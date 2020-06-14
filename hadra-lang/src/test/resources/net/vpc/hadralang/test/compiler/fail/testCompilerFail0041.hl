@@ -1,0 +1,12 @@
+Class x=String.class;
+int r=switch(x){
+    case Integer:{
+        1;
+    }
+    case CharSequence:{
+        2;
+    }
+    default :{
+        3;
+    }
+};

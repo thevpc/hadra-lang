@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Layer: net/vpc/hadralang/editor/hl4nb/layer.xml
+OpenIDE-Module-Localizing-Bundle: net/vpc/hadralang/editor/hl4nb/Bundle.properties
+

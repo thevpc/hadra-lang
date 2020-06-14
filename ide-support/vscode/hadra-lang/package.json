@@ -1,0 +1,25 @@
+{
+    "name": "hadra-lang",
+    "displayName": "hadra-lang",
+    "description": "Hadra Language support",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.46.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "hl",
+            "aliases": ["hadra-lang", "hl"],
+            "extensions": [".hl"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "hl",
+            "scopeName": "source.hl",
+            "path": "./syntaxes/hl.tmLanguage.json"
+        }]
+    }
+}

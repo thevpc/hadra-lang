@@ -1,0 +1,10 @@
+package net.vpc.hlexamples;
+String[] args;
+String[] args;
+String[] a,a;
+int z;
+{
+    println("hello world");
+    int a=z;
+    int z;
+}

@@ -1,0 +1,76 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+# copy me to config folder
+# ln -s /data/public/git/hadra-lang/ide-support/sublime/hl.sublime-syntax ~/.config/sublime-text-3/Packages/User/hl.sublime-syntax
+name: HadraLang
+file_extensions:
+  - hl
+scope: source.hl
+contexts:
+  main:
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character
+    - match: '"'
+      scope: punctuation.definition.string.begin.hl
+      push: double_quoted_string
+
+    # Comments begin with a '//' and finish at the end of the line
+    - match: '//'
+      scope: punctuation.definition.comment.hl
+      push: line_comment
+
+    # Keywords are if, else for and while.
+    # Note that blackslashes don't need to be escaped within single quoted
+    # strings in YAML. When using single quoted strings, only single quotes
+    # need to be escaped: this is done by using two single quotes next to each
+    # other.
+    - match: '\b(def|var|val|this|super|import|package|void|int|long|byte|boolean|short|float|double|constructor|extends|break|continue|import|class|private|public|protected|static|final)\b'
+      scope: keyword.control.hl
+
+    - match: '\b(if|else|for|while)\b'
+      scope: keyword.control.conditional.hl
+
+    - match: '\b(import)\b'
+      scope: keyword.control.import.hl
+
+    - match: /\*
+      scope: punctuation.definition.comment.begin.hl
+      push:
+        - meta_scope: comment.block.go
+        - match: \*/
+          scope: punctuation.definition.comment.end.hl
+          pop: true
+        - match: ^\s*(\*)(?!/)
+          captures:
+            1: punctuation.definition.comment.hl
+
+    - match: '(\+|-|/)'
+      scope: keyword.operator.arithmetic.hl
+
+    # Numbers
+    - match: '\b(-)?[0-9.]+\b'
+      scope: constant.numeric.hl
+
+    - match: \(|\)|<|>|,
+      scope: punctuation.separator
+
+    - match: ';'
+      scope: punctuation.terminator
+
+    - match: '\.|->|::'
+      scope: punctuation.accessor
+
+  double_quoted_string:
+    - meta_scope: string.quoted.double.hl
+    - match: '\\.'
+      scope: constant.character.escape.hl
+    - match: '"'
+      scope: punctuation.definition.string.end.hl
+      pop: true
+
+  line_comment:
+    - meta_scope: comment.line.hl
+    - match: $\n?
+      pop: true
+

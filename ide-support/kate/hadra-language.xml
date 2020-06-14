@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language name="Hadra Language" version="1" kateversion="2.4" section="Sources" extensions="*.hl">
+<highlighting>
+    <list name="Keyword1">
+      <item>_</item>
+      <item>class</item>
+      <item>def</item>
+      <item>extends</item>
+      <item>import</item>
+      <item>in</item>
+      <item>is</item>
+      <item>length</item>
+      <item>new</item>
+      <item>operator</item>
+      <item>or</item>
+      <item>super</item>
+      <item>this</item>
+      <item>val</item>
+      <item>var</item>
+    </list>
+    <list name="Keyword2">
+      <item>abstract</item>
+      <item>const</item>
+      <item>constructor</item>
+      <item>final</item>
+      <item>get</item>
+      <item>implicit</item>
+      <item>package</item>
+      <item>private</item>
+      <item>protected</item>
+      <item>public</item>
+      <item>readonly</item>
+      <item>set</item>
+      <item>static</item>
+      <item>value</item>
+    </list>
+    <list name="Keyword3">
+      <item>Date</item>
+      <item>Entry</item>
+      <item>List</item>
+      <item>Map</item>
+      <item>Object</item>
+      <item>String</item>
+      <item>StringBuilder</item>
+      <item>System</item>
+      <item>Time</item>
+      <item>Timestamp</item>
+      <item>bool</item>
+      <item>boolean</item>
+      <item>char</item>
+      <item>complex</item>
+      <item>date</item>
+      <item>double</item>
+      <item>false</item>
+      <item>float</item>
+      <item>int</item>
+      <item>long</item>
+      <item>matrix</item>
+      <item>multiarray</item>
+      <item>null</item>
+      <item>object</item>
+      <item>string</item>
+      <item>stringb</item>
+      <item>time</item>
+      <item>timestamp</item>
+      <item>true</item>
+      <item>void</item>
+    </list>
+    <list name="ControlFlow1">
+      <item>if</item>
+      <item>for</item>
+      <item>while</item>
+      <item>switch</item>
+      <item>case</item>
+      <item>break</item>
+      <item>catch</item>
+      <item>else</item>
+    </list>
+    
+    <contexts>
+      <context attribute="Normal Text" lineEndContext="#pop" name="Normal Text" >
+        <keyword attribute="Keyword" context="#stay" String="Keyword1" />
+        <keyword attribute="Keyword" context="#stay" String="Keyword2" />
+        <keyword attribute="Keyword" context="#stay" String="Keyword3" />
+        <DetectChar attribute="String" context="string" char="&quot;" />
+        <DetectChar attribute="ControlFlow" context="#stay" char="ControlFlow1" />
+      </context>
+      <context attribute="String" lineEndContext="#stay" name="string" >
+        <DetectChar attribute="String" context="#pop" char="&quot;" />
+      </context>
+    </contexts>
+    <itemDatas>
+      <itemData name="Normal Text" defStyleNum="dsNormal" />
+      <itemData name="Keyword" defStyleNum="dsKeyword" />
+      <itemData name="String" defStyleNum="dsString" />
+      <itemData name="ControlFlow" defStyleNum="dsControlFlow" />
+    </itemDatas>
+</highlighting> 
+<general>
+    <comments>
+      <comment name="multiLine" start="/*" end="*/"/>
+      <comment name="singleLine" start="//"/>
+    </comments>
+    <keywords casesensitive="1"/>
+    <folding indentationsensitive="0"/>
+    <emptyLines>
+      <emptyLine regexpr="\s+"/>
+      <emptyLine regexpr="\s*#.*"/>
+    </emptyLines>
+    <spellchecking>
+    </spellchecking>
+  </general>
+</language>

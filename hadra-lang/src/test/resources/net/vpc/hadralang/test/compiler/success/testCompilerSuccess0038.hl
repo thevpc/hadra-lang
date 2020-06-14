@@ -1,0 +1,25 @@
+package net.vpc.hadralang.test:test05;
+/**
+ * tested :
+ *   * try catch
+ *   * or else
+ *
+ * you do not need to declare logger. If you use it, it will be instatianted.
+ * It defaults to java logging framework.
+ * Other frameworks may be handled as well according to framework
+ * using extension methods.
+ */
+def void myMethod(){
+    String one="one";
+    int x1="one" catch 1
+    int x2=int("one") catch 1
+
+    int y=0;
+    try{
+        y="one";
+    }catch(Exception e){
+        y=1;
+    }finally{
+        y=1;
+    }
+}

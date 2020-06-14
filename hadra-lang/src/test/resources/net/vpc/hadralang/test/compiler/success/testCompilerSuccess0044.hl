@@ -1,0 +1,47 @@
+public static final class a.b.c.Toto(int x=5){
+    var a=null;
+    $compiler.caller.requireSamePackage();
+    int[20] x;
+    (x[0],x[1]) = scanf("%d %d");
+
+    string[x[0]][2] initializedArray; // this an initialized 2 dim array with x[0] and 2 dimensions respectively
+    string[][] nullArray ; // this is null
+    string[] nullArray2 =[[[]],[["12","abc"]]];
+    public def int f(int x) -> if (x< 2) 1 else(x*f(x-1));
+    const class Item(int a,int b);
+    class Item2(int a,int b);
+    class SpecialItem(const int x,int y,private int z=f(12+x)) extends Item(a,b){
+//        set a(int value){
+//            //some check here;
+//        }
+//        operator int +(int x) { return this.plus(x);};
+//        operator int (int x)+ { return x.plus(this);};
+//        operator int ++()     { inc(); return this;};
+//        operator int  ()++    { SpecialItem c=this; inc(); return c;};
+    };
+//
+//    f=public function SpecialItem.test(int i)=return x;
+//
+//    f=SpecialItem.test(int i)=return x;
+//
+//    f=SpecialItem.test(int i){
+//        return x;
+//    }
+//
+//    unload f;
+//    f=unload function SpecialItem.test(int i)=return x;
+//    load f;
+    Item i(12,16);
+    Item2 i2=Item2(i); // cast with dynamically check if all methods are implemented!
+    a.Item a=(12,16);
+    Item a=SpecialItem(12,16);
+    println(a.x);
+    for(i:1..12){
+        println(i);
+    }
+//    var value h=a.?b().?c;
+//    matrix a={ 1, 2, 3 ,,
+//               4, 5, 6 ,,
+//               6, 7, 8 } ;
+//    a[0,0]=2;
+}

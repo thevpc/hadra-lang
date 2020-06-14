@@ -1,0 +1,16 @@
+package net.vpc.hadralang.test:test05;
+/**
+ * tested :
+ *   test precompiler expressions (this:varName,this:lineNumber,...)
+ */
+String myVar=this:varName+this:lineNumber+"/"+this:class+"::"+this:filePath;
+String currentClassName=this:class.getName();
+Logger LOG=Logger.getLogger(this:className);
+
+def void myMethod(){
+    Method method=this:method;
+    String methodName=this:methodName;
+    String filePath=this:filePath;
+    String fileName=this:fileName;
+    println("we are calling "+methodName+" at from line "+this:lineNumber);
+}

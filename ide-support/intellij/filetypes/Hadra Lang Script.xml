@@ -1,0 +1,22 @@
+<filetype binary="false" description="Hadra Lang Script" name="Hadra Lang Script">
+  <highlighting>
+    <options>
+      <option name="LINE_COMMENT" value="//" />
+      <option name="COMMENT_START" value="/*" />
+      <option name="COMMENT_END" value="*/" />
+      <option name="HEX_PREFIX" value="0x" />
+      <option name="NUM_POSTFIXES" value="" />
+      <option name="HAS_BRACES" value="true" />
+      <option name="HAS_BRACKETS" value="true" />
+      <option name="HAS_PARENS" value="true" />
+      <option name="HAS_STRING_ESCAPES" value="true" />
+    </options>
+    <keywords keywords="!in;_;break;case;catch;class;continue;def;default;else;extends;for;if;import;in;is;length;new;operator;return;super;switch;this;try;val;var;while" ignore_case="false" />
+    <keywords2 keywords="abstract;const;constructor;final;get;implicit;package;private;protected;public;readonly;set;static;value" />
+    <keywords3 keywords="Date;Entry;List;Map;Object;String;StringBuilder;System;Time;Timestamp;bool;boolean;char;complex;date;double;false;float;int;long;matrix;multiarray;null;object;string;stringb;time;timestamp;true;void" />
+    <keywords4 keywords="equals;exclude;hashCode;optional;test;this:class;this:className;this:fileName;this:filePath;this:lineNumber;this:log;this:method;this:methodName;this:varName;toString" />
+  </highlighting>
+  <extensionMap>
+    <mapping ext="hl" />
+  </extensionMap>
+</filetype>

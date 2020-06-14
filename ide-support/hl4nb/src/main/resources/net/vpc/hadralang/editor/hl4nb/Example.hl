@@ -1,0 +1,26 @@
+def sampleFunction(String[] arg){
+    println("Hello World");
+    int x=12;
+    double y=12.0;
+    Complex y=12.0î+3;
+    int[10] iarray1(x->x*2);
+    int[10] iarray2(x->x*3);
+    iarray1[1..3]=iarray2[3..5];
+}
+
+class Clock(int hours,int minutes){
+    constructor(String hours,String minutes){
+        this(
+                if (p"[0-9]+".matches(hours)) int(hours) else -1,
+                if (p"[0-9]+".matches(minutes)) int(minutes) else -1
+            );
+        println(t"12:00"+$"enter $hours:$minutes");
+    }
+}
+
+class RoundClock(int[] hours,int minutes) extends Clock(){
+    Date extraField;
+    constructor(String hours,String minutes){
+        super(hours,minutes);
+    }
+}

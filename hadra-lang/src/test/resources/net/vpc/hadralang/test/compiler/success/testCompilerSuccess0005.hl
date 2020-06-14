@@ -1,0 +1,1 @@
+def int m(int x)-> x+1;

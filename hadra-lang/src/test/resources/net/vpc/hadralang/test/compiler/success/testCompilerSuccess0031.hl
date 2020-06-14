@@ -1,0 +1,15 @@
+/**
+ * Support for json format
+ */
+class A{
+    int x;
+    B b;
+}
+class B{
+    int y;
+    int z;
+}
+
+
+A a={x:1,{y:2,z:3}};
+

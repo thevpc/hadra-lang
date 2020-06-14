@@ -1,0 +1,33 @@
+package net.vpc.hadralang.test:test10;
+
+/**
+ * testing :
+ *   * switch expression
+ */
+//java.lang.String.class;
+def void main(String[] args){
+     {
+         Class x=String.class;
+         int r=switch(x){
+             case Integer->1;
+             case CharSequence->2;
+             default ->3;
+         };
+     }
+     {
+         Integer x=3;
+         int result=switch(x){
+             is Integer y -> 1;
+             is CharSequence-> 2;
+             default -> 3;
+         };
+     }
+     {
+         double d=3;
+         int result=switch(d){
+             case NaN->1;
+             case 5.0..MAX_VALUE->2;
+             default ->3;
+         };
+     }
+}

@@ -1,0 +1,16 @@
+/**
+ * extension methods
+ */
+
+def void String.isBlank(){
+     return this==null | isEmpty();
+}
+
+var v="";
+if(v.isBlank()){
+    println("yes am blank"!);
+}
+v=null;
+if(v.isBlank()){
+    println("yes am still blank"!);
+}

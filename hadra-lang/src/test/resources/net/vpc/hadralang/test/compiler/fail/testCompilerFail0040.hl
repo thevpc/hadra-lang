@@ -1,0 +1,6 @@
+def void main(){
+    int x=3;
+     {
+         float x=3;
+     }
+}

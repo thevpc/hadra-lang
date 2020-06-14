@@ -1,0 +1,310 @@
+package net.vpc.hadralang.test:test09#1215 {
+    String commonVersion="2.6";
+    import package $"commons-lang:commons-lang#${commonVersion}" for test;
+    import package $"commons-lang:commons-lang#${commonVersion}" for compile;
+    import package $"commons-lang:commons-lang#${commonVersion}" for optional build
+            break "toto:titi#2", "toto:titi#2", "toto:titi#2";
+      import package "net.vpc.common:jeep#1.2.7" for compile;
+}
+int z;
+def main(String[] args){
+    this.println("hello world");
+    int a=b;
+}
+
+def int sum(int e) -> xx+y+e;
+
+class MyClass(int a) : Object(){
+    val a=3;
+    constructor(int a){
+        super();
+    }
+    def void m(){
+        int a=b;
+        for(x:[1..10]){
+            continue;
+        }
+        while(true){
+            break;
+        }
+    }
+}
+
+def void main2(String[] args){
+    println("really???");
+    A a();
+    int v=a?b?c?five;
+    String s=a?b?c?s??"Hello";
+    println("s=",s);
+}
+
+class test.A{
+    B b;
+}
+
+class test.B{
+    C c;
+}
+
+class test.C{
+    int five=5;
+    String s=null;
+}
+
+def void main(String[] args){
+var myuplet=(1,2.0);
+println(myuplet._1,myuplet._2);
+int a;
+double b;
+(a,b)=myuplet;
+
+int[10] arr1(2);
+int[10] arr2(3);
+var x=(a*2,arr1[0..3],b*2);
+(a,arr2[2..5],b)=x;
+}
+def void main(String[] args){
+    int[10] arr((i)->2*i);
+    println("arr=",arr);
+
+    int[] arr2=arr[3..9];
+    println("1::arr2=",arr2);
+
+    arr2[3..5]=arr[1..3];
+    println("2::arr2=",arr2);
+
+    arr2[(i)->i%2==0]=arr[1..3];
+    println("3::arr2=",arr2);
+}
+
+
+{
+    string s1="hello world";
+    char[] s2=s1[6..10];//world
+    char[] s2p=s1[($/2+1)..$];
+    println(s2+" :: expected 'world'");
+    string s3=s2[0..2]+s2[4];//word
+    println(s3+" :: expected 'word'");
+    stringb sb();
+    sb=s3+" of "+s2+'s'; //world of words
+    println(sb+" :: expected 'world of words'");
+    sb[0..4]=sb[8..13];
+    sb+="the world";
+    println(sb+" :: expected 'words of the world'");
+    sb;
+
+    string s8="*"*3;
+    println(s8);
+}
+
+def void main(String[] args){
+
+//    int b=3;
+//    if(1<b<3>2){
+//        println("less");
+//    }
+    Object a="Hello";
+    if(a is String s){
+        println(s.length());
+    }else if(a is Integer i){
+        println(i+1);
+    }else if(a is List li && li.get(0) is String s){
+        println(s);
+    }
+
+
+    List<Map<String,Object>> list=ArrayList();
+    List<Map<String,Object>> list2(list);
+    Map<String,Object> map=HashMap();
+    map["Hello"]="bye";
+    //list += map;
+    //list =  list+map;
+
+    //list =+ map;
+    //list =  map+list;
+
+    //list ::= list2;
+    //list =   list::list2;
+
+    //list =:: list2;
+    //list =   list2::list;
+
+    Object o=list;
+
+    if(o is List li && li[0] is Map<String,Object> m &&
+        (
+        (m["Hello"] is String s && s.length()>0)
+        ||
+        (m["Hello"] is int i && i>0)
+        ||
+        (m["Hello"] is null)
+        )
+        ){
+
+    }else if(o is List li2){
+
+    }
+}
+
+{
+    int b=3;
+    //int i=8;
+    for(i=3;i<3;i++){
+        println(i);
+        //yield x+2;
+    }
+    for(i:1..2,j:4..3){
+        println(i+",",j);
+    }
+
+    for((i,j):(1..2,4..3)){
+        println(i+",",j);
+    }
+
+    //for (e <- names) yield e.capitalize
+    //names.map(e::capitalize)
+     for(;;){
+         println(i);
+         break;
+     }
+     for(i=0,j=0;i<3;i++){
+         println(i);
+     }
+     for(j:1..3){
+         println(j);
+     }
+     for((i,j):(1..3,1..3)){
+         println(i,j);
+     }
+     for(i=0;i<3;i++){
+         println(i);
+     }
+     for((i,j)=(0,0);i<3;i++){
+         println(i);
+     }
+}
+
+/**
+ * testing :
+ *   * switch statement
+ */
+//java.lang.String.class;
+def void main(String[] args){
+    int x=3;
+     {
+         int x=3;
+         switch(y=x*2){
+             case 2|3+1..6|10:{
+                 println("two or four to six");
+             }
+             case 3:{
+                 println("three");
+                 return;
+             }
+             default:{
+                 println(y);
+                 return;
+             }
+         }
+     }
+     {
+         double x=3.0;
+         switch(y=x*2){
+             case 2|3+1..6|10:{
+                 println("two or four to six or ten");
+             }
+             case 3.0:{
+                 println("three");
+                 return;
+             }
+             default:{
+                 println(y);
+                 return;
+             }
+         }
+     }
+
+     {
+         String x="12.3";
+         switch(x){
+             case "0"| p"[0-9]"| p"[0-9]+":{
+                 println("this is an integer");
+             }
+             case p"[0-9]+[.][0-9]+":{
+                 println("this is a float");
+             }
+             default :{
+                 println("unknown "+x);
+             }
+         }
+     }
+     {
+         Class x=ArrayList.class;
+         switch(x){
+             case List:{
+                 println("this is a list");
+             }
+             case CharSequence:{
+                 println("this is a char sequence");
+             }
+             default :{
+                 println("not a "+x);
+             }
+         }
+     }
+    {
+        Object x=ArrayList();
+        switch(x){
+            is null:{
+                println("this is null");
+            }
+            is List li:{
+                println("this is a list"+li.size());
+            }
+            is CharSequence:{
+                println("this is a char sequence");
+            }
+            default :{
+                println("what is this "+x);
+            }
+        }
+    }
+//     {
+//         Class x=String.class;
+//         int r=switch(x){
+//             case Integer:{
+//                 1;
+//             }
+//             case CharSequence:{
+//                 2;
+//             }
+//             default :{
+//                 3;
+//             }
+//         };
+//     }
+//     {
+//         Integer x=3;
+//         int result=switch(x){
+//             is Integer x -> 1
+//             is CharSequence: return 2;
+//             default : {
+//                 3;
+//             }
+//         };
+//     }
+//     {
+//         double d=3;
+//         int result=switch(x){
+//             case NaN:{
+//                 1;
+//             }
+//             case 5.0..MAX_VALUE:{
+//                 2;
+//             }
+//             default :{
+//                 3;
+//             }
+//         };
+//     }
+}

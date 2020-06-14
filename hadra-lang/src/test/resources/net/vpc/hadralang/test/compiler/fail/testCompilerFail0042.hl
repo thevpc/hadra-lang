@@ -1,0 +1,55 @@
+/*ok*/ println("Hello from Hadra");
+/*ok*/ int x=4;
+/*ok*/ System.out.println("Hello from Hadra "+(1+x));
+/*ok*/ StringBuilder s=StringBuilder("");
+/*ok*/ s[1..3]="hello";
+/*ok*/ s[1]="hello";
+/*ok*/ assignArray(s,1,"hello");
+s(2..3)="hello"
+/*ok*/ assignArray(s,1,"hello");
+/*ok*/ Map<int,string> map;
+
+From haskel :: ghci> [x*2 | x <- [1..10], x*2 >= 12]
+               [12,14,16,18,20]
+
+map={15:"fifteen",1:"one"};
+map+={15:"fifteen"};
+map+={15:"fifteen",1:"one"};
+for(e:map){
+    println(e.key+","+e.value?nullable?name);
+}
+
+static boolean string|null.isBlank()->true;
+boolean stringisBlank()->true;
+var v="";
+v=null;
+if(v.isBlank()){
+    println("yes am blank!");
+}
+//if(x>0){
+//    x++;
+//}else{
+//    --x+3;
+//}
+/*
+x+1;
+
+int y=6;
+class Toto(private long a=3) extends Titi(a){
+    int x;
+    int y;
+}
+
+int f1(int x);
+int g2(int x)->12;
+int h3(int x){
+    12;
+    var x=3;
+    int g(int x)->12;
+}
+
+var x=3;
+x+1;
+x+y;
+var e=X+1;
+*/

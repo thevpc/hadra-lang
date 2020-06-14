@@ -1,0 +1,30 @@
+package net.vpc.hadralang.test:test05;
+import java.util.concurrent.atomic.*;
+import java.util.concurrent.*;
+/**
+ * tested :
+ *   * concurrency
+ */
+
+def main(String[] args){
+    sum(int[30000](i->i));
+}
+
+
+def void sum(int[] arr){
+    int slice=5;
+    AtomicInteger ai(0);
+    var pool = Executors.newFixedThreadPool(10);
+    for(i=0;i<arr.length;i+=slice){
+        pool.submit(()->sum(arr,i,max(arr.length,i+slice,ai)));
+    }
+    pool.waitFor;
+    println(ai);
+
+}
+    def void sum(int[] arr2,int from,int to,AtomicInteger ai2){
+        ai2+=arr2[from..(to-from)].sum();
+    }
+
+
+

@@ -1,0 +1,12 @@
+package net.vpc.hadralang.test:test05;
+/**
+ * tested :
+ *   * fixed decreasing ranges 3>..1 or 3<..1
+ */
+{
+    string s0="hello world";
+    char[] s1=s0[0..<$];
+    char[] s2=s1[4..1];
+    println(s1);
+    println(s2);
+}

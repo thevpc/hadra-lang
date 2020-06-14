@@ -1,0 +1,84 @@
+\contentsline {part}{I\hspace {1em}Reference Guide}{23}{part.1}%
+\contentsline {chapter}{\numberline {1}Lexical Structure}{25}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Lexical Program Structure}{25}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Comments}{25}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Keywords}{25}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Literals}{25}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Numerical Literals}{25}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Character and String Literals}{26}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.3}Temporal Literals}{27}{subsection.1.4.3}%
+\contentsline {subsection}{\numberline {1.4.4}Pattern Literals}{27}{subsection.1.4.4}%
+\contentsline {subsection}{\numberline {1.4.5}Interpolated String Literals}{27}{subsection.1.4.5}%
+\contentsline {section}{\numberline {1.5}Identifiers}{27}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Operators}{27}{section.1.6}%
+\contentsline {subsection}{\numberline {1.6.1}== operator}{27}{subsection.1.6.1}%
+\contentsline {subsection}{\numberline {1.6.2}=== operator}{27}{subsection.1.6.2}%
+\contentsline {subsection}{\numberline {1.6.3}'.' member operator}{28}{subsection.1.6.3}%
+\contentsline {subsection}{\numberline {1.6.4}'?' null expression member operator}{28}{subsection.1.6.4}%
+\contentsline {subsection}{\numberline {1.6.5}'??' null member operator}{28}{subsection.1.6.5}%
+\contentsline {subsection}{\numberline {1.6.6}'.?' Operator (unchecked member)}{28}{subsection.1.6.6}%
+\contentsline {subsection}{\numberline {1.6.7}'()' Operator (apply)}{28}{subsection.1.6.7}%
+\contentsline {subsection}{\numberline {1.6.8}'[]' Operator (indexed)}{28}{subsection.1.6.8}%
+\contentsline {section}{\numberline {1.7}Tuples}{29}{section.1.7}%
+\contentsline {section}{\numberline {1.8}Arrays}{29}{section.1.8}%
+\contentsline {section}{\numberline {1.9}Lambda Expressions}{29}{section.1.9}%
+\contentsline {section}{\numberline {1.10}Annotations}{29}{section.1.10}%
+\contentsline {chapter}{\numberline {2}Control-flow}{31}{chapter.2}%
+\contentsline {section}{\numberline {2.1}if/else syntax}{32}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}if statement}{32}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}if expression}{32}{subsection.2.1.2}%
+\contentsline {section}{\numberline {2.2}switch expression}{32}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}switch/case statement}{32}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}switch case statement}{32}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}switch is statement}{32}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}switch if statement}{32}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}switch default statement}{32}{subsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.2.6}switch on Tuples}{32}{subsection.2.2.6}%
+\contentsline {subsection}{\numberline {2.2.7}switch Expression}{32}{subsection.2.2.7}%
+\contentsline {section}{\numberline {2.3}while loop syntax}{32}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}while/do statement}{32}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}do/while statement}{32}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}while/do expression}{32}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}do/while expression}{32}{subsection.2.3.4}%
+\contentsline {section}{\numberline {2.4}for loop}{32}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}for loop statement}{32}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}for iterator statement}{32}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}for loop expression}{32}{subsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.4.4}for iterator expression}{32}{subsection.2.4.4}%
+\contentsline {section}{\numberline {2.5}try/catch}{33}{section.2.5}%
+\contentsline {chapter}{\numberline {3}Declarations}{35}{chapter.3}%
+\contentsline {subsection}{\numberline {3.0.1}Classes}{35}{subsection.3.0.1}%
+\contentsline {subsection}{\numberline {3.0.2}Annotation Classes}{35}{subsection.3.0.2}%
+\contentsline {subsection}{\numberline {3.0.3}Exception Classes}{35}{subsection.3.0.3}%
+\contentsline {subsection}{\numberline {3.0.4}Enumerations}{35}{subsection.3.0.4}%
+\contentsline {subsection}{\numberline {3.0.5}Fields and Properties}{35}{subsection.3.0.5}%
+\contentsline {subsection}{\numberline {3.0.6}Constructors}{37}{subsection.3.0.6}%
+\contentsline {subsection}{\numberline {3.0.7}Methods}{37}{subsection.3.0.7}%
+\contentsline {subsection}{\numberline {3.0.8}Functions and global variables}{38}{subsection.3.0.8}%
+\contentsline {subsection}{\numberline {3.0.9}main function}{39}{subsection.3.0.9}%
+\contentsline {subsection}{\numberline {3.0.10}Extension functions}{39}{subsection.3.0.10}%
+\contentsline {subsection}{\numberline {3.0.11}Operators}{39}{subsection.3.0.11}%
+\contentsline {subsection}{\numberline {3.0.12}Extension constructors}{40}{subsection.3.0.12}%
+\contentsline {subsection}{\numberline {3.0.13}Package Class}{40}{subsection.3.0.13}%
+\contentsline {chapter}{\numberline {4}Compilation and Execution}{41}{chapter.4}%
+\contentsline {section}{\numberline {4.1}PreProcessor}{41}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Maven Support}{41}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Interpreter}{41}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Java Transpiler/Compiler}{41}{section.4.4}%
+\contentsline {part}{II\hspace {1em}Programming with Hadra-Lang}{43}{part.2}%
+\contentsline {chapter}{\numberline {5}IDE Support}{45}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Netbeans Support}{45}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Intellij Support}{45}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Eclipse Support}{45}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Visualcode Support}{45}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Other Text Tools support}{45}{section.5.5}%
+\contentsline {chapter}{\numberline {6}Standard Library}{47}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Java Integration}{49}{chapter.7}%
+\contentsline {part}{III\hspace {1em}Future Features}{51}{part.3}%
+\contentsline {section}{\numberline {7.1}Javascript/Typescript Transpiler}{53}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Javascript/Typescript Transpiler}{53}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Native Compiler}{53}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Language Server Protocol}{53}{section.7.4}%
+\contentsline {chapter}{Bibliography}{55}{chapter*.5}%
+\contentsline {chapter}{Index}{57}{chapter*.6}%
+\contentsfinish 

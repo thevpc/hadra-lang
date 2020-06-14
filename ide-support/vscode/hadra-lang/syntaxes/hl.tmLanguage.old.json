@@ -1,0 +1,90 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "hadra-lang",
+	"patterns": [
+		{
+			"include": "#keywords"
+		}
+		,{
+			"include": "#strings"
+		}
+		,{
+			"include": "operators"
+		}
+		,{
+			"include": "ponctuation"
+		}
+	]
+	, "comments": {
+		"lineComment": "//",
+		"blockComment": [ "/*", "*/" ]
+	}
+	,
+	"brackets": [
+		["{", "}"],
+		["[", "]"]
+	],
+	"autoClosingPairs": [
+		{ "open": "{", "close": "}", "notIn": ["string"] },
+		{ "open": "[", "close": "]", "notIn": ["string"] },
+		{ "open": "(", "close": ")", "notIn": ["string"] },
+		{ "open": "'", "close": "'", "notIn": ["string"] },
+		{ "open": "\"", "close": "\"", "notIn": ["string", "comment"] },
+		{ "open": "`", "close": "`", "notIn": ["string", "comment"] }
+	],
+
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+				"name": "keyword.control.hl",
+				"match": "\\b(def|var|val|this|super|import|package|void|int|long|byte|boolean|short|float|double|constructor|extends|break|continue|import|class|private|public|protected|static|final)\\b"
+			}
+			,{
+				"name": "keyword.control.conditional.hl",
+				"match": "\\b(if|else|for|while)\\b"
+			}
+			,{
+				"name": "keyword.control.import.hl",
+				"match": "\\b(import)\\b"
+			}
+			]
+		},
+		"operators": {
+			"patterns": [
+			{
+				"name": "keyword.operator",
+				"match": "\\b(\\+|\\+\\+|-|--)\\b"
+			}
+			]
+		},
+		"ponctuation": {
+			"patterns": [
+			{
+				"name": "punctuation.separator",
+				"match": "\\(|\\)|<|>|"
+			}
+			,{
+				"name": "punctuation.terminator",
+				"match": ";"
+			}
+			,{
+				"name": "punctuation.accessor",
+				"match": "\\.|->|::"
+			}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.hl",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.hl",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "source.hl"
+}

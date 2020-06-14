@@ -1,0 +1,18 @@
+/**
+ * Support for tuple/class conversion
+ */
+
+int a,b;
+
+class A{
+    int x;
+    B b;
+}
+class B{
+    int y;
+    int z;
+}
+
+A a1=(1,(2,3));
+
+
