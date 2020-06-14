@@ -22,7 +22,7 @@ Version 0.0.1.1 buit on 2020-06-14 Document Version 0.0.1 buit on
 
   Copyright ©  
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may
+Licensed under the Apache License, Version 3.0 (the "License"); you may
 not use this file except in compliance with the License. You may obtain
 a copy of the License at <http://www.apache.org/licenses/LICENSE-3.0>.
 Unless required by applicable law or agreed to in writing, software

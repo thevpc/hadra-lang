@@ -31,4 +31,4 @@ Here is a snippet of the one file project in hadra-lang
     }
 ```
 
-more documentation under doc folder...
+more documentation under in the [open ebook](doc/ebook/hadra-lang-book.md)
