@@ -5,25 +5,25 @@ import net.vpc.common.jeep.core.eval.JEvaluableNode;
 import net.vpc.common.jeep.core.eval.JEvaluableValue;
 import net.vpc.common.jeep.impl.CastJConverter;
 import net.vpc.common.jeep.impl.eval.JEvaluableConverter;
-import net.vpc.common.jeep.impl.functions.JFunctionConverted;
-import net.vpc.common.jeep.impl.functions.JMethodInvocationFunction;
-import net.vpc.common.jeep.JParameterizedType;
-import net.vpc.common.jeep.JTypeArray;
+import net.vpc.common.jeep.impl.functions.*;
 import net.vpc.common.jeep.util.JStringUtils;
 import net.vpc.common.jeep.util.JTokenUtils;
 import net.vpc.common.jeep.util.JTypeUtils;
 import net.vpc.common.jeep.util.JeepUtils;
-import net.vpc.hadralang.compiler.core.HLCOptions;
-import net.vpc.hadralang.compiler.core.invokables.*;
-import net.vpc.hadralang.compiler.stages.HLCStage;
+import net.vpc.hadralang.compiler.core.HLOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
-import net.vpc.common.jeep.JNodeFindAndReplace;
+import net.vpc.hadralang.compiler.core.elements.HNElement;
+import net.vpc.hadralang.compiler.core.elements.HNElementAssign;
+import net.vpc.hadralang.compiler.core.elements.HNElementConstructor;
+import net.vpc.hadralang.compiler.core.elements.HNElementMethod;
+import net.vpc.hadralang.compiler.core.invokables.*;
 import net.vpc.hadralang.compiler.parser.ast.*;
+import net.vpc.hadralang.compiler.stages.HLCStage;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
+import net.vpc.hadralang.compiler.utils.HUtils;
 import net.vpc.hadralang.stdlib.IntRange;
 import net.vpc.hadralang.stdlib.ext.HHelpers;
 import net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators;
-import net.vpc.hadralang.compiler.utils.HUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,20 +33,33 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.vpc.hadralang.compiler.core.elements.HNElement;
-import net.vpc.hadralang.compiler.core.elements.HNElementAssign;
-import net.vpc.hadralang.compiler.core.elements.HNElementConstructor;
-import net.vpc.hadralang.compiler.core.elements.HNElementMethod;
+import java.util.regex.Pattern;
 
 public class HLCStage09JavaGenerator implements HLCStage {
 
+    private static final Logger LOG = Logger.getLogger(HLCStage09JavaGenerator.class.getName());
     int counter = 0;
     private boolean staticStdImportExtensions = true;
     private boolean staticStdDefaults = true;
-    private static final Logger LOG = Logger.getLogger(HLCStage09JavaGenerator.class.getName());
+
+    public static String indent(StringPrec str) {
+        return indent(str.toString());
+    }
+
+    public static String beforeClass() {
+        return "\n";
+    }
+
+    public static String beforeMethod() {
+        return "\n";
+    }
+
+    public static String indent(String str) {
+        return JeepUtils.indent("    ", str);
+    }
 
     @Override
-    public void processProject(HLProject project, HLCOptions options) {
+    public void processProject(HLProject project, HLOptions options) {
         generate(project, options.generateJavaFolder(), options.isClean());
     }
 
@@ -125,15 +138,24 @@ public class HLCStage09JavaGenerator implements HLCStage {
         }
     }
 
+    public StringPrec nodeToStatementString(HNode node, HLGenCompilationUnitContext cuctx, JNodePath path) {
+        StringPrec s0 = nodeToString(node, cuctx, path);
+        String s= s0.str;
+        if(s.endsWith("}") || s.endsWith(";")){
+            return s0;
+        }
+        return new StringPrec(s+";");
+    }
+
     public StringPrec nodeToString(HNode node, HLGenCompilationUnitContext cuctx, JNodePath path) {
         if (node == null) {
             return new StringPrec("null");
         }
-        switch (((HNode) node).id()) {
+        switch (node.id()) {
             case H_DECLARE_TYPE:
                 return onDeclareType((HNDeclareType) node, cuctx, path);
             case H_BLOCK:
-                return onBlock((HNBlock) node, cuctx, false, false, path);
+                return onBlock((HNBlock) node, cuctx, false, false, false, path);
             case H_DECLARE_IDENTIFIER:
                 return onDeclareIdentifier((HNDeclareIdentifier) node, cuctx, path);
             case H_DECLARE_INVOKABLE:
@@ -141,7 +163,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
             case H_LITERAL:
                 return JNodeLiteral_ToString((HNLiteral) node, cuctx, path);
             case H_LITERAL_DEFAULT:
-                return JNodeHDefaultLiteral_ToString((HNLiteralDefault) node, cuctx, path);
+                return onLiteralDefault((HNLiteralDefault) node, cuctx, path);
             case H_ASSIGN:
                 return onAssign((HNAssign) node, cuctx, path);
             case H_THIS:
@@ -159,9 +181,9 @@ public class HLCStage09JavaGenerator implements HLCStage {
             case H_IF:
                 return JNodeHIf_ToString((HNIf) node, cuctx, path);
             case H_WHILE:
-                return JNodeHWhileNode_ToString((HNWhile) node, cuctx, path);
+                return onWhile((HNWhile) node, cuctx, path);
             case H_FOR:
-                return JNodeHForNode_ToString((HNFor) node, cuctx, path);
+                return onFor((HNFor) node, cuctx, path);
             case H_BREAK:
                 return JNodeHBreak_ToString((HNBreak) node, cuctx, path);
             case H_CONTINUE:
@@ -169,7 +191,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
             case H_DOT_THIS:
                 return JNodeHOpThis_ToString((HNDotThis) node, cuctx, path);
             case H_SWITCH:
-                return JNodeHSwitch_ToString((HNSwitch) node, cuctx, path);
+                return onSwitch((HNSwitch) node, cuctx, path);
             case H_RETURN:
                 return onReturn((HNReturn) node, cuctx, path);
             case H_IDENTIFIER:
@@ -229,9 +251,9 @@ public class HLCStage09JavaGenerator implements HLCStage {
     private StringPrec JNodeHCast_ToString(HNCast node, HLGenCompilationUnitContext cuctx, JNodePath path) {
         return new StringPrec(
                 "(("
-                + nodeToString(node.getTypeNode(), cuctx, path)
-                + ")"
-                + "(" + nodeToString(node.getBase(), cuctx, path) + "))"
+                        + nodeToString(node.getTypeNode(), cuctx, path)
+                        + ")"
+                        + "(" + nodeToString(node.getBase(), cuctx, path) + "))"
         );
     }
 
@@ -242,12 +264,12 @@ public class HLCStage09JavaGenerator implements HLCStage {
     private StringPrec onReturn(HNReturn node, HLGenCompilationUnitContext cuctx, JNodePath path) {
         return new StringPrec(
                 "return "
-                + (node.getExpr() == null ? "" : nodeToString(node.getExpr(), cuctx, path))
-                +";"
+                        + (node.getExpr() == null ? "" : nodeToString(node.getExpr(), cuctx, path))
+                        + ";"
         );
     }
 
-    private StringPrec JNodeHSwitch_ToString(HNSwitch node, HLGenCompilationUnitContext cuctx, JNodePath path) {
+    private StringPrec onSwitch(HNSwitch node, HLGenCompilationUnitContext cuctx, JNodePath path) {
         HNode ee = node.getExpr();
         StringBuilder sb = new StringBuilder();
         if (ee instanceof HNDeclareIdentifier) {
@@ -269,7 +291,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
                 for (HNode whenNode : ((HNSwitch.SwitchCase) aCase).getWhenNodes()) {
                     sb2.append("\ncase ").append(nodeToString(whenNode, cuctx, path)).append(": ");
                 }
-                sb2.append(nodeToString(aCase.getDoNode(), cuctx, path));
+                sb2.append(nodeToStatementString(aCase.getDoNode(), cuctx, path));
                 HNSwitch.SwitchCase cc = (HNSwitch.SwitchCase) aCase;
                 HNode doNode = cc.getDoNode();
                 if (HNodeUtils.requireExplicitBreak(doNode)) {
@@ -317,7 +339,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
         return new StringPrec("break " + node.getLabel());
     }
 
-    private StringPrec JNodeHForNode_ToString(HNFor node, HLGenCompilationUnitContext cuctx, JNodePath path) {
+    private StringPrec onFor(HNFor node, HLGenCompilationUnitContext cuctx, JNodePath path) {
         boolean iter = node.isIteratorType();
         boolean tuple = false;
         for (HNode initExpr : node.getInitExprs()) {
@@ -342,7 +364,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
                 sb.append(" ");
                 String identifierName = ((HNDeclareTokenIdentifier) initExpr.getIdentifierToken()).getName();
                 sb.append(identifierName);
-                sb.append(initExpr.getAssignOperator());
+                sb.append(iter ? ":" : "=");//initExpr.getAssignOperator().image
                 HNode initValue = (HNode) initExpr.getInitValue();
                 StringPrec obj = nodeToString(initValue, cuctx, path.append(node));
                 sb.append(obj);
@@ -567,7 +589,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
         }
     }
 
-    private StringPrec JNodeHWhileNode_ToString(HNWhile node, HLGenCompilationUnitContext cuctx, JNodePath path) {
+    private StringPrec onWhile(HNWhile node, HLGenCompilationUnitContext cuctx, JNodePath path) {
         StringBuilder sb = new StringBuilder();
         if (node.getLabel() != null) {
             sb.append(node.getLabel() + ": ");
@@ -660,6 +682,10 @@ public class HLCStage09JavaGenerator implements HLCStage {
     }
 
     private StringPrec onArrayNew(HNArrayNew node, HLGenCompilationUnitContext cuctx, JNodePath path) {
+        if (HNodeUtils.isElementInvokable(node)) {
+            return onElementInvokable(node, cuctx, path);
+        }
+
         HNode setter = node.getConstructor();
         if (setter == null) {
             StringBuilder sb = new StringBuilder("new ");
@@ -738,6 +764,14 @@ public class HLCStage09JavaGenerator implements HLCStage {
             }
             case METHOD: {
                 HNElementMethod c = (HNElementMethod) element;
+                if (c.getArg0Kind() == HNElementMethod.Arg0Kind.BASE) {
+                    List<JNode> aa = new ArrayList<>();
+//                    aa.add();
+                    aa.addAll(Arrays.asList(c.getArgNodes()));
+                    return JInvokable_ToString(node, c.getInvokable(),
+                            HUtils.getEvaluables(c.getArgNodes()),
+                            cuctx, path);
+                }
                 return JInvokable_ToString(node, c.getInvokable(),
                         HUtils.getEvaluables(c.getArgNodes()),
                         cuctx, path);
@@ -748,13 +782,8 @@ public class HLCStage09JavaGenerator implements HLCStage {
     }
 
     private StringPrec onOpUnaryCall(HNOpUnaryCall node, HLGenCompilationUnitContext cuctx, JNodePath path) {
-        HNElement element = node.getElement();
-        if (element != null) {
-            switch (element.getKind()) {
-                case METHOD: {
-                    throw new JFixMeLaterException();
-                }
-            }
+        if (HNodeUtils.isElementInvokable(node)) {
+            return onElementInvokable(node, cuctx, path);
         }
         StringBuilder sb = new StringBuilder();
         if (node.isPrefixOperator()) {
@@ -769,7 +798,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
         return new StringPrec(sb.toString());
     }
 
-    private StringPrec JNodeHDefaultLiteral_ToString(HNLiteralDefault node, HLGenCompilationUnitContext cuctx, JNodePath path) {
+    private StringPrec onLiteralDefault(HNLiteralDefault node, HLGenCompilationUnitContext cuctx, JNodePath path) {
         JType t = node.getElement().getType();
         if (t.isPrimitive()) {
             if (t.name().equals("boolean")) {
@@ -802,7 +831,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
         }
     }
 
-//    private StringPrec JNodeHField_ToString(HNField node, HLGenCompilationUnitContext cuctx, JNodePath path) {
+    //    private StringPrec JNodeHField_ToString(HNField node, HLGenCompilationUnitContext cuctx, JNodePath path) {
 //        HNode i = node.getInstanceNode();
 //        JField f = node.getField();
 //        if (f.isStatic()) {
@@ -975,6 +1004,19 @@ public class HLCStage09JavaGenerator implements HLCStage {
         if (v instanceof Boolean) {
             return new StringPrec(String.valueOf(v));
         }
+        if (v instanceof Pattern) {
+
+            return new StringPrec(
+                    cuctx.nameWithImports(
+                            cuctx.types().forName(java.util.regex.Pattern.class.getName())
+                            , false)
+                    +".compile("
+                            +JToken.quoteString(
+                                    v.toString()
+                    )
+                    +")"
+            );
+        }
         throw new IllegalArgumentException("Unsupported Literal of type " + v.getClass().getName());
 //        return String.valueOf(v);
     }
@@ -1044,7 +1086,39 @@ public class HLCStage09JavaGenerator implements HLCStage {
     }
 
     private StringPrec JInvokable_ToString(HNode node, JInvokable invokable, JEvaluable[] args, HLGenCompilationUnitContext cuctx, JNodePath path) {
-        if (invokable instanceof JFunctionConverted) {
+        if (invokable instanceof ConvertedJMethod2) {
+            ConvertedJMethod2 c = (ConvertedJMethod2) invokable;
+            JArgumentConverter[] argConverters = c.getArgConverters();
+            JInvokable other = c.getOther();
+            int newArgCount = other.signature().argsCount();
+            JEvaluable[] args2 = new JEvaluable[newArgCount];
+            for (int i = 0; i < newArgCount; i++) {
+                if (argConverters != null && argConverters[i] != null) {
+                    if (argConverters[i] instanceof JArgumentConverterByIndex) {
+                        int newIndex = ((JArgumentConverterByIndex) argConverters[i]).getNewIndex();
+                        args2[i] = args[newIndex];
+                    } else {
+                        throw new JShouldNeverHappenException();
+                    }
+                } else {
+                    args2[i] = args[i];
+                }
+            }
+            JInstanceArgumentResolver ir = c.getInstanceArgumentResolver();
+            if (ir == null) {
+                throw new JShouldNeverHappenException();
+            } else if (ir instanceof JInstanceArgumentResolverFromArgumentByIndex) {
+                JInstanceArgumentResolverFromArgumentByIndex rr = (JInstanceArgumentResolverFromArgumentByIndex) ir;
+                JEvaluableNode nn = (JEvaluableNode) args[rr.getInstanceArgumentIndex()];
+                StringPrec s = JInvokable_ToString((HNode) nn.getNode(), other, args2, cuctx, path.append(node));
+                if (c.getResultConverter() != null) {
+                    s = Convert_ToString(c.getResultConverter(), s, cuctx, path.append(node));
+                }
+                return s;
+            } else {
+                throw new JShouldNeverHappenException();
+            }
+        } else if (invokable instanceof JFunctionConverted) {
             JFunctionConverted c = (JFunctionConverted) invokable;
             JConverter[] argConverters = c.getArgConverters();
             JEvaluable[] args2 = new JEvaluable[args.length];
@@ -1153,7 +1227,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
                     } else if (m.declaringType().name().startsWith("net.vpc.hadralang.stdlib.ext.")) {
                         if (staticStdImportExtensions) {
                             cuctx.nameWithImports(t, true);
-                            doPrint = false;
+                            doPrint = true;
                         }
                     }
                     if (doPrint) {
@@ -1259,7 +1333,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
             } else {
                 jb = (HNBlock) node.getBody();
             }
-            sb.append(onBlock(jb, cuctx, false, node.isSetUserObject("javagen.injectRunModule"), path.append(node)));
+            sb.append(onBlock(jb, cuctx, false, true, node.isSetUserObject("javagen.injectRunModule"), path.append(node)));
         } else {
             //if constructor
             //  sb.append(node.getConstructor().declaringType().simpleName());
@@ -1304,7 +1378,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
                         && node.getInvokableType() != HLInvokableType.CONSTRUCTOR
                         && node.getInvokableType() != HLInvokableType.MAIN_CONSTRUCTOR
                         && !node.getReturnType().name().equals("void");
-                sb.append(onBlock(jb, cuctx, withReturn, node.isSetUserObject("javagen.injectRunModule"), path.append(node)));
+                sb.append(onBlock(jb, cuctx, withReturn, true, node.isSetUserObject("javagen.injectRunModule"), path.append(node)));
             }
         }
         return new StringPrec(sb.toString());
@@ -1339,9 +1413,9 @@ public class HLCStage09JavaGenerator implements HLCStage {
         return new StringPrec(sb.toString());
     }
 
-    public StringPrec onBlock(HNBlock node, HLGenCompilationUnitContext cuctx, boolean withReturn, boolean injectRunModule, JNodePath path) {
+    public StringPrec onBlock(HNBlock node, HLGenCompilationUnitContext cuctx, boolean withReturn, boolean withTryCatch, boolean injectRunModule, JNodePath path) {
         StringBuilder sb = new StringBuilder();
-        if(node.getBlocType()== HNBlock.BlocType.STATIC_INITIALIZER){
+        if (node.getBlocType() == HNBlock.BlocType.STATIC_INITIALIZER) {
             sb.append("static ");
         }
         sb.append("{");
@@ -1349,9 +1423,16 @@ public class HLCStage09JavaGenerator implements HLCStage {
             sb.append("\n");
             sb.append(indent("runModule();"));
         }
+        StringBuilder sb2 = new StringBuilder();
         for (HNode statement : node.getStatements()) {
+            sb2.append("\n");
+            sb2.append(indent(nodeToStatementString(statement, cuctx, path.append(node)).toString()));
+        }
+        if (withTryCatch) {
             sb.append("\n");
-            sb.append(indent(nodeToString(statement, cuctx, path.append(node)).toString()));
+            sb.append(indent(toCatchChecked(new StringPrec(sb2.toString()))));
+        } else {
+            sb.append(sb2);
         }
 //        if (withReturn) {
 //            sb.append("\n");
@@ -1391,13 +1472,27 @@ public class HLCStage09JavaGenerator implements HLCStage {
         return new StringPrec(sb.toString());
     }
 
+    private StringPrec toCatchChecked(StringPrec s) {
+        StringBuilder sb = new StringBuilder("try{\n");
+        sb.append(indent(s));
+        sb.append("\n}catch(RuntimeException $e){");
+        sb.append("\n  throw $e;");
+        sb.append("\n}catch(Exception $e){");
+        sb.append("\n  throw new RuntimeException($e);");
+        sb.append("\n}");
+        return new StringPrec(sb.toString());
+    }
+
     private StringPrec onOpDot(HNOpDot node, HLGenCompilationUnitContext cuctx, JNodePath path) {
+        if (HNodeUtils.isElementInvokable(node)) {
+            return onElementInvokable(node, cuctx, path);
+        }
         if (!node.isNullableInstance()
                 && !node.isUncheckedMember()) {
             return new StringPrec(
                     nodeToString(node.getLeft(), cuctx, path.append(node))
-                    + "."
-                    + nodeToString(node.getRight(), cuctx, path.append(node))
+                            + "."
+                            + nodeToString(node.getRight(), cuctx, path.append(node))
             );
         } else {
             throw new JFixMeLaterException();
@@ -1405,6 +1500,9 @@ public class HLCStage09JavaGenerator implements HLCStage {
     }
 
     private StringPrec onParsPostfix(HNParsPostfix node, HLGenCompilationUnitContext cuctx, JNodePath path) {
+        if (HNodeUtils.isElementInvokable(node)) {
+            return onElementInvokable(node, cuctx, path);
+        }
         StringBuilder sb = new StringBuilder();
         sb.append(node.getLeft());
         sb.append("(");
@@ -1427,7 +1525,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
             if (i > 0) {
                 sb.append(",");
             }
-            sb.append(right[i]);
+            sb.append(nodeToString(right[i], cuctx, path.append(node)));
         }
         sb.append(")");
         return new StringPrec(sb.toString());
@@ -1474,67 +1572,6 @@ public class HLCStage09JavaGenerator implements HLCStage {
             }
         }
         return binop(node.getName(), nodeToString(node.getLeft(), cuctx, path.append(node)), nodeToString(node.getRight(), cuctx, path.append(node)));
-    }
-
-    private static class ForEachDec {
-
-        String name;
-        String type;
-        String value;
-
-        public ForEachDec(String name, String type, String value) {
-            this.name = name;
-            this.type = type;
-            this.value = value;
-        }
-    }
-
-    private static class JNodeRaw extends HNode {
-
-        private String javaCode;
-
-        public JNodeRaw(String javaCode) {
-            super(HNNodeId.H_RAW);
-            this.javaCode = javaCode;
-        }
-
-        @Override
-        protected void findAndReplaceChildren(JNodeFindAndReplace findAndReplace) {
-        }
-
-        @Override
-        public List<JNode> childrenNodes() {
-            return Collections.emptyList();
-        }
-    }
-
-    private static class StringPrec {
-
-        private String str;
-        private int prec;
-
-        public StringPrec(String str, int prec) {
-            this.str = str;
-            this.prec = prec;
-        }
-
-        public StringPrec(String str) {
-            this.str = str;
-            this.prec = Integer.MAX_VALUE;
-        }
-
-        @Override
-        public String toString() {
-            return String.valueOf(str);
-        }
-
-        public int length() {
-            return str.length();
-        }
-
-        public boolean endsWith(String s) {
-            return str.endsWith(s);
-        }
     }
 
     private boolean isReturn(HNode[] n) {
@@ -1623,19 +1660,64 @@ public class HLCStage09JavaGenerator implements HLCStage {
         return JOperatorPrecedences.getDefaultPrecedence(JOperator.infix(name));
     }
 
-    public static String indent(StringPrec str) {
-        return indent(str.toString());
+    private static class ForEachDec {
+
+        String name;
+        String type;
+        String value;
+
+        public ForEachDec(String name, String type, String value) {
+            this.name = name;
+            this.type = type;
+            this.value = value;
+        }
     }
 
-    public static String beforeClass() {
-        return "\n";
+    private static class JNodeRaw extends HNode {
+
+        private String javaCode;
+
+        public JNodeRaw(String javaCode) {
+            super(HNNodeId.H_RAW);
+            this.javaCode = javaCode;
+        }
+
+        @Override
+        public List<JNode> childrenNodes() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        protected void findAndReplaceChildren(JNodeFindAndReplace findAndReplace) {
+        }
     }
 
-    public static String beforeMethod() {
-        return "\n";
-    }
+    private static class StringPrec {
 
-    public static String indent(String str) {
-        return JeepUtils.indent("    ", str);
+        private String str;
+        private int prec;
+
+        public StringPrec(String str, int prec) {
+            this.str = str;
+            this.prec = prec;
+        }
+
+        public StringPrec(String str) {
+            this.str = str;
+            this.prec = Integer.MAX_VALUE;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(str);
+        }
+
+        public int length() {
+            return str.length();
+        }
+
+        public boolean endsWith(String s) {
+            return str.endsWith(s);
+        }
     }
 }

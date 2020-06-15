@@ -4,13 +4,13 @@ import net.vpc.common.jeep.DefaultJCompilationUnit;
 import net.vpc.common.jeep.JSource;
 import net.vpc.common.jeep.core.compiler.JSourceRoot;
 import net.vpc.common.jeep.util.JStringUtils;
-import net.vpc.hadralang.compiler.core.HLCOptions;
+import net.vpc.hadralang.compiler.core.HLOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
 import net.vpc.hadralang.compiler.parser.ast.HNBlock;
 
 public class HLCStage01Parser implements HLCStage {
     @Override
-    public void processProject(HLProject project, HLCOptions options) {
+    public void processProject(HLProject project, HLOptions options) {
         JSourceRoot[] inputs = options.roots();
         int foundCompilationUnits = 0;
         if (inputs.length > 0) {

@@ -4,7 +4,7 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.nodes.AbstractJNode;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.util.JStringUtils;
-import net.vpc.hadralang.compiler.core.HLCOptions;
+import net.vpc.hadralang.compiler.core.HLOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
 import net.vpc.hadralang.compiler.parser.ast.HNLambdaExpression;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public abstract class HLCStageType1 implements HLCStage{
     public abstract JNode processCompilerStage(JCompilerContext compilerContextBase) ;
 
-    public void processProject(HLProject project, HLCOptions options) {
+    public void processProject(HLProject project, HLOptions options) {
         for (JCompilationUnit compilationUnit : project.getCompilationUnits()) {
             processCompilerStage(project.newCompilerContext(compilationUnit));
         }

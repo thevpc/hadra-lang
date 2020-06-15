@@ -332,4 +332,8 @@ public class HNBlock extends HNode {
             return this;
         }
     }
+
+    public static HNBlock get(JNode n){
+        return (HNBlock) n;
+    }
 }

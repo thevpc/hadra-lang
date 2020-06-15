@@ -8,7 +8,6 @@ import java.util.List;
 public class HLDeclarationOptions {
     boolean acceptFunction = true;
     boolean acceptClass = true;
-    boolean requiredSemiColumnForVar = false;
     boolean acceptEqValue = true;
     boolean acceptInValue = false;
     boolean acceptModifiers = true;
@@ -60,15 +59,6 @@ public class HLDeclarationOptions {
 
     public HLDeclarationOptions setAcceptClass(boolean acceptClass) {
         this.acceptClass = acceptClass;
-        return this;
-    }
-
-    public boolean isRequiredSemiColumnForVar() {
-        return requiredSemiColumnForVar;
-    }
-
-    public HLDeclarationOptions setRequiredSemiColumnForVar(boolean requiredSemiColumnForVar) {
-        this.requiredSemiColumnForVar = requiredSemiColumnForVar;
         return this;
     }
 

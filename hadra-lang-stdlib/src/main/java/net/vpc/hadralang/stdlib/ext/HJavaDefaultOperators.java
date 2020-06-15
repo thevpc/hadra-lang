@@ -2,7 +2,7 @@ package net.vpc.hadralang.stdlib.ext;
 
 public class HJavaDefaultOperators {
 
-    //region neg
+    //region minus
     public static int minus(byte a) {
         return -a;
     }
@@ -46,7 +46,7 @@ public class HJavaDefaultOperators {
     }
     //endregion
 
-    //region neg
+    //region or
     public static boolean or(boolean a, boolean b) {
         return a || b;
     }
@@ -892,6 +892,13 @@ public class HJavaDefaultOperators {
     }
     public static long newPrimitiveLong(int a) {
         return a;
+    }
+
+    //endregion
+
+    //region not
+    public static boolean not(boolean a) {
+        return !a;
     }
 
     //endregion

@@ -38,7 +38,7 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>hlc</goal>
+                            <goal>hl</goal>
                         </goals>
                     </execution>
                 </executions>

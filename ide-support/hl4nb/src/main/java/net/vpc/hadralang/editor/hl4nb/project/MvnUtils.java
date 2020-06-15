@@ -33,7 +33,7 @@ public class MvnUtils {
 //                <executions>
 //                    <execution>
 //                        <goals>
-//                            <goal>hlc</goal>
+//                            <goal>hl</goal>
 //                        </goals>
 //                    </execution>
 //                </executions>
@@ -47,7 +47,7 @@ public class MvnUtils {
 //        plugin.setConfiguration(createConfiguration());
         if (a.equals(HADRA_MAVEN_PLUGIN)) {
             PluginExecution e = factory.createExecution();
-            e.addGoal("hlc");
+            e.addGoal("hl");
             plugin.addExecution(e);
         }
         return plugin;

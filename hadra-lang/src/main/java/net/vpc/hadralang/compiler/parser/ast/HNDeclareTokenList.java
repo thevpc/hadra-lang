@@ -28,7 +28,7 @@ public class HNDeclareTokenList extends HNDeclareToken implements HNDeclare {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("(");
+//        sb.append("(");
         for (int i = 0; i < items.length; i++) {
             if (i > 0) {
                 sb.append(",");
@@ -39,7 +39,7 @@ public class HNDeclareTokenList extends HNDeclareToken implements HNDeclare {
 //            sb.append(" ");
             sb.append(items[i]);
         }
-        sb.append(")");
+//        sb.append(")");
         return sb.toString();
     }
 

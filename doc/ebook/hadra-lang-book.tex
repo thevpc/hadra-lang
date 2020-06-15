@@ -337,24 +337,27 @@ backgroundcolor=\color{yellow!10}, frame=single
     \cleardoublepage
     \chapter*{Introduction}
 
-        \textit{HadraLang} is a new general purpose, multi paradigm, statically typed, transpiled, programming language that that is very inspired from Java, C\#, C++, Scala, Kotlin,Haskell among other programming languages around. HadraLang (or **HL**). It compiles mainly to java source code or directly to java bytecode.
-
-        \textit{HadraLang} focuses on
+        \textit{HadraLang} is a new GPL for DSL, multi paradigm, statically typed, transpiled, programming language that is very inspired from Java, C\#, C++, Scala, Kotlin and Haskell among other programming languages around. HadraLang (or **HL**) compiles mainly to java source code or directly to java bytecode. By GPL for DSL we mean a general purpose programming language that makes it easy to be used as a Domain Specific Language in a range of domains. 
+        
+        \textit{HadraLang} is entended to be
         \begin{itemize}
-        \item conciseness : write less, do more
-        \item readability : meaningful statements
-        \item extensibility : always make room for extensions
-        \item scientific expressiveness : write scientific software better
-        \item fast learning curve : Java, C\#, C++ developers will be comfortable with the syntax
+        \item easy to learn for DSL users
+        \item more precise semantics
+        \item with better checking : compiler should do more work
+        \item focus conciseness : write less, do more
+        \item promote readability : meaningful statements
+        \item enable extensibility : always make room for extensions
         \end{itemize}
 
         and brings features like
         \begin{itemize}
         \item Single file project
-        \item Scripting
+        \item Embeddable scripting
+        \item Transpillable to a range of Languages (for now only Java is supported)
         \item Preprocessing
         \item Operator overloading with unicode support
         \item Extension of existing classes
+        \item Extension of control statements
         \item null safety operators
         \item Checked and unchecked calls
         \item Tuples and Range support
@@ -363,11 +366,11 @@ backgroundcolor=\color{yellow!10}, frame=single
 
         \section*{Why do we need another Programming Language?}
         \textit{HadraLang} was first designed as a backing scripting language for "Hadrumaths" java/scala library which is mainly an algebraic calculus library as a replacement of the scripting facilities implemented in scala. Java and Scala are very powerful programming languages however code can get very verbose or very complicated sooner or later.        
-        Initially, \textit{HadraLang} was implemented as a simple imperative programming language with operator overloading, implicit conversion, and extension functions with support for unicode operators (used in algebra calculus).
+        Initially, \textit{HadraLang} was implemented as a simple imperative programming language with operator overloading, implicit conversion, and extension functions with support for unicode operators (used in algebra calculus). There we have seen the potential of such programming language as a GPL be re-sesigning the language to becore multi-paradigm.
         
         
         \section*{Hello World}
-        writing a Hello world in \textit{HadraLang} could not be simpler. there is no need to encapsulate your code in a function/procedure/class or what so ever.
+        Writing a Hello world in \textit{HadraLang} is straightforward. There is no need to encapsulate your code in a function/procedure/class or whatsoever.
         The following code is a fully compilable/runnable valid code :
         
         \lstset{language=HadraLang,backgroundcolor=\color{bgHL}}
@@ -381,7 +384,7 @@ println("Hello World");
 $ hl Main.hl
         \end{lstlisting}
 
-        This command will actually compile the code, generating the corresponding byte code and executing in a new virtual machine.
+        This command will actually compile the code, generate the corresponding byte code and execute it a new virtual machine.
         
         If we need only to compile the file to a jar we issue this command:
 
@@ -391,16 +394,22 @@ $ hl --jar Main.hl
         \end{lstlisting}
 
         \section*{Getting Started}
-        To use HadraLang we need to download the HadraLang Compiler and runtime. The easiest way to do so is via 
-        nut package manager.
-        if you have not nuts installed you can do so by
+        To use \textit{HadraLang} we need to download the \textit{HadraLang} Compiler and Runtime. The easiest way to do so is via \textit{nuts} package manager. Both \textit{nuts} and \textit{HadraLang} are written in \textit{java} (c) and require \textit{java} 8 runtime (or later).
+        We start checking if java is installed :
+        \begin{lstlisting}
+$ java -version
+java version %221.8.0_211%22
+Java(TM) SE Runtime Environment (build 1.8.0_211-b12)
+Java HotSpot(TM) 64-Bit Server VM (build 25.211-b12, mixed mode)
+        \end{lstlisting}
+        If we have not nuts installed yet, we start downloading nuts and installing it as show here.
+        We download nuts binaries, a bare jar file.
          \lstset{language=Bash,backgroundcolor=\color{bgBash}}
         \begin{lstlisting}
 $ wget https://github.com/thevpc/vpc-public-maven\
 /raw/master/net/vpc/app/nuts/nuts/0.7.0/nuts-0.7.0.jar
         \end{lstlisting}
-        
-        installing nuts
+Then we run the installer :
         \begin{lstlisting}
 $ java -jar nuts-0.7.0.jar
         \end{lstlisting}

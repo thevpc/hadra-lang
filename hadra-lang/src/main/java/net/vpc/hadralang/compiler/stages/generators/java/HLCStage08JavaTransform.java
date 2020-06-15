@@ -4,7 +4,7 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.impl.functions.JNameSignature;
 import net.vpc.common.jeep.util.JTokenUtils;
 import net.vpc.common.jeep.util.JTypeUtils;
-import net.vpc.hadralang.compiler.core.HLCOptions;
+import net.vpc.hadralang.compiler.core.HLOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
 import net.vpc.hadralang.compiler.core.elements.*;
 import net.vpc.hadralang.compiler.core.invokables.HLJCompilerContext;
@@ -12,6 +12,7 @@ import net.vpc.hadralang.compiler.parser.ast.*;
 import net.vpc.hadralang.compiler.stages.HLCStage;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
 import net.vpc.hadralang.compiler.utils.HUtils;
+import net.vpc.hadralang.stdlib.BooleanRef;
 
 import java.lang.reflect.Modifier;
 import java.util.function.Supplier;
@@ -36,7 +37,7 @@ public class HLCStage08JavaTransform implements HLCStage {
     }
 
     @Override
-    public void processProject(HLProject project, HLCOptions options) {
+    public void processProject(HLProject project, HLOptions options) {
         JavaNodes.of(project).setMetaPackage(
                 (HNDeclareType) copyFactory.copy(project.getMetaPackageType())
         );
@@ -185,138 +186,17 @@ public class HLCStage08JavaTransform implements HLCStage {
     private HNode onBlock(HNBlock node, HLJCompilerContext2 compilerContext) {
         switch (node.getBlocType()) {
             case GLOBAL_BODY: {
-//                HNBlock newBlock = new HNBlock(node.getBlocType(), new HNode[0], null, null);
                 for (HNode statement : node.getStatements()) {
-                    HNode hs = (HNode) statement;
-                    JavaNodes jn = JavaNodes.of(compilerContext.project());
-                    switch (hs.id()) {
-                        case H_DECLARE_TYPE: {
-                            HNDeclareType r = (HNDeclareType) processNode(hs, compilerContext);
-                            JSource s0 = HUtils.getSource(hs);
-                            HUtils.setSource(r, s0);
-                            jn.getTopLevelTypes().add(r);
-                            break;
-                        }
-
-                        case H_DECLARE_INVOKABLE: {
-                            JSource s0 = HUtils.getSource(hs);
-                            if (s0 != null) {
-                                jn.getMetaPackageSources().add(s0);
-                            }
-                            HNBlock metaBody = (HNBlock) jn.getMetaPackage().getBody();
-                            HNDeclareInvokable r = (HNDeclareInvokable) processNode(hs, compilerContext);
-                            r.setModifiers(HUtils.publifyModifiers(r.getModifiers() | Modifier.STATIC));
-                            if(metaBody==null){
-                                metaBody=new HNBlock(HNBlock.BlocType.CLASS_BODY, new HNode[0],null,null);
-                                jn.getMetaPackage().setBody(metaBody);
-                            }
-                            metaBody.add(r);
-                            break;
-                        }
-
-                        case H_DECLARE_META_PACKAGE: {
-                            //ignore
-                            break;
-                        }
-                        case H_DECLARE_IDENTIFIER: {
-                            //always dissociate declaration and assignement as the metaPackage may be run
-                            //multiple times
-                            JSource s0 = HUtils.getSource(hs);
-                            if (s0 != null) {
-                                jn.getMetaPackageSources().add(s0);
-                            }
-                            Supplier<HNBlock> dissociateBlock = () -> getOrCreateRunModuleMethodBody(compilerContext);
-                            HNDeclareIdentifier hs0 = (HNDeclareIdentifier) hs;
-                            HNode left = (HNode) copyFactory.copy(hs0.getIdentifierToken());
-                            HNode right = hs0.getInitValue() == null ? null : (HNode) copyFactory.copy(hs0.getInitValue());
-                            _fillBlockAssign(left, right,
-                                    (HNBlock) jn.getMetaPackage().getBody(), dissociateBlock,
-                                    isAssignRequireTempVar(left, right), true, true, compilerContext);
-                            //ignore
-                            break;
-                        }
-                        default: {
-                            JSource s0 = HUtils.getSource(hs);
-                            if (s0 != null) {
-                                jn.getMetaPackageSources().add(s0);
-                            }
-                            HNBlock body = getOrCreateRunModuleMethodBody(compilerContext);
-                            HNode n2 = processNode(hs, compilerContext.withNewParent(body));
-                            if (n2.id() == HNNodeId.H_BLOCK && ((HNBlock) n2).getBlocType() == HNBlock.BlocType.EXPR_GROUP) {
-                                for (HNode s2 : ((HNBlock) n2).getStatements()) {
-                                    body.add(s2);
-                                }
-                            } else {
-                                body.add(n2);
-                            }
-                        }
-
-                    }
+                    onBlockGlobal(statement, compilerContext);
                 }
                 return null;
             }
             case CLASS_BODY: {
                 HNBlock newBlock = new HNBlock(node.getBlocType(), new HNode[0], null, null);
-                boolean dissociateInstance = false;
-                boolean dissociateStatic = false;
+                BooleanRef dissociateInstance = new BooleanRef(false);
+                BooleanRef dissociateStatic = new BooleanRef(false);
                 for (HNode statement : node.getStatements()) {
-                    HNode hs = (HNode) statement;
-                    switch (hs.id()) {
-                        case H_DECLARE_TYPE: {
-                            newBlock.add(processNode(hs, compilerContext));
-                            break;
-                        }
-                        case H_DECLARE_INVOKABLE: {
-                            newBlock.add(processNode(hs, compilerContext));
-                            break;
-                        }
-                        case H_DECLARE_META_PACKAGE: {
-                            //ignore
-                            break;
-                        }
-                        case H_DECLARE_IDENTIFIER: {
-                            //need to check when to dissociate.
-                            // as a first reflexion, we should dissociate when these conditions apply
-                            // + there is a statement (other than declarations) BEFORE this declaration
-                            HNDeclareIdentifier hs0 = (HNDeclareIdentifier) hs;
-                            boolean dissociate=hs0.isStatic()?dissociateStatic:dissociateInstance;
-                            Supplier<HNBlock> dissociateBlock = null;
-                            HNBlock newBlock0 = newBlock;
-                            if (dissociate) {
-                                dissociateBlock = () -> getOrCreateSpecialInitializer(newBlock, compilerContext,hs0.isStatic());
-                            }
-                            HNode left = (HNode) copyFactory.copy(hs0.getIdentifierToken());
-                            HNode right = hs0.getInitValue() == null ? null : (HNode) copyFactory.copy(hs0.getInitValue());
-                            _fillBlockAssign(left, right,
-                                    newBlock0, dissociateBlock, isAssignRequireTempVar(left, right), true, false, compilerContext);
-                            break;
-                        }
-
-                        case H_ASSIGN: {
-                            //need to check when to dissociate.
-                            // as a first reflexion, we should dissociate when these conditions apply
-                            // + there is a statement (other than declarations) BEFORE this declaration
-                            HNAssign hs0 = (HNAssign) hs;
-                            if(hs0.isStatic()){
-                                dissociateStatic=true;
-                            }else{
-                                dissociateInstance=true;
-                            }
-                            HNode left = (HNode) copyFactory.copy(hs0.getLeft());
-                            HNode right = hs0.getRight() == null ? null : (HNode) copyFactory.copy(hs0.getRight());
-                            _fillBlockAssign(left, right,
-                                    getOrCreateSpecialInitializer(newBlock, compilerContext,hs0.isStatic())
-                                    , null, isAssignRequireTempVar(left, right), true, false, compilerContext);
-                            break;
-                        }
-
-                        default: {
-                            dissociateInstance=true;
-                            HNBlock body = getOrCreateSpecialInitializer(newBlock, compilerContext,false);
-                            body.add(processNode(hs, compilerContext));
-                        }
-
-                    }
+                    onBlockClass(statement, compilerContext, newBlock, dissociateStatic, dissociateInstance);
                 }
                 return newBlock;
             }
@@ -324,58 +204,206 @@ public class HLCStage08JavaTransform implements HLCStage {
             case LOCAL_BLOC:
             case METHOD_BODY:
             case INSTANCE_INITIALIZER:
-            case STATIC_INITIALIZER:
-                {
+            case STATIC_INITIALIZER: {
                 HNBlock newBlock = new HNBlock(node.getBlocType(), new HNode[0], null, null);
                 for (HNode statement : node.getStatements()) {
-                    HNode hs = (HNode) statement;
-                    switch (hs.id()) {
-                        case H_DECLARE_TYPE: {
-                            newBlock.add(processNode(hs, compilerContext));
-                            break;
-                        }
-                        case H_DECLARE_INVOKABLE: {
-                            throw new JFixMeLaterException();
-//                            newBlock.add(processNode(hs, compilerContext));
-//                            break;
-                        }
-                        case H_DECLARE_META_PACKAGE: {
-                            //ignore
-                            break;
-                        }
-                        case H_DECLARE_IDENTIFIER: {
-                            HNDeclareIdentifier hs0 = (HNDeclareIdentifier) hs;
-                            HNode left = (HNode) copyFactory.copy(hs0.getIdentifierToken());
-                            HNode right = hs0.getInitValue() == null ? null : (HNode) copyFactory.copy(hs0.getInitValue());
-                            _fillBlockAssign(left, right,
-                                    newBlock, null, isAssignRequireTempVar(left, right), false, false, compilerContext);
-                            //ignore
-                            break;
-                        }
-
-                        default: {
-                            HNode n2 = processNode(hs, compilerContext);
-                            if (n2.id() == HNNodeId.H_BLOCK && ((HNBlock) n2).getBlocType() == HNBlock.BlocType.EXPR_GROUP) {
-                                for (HNode s2 : ((HNBlock) n2).getStatements()) {
-                                    newBlock.add(s2);
-                                }
-                            } else {
-                                newBlock.add(n2);
-                            }
-                            break;
-                        }
-
-                    }
+                    onBlockLocal(statement, compilerContext, newBlock);
                 }
                 return newBlock;
             }
-            case UNKNOWN:
-            case PACKAGE_BODY:
-            case IMPORT_BLOC: {
-                throw new JShouldNeverHappenException();
-            }
             default: {
                 throw new JShouldNeverHappenException();
+            }
+        }
+    }
+
+    private void onBlockGlobal(HNode statement, HLJCompilerContext2 compilerContext) {
+        JavaNodes jn = JavaNodes.of(compilerContext.project());
+        switch (statement.id()) {
+            case H_IMPORT: {
+                //ignore
+                break;
+            }
+            case H_DECLARE_TYPE: {
+                HNDeclareType r = (HNDeclareType) processNode(statement, compilerContext);
+                JSource s0 = HUtils.getSource(statement);
+                HUtils.setSource(r, s0);
+                jn.getTopLevelTypes().add(r);
+                break;
+            }
+
+            case H_DECLARE_INVOKABLE: {
+                JSource s0 = HUtils.getSource(statement);
+                if (s0 != null) {
+                    jn.getMetaPackageSources().add(s0);
+                }
+                HNBlock metaBody = (HNBlock) jn.getMetaPackage().getBody();
+                HNDeclareInvokable r = (HNDeclareInvokable) processNode(statement, compilerContext);
+                r.setModifiers(HUtils.publifyModifiers(r.getModifiers() | Modifier.STATIC));
+                if (metaBody == null) {
+                    metaBody = new HNBlock(HNBlock.BlocType.CLASS_BODY, new HNode[0], null, null);
+                    jn.getMetaPackage().setBody(metaBody);
+                }
+                metaBody.add(r);
+                break;
+            }
+
+            case H_DECLARE_META_PACKAGE: {
+                //ignore
+                break;
+            }
+            case H_DECLARE_IDENTIFIER: {
+                //always dissociate declaration and assignement as the metaPackage may be run
+                //multiple times
+                JSource s0 = HUtils.getSource(statement);
+                if (s0 != null) {
+                    jn.getMetaPackageSources().add(s0);
+                }
+                Supplier<HNBlock> dissociateBlock = () -> getOrCreateRunModuleMethodBody(compilerContext);
+                HNDeclareIdentifier hs0 = (HNDeclareIdentifier) statement;
+                HNode left = (HNode) copyFactory.copy(hs0.getIdentifierToken());
+                HNode right = hs0.getInitValue() == null ? null : (HNode) copyFactory.copy(hs0.getInitValue());
+                _fillBlockAssign(left, right,
+                        (HNBlock) jn.getMetaPackage().getBody(), dissociateBlock,
+                        isAssignRequireTempVar(left, right), true, true, compilerContext);
+                //ignore
+                break;
+            }
+            default: {
+                if (statement instanceof HNBlock && HNBlock.get(statement).getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
+                    for (HNode hNode : HNBlock.get(statement).getStatements()) {
+                        onBlockGlobal(hNode, compilerContext);
+                    }
+                } else {
+                    JSource s0 = HUtils.getSource(statement);
+                    if (s0 != null) {
+                        jn.getMetaPackageSources().add(s0);
+                    }
+                    HNBlock body = getOrCreateRunModuleMethodBody(compilerContext);
+                    HNode n2 = processNode(statement, compilerContext.withNewParent(body));
+                    if (n2.id() == HNNodeId.H_BLOCK && ((HNBlock) n2).getBlocType() == HNBlock.BlocType.EXPR_GROUP) {
+                        for (HNode s2 : ((HNBlock) n2).getStatements()) {
+                            body.add(s2);
+                        }
+                    } else {
+                        body.add(n2);
+                    }
+                }
+            }
+        }
+    }
+
+    private void onBlockClass(HNode statement, HLJCompilerContext2 compilerContext, HNBlock newBlock,
+                              BooleanRef dissociateStatic, BooleanRef dissociateInstance) {
+        switch (statement.id()) {
+            case H_IMPORT: {
+                break;
+            }
+            case H_DECLARE_TYPE: {
+                newBlock.add(processNode(statement, compilerContext));
+                break;
+            }
+            case H_DECLARE_INVOKABLE: {
+                newBlock.add(processNode(statement, compilerContext));
+                break;
+            }
+            case H_DECLARE_META_PACKAGE: {
+                //ignore
+                break;
+            }
+            case H_DECLARE_IDENTIFIER: {
+                //need to check when to dissociate.
+                // as a first reflexion, we should dissociate when these conditions apply
+                // + there is a statement (other than declarations) BEFORE this declaration
+                HNDeclareIdentifier hs0 = (HNDeclareIdentifier) (HNode) statement;
+                boolean dissociate = hs0.isStatic() ? dissociateStatic.get() : dissociateInstance.get();
+                Supplier<HNBlock> dissociateBlock = null;
+                HNBlock newBlock0 = newBlock;
+                if (dissociate) {
+                    dissociateBlock = () -> getOrCreateSpecialInitializer(newBlock, compilerContext, hs0.isStatic());
+                }
+                HNode left = (HNode) copyFactory.copy(hs0.getIdentifierToken());
+                HNode right = hs0.getInitValue() == null ? null : (HNode) copyFactory.copy(hs0.getInitValue());
+                _fillBlockAssign(left, right,
+                        newBlock0, dissociateBlock, isAssignRequireTempVar(left, right), true, false, compilerContext);
+                break;
+            }
+
+            case H_ASSIGN: {
+                //need to check when to dissociate.
+                // as a first reflexion, we should dissociate when these conditions apply
+                // + there is a statement (other than declarations) BEFORE this declaration
+                HNAssign hs0 = (HNAssign) (HNode) statement;
+                if (hs0.isStatic()) {
+                    dissociateStatic.set(true);
+                } else {
+                    dissociateInstance.set(true);
+                }
+                HNode left = (HNode) copyFactory.copy(hs0.getLeft());
+                HNode right = hs0.getRight() == null ? null : (HNode) copyFactory.copy(hs0.getRight());
+                _fillBlockAssign(left, right,
+                        getOrCreateSpecialInitializer(newBlock, compilerContext, hs0.isStatic())
+                        , null, isAssignRequireTempVar(left, right), true, false, compilerContext);
+                break;
+            }
+            default: {
+                if (statement instanceof HNBlock && HNBlock.get(statement).getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
+                    for (HNode hNode : HNBlock.get(statement).getStatements()) {
+                        onBlockClass(hNode, compilerContext, newBlock, dissociateStatic, dissociateInstance);
+                    }
+                } else {
+                    dissociateInstance.set(true);
+                    HNBlock body = getOrCreateSpecialInitializer(newBlock, compilerContext, false);
+                    body.add(processNode((HNode) statement, compilerContext));
+                }
+            }
+        }
+    }
+
+    private void onBlockLocal(HNode statement, HLJCompilerContext2 compilerContext, HNBlock newBlock) {
+        switch (statement.id()) {
+            case H_IMPORT: {
+                break;//ignore
+            }
+            case H_DECLARE_TYPE: {
+                newBlock.add(processNode(statement, compilerContext));
+                break;
+            }
+            case H_DECLARE_INVOKABLE: {
+                throw new JFixMeLaterException();
+//                            newBlock.add(processNode(hs, compilerContext));
+//                            break;
+            }
+            case H_DECLARE_META_PACKAGE: {
+                //ignore
+                break;
+            }
+            case H_DECLARE_IDENTIFIER: {
+                HNDeclareIdentifier hs0 = (HNDeclareIdentifier) statement;
+                HNode left = (HNode) copyFactory.copy(hs0.getIdentifierToken());
+                HNode right = hs0.getInitValue() == null ? null : (HNode) copyFactory.copy(hs0.getInitValue());
+                right = initializeAssignRight(compilerContext, left, right, false);
+                _fillBlockAssign(left, right,
+                        newBlock, null, isAssignRequireTempVar(left, right), false, false, compilerContext);
+                //ignore
+                break;
+            }
+            default: {
+                if (statement instanceof HNBlock && HNBlock.get(statement).getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
+                    for (HNode hNode : HNBlock.get(statement).getStatements()) {
+                        onBlockLocal(hNode, compilerContext, newBlock);
+                    }
+                } else {
+                    HNode n2 = processNode(statement, compilerContext);
+                    if (n2.id() == HNNodeId.H_BLOCK && ((HNBlock) n2).getBlocType() == HNBlock.BlocType.EXPR_GROUP) {
+                        for (HNode s2 : ((HNBlock) n2).getStatements()) {
+                            newBlock.add(s2);
+                        }
+                    } else {
+                        newBlock.add(n2);
+                    }
+                }
+                break;
             }
         }
     }
@@ -544,6 +572,7 @@ public class HLCStage08JavaTransform implements HLCStage {
         HNBlock b = new HNBlock(HNBlock.BlocType.EXPR_GROUP, new HNode[0], null, null);
         HNode left = (HNode) copyFactory.copy(node.getIdentifierToken());
         HNode right = (HNode) (node.getInitValue() == null ? null : copyFactory.copy(node.getInitValue()));
+        right = initializeAssignRight(compilerContext, left, right, true);
         _fillBlockAssign(left, right, b, null,
                 isAssignRequireTempVar(left, right),
                 false, false, compilerContext
@@ -555,14 +584,81 @@ public class HLCStage08JavaTransform implements HLCStage {
 //        return copy0(node);
     }
 
+    private boolean isWithinLocalBlock(HNode left, HLJCompilerContext2 compilerContext) {
+        HNode dd = compilerContext.base.lookupEnclosingDeclaration(left);
+        if (dd instanceof HNBlock) {
+            HNBlock bb = HNBlock.get(dd);
+            if (bb.getBlocType() == HNBlock.BlocType.LOCAL_BLOC) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private HNode initializeAssignRight(HLJCompilerContext2 compilerContext, HNode left, HNode right, boolean check) {
+        if (right == null) {
+            if (!check || isWithinLocalBlock(left, compilerContext)) {
+                JType ll = null;
+                if (left instanceof HNDeclareTokenList) {
+                    ll = (((HNDeclareTokenList) left).getIdentifierType());
+                } else if (left instanceof HNDeclareTokenIdentifier) {
+                    ll = (((HNDeclareTokenIdentifier) left).getIdentifierType());
+                } else {
+                    ll = compilerContext.base.jTypeOrLambda(left).getType();
+                }
+                if (ll.isPrimitive()) {
+                    switch (ll.name()) {
+                        case "boolean": {
+                            right = new HNLiteral(false, JTypeUtils.forBoolean(compilerContext.base.types()), null);
+                            break;
+                        }
+                        case "byte": {
+                            right = new HNLiteral((byte) 0, JTypeUtils.forByte(compilerContext.base.types()), null);
+                            break;
+                        }
+                        case "short": {
+                            right = new HNLiteral((short) 0, JTypeUtils.forShort(compilerContext.base.types()), null);
+                            break;
+                        }
+                        case "int": {
+                            right = new HNLiteral((int) 0, JTypeUtils.forInt(compilerContext.base.types()), null);
+                            break;
+                        }
+                        case "long": {
+                            right = new HNLiteral((long) 0, JTypeUtils.forLong(compilerContext.base.types()), null);
+                            break;
+                        }
+                        case "char": {
+                            right = new HNLiteral((char) 0, JTypeUtils.forChar(compilerContext.base.types()), null);
+                            break;
+                        }
+                        case "float": {
+                            right = new HNLiteral((float) 0, JTypeUtils.forFloat(compilerContext.base.types()), null);
+                            break;
+                        }
+                        case "double": {
+                            right = new HNLiteral((double) 0, JTypeUtils.forDouble(compilerContext.base.types()), null);
+                            break;
+                        }
+                    }
+                } else {
+                    right = new HNLiteral(null, JTypeUtils.forNull(compilerContext.base.types()), null);
+                }
+
+
+            }
+        }
+        return right;
+    }
+
     private HNode onParsPostfix(HNParsPostfix node, HLJCompilerContext2 compilerContext) {
         HNParsPostfix m = (HNParsPostfix) copy0(node);
-        if(m.getElement().getKind()==HNElementKind.METHOD){
+        if (m.getElement().getKind() == HNElementKind.METHOD) {
             JInvokable i = ((HNElementMethod) m.getElement()).getInvokable();
-            if(i instanceof JMethod){
-                JMethod jm=(JMethod)i;
-                if(jm.isStatic()){
-                    if(node.parentNode()!=null) {
+            if (i instanceof JMethod) {
+                JMethod jm = (JMethod) i;
+                if (jm.isStatic()) {
+                    if (node.parentNode() != null) {
                         switch (node.parentNode().id()) {
                             case H_OP_DOT: {
                                 return m;
@@ -570,10 +666,10 @@ public class HLCStage08JavaTransform implements HLCStage {
                         }
                     }
                     return new HNOpDot(
-                            new HNTypeToken(jm.declaringType(),null),
+                            new HNTypeToken(jm.declaringType(), null),
                             HNodeUtils.createToken("."),
                             m,
-                            null,null
+                            null, null
                     ).setElement(m.getElement());
                 }
             }
@@ -589,11 +685,11 @@ public class HLCStage08JavaTransform implements HLCStage {
     private HNode onDeclareInvokable(HNDeclareInvokable node, HLJCompilerContext2 compilerContext) {
         HNDeclareInvokable copy = (HNDeclareInvokable) copy0(node);
         HNode body = processNode((HNode) copy.getBody(), compilerContext);
-        if(copy.isImmediateBody() && !JTypeUtils.isVoid(copy.getReturnType())){
+        if (copy.isImmediateBody() && !JTypeUtils.isVoid(copy.getReturnType())) {
             copy.setBody(
-                    new HNReturn(body,null,null)
+                    new HNReturn(body, null, null)
             );
-        }else {
+        } else {
             copy.setBody(body);
         }
         return copy;
@@ -623,6 +719,10 @@ public class HLCStage08JavaTransform implements HLCStage {
     public HNDeclareInvokable getRunModuleMethod(HLJCompilerContext2 compilerContext) {
         HNDeclareType meta = JavaNodes.of(compilerContext.project()).getMetaPackage();
         HNBlock b = (HNBlock) meta.getBody();
+        if (b == null) {
+            b = new HNBlock(HNBlock.BlocType.CLASS_BODY, new HNode[0], null, null);
+            meta.setBody(b);
+        }
         for (HNDeclareInvokable ii : b.findDeclaredInvokables()) {
             if (ii.getSignature() != null && ii.getSignature().toString().equals("runModule()")) {
                 return ii;
@@ -645,7 +745,7 @@ public class HLCStage08JavaTransform implements HLCStage {
                     null
             );
             ii.setSignature(JNameSignature.of("runModule()"));
-            ii.setElement(new HNElementMethod("runModule", null));
+            ii.setElement(new HNElementMethod(null).setMethodName("runModule"));
             ii.setReturnTypeName(compilerContext.base.createSpecialTypeToken("void"));
             ii.setDeclaringType(meta);
             ii.setBody(new HNBlock(HNBlock.BlocType.METHOD_BODY, new HNode[0], ii.startToken(), ii.endToken()));
@@ -665,16 +765,16 @@ public class HLCStage08JavaTransform implements HLCStage {
         return m;
     }
 
-    public HNBlock getSpecialInitializer(HNBlock classTypeBody, HLJCompilerContext2 compilerContext,boolean isStatic) {
+    public HNBlock getSpecialInitializer(HNBlock classTypeBody, HLJCompilerContext2 compilerContext, boolean isStatic) {
         for (HNode statement : classTypeBody.getStatements()) {
             if (statement instanceof HNBlock) {
                 HNBlock specInit = (HNBlock) statement;
-                if(isStatic){
-                    if (specInit.getBlocType()== HNBlock.BlocType.STATIC_INITIALIZER && specInit.isSetUserObject("SPECIAL_INITIALIZER")) {
+                if (isStatic) {
+                    if (specInit.getBlocType() == HNBlock.BlocType.STATIC_INITIALIZER && specInit.isSetUserObject("SPECIAL_INITIALIZER")) {
                         return specInit;
                     }
-                }else {
-                    if (specInit.getBlocType()== HNBlock.BlocType.INSTANCE_INITIALIZER && specInit.isSetUserObject("SPECIAL_INITIALIZER")) {
+                } else {
+                    if (specInit.getBlocType() == HNBlock.BlocType.INSTANCE_INITIALIZER && specInit.isSetUserObject("SPECIAL_INITIALIZER")) {
                         return specInit;
                     }
                 }
@@ -683,11 +783,11 @@ public class HLCStage08JavaTransform implements HLCStage {
         return null;
     }
 
-    public HNBlock getOrCreateSpecialInitializer(HNBlock classTypeBody, HLJCompilerContext2 compilerContext,boolean isStatic) {
-        HNBlock m = getSpecialInitializer(classTypeBody, compilerContext,isStatic);
+    public HNBlock getOrCreateSpecialInitializer(HNBlock classTypeBody, HLJCompilerContext2 compilerContext, boolean isStatic) {
+        HNBlock m = getSpecialInitializer(classTypeBody, compilerContext, isStatic);
         if (m == null) {
             m = new HNBlock(
-                    isStatic?HNBlock.BlocType.STATIC_INITIALIZER:HNBlock.BlocType.INSTANCE_INITIALIZER,
+                    isStatic ? HNBlock.BlocType.STATIC_INITIALIZER : HNBlock.BlocType.INSTANCE_INITIALIZER,
                     new HNode[0], null, null);
             m.setUserObject("SPECIAL_INITIALIZER");
             classTypeBody.add(m);
@@ -741,7 +841,7 @@ public class HLCStage08JavaTransform implements HLCStage {
             if (!fieldTemp || dissociatedBlock == null || right == null) {
                 HNDeclareIdentifier decl = new HNDeclareIdentifier(
                         (HNDeclareToken) new HNDeclareTokenIdentifier(newVarToken)
-                        .setElement(new HNElementLocalVar(newVarName).setEffectiveType(rightTypeOrLambda.getType()))
+                                .setElement(new HNElementLocalVar(newVarName).setEffectiveType(rightTypeOrLambda.getType()))
                         , right,
                         new HNTypeToken(rightTypeOrLambda.getType(), null), assignOp, null, null);
                 int modifiers = 0;
@@ -761,7 +861,7 @@ public class HLCStage08JavaTransform implements HLCStage {
             } else {
                 HNDeclareIdentifier decl = new HNDeclareIdentifier(
                         (HNDeclareToken) new HNDeclareTokenIdentifier(newVarToken)
-                        .setElement(new HNElementLocalVar(newVarName).setEffectiveType(rightTypeOrLambda.getType()))
+                                .setElement(new HNElementLocalVar(newVarName).setEffectiveType(rightTypeOrLambda.getType()))
                         , null,
                         new HNTypeToken(rightTypeOrLambda.getType(), null), assignOp, null, null);
                 int modifiers = 0;
@@ -881,17 +981,17 @@ public class HLCStage08JavaTransform implements HLCStage {
 
                 block.add(nhs1);
                 if (right != null) {
-                    HNode first=null;
+                    HNode first = null;
                     for (HNDeclareTokenIdentifier object : leftId.getItems()) {
                         HNode hnIdentifier = new HNIdentifier(object.getToken())
                                 .setElement(
                                         isField ? new HNElementField(object.getName()).setEffectiveType(identifierType)
                                                 : new HNElementLocalVar(object.getName()).setEffectiveType(identifierType)
                                 );
-                        if(first==null || right instanceof HNLiteral) {
-                            first=hnIdentifier;
+                        if (first == null || right instanceof HNLiteral) {
+                            first = hnIdentifier;
                             _fillBlockAssign(hnIdentifier, right, dissociatedBlock.get(), null, false, isField, isStatic, compilerContext);
-                        }else{
+                        } else {
                             _fillBlockAssign(hnIdentifier, first, dissociatedBlock.get(), null, false, isField, isStatic, compilerContext);
                         }
                     }

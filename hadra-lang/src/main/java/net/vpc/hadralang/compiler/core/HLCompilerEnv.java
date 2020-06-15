@@ -6,7 +6,7 @@ import java.util.*;
 
 public class HLCompilerEnv implements JCompilerEnv{
     private HLProject project;
-    private HLCOptions options;
+    private HLOptions options;
     private JContext context;
     private JModuleId effectiveModuleId;
     private Set<String> effectiveClassPathIds;
@@ -15,7 +15,7 @@ public class HLCompilerEnv implements JCompilerEnv{
     private List<HLDependency> dependencies=new ArrayList<>();
     private Map<String,String> properties=new LinkedHashMap<>();
 
-    public HLCompilerEnv(HLProject project, HLCOptions options, JContext context) {
+    public HLCompilerEnv(HLProject project, HLOptions options, JContext context) {
         this.project = project;
         this.options = options;
         this.context = context;
@@ -25,7 +25,7 @@ public class HLCompilerEnv implements JCompilerEnv{
         return project;
     }
 
-    public HLCOptions options() {
+    public HLOptions options() {
         return options;
     }
 

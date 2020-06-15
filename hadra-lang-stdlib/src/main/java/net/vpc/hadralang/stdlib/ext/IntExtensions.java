@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.function.IntFunction;
 import java.util.function.IntPredicate;
 
-public class IntArrayExtensions {
+public class IntExtensions {
     //region int[] array extension points
     public static int upperBound(int[] s) {
         return s.length - 1;

@@ -1,7 +1,6 @@
 package net.vpc.hadralang.compiler;
 
 import net.vpc.app.nuts.*;
-import net.vpc.hadralang.compiler.core.HLCWithOptions;
 
 public class HLMain extends NutsApplication {
     public static void main(String[] args) {
@@ -14,7 +13,7 @@ public class HLMain extends NutsApplication {
     @Override
     public void run(NutsApplicationContext applicationContext) {
         applicationContext.processCommandLine(new NutsCommandLineProcessor() {
-            HLCWithOptions hl = new HL().withOptions();
+            HL hl=HL.create();
             boolean noMoreOptions=false;
             @Override
             public boolean processOption(NutsArgument argument, NutsCommandLine cmdLine) {
@@ -44,9 +43,9 @@ public class HLMain extends NutsApplication {
             public boolean processNonOption(NutsArgument argument, NutsCommandLine cmdLine) {
                 String s = argument.getString();
                 if(isURL(s)){
-                    hl.includeFileURL(s);
+                    hl.addSourceFileURL(s);
                 }else{
-                    hl.includeFile(s);
+                    hl.addSourceFile(s);
                 }
                 noMoreOptions=true;
                 return true;

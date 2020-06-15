@@ -44,7 +44,7 @@ Introduction {#introduction .unnumbered}
 transpiled, programming language that that is very inspired from Java,
 C\#, C++, Scala, Kotlin,Haskell among other programming languages
 around. HadraLang (or \*\*HL\*\*). It compiles mainly to java source
-code or directly to java bytecode.
+code or directly to java bytecode. 
 
 *HadraLang* focuses on
 

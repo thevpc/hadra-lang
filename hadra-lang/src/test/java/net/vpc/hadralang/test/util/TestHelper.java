@@ -6,8 +6,8 @@
 package net.vpc.hadralang.test.util;
 
 import net.vpc.hadralang.compiler.HL;
-import net.vpc.hadralang.compiler.core.HLCWithOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
+import net.vpc.hadralang.compiler.utils.SetLog;
 
 /**
  *
@@ -25,9 +25,9 @@ public class TestHelper {
     public static HLProject compile2JavaResource(String resourceFileName) {
         SetLog.prepare();
         printHeader(resourceFileName);
-        HLCWithOptions hlc = new HL().withOptions();
-        return hlc
-                .includeResourcesFile("net/vpc/hadralang/test/" + resourceFileName)
+        HL hl=HL.create();
+        return hl
+                .addSourceResourcesFile("net/vpc/hadralang/test/" + resourceFileName)
                 .generateJavaFolder("build/generated/tmp/" + resourceFileName)
                 .compile();
 
@@ -36,9 +36,9 @@ public class TestHelper {
     public static HLProject compileOnlyResource(String resourceFileName) {
         SetLog.prepare();
         printHeader(resourceFileName);
-        HLCWithOptions hlc = new HL().withOptions();
-        return hlc
-                .includeResourcesFile("net/vpc/hadralang/test/" + resourceFileName)
+        HL hl=HL.create();
+        return hl
+                .addSourceResourcesFile("net/vpc/hadralang/test/" + resourceFileName)
                 .compile();
 
     }
@@ -52,10 +52,18 @@ public class TestHelper {
     public static HLProject compileOnlyText(String id, String text) {
         SetLog.prepare();
         printHeader(id);
-        HLCWithOptions hlc = new HL().withOptions();
-        return hlc
-                .includeText(text, "<user-text>")
+        HL hl=HL.create();
+        return hl
+                .addSourceText(text, "<user-text>")
                 .compile();
+    }
+    public static HLProject parseOnlyText(String id, String text) {
+        SetLog.prepare();
+        printHeader(id);
+        HL hl=HL.create();
+        return hl
+                .addSourceText(text, "<user-text>")
+                .parse();
     }
 
 }

@@ -1,7 +1,7 @@
 package net.vpc.hadralang.compiler.stages;
 
 import net.vpc.common.jeep.*;
-import net.vpc.hadralang.compiler.core.HLCOptions;
+import net.vpc.hadralang.compiler.core.HLOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
 import net.vpc.hadralang.compiler.core.invokables.HLJCompilerContext;
 import net.vpc.hadralang.compiler.parser.ast.HNode;
@@ -14,14 +14,14 @@ public abstract class HLCStageType2 implements HLCStage {
 
     public abstract boolean processCompilerStage(JCompilerContext compilerContextBase);
 
-    protected void processProjectMain(HLProject project, HLCOptions options) {
+    protected void processProjectMain(HLProject project, HLOptions options) {
         for (JCompilationUnit compilationUnit : project.getCompilationUnits()) {
             processCompilerStage(project.newCompilerContext(compilationUnit));
         }
     }
 
     @Override
-    public void processProject(HLProject project, HLCOptions options) {
+    public void processProject(HLProject project, HLOptions options) {
         processProjectMain(project, options);
         if (check) {
             for (JCompilationUnit compilationUnit : project.getCompilationUnits()) {
@@ -44,7 +44,7 @@ public abstract class HLCStageType2 implements HLCStage {
         return succeeded;
     }
 
-    protected void processProjectCheck(HLProject project, HLCOptions options) {
+    protected void processProjectCheck(HLProject project, HLOptions options) {
         //check
         for (JCompilationUnit compilationUnit : project.getCompilationUnits()) {
             processCompilerStageCheck(project.newCompilerContext(compilationUnit));

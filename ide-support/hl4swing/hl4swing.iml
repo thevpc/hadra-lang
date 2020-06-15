@@ -20,7 +20,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="hadra-lang" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm:6.0" level="project" />
-    <orderEntry type="module" module-name="nuts" />
+    <orderEntry type="library" name="Maven: net.vpc.app.nuts:nuts:0.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-util:6.0" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-tree:6.0" level="project" />
     <orderEntry type="module" module-name="tson" />

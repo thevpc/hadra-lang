@@ -20,16 +20,16 @@ public class HNElementMethod extends HNElement {
     public JTypeOrLambda arg0Type = null;
     public boolean arg0TypeProcessed = false;
 
-    public HNElementMethod(String methodName,JInvokable invokable) {
+    public HNElementMethod(JInvokable invokable) {
         super(HNElementKind.METHOD);
-        this.methodName = methodName;
+        this.methodName = invokable.name();
         this.invokable = invokable;
     }
 
-    public HNElementMethod(String methodName) {
-        super(HNElementKind.METHOD);
-        this.methodName = methodName;
-    }
+//    public HNElementMethod(String methodName) {
+//        super(HNElementKind.METHOD);
+//        this.methodName = methodName;
+//    }
 
     public HLIndexedMethod getIndexedMethod() {
         return indexedMethod;
@@ -83,10 +83,15 @@ public class HNElementMethod extends HNElement {
         return null;
     }
 
+    public HNElementMethod setMethodName(String methodName) {
+        this.methodName = methodName;
+        return this;
+    }
+
     @Override
     public JTypeOrLambda getTypeOrLambda() {
         if(invokable!=null){
-            JType type = invokable.returnType();
+            JType type = invokable.genericReturnType();
             if(type==null){
                 return null;
             }

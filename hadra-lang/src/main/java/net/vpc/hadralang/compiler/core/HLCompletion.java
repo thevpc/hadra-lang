@@ -36,8 +36,7 @@ public class HLCompletion implements JCompletion {
     @Override
     public void setCompilationUnit(String compilationUnitText, String sourceName) {
         HLProject c = new HL(projectContext)
-                .withOptions()
-                .includeText(
+                .addSourceText(
                         compilationUnitText == null ? "" : compilationUnitText,
                         sourceName
                 )
@@ -166,7 +165,7 @@ public class HLCompletion implements JCompletion {
             }
             case "HNBlock":
             case "CompilationUnitBlock": {
-                HNBlock n = (HNBlock) node;
+                HNBlock n = HNBlock.get(node);
                 JPositionStyle y = null;
                 if (n.startToken().def.id == HTokenId.LEFT_CURLY_BRACKET) {
                     y = n.startToken().getPosition(caretOffset);

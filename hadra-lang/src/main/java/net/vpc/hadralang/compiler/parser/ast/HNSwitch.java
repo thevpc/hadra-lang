@@ -82,7 +82,9 @@ public class HNSwitch extends HNode {
                     sb.append(aCase.toString());
                 }
                 sb.append(": ");
-                sb.append(switchBranch.doNode.toString());
+                if(switchBranch.doNode!=null) {
+                    sb.append(switchBranch.doNode.toString());
+                }
             } else if (switchBranch instanceof SwitchIf) {
                 sb.append("\n  if ");
                 HNode whenNode = ((SwitchIf) switchBranch).whenNode;
@@ -202,7 +204,7 @@ public class HNSwitch extends HNode {
         @Override
         public void copyFrom(JNode node,JNodeCopyFactory copyFactory) {
             super.copyFrom(node,copyFactory);
-            if (node instanceof SwitchIf) {
+            if (node instanceof SwitchBranch) {
                 SwitchBranch o = (SwitchBranch) node;
                 this.doNode = JNodeUtils.bindCopy(this, copyFactory, o.doNode);
                 this.impl = o.impl;
@@ -230,10 +232,13 @@ public class HNSwitch extends HNode {
         private List<HNode> whenNodes;
         private List<Object> simplifiedWhenNodes = new ArrayList<>();
 
+        public SwitchCase() {
+            super(HNNodeId.H_SWITCH_CASE);
+        }
         public SwitchCase(List<HNode> whenNodes, JToken op, HNode doNode, JToken startToken, JToken endToken) {
             super(HNNodeId.H_SWITCH_CASE);
-            this.whenNodes = JNodeUtils.bind(this,whenNodes, "when");
-            this.doNode = JNodeUtils.bind(this,doNode, "do");
+            this.setWhenNodes(whenNodes);
+            this.setDoNode(doNode);
             this.op = op;
             setStartToken(startToken);
             setEndToken(endToken);

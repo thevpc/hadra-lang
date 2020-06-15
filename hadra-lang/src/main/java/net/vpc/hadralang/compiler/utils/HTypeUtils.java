@@ -2,6 +2,8 @@ package net.vpc.hadralang.compiler.utils;
 
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.util.JTypeUtils;
+import net.vpc.hadralang.compiler.parser.ast.ElementTypeAndConstraint;
+import net.vpc.hadralang.compiler.parser.ast.InitValueConstraint;
 import net.vpc.hadralang.stdlib.Tuple;
 import net.vpc.hadralang.stdlib.TupleN;
 
@@ -10,9 +12,9 @@ import java.util.Arrays;
 public class HTypeUtils {
 
     public static boolean isTupleType(JTypeOrLambda t) {
-        return t!=null && t.isType() && isTupleType(t.getType());
+        return t != null && t.isType() && isTupleType(t.getType());
     }
-    
+
     public static boolean isTupleType(JType t) {
         return tupleTypeBase(t.types()).isAssignableFrom(t);
     }
@@ -89,7 +91,7 @@ public class HTypeUtils {
     public static JType[] extractLambdaArgTypesOrError(JType type, int expectedArgCount, JToken location, JCompilerLog log) {
         JMethod[] jMethods = type.declaredMethods();
         if (jMethods.length > 1) {
-            jMethods = Arrays.stream(type.declaredMethods()).filter(x->!x.isDefault()
+            jMethods = Arrays.stream(type.declaredMethods()).filter(x -> !x.isDefault()
                     && x.isPublic()
                     && !JTypeUtils.isSynthetic(x.modifiers())
             ).toArray(JMethod[]::new);
@@ -97,16 +99,16 @@ public class HTypeUtils {
         if (jMethods.length == 1) {
             JType[] jTypes = jMethods[0].argTypes();
             if (expectedArgCount >= 0) {
-                if(jMethods[0].signature().isVarArgs()){
-                    if (jTypes.length-1<=expectedArgCount) {
-                        if(log!=null) {
+                if (jMethods[0].signature().isVarArgs()) {
+                    if (jTypes.length - 1 <= expectedArgCount) {
+                        if (log != null) {
                             log.error("X000", null, "lambda expression arguments count mismatch " + jTypes.length + "!=" + expectedArgCount, location);
                         }
                         return null;
                     }
-                }else {
+                } else {
                     if (expectedArgCount != jTypes.length) {
-                        if(log!=null) {
+                        if (log != null) {
                             log.error("X000", null, "lambda expression arguments count mismatch " + jTypes.length + "!=" + expectedArgCount, location);
                         }
                         return null;
@@ -115,7 +117,7 @@ public class HTypeUtils {
             }
             return jTypes;
         } else {
-            if(log!=null) {
+            if (log != null) {
                 log.error("X000", null, "expected functional type as Lambda expression. methods count " + jMethods.length + "!=1", location);
             }
             return null;
@@ -125,5 +127,81 @@ public class HTypeUtils {
     public static JType classOf(JType tv) {
         JRawType raw = (JRawType) tv.types().forName(Class.class.getName());
         return raw.parametrize(tv);
+    }
+
+    public static ElementTypeAndConstraint resolveIterableComponentType(JType valType, JTypes types) {
+        if (valType.isArray()) {
+            JTypeArray ta = (JTypeArray) valType;
+            return new ElementTypeAndConstraint(
+                    (ta.componentType()),
+                    InitValueConstraint.ITERABLE
+            );
+        } else if (types.forName("java.lang.CharSequence").isAssignableFrom(valType)) {
+            return new ElementTypeAndConstraint(
+                    JTypeUtils.forChar(types),
+                    InitValueConstraint.ITERABLE
+            );
+        } else if (types.forName("net.vpc.hadralang.stdlib.IntRange").isAssignableFrom(valType)) {
+            return new ElementTypeAndConstraint(
+                    JTypeUtils.forInt(types),
+                    InitValueConstraint.ITERABLE
+            );
+        } else if (types.forName("java.util.Iterable").isAssignableFrom(valType)) {
+            if (types.forName("java.util.Iterable").equals(valType.rawType())) {
+                JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).actualTypeArguments() : new JType[0];
+                if (a.length == 0) {
+                    valType = (JTypeUtils.forObject(types));
+                } else {
+                    valType = (JType) a[0];
+                }
+            } else {
+                throw new JFixMeLaterException();
+            }
+            return new ElementTypeAndConstraint(
+                    valType,
+                    InitValueConstraint.ITERABLE
+            );
+        } else if (types.forName("java.util.Iterator").isAssignableFrom(valType)) {
+            if (types.forName("java.util.Iterator").equals(valType.rawType())) {
+                JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).actualTypeArguments() : new JType[0];
+                if (a.length == 0) {
+                    valType = (JTypeUtils.forObject(types));
+                } else {
+                    valType = (JType) a[0];
+                }
+            } else {
+                throw new JFixMeLaterException();
+            }
+            return new ElementTypeAndConstraint(
+                    valType,
+                    InitValueConstraint.ITERATOR
+            );
+        } else if (types.forName("java.util.stream.BaseStream").isAssignableFrom(valType)) {
+            if (types.forName("java.util.stream.Stream").isAssignableFrom(valType)) {
+                if (types.forName("java.util.stream.Stream").equals(valType.rawType())) {
+                    JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).actualTypeArguments() : new JType[0];
+                    if (a.length == 0) {
+                        valType = (JTypeUtils.forObject(types));
+                    } else {
+                        valType = (JType) a[0];
+                    }
+                } else {
+                    throw new JFixMeLaterException();
+                }
+            } else if (types.forName("java.util.stream.IntStream").isAssignableFrom(valType)) {
+                valType = JTypeUtils.forInt(types);
+            } else if (types.forName("java.util.stream.LongStream").isAssignableFrom(valType)) {
+                valType = JTypeUtils.forLong(types);
+            } else if (types.forName("java.util.stream.DoubleStream").isAssignableFrom(valType)) {
+                valType = JTypeUtils.forDouble(types);
+            } else {
+                throw new JFixMeLaterException();
+            }
+            return new ElementTypeAndConstraint(
+                    valType,
+                    InitValueConstraint.ITERATOR
+            );
+        }
+        return null;
     }
 }

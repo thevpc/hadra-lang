@@ -130,7 +130,7 @@
 //        }
 //        project.metaPackageType().visit(visitor);
 //    }
-//    public void processProject(HLProject project, HLCOptions options){
+//    public void processProject(HLProject project, HLOptions options){
 //        for (JCompilationUnit cu : project.getCompilationUnits()) {
 //            ((AbstractJNode) cu.getAst()).parentNode(project.metaPackageType());
 //        }
@@ -3154,7 +3154,7 @@
 //            List<JNode> whenNodes = aCase.getWhenNodes();
 //            for (int i1 = 0; i1 < whenNodes.size(); i1++) {
 //                JNode whenNode = whenNodes.get(i1);
-//                Object e = HLCUtils.simplifyCaseLiteral(whenNode, vexpr.getType(), compilerContext, true, new boolean[1]);
+//                Object e = HLUtils.simplifyCaseLiteral(whenNode, vexpr.getType(), compilerContext, true, new boolean[1]);
 //                String kind = "unknown";
 //                if (numType.isInstance(e)) {
 //                    kind = "simple";
@@ -3167,14 +3167,14 @@
 //                    JInvokable cc = compilerContext.createConverter(JOnError.NULL, from, vexpr.getType(), whenNode, failInfo);
 //                    if (cc != null) {
 //                        HNInvokerCall r2 = createFunctionCall(node.startToken(), cc, new HNLiteral(e, from, whenNode.startToken()));
-//                        Object ce = HLCUtils.evalCaseLiteral(r2, compilerContext, null, null);
+//                        Object ce = HLUtils.evalCaseLiteral(r2, compilerContext, null, null);
 //                        kind = "simple";
 //                        e = ce;
 //                    } else {
 //                        cc = compilerContext.createConverter(JOnError.NULL, from, rangeType, whenNode, failInfo);
 //                        if (cc != null) {
 //                            HNInvokerCall r2 = createFunctionCall(node.startToken(), cc, new HNLiteral(e, from, whenNode.startToken()));
-//                            Object ce = HLCUtils.evalCaseLiteral(r2, compilerContext, null, null);
+//                            Object ce = HLUtils.evalCaseLiteral(r2, compilerContext, null, null);
 //                            kind = "range";
 //                            e = ce;
 //                        } else {
@@ -3218,9 +3218,9 @@
 //                        rangeSize = ((IntRange) r).size();
 //                    } else if (r instanceof LongRange) {
 //                        long size = ((LongRange) r).size();
-//                        rangeSize = size > HLCUtils.EXPAND_RANGE_SIZE ? HLCUtils.EXPAND_RANGE_SIZE + 1 : (int) size;
+//                        rangeSize = size > HLUtils.EXPAND_RANGE_SIZE ? HLUtils.EXPAND_RANGE_SIZE + 1 : (int) size;
 //                    }
-//                    if (rangeSize < 0 || rangeSize > HLCUtils.EXPAND_RANGE_SIZE) {
+//                    if (rangeSize < 0 || rangeSize > HLUtils.EXPAND_RANGE_SIZE) {
 //                        newIf.add(new HNIf.WhenDoBranchNode(
 //                                new HNOpBinaryCall(
 //                                        JTokenUtils.createOpToken("&&"),
@@ -3338,7 +3338,7 @@
 //            if (switchBranch instanceof HNSwitch.SwitchCase) {
 //                JNode c = null;
 //                for (JNode whenNode : ((HNSwitch.SwitchCase) switchBranch).getWhenNodes()) {
-//                    Object simple = HLCUtils.simplifyCaseLiteral(whenNode, vexpr.getType(), compilerContext, true, new boolean[1]);
+//                    Object simple = HLUtils.simplifyCaseLiteral(whenNode, vexpr.getType(), compilerContext, true, new boolean[1]);
 //                    HNOpBinaryCall c2 = new HNOpBinaryCall(
 //                            JTokenUtils.createOpToken("=="),
 //                            vexpr.copy(),
@@ -3651,7 +3651,7 @@
 //            List<JNode> whenNodes = aCase.getWhenNodes();
 //            for (int i1 = 0; i1 < whenNodes.size(); i1++) {
 //                JNode whenNode = whenNodes.get(i1);
-//                Object e = HLCUtils.simplifyCaseLiteral(whenNode, node.getExpr().getType(), compilerContext, true, new boolean[1]);
+//                Object e = HLUtils.simplifyCaseLiteral(whenNode, node.getExpr().getType(), compilerContext, true, new boolean[1]);
 //                if (e instanceof String) {
 //                    String i = (String) e;
 //                    if (visitedStrings.contains(i)) {
@@ -3694,7 +3694,7 @@
 //                JNode ifCond = null;
 //                for (int i1 = 0; i1 < wnodes.size(); i1++) {
 //                    JNode whenNode = wnodes.get(i1);
-//                    Object simple = HLCUtils.simplifyCaseLiteral(whenNode, vexpr.getType(), compilerContext, true, new boolean[1]);
+//                    Object simple = HLUtils.simplifyCaseLiteral(whenNode, vexpr.getType(), compilerContext, true, new boolean[1]);
 //                    if (simple instanceof String) {
 //                        //this is okkay
 //                    } else {

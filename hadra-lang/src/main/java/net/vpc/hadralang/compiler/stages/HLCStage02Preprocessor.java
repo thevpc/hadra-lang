@@ -7,11 +7,8 @@ import net.vpc.app.nuts.NutsWorkspace;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.DefaultJTypedValue;
 import net.vpc.common.jeep.core.eval.JEvaluableValue;
-import net.vpc.common.jeep.core.types.JTypeNameParser;
 import net.vpc.common.jeep.impl.functions.DefaultJInvokeContext;
 import net.vpc.common.jeep.util.JStringUtils;
-import net.vpc.common.jeep.util.JTokenUtils;
-import net.vpc.common.jeep.util.JeepUtils;
 import net.vpc.hadralang.compiler.core.*;
 import net.vpc.hadralang.compiler.core.elements.HNElementMetaPackageArtifact;
 import net.vpc.hadralang.compiler.core.elements.HNElementMetaPackageGroup;
@@ -22,7 +19,6 @@ import net.vpc.hadralang.compiler.index.HLIndexedProject;
 import net.vpc.hadralang.compiler.parser.ast.*;
 import net.vpc.hadralang.compiler.stages.generators.java.HLCStage08JavaTransform;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
-import net.vpc.hadralang.compiler.utils.HUtils;
 
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -32,7 +28,7 @@ import java.util.logging.Logger;
 public class HLCStage02Preprocessor implements HLCStage {
     public static final Logger LOG=Logger.getLogger(HLCStage02Preprocessor.class.getName());
     @Override
-    public void processProject(HLProject project, HLCOptions options) {
+    public void processProject(HLProject project, HLOptions options) {
         HNDeclareMetaPackage currentMetaPackage = null;
         String currentMetaPackageSource = null;
         JToken anyToken = null;
@@ -118,7 +114,7 @@ public class HLCStage02Preprocessor implements HLCStage {
 
     public HLIndexedProject parsePreProcessorResult(HNDeclareMetaPackage metaPackage,
                                                     String projectId,
-                                                    String currentMetaPackageSource, HLProject project, HLCOptions options) {
+                                                    String currentMetaPackageSource, HLProject project, HLOptions options) {
         JContext context = project.languageContext();
         if (metaPackage != null) {
             HNBlock body = metaPackage.getBody();

@@ -7,7 +7,6 @@ package net.vpc.hadralang.compiler.core;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.HashSet;
 
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.DefaultJeep;
@@ -236,13 +235,14 @@ public final class HadraLanguage extends DefaultJeep {
         this.resolvers().importType(CharArrayExtensions.class);
         this.resolvers().importType(PatternExtensions.class);
         this.resolvers().importType(CharSequenceExtensions.class);
-        this.resolvers().importType(IntArrayExtensions.class);
+        this.resolvers().importType(IntExtensions.class);
         this.resolvers().importType(ListExtensions.class);
         this.resolvers().importType(MapExtensions.class);
         this.resolvers().importType(RangeExtensions.class);
         this.resolvers().importType(StringBufferExtensions.class);
         this.resolvers().importType(StringBuilderExtensions.class);
         this.resolvers().importType(StringExtensions.class);
+        this.resolvers().importType(IOExtensions.class);
         this.resolvers().importType(HDefaults.class);
     }
 

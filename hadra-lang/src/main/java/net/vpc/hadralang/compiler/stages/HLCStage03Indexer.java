@@ -1,7 +1,7 @@
 package net.vpc.hadralang.compiler.stages;
 
 import net.vpc.common.jeep.*;
-import net.vpc.hadralang.compiler.core.HLCOptions;
+import net.vpc.hadralang.compiler.core.HLOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
 import net.vpc.hadralang.compiler.parser.ast.HNBlock;
 import net.vpc.hadralang.compiler.parser.ast.HNDeclareType;
@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class HLCStage03Indexer implements HLCStage{
     @Override
-    public void processProject(HLProject project, HLCOptions options) {
+    public void processProject(HLProject project, HLOptions options) {
         boolean incremental = options.isIncremental();
         HLIndexer indexer = project.indexer();
 

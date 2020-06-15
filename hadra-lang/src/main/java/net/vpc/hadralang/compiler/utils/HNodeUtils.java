@@ -95,7 +95,10 @@ public class HNodeUtils {
                     }
                     case METHOD: {
                         JMethod jm = (JMethod) ((HNElementMethod) element).getInvokable();
-                        if (jm.declaringType().name().equals("net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators")) {
+                        //jm.declaringType()==null for convert functions...
+                        if (
+                                jm.declaringType()!=null &&
+                                jm.declaringType().name().equals("net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators")) {
                             //this is a standard operator
                             return false;
                         }
@@ -165,7 +168,7 @@ public class HNodeUtils {
     public static HNDeclareInvokable getMainMethod(HNDeclareType type) {
         HNode b = type.getBody();
         if (b instanceof HNBlock) {
-            return getMainMethod((HNBlock) b);
+            return getMainMethod(HNBlock.get(b));
         }
         return null;
     }
@@ -281,7 +284,7 @@ public class HNodeUtils {
     }
 
     public static JNode skipImportBlock(JNode v) {
-        while (v instanceof HNBlock && ((HNBlock) v).getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
+        while (v instanceof HNBlock && HNBlock.get(v).getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
             v = v.parentNode();
         }
         return v;
@@ -290,7 +293,7 @@ public class HNodeUtils {
     public static JNode findImmediateParent(JNode v) {
         JNode n = v.parentNode();
         if (v instanceof HNBlock) {
-            if (((HNBlock) v).getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
+            if ((HNBlock.get(v)).getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
                 return findImmediateParent(v);
             }
         }

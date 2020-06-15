@@ -87,7 +87,7 @@
                 <version>3.6.0</version>
                 <configuration>
                     <goalPrefix>hl</goalPrefix>
-                    <goal>hlc</goal>
+                    <goal>hl</goal>
                 </configuration>
                 <executions>
                     <execution>

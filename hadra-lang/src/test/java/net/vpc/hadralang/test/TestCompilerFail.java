@@ -1,13 +1,9 @@
 package net.vpc.hadralang.test;
 
-import net.vpc.hadralang.compiler.HL;
-import net.vpc.hadralang.compiler.core.HLCWithOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
-import net.vpc.hadralang.test.util.SetLog;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.vpc.hadralang.test.util.TestHelper;
 

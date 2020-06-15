@@ -244,8 +244,9 @@ public class HUtils {
         LinkedHashSet<String> imports = new LinkedHashSet<>();
         while (node != null) {
             if (node instanceof HNBlock) {
-                if (((HNBlock) node).getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
-                    for (JNode statement : ((HNBlock) node).getStatements()) {
+                HNBlock node1 = HNBlock.get(node);
+                if (node1.getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
+                    for (JNode statement : node1.getStatements()) {
                         if (statement instanceof HNImport) {
                             imports.add(((HNImport) statement).getValue());
                         }

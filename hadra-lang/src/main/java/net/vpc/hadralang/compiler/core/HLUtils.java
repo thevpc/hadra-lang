@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class HLCUtils {
+public class HLUtils {
     public static final int EXPAND_RANGE_SIZE = 50;
 
     public static Object checkSimpleValue(Object value, JNode node, JType type, HLJCompilerContext compilerContextBase, boolean acceptSwitchCaseAlternatives, boolean[] refError) {

@@ -1,7 +1,6 @@
 package net.vpc.hadralang.mvnplugin;
 
 import net.vpc.hadralang.compiler.HL;
-import net.vpc.hadralang.compiler.core.HLCWithOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
@@ -21,12 +20,12 @@ import java.util.List;
  *
  */
 @Mojo(
-        name = "hlc",
+        name = "hl",
         threadSafe = true,
         defaultPhase = LifecyclePhase.GENERATE_SOURCES,
         requiresDependencyResolution = ResolutionScope.COMPILE
 )
-//@Execute(goal = "hlc")
+//@Execute(goal = "hl")
 public class HLMvnPlugin extends AbstractMojo {
     @Component
     private BuildPluginManager pluginManager;
@@ -96,19 +95,18 @@ public class HLMvnPlugin extends AbstractMojo {
         URLClassLoader classLoader=new URLClassLoader(classLoaderURLs.toArray(new URL[0]),
                 Thread.currentThread().getContextClassLoader()
         );
-        HLCWithOptions hlc = new HL(classLoader,null)
-                .withOptions();
+        HL hl=new HL(classLoader,null);
         for (String item : compileClasspathElements) {
             if(item.equals(buildDirectory) || item.startsWith(buildDirectory+File.separator)){
                 //ignore
             }else {
-                hlc.addClassPathItem(item);
+                hl.addClassPathItem(item);
             }
         }
-        hlc.includeFile(getSourceDirectory())
+        hl.addSourceFile(getSourceDirectory())
                 .generateJavaFolder(getOutputDirectory());
 
-        HLProject project = hlc.compile();
+        HLProject project = hl.compile();
         if (!project.isSuccessful()) {
             throw new MojoExecutionException(
                     "compilation failed with " + project.errorCount() + " errors.");

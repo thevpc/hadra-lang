@@ -7,7 +7,7 @@ import java.util.*;
 import net.vpc.common.jeep.core.compiler.JSourceFactory;
 import net.vpc.common.jeep.core.compiler.JSourceRoot;
 
-public abstract class HLCOptionsBase<T extends HLCOptionsBase> {
+public abstract class HLOptions<T extends HLOptions> {
 
     private final List<JSourceRoot> roots = new ArrayList<>();
     private final Set<String> classpath = new LinkedHashSet<>();
@@ -30,7 +30,7 @@ public abstract class HLCOptionsBase<T extends HLCOptionsBase> {
         return (T) this;
     }
 
-    public <T, R extends HLCOptionsBase> T setAll(HLCOptionsBase<R> t) {
+    public <T, R extends HLOptions> T setAll(HLOptions<R> t) {
         this.roots.addAll(t.roots);
         this.classpath.addAll(t.classpath);
         this.generateJavaFolder = t.generateJavaFolder;
@@ -88,27 +88,32 @@ public abstract class HLCOptionsBase<T extends HLCOptionsBase> {
         return (T) this;
     }
 
-    public T includeResourcesFolder(String path) {
+    public T addSourceResourcesFolder(String path) {
         roots.add(JSourceFactory.rootResourceFolder(path, "*.hl"));
         return (T) this;
     }
 
-    public T includeResourcesFile(String path) {
+    public T addSourceResourcesFile(String path) {
         roots.add(JSourceFactory.rootResourceFile(path));
         return (T) this;
     }
 
-    public T includeFile(String path) {
+    public T addSourceMavenProject(String path) {
+        addSourceFile(new File(path,"src/main/hl"));
+        return (T) this;
+    }
+
+    public T addSourceFile(String path) {
         roots.add(JSourceFactory.rootFile(new File(path)));
         return (T) this;
     }
 
-    public T includeFile(File file) {
+    public T addSourceFile(File file) {
         roots.add(JSourceFactory.rootFile(file));
         return (T) this;
     }
 
-    public T includeLibraryURL(String url) {
+    public T addSourceLibraryURL(String url) {
         try {
             roots.add(JSourceFactory.rootURLFolder(new URL(url), "*.hl"));
         } catch (MalformedURLException e) {
@@ -117,7 +122,7 @@ public abstract class HLCOptionsBase<T extends HLCOptionsBase> {
         return (T) this;
     }
 
-    public T includeFileURL(String url) {
+    public T addSourceFileURL(String url) {
         try {
             roots.add(JSourceFactory.rootURL(new URL(url)));
         } catch (MalformedURLException e) {
@@ -126,7 +131,7 @@ public abstract class HLCOptionsBase<T extends HLCOptionsBase> {
         return (T) this;
     }
 
-    public T includeText(String text,String sourceName) {
+    public T addSourceText(String text, String sourceName) {
         roots.add(JSourceFactory.rootString(text,sourceName));
         return (T) this;
     }
