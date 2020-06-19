@@ -10,14 +10,14 @@ import java.util.List;
 
 public class HNObjectNew extends HNode {
     private HNTypeToken objectTypeName;
-    private JNode[] inits;
+    private HNode[] inits;
     private JInvokablePrefilled constructor;
 
     protected HNObjectNew() {
         super(HNNodeId.H_OBJECT_NEW);
     }
 
-    public HNObjectNew(HNTypeToken objectTypeName, JNode[] inits, JToken startToken, JToken endToken) {
+    public HNObjectNew(HNTypeToken objectTypeName, HNode[] inits, JToken startToken, JToken endToken) {
         this();
         setObjectTypeName(objectTypeName);
         setInits(inits);
@@ -45,7 +45,7 @@ public class HNObjectNew extends HNode {
         if (node instanceof HNObjectNew) {
             HNObjectNew o =(HNObjectNew) node;
             this.objectTypeName=JNodeUtils.bindCopy(this, copyFactory, o.objectTypeName);
-            this.inits=JNodeUtils.bindCopy(this, copyFactory, o.inits);
+            this.inits=JNodeUtils.bindCopy(this, copyFactory, o.inits,HNode.class);
             this.constructor=(o.constructor);
         }
     }
@@ -67,7 +67,7 @@ public class HNObjectNew extends HNode {
         this.objectTypeName=JNodeUtils.bind(this,objectTypeName,"objectTypeName");
     }
 
-    public void setInits(JNode[] inits) {
+    public void setInits(HNode[] inits) {
         this.inits = JNodeUtils.bind(this,inits,"inits");
     }
 
@@ -86,7 +86,7 @@ public class HNObjectNew extends HNode {
         return sb.toString();
     }
 
-    public JNode[] getInits() {
+    public HNode[] getInits() {
         return inits;
     }
 }

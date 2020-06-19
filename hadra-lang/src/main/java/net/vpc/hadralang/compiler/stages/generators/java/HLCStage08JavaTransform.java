@@ -4,19 +4,26 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.impl.functions.JNameSignature;
 import net.vpc.common.jeep.util.JTokenUtils;
 import net.vpc.common.jeep.util.JTypeUtils;
+import net.vpc.common.textsource.JTextSource;
 import net.vpc.hadralang.compiler.core.HLOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
 import net.vpc.hadralang.compiler.core.elements.*;
 import net.vpc.hadralang.compiler.core.invokables.HLJCompilerContext;
 import net.vpc.hadralang.compiler.parser.ast.*;
+import net.vpc.hadralang.compiler.parser.ast.extra.HXInvokableCall;
 import net.vpc.hadralang.compiler.stages.HLCStage;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
 import net.vpc.hadralang.compiler.utils.HUtils;
 import net.vpc.hadralang.stdlib.BooleanRef;
 
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Stack;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class HLCStage08JavaTransform implements HLCStage {
 
@@ -24,6 +31,7 @@ public class HLCStage08JavaTransform implements HLCStage {
     private boolean showFinalErrors = false;
     private boolean inPreprocessor = false;
     private boolean inMetaPackage = false;
+    private Stack<HNode> contextStack = new Stack<>();
     private HLJCompilerContext2 compilerContext0;
     private JNodeCopyFactory copyFactory = new JNodeCopyFactory() {
         @Override
@@ -34,6 +42,75 @@ public class HLCStage08JavaTransform implements HLCStage {
 
     public HLCStage08JavaTransform(boolean inPreprocessor) {
         this.inPreprocessor = inPreprocessor;
+    }
+
+    private static int refIndexOf(JNode node, List<JNode> all, int fallbackIndex) {
+        for (int i = 0; i < all.size(); i++) {
+            if (node == all.get(i)) {
+                return i;
+            }
+        }
+        return fallbackIndex;
+//        throw new JShouldNeverHappenException();
+    }
+
+    public static HXInvokableCall getInvokableCallNode(JNode node, JNode oldNode) {
+        HNElementInvokable ei = getElementInvokable(node);
+        if (ei != null) {
+            HNode[] oldArgNode = ei.getArgNodes();
+            HNode[] newArgNode = new HNode[oldArgNode.length];
+            List<JNode> oldNodes = oldNode.childrenNodes();
+            List<JNode> newNodes = node.childrenNodes();
+            for (int i = 0; i < oldArgNode.length; i++) {
+                int index = refIndexOf(oldArgNode[i], oldNodes, -1);
+                if (index < 0) {
+                    newArgNode[i] = oldArgNode[i];
+                } else {
+                    if (i < newNodes.size()) {
+                        newArgNode[i] = (HNode) newNodes.get(index);
+                    } else {
+                        newArgNode[i] = oldArgNode[i];
+                    }
+                }
+            }
+            ei = (HNElementInvokable) ei.copy();
+            ei.setArgNodes(newArgNode);
+            return (HXInvokableCall) new HXInvokableCall(
+                    ei.getInvokable(),
+                    null,
+                    ei.getArgNodes(),
+                    null, null
+            ).setElement(ei);
+        }
+        return null;
+    }
+
+    public static HNElementInvokable getElementInvokable(JNode node) {
+        if (node instanceof HNode) {
+            HNElement element = ((HNode) node).getElement();
+            if (element != null) {
+                switch (element.getKind()) {
+                    case CONSTRUCTOR: {
+                        return (HNElementInvokable) element;
+                    }
+                    case METHOD: {
+                        JInvokable invokable = ((HNElementMethod) element).getInvokable();
+                        if(invokable instanceof JMethod) {
+                            JMethod jm = (JMethod) invokable;
+                            //jm.declaringType()==null for convert functions...
+                            if (
+                                    jm.declaringType() != null &&
+                                            jm.declaringType().name().equals("net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators")) {
+                                //this is a standard operator
+                                return null;
+                            }
+                        }
+                        return (HNElementInvokable) element;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     @Override
@@ -164,11 +241,15 @@ public class HLCStage08JavaTransform implements HLCStage {
             case H_BLOCK: {
                 return onBlock((HNBlock) node, compilerContext);
             }
+            case H_LITERAL: {
+                return onLiteral((HNLiteral) node, compilerContext);
+            }
+            case H_STRING_INTEROP: {
+                return onStringInterop((HNStringInterop) node, compilerContext);
+            }
             case H_THIS:
             case H_LITERAL_DEFAULT:
-            case H_LITERAL:
             case H_TYPE_TOKEN:
-            case H_STRING_INTEROP:
             case H_IMPORT: {
                 //do nothing
                 return copy0(node);
@@ -181,6 +262,81 @@ public class HLCStage08JavaTransform implements HLCStage {
         //in stage 1 wont change node instance
         throw new JShouldNeverHappenException("Unsupported node class in " + getClass().getSimpleName() + ": " + node.getClass().getSimpleName());
 //        return node;
+    }
+
+    private HNode onStringInterop(HNStringInterop node, HLJCompilerContext2 compilerContext) {
+        HNStringInterop newNode = (HNStringInterop) node.copy(copyFactory);
+        JType MessageFormatType=compilerContext.base.types().forName("java.text.MessageFormat");
+        JType StringType = JTypeUtils.forString(compilerContext.base.types());
+
+        JMethod jMethod = MessageFormatType.declaredMethod("format(java.lang.String,java.lang.Object[])");
+        List<HNode> allArgs=new ArrayList<>();
+        allArgs.add(new HNLiteral(newNode.getJavaMessageFormatString(), StringType,null).setElement(new HNElementExpr(StringType)));
+        allArgs.addAll(Arrays.asList(newNode.getExpressions()));
+        return new HXInvokableCall(
+                jMethod,
+                null,
+                allArgs.toArray(new HNode[0]),
+                null,null
+        ).setElement(
+                new HNElementMethod(jMethod)
+                .setArgNodes(allArgs.toArray(new HNode[0]))
+        );
+    }
+
+    public HNDeclareType lookupEnclosingDeclareTypeNew(HLJCompilerContext2 compilerContext) {
+        for (int i = contextStack.size() - 1; i >= 0; i--) {
+            if (contextStack.get(i) instanceof HNDeclareType) {
+                return (HNDeclareType) contextStack.get(i);
+            }
+        }
+        JavaNodes jn = JavaNodes.of(compilerContext.project());
+        return jn.getMetaPackage();
+    }
+
+    private HNode onLiteral(HNLiteral node, HLJCompilerContext2 compilerContext) {
+        if (node.getValue() instanceof Pattern) {
+            Pattern p0 = (Pattern) node.getValue();
+            HNDeclareType newType = lookupEnclosingDeclareTypeNew(compilerContext);
+            HNBlock body = HNBlock.get(newType.getBody());
+            if (body == null) {
+                body = new HNBlock(HNBlock.BlocType.CLASS_BODY, new HNode[0], null, null);
+                newType.setBody(body);
+            }
+            JType patternType = compilerContext.base.types().forName(Pattern.class.getName());
+            for (HNDeclareIdentifier old : body.findDeclaredIdentifiers()) {
+                if (old.isSetUserObject("CompilerGeneratedPattern")) {
+                    Pattern p = (Pattern) ((HNLiteral) old.getInitValue()).getValue();
+                    if (p.equals(p0)) {
+                        HNDeclareTokenIdentifier identifierToken = (HNDeclareTokenIdentifier) old.getIdentifierToken();
+                        JToken token = identifierToken.getToken();
+                        return new HNIdentifier(
+                                token
+                        ).setElement(identifierToken.getElement());
+                    }
+                }
+            }
+            String nextVar = compilerContext.base.nextVarName(null, newType);
+            JToken nextVarToken = HNodeUtils.createToken(nextVar);
+            HNDeclareTokenIdentifier hnDeclareTokenIdentifier = new HNDeclareTokenIdentifier(nextVarToken);
+            HNDeclareIdentifier newDecl = new HNDeclareIdentifier(
+                    (HNDeclareToken)
+                            hnDeclareTokenIdentifier.setElement(new HNElementField(
+                                    nextVarToken.image,
+                                    compilerContext.base.lookupType(newType.getFullName()),
+                                    hnDeclareTokenIdentifier,
+                                    null
+                            ).setEffectiveType(patternType)),
+                    copy0(node), HNodeUtils.createTypeToken(patternType),
+                    HNodeUtils.createToken("="), null, null
+            ).setModifiers(Modifier.STATIC | Modifier.PRIVATE);
+            newDecl.setUserObject("CompilerGeneratedPattern");
+            body.add(newDecl);
+
+            return new HNIdentifier(nextVarToken).setElement(hnDeclareTokenIdentifier.getElement());
+        }
+
+        return copy0(node);
     }
 
     private HNode onBlock(HNBlock node, HLJCompilerContext2 compilerContext) {
@@ -226,20 +382,20 @@ public class HLCStage08JavaTransform implements HLCStage {
             }
             case H_DECLARE_TYPE: {
                 HNDeclareType r = (HNDeclareType) processNode(statement, compilerContext);
-                JSource s0 = HUtils.getSource(statement);
+                JTextSource s0 = HUtils.getSource(statement);
                 HUtils.setSource(r, s0);
                 jn.getTopLevelTypes().add(r);
                 break;
             }
 
             case H_DECLARE_INVOKABLE: {
-                JSource s0 = HUtils.getSource(statement);
+                JTextSource s0 = HUtils.getSource(statement);
                 if (s0 != null) {
                     jn.getMetaPackageSources().add(s0);
                 }
-                HNBlock metaBody = (HNBlock) jn.getMetaPackage().getBody();
                 HNDeclareInvokable r = (HNDeclareInvokable) processNode(statement, compilerContext);
                 r.setModifiers(HUtils.publifyModifiers(r.getModifiers() | Modifier.STATIC));
+                HNBlock metaBody = (HNBlock) jn.getMetaPackage().getBody();
                 if (metaBody == null) {
                     metaBody = new HNBlock(HNBlock.BlocType.CLASS_BODY, new HNode[0], null, null);
                     jn.getMetaPackage().setBody(metaBody);
@@ -255,7 +411,7 @@ public class HLCStage08JavaTransform implements HLCStage {
             case H_DECLARE_IDENTIFIER: {
                 //always dissociate declaration and assignement as the metaPackage may be run
                 //multiple times
-                JSource s0 = HUtils.getSource(statement);
+                JTextSource s0 = HUtils.getSource(statement);
                 if (s0 != null) {
                     jn.getMetaPackageSources().add(s0);
                 }
@@ -275,7 +431,7 @@ public class HLCStage08JavaTransform implements HLCStage {
                         onBlockGlobal(hNode, compilerContext);
                     }
                 } else {
-                    JSource s0 = HUtils.getSource(statement);
+                    JTextSource s0 = HUtils.getSource(statement);
                     if (s0 != null) {
                         jn.getMetaPackageSources().add(s0);
                     }
@@ -519,11 +675,17 @@ public class HLCStage08JavaTransform implements HLCStage {
     }
 
     private HNode onDeclareType(HNDeclareType node, HLJCompilerContext2 compilerContext) {
-        HNDeclareType copy = (HNDeclareType) copy0(node);
-        copy.setPackageName(copy.getFullPackage());
-        copy.setMetaPackageName(null);
-        copy.setModifiers(HUtils.publifyModifiers(copy.getModifiers()));
-        return copy;
+        try {
+            HNDeclareType newType = new HNDeclareType();
+            contextStack.push(newType);
+            newType.copyFrom(node, copyFactory);
+            newType.setPackageName(newType.getFullPackage());
+            newType.setMetaPackageName(null);
+            newType.setModifiers(HUtils.publifyModifiers(newType.getModifiers()));
+            return newType;
+        } finally {
+            contextStack.pop();
+        }
     }
 
     private HNode onMetaImportPackage(HNMetaImportPackage node, HLJCompilerContext2 compilerContext) {
@@ -542,8 +704,13 @@ public class HLCStage08JavaTransform implements HLCStage {
         return copy0(node);
     }
 
-    private HNode copy0(JNode node) {
-        return (HNode) node.copy(copyFactory);
+    private HNode copy0(JNode oldNode) {
+        HNode newNode = (HNode) oldNode.copy(copyFactory);
+        HXInvokableCall ei = getInvokableCallNode(newNode, oldNode);
+        if (ei != null) {
+            return ei;
+        }
+        return newNode;
     }
 
     private HNode onBracketsPostfix(HNBracketsPostfix node, HLJCompilerContext2 compilerContext) {
@@ -652,7 +819,11 @@ public class HLCStage08JavaTransform implements HLCStage {
     }
 
     private HNode onParsPostfix(HNParsPostfix node, HLJCompilerContext2 compilerContext) {
-        HNParsPostfix m = (HNParsPostfix) copy0(node);
+        HNode hNode = copy0(node);
+        if(!(hNode instanceof HNParsPostfix)){
+            return hNode;
+        }
+        HNParsPostfix m = (HNParsPostfix) hNode;
         if (m.getElement().getKind() == HNElementKind.METHOD) {
             JInvokable i = ((HNElementMethod) m.getElement()).getInvokable();
             if (i instanceof JMethod) {
@@ -684,13 +855,11 @@ public class HLCStage08JavaTransform implements HLCStage {
 
     private HNode onDeclareInvokable(HNDeclareInvokable node, HLJCompilerContext2 compilerContext) {
         HNDeclareInvokable copy = (HNDeclareInvokable) copy0(node);
-        HNode body = processNode((HNode) copy.getBody(), compilerContext);
+        HNode body = copy.getBody();
         if (copy.isImmediateBody() && !JTypeUtils.isVoid(copy.getReturnType())) {
             copy.setBody(
                     new HNReturn(body, null, null)
             );
-        } else {
-            copy.setBody(body);
         }
         return copy;
     }
@@ -1043,5 +1212,6 @@ public class HLCStage08JavaTransform implements HLCStage {
         }
 
     }
+
 
 }

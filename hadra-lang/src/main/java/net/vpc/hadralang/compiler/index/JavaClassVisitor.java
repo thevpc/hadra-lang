@@ -17,7 +17,7 @@ class JavaClassVisitor extends ClassVisitor {
     private Set<String> visitedMethods=new LinkedHashSet<>();
 
     public JavaClassVisitor(DefaultHLIndexer defaultHLIndexer, String source) {
-        super(Opcodes.ASM6);
+        super(Opcodes.ASM8);
         this.defaultHLIndexer = defaultHLIndexer;
         this.source = source;
     }

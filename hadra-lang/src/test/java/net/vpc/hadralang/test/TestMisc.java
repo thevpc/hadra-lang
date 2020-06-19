@@ -5,18 +5,8 @@
  */
 package net.vpc.hadralang.test;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.compiler.JSourceFactory;
-import net.vpc.common.jeep.core.tokens.JTokenDef;
-import net.vpc.hadralang.compiler.HL;
 import net.vpc.hadralang.compiler.utils.HUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * @author vpc

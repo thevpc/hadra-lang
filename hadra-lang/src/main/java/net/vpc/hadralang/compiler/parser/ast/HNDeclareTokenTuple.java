@@ -11,7 +11,6 @@ import net.vpc.common.jeep.util.JNodeUtils;
 
 public class HNDeclareTokenTuple extends HNDeclareTokenTupleItem implements HNDeclare {
     private HNDeclareTokenTupleItem[] items;
-    private JToken[] separators;
     private HNDeclareTokenTuple() {
         super(HNNodeId.H_DECLARE_TOKEN_TUPLE);
     }
@@ -22,15 +21,6 @@ public class HNDeclareTokenTuple extends HNDeclareTokenTupleItem implements HNDe
         setStartToken(startToken);
         setEndToken(endToken);
         setSeparators(separators);
-    }
-
-    public JToken[] getSeparators() {
-        return separators;
-    }
-
-    public HNDeclareTokenTuple setSeparators(JToken[] separators) {
-        this.separators = separators;
-        return this;
     }
 
     public String toString() {
@@ -64,7 +54,6 @@ public class HNDeclareTokenTuple extends HNDeclareTokenTupleItem implements HNDe
         if (node instanceof HNDeclareTokenTuple) {
             HNDeclareTokenTuple o = (HNDeclareTokenTuple) node;
             this.items = JNodeUtils.bindCopy(this, copyFactory, o.items,HNDeclareTokenTupleItem.class);
-            this.separators = o.separators;
         }
     }
 

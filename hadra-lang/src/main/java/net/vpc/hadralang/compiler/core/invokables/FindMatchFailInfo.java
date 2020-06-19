@@ -1,11 +1,11 @@
 package net.vpc.hadralang.compiler.core.invokables;
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.textsource.log.JSourceMessage;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.logging.Level;
 
 public class FindMatchFailInfo {
     private boolean error;
@@ -17,7 +17,7 @@ public class FindMatchFailInfo {
     private LinkedHashSet<JConverter> searchedConverters=new LinkedHashSet<>();
     private HLJCompilerContext.ConversionTrace conversions;
 
-    private List<JCompilerMessage> errorMessages=new ArrayList<>();
+    private List<JSourceMessage> errorMessages=new ArrayList<>();
 
     public String getSignatureString() {
         return signatureString;
@@ -88,7 +88,7 @@ public class FindMatchFailInfo {
     }
 
     public void fail(JOnError fail, JCompilerLog log, String errorId, String group, String message, JToken location) {
-        JCompilerMessage em = buildMessage(errorId, null, message, location);
+        JSourceMessage em = buildMessage(errorId, null, message, location);
         errorMessages.add(em);
         switch (fail) {
             case NULL:
@@ -105,7 +105,7 @@ public class FindMatchFailInfo {
         throw new JParseException(header());
     }
 
-    private JCompilerMessage buildMessage(String errorId, String group, String extraMessage, JToken location){
+    private JSourceMessage buildMessage(String errorId, String group, String extraMessage, JToken location){
         if(errorId==null){
             errorId="S044";
         }
@@ -166,7 +166,7 @@ public class FindMatchFailInfo {
                 sb.append("\n\t\t").append(alt);
             }
         }
-        return JCompilerMessage.error(errorId, null, sb.toString(), location);
+        return JSourceMessage.error(errorId, null, sb.toString(), location);
     }
 
     public void fail(JOnError fail,JCompilerLog log, JToken location) {

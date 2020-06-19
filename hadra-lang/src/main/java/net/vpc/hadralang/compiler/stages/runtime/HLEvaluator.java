@@ -1,6 +1,5 @@
 package net.vpc.hadralang.compiler.stages.runtime;
 
-import net.vpc.common.jeep.JMethod;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.DefaultJTypedValue;
 import net.vpc.common.jeep.core.eval.JEvaluableValue;
@@ -10,11 +9,14 @@ import net.vpc.common.jeep.impl.types.host.HostJRawType;
 import net.vpc.common.jeep.util.JTypeUtils;
 import net.vpc.hadralang.compiler.core.HLCompilerEnv;
 import net.vpc.hadralang.compiler.core.HLDependency;
+import net.vpc.hadralang.compiler.core.elements.HNElement;
 import net.vpc.hadralang.compiler.core.elements.HNElementField;
+import net.vpc.hadralang.compiler.core.elements.HNElementKind;
 import net.vpc.hadralang.compiler.core.elements.HNElementLocalVar;
 import net.vpc.hadralang.compiler.parser.ast.*;
 import net.vpc.hadralang.compiler.core.invokables.BodyJInvoke;
 import net.vpc.hadralang.compiler.core.invokables.JNodeHBlocJInvoke;
+import net.vpc.hadralang.compiler.parser.ast.extra.HXInvokableCall;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
 import net.vpc.hadralang.compiler.utils.HTypeUtils;
 import net.vpc.hadralang.compiler.utils.HUtils;
@@ -255,38 +257,10 @@ public class HLEvaluator implements JEvaluator {
                 }
                 break;
             }
-            case H_INVOKE_METHOD: {
-                HNMethodCall a = (HNMethodCall) node;
-                boolean staticCall = true;
-                if (a.getMethod() instanceof JMethod && !((JMethod) a.getMethod()).isStatic()) {
-                    staticCall = false;
-                }
-                JInvokable m = a.getMethod();
+            case X_INVOKABLE_CALL: {
+                HXInvokableCall a = (HXInvokableCall) node;
                 JContext newCtx = context.context().newContext();
-                if (staticCall) {
-                    return a.impl().invoke(
-                            context.builder().context(newCtx)
-                                    .instance(null)
-                                    .build()
-                    );
-                } else {
-                    HNode instanceNode = a.getInstanceNode();
-                    /*instanceNode == null ? context.instance() : */
-                    Object instance = evaluate(instanceNode, context);
-                    return a.impl().invoke(
-                            context.builder().context(newCtx)
-                                    .instance(
-                                            new DefaultJTypedValue(instance, HNodeUtils.getType(instanceNode))
-                                    )
-                                    .build()
-                    );
-                }
-
-            }
-            case H_INVOKER_CALL: {
-                HNInvokerCall a = (HNInvokerCall) node;
-                JContext newCtx = context.context().newContext();
-                return a.impl().invoke(
+                return a.getInvokable().invoke(
                         context.builder().context(newCtx)
                                 .instance(null)
                                 .build()
@@ -354,146 +328,21 @@ public class HLEvaluator implements JEvaluator {
                     }
                     if (c.isPostfixOperator()) {
                         //standard
-                        HNode arg = (HNode) c.getExpr();
-                        JVars vars = context.context().vars();
-                        String argTypeName = HNodeUtils.getType(arg).boxed().name();
+                        HNode arg = c.getExpr();
                         switch (arg.id()) {
-                            case H_VAR: {
-                                HNVar a = (HNVar) arg;
-                                switch (argTypeName) {
-                                    case "java.lang.Byte": {
-                                        Byte retValue = ((Byte) vars.getValue(a.getName()));
-                                        vars.setValue(a.getName(), retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Character": {
-                                        Character retValue = ((Character) vars.getValue(a.getName()));
-                                        vars.setValue(a.getName(), retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Short": {
-                                        Short retValue = ((Short) vars.getValue(a.getName()));
-                                        vars.setValue(a.getName(), retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Integer": {
-                                        Integer retValue = ((Integer) vars.getValue(a.getName()));
-                                        vars.setValue(a.getName(), retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Long": {
-                                        Long retValue = ((Long) vars.getValue(a.getName()));
-                                        vars.setValue(a.getName(), retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Float": {
-                                        Float retValue = ((Float) vars.getValue(a.getName()));
-                                        vars.setValue(a.getName(), retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Double": {
-                                        Double retValue = ((Double) vars.getValue(a.getName()));
-                                        vars.setValue(a.getName(), retValue + inc);
-                                        return retValue;
-                                    }
-                                    default: {
-                                        throw new JEvalException("Not supported type");
-                                    }
+                            case H_IDENTIFIER: {
+                                HNIdentifier a = (HNIdentifier) arg;
+                                HNElement element = arg.getElement();
+                                if(element.getKind()== HNElementKind.LOCAL_VAR) {
+                                    return evalVarInc(a, inc,context)._1;
+                                }else if(element.getKind()== HNElementKind.FIELD){
+                                    return evalFieldInc(a,inc, context)._1;
+                                }else{
+                                    throw new JEvalException("Unsupported");
                                 }
                             }
-//                            case H_FIELD: {
-//                                HNField a = (HNField) arg;
-//                                JField f = a.getField();
-//                                Object instance = null;
-//                                if (!f.isStatic()) {
-//                                    instance = context.instance().getValue();
-//                                }
-//                                switch (argTypeName) {
-//                                    case "java.lang.Byte": {
-//                                        Byte retValue = (Byte) f.get(instance);
-//                                        f.set(instance, retValue + inc);
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Character": {
-//                                        Character retValue = (Character) f.get(instance);
-//                                        f.set(instance, retValue + inc);
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Short": {
-//                                        Short retValue = (Short) f.get(instance);
-//                                        f.set(instance, retValue + inc);
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Integer": {
-//                                        Integer retValue = (Integer) f.get(instance);
-//                                        f.set(instance, retValue + inc);
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Long": {
-//                                        Long retValue = (Long) f.get(instance);
-//                                        f.set(instance, retValue + inc);
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Float": {
-//                                        Float retValue = (Float) f.get(instance);
-//                                        f.set(instance, retValue + inc);
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Double": {
-//                                        Double retValue = (Double) f.get(instance);
-//                                        f.set(instance, retValue + inc);
-//                                        return retValue;
-//                                    }
-//                                    default: {
-//                                        throw new JEvalException("Not supported type");
-//                                    }
-//                                }
-//                            }
-                            case H_ARRAY_CALL: {
-                                HNArrayCall a = (HNArrayCall) arg;
-                                int index = (int) evaluate(a.getIndexNodes()[0], context);
-                                JTypeArray arrayType = (JTypeArray) a.getArrayType();
-                                JArray array = arrayType.asArray(evaluate(a.getArrayInstanceNode(), context));
-                                switch (argTypeName) {
-                                    case "java.lang.Byte": {
-                                        Byte retValue = ((Byte) array.get(index));
-                                        array.set(index, retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Character": {
-                                        Character retValue = ((Character) array.get(index));
-                                        array.set(index, retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Short": {
-                                        Short retValue = ((Short) array.get(index));
-                                        array.set(index, retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Integer": {
-                                        Integer retValue = ((Integer) array.get(index));
-                                        array.set(index, retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Long": {
-                                        Long retValue = ((Long) array.get(index));
-                                        array.set(index, retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Float": {
-                                        Float retValue = ((Float) array.get(index));
-                                        array.set(index, retValue + inc);
-                                        return retValue;
-                                    }
-                                    case "java.lang.Double": {
-                                        Double retValue = ((Double) array.get(index));
-                                        array.set(index, retValue + inc);
-                                        return retValue;
-                                    }
-                                    default: {
-                                        throw new JEvalException("Not supported type");
-                                    }
-                                }
+                            case H_BRACKETS_POSTFIX: {
+                                return evalArrayInc((HNBracketsPostfix) arg, inc, context)._1;
                             }
                             default: {
                                 throw new JEvalException("Unsupported");
@@ -502,126 +351,21 @@ public class HLEvaluator implements JEvaluator {
                     } else {
                         //postfix
                         //standard
-                        HNode arg = (HNode) c.getExpr();
-                        JVars vars = context.context().vars();
-                        Object retValue;
-                        String argTypeName = HNodeUtils.getType(arg).boxed().name();
+                        HNode arg = c.getExpr();
                         switch (arg.id()) {
-                            case H_VAR: {
-                                HNVar a = (HNVar) arg;
-                                switch (argTypeName) {
-                                    case "java.lang.Byte": {
-                                        vars.setValue(a.getName(), (retValue = (((Byte) vars.getValue(a.getName())) + inc)));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Character": {
-                                        vars.setValue(a.getName(), (retValue = (((Character) vars.getValue(a.getName())) + inc)));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Short": {
-                                        vars.setValue(a.getName(), (retValue = (((Short) vars.getValue(a.getName())) + inc)));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Integer": {
-                                        vars.setValue(a.getName(), (retValue = (((Integer) vars.getValue(a.getName())) + inc)));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Long": {
-                                        vars.setValue(a.getName(), (retValue = (((Long) vars.getValue(a.getName())) + inc)));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Float": {
-                                        vars.setValue(a.getName(), (retValue = (((Float) vars.getValue(a.getName())) + inc)));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Double": {
-                                        vars.setValue(a.getName(), (retValue = (((Double) vars.getValue(a.getName())) + inc)));
-                                        return retValue;
-                                    }
-                                    default: {
-                                        throw new JEvalException("Not supported type");
-                                    }
+                            case H_IDENTIFIER: {
+                                HNIdentifier a = (HNIdentifier) arg;
+                                HNElement element = arg.getElement();
+                                if(element.getKind()== HNElementKind.LOCAL_VAR) {
+                                    return evalVarInc(a, inc,context)._2;
+                                }else if(element.getKind()== HNElementKind.FIELD){
+                                    return evalFieldInc(a,inc, context)._2;
+                                }else{
+                                    throw new JEvalException("Unsupported");
                                 }
                             }
-//                            case H_FIELD: {
-//                                HNField a = (HNField) arg;
-//                                JField f = a.getField();
-//                                Object instance = null;
-//                                if (!f.isStatic()) {
-//                                    instance = context.instance().getValue();
-//                                }
-//                                switch (argTypeName) {
-//                                    case "java.lang.Byte": {
-//                                        f.set(instance, (retValue = ((Byte) f.get(instance)) + inc));
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Character": {
-//                                        f.set(instance, (retValue = ((Character) f.get(instance)) + inc));
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Short": {
-//                                        f.set(instance, (retValue = ((Short) f.get(instance)) + inc));
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Integer": {
-//                                        f.set(instance, (retValue = ((Integer) f.get(instance)) + inc));
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Long": {
-//                                        f.set(instance, (retValue = ((Long) f.get(instance)) + inc));
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Float": {
-//                                        f.set(instance, (retValue = ((Float) f.get(instance)) + inc));
-//                                        return retValue;
-//                                    }
-//                                    case "java.lang.Double": {
-//                                        f.set(instance, (retValue = ((Double) f.get(instance)) + inc));
-//                                        return retValue;
-//                                    }
-//                                    default: {
-//                                        throw new JEvalException("Not supported type");
-//                                    }
-//                                }
-//                            }
-                            case H_ARRAY_CALL: {
-                                HNArrayCall a = (HNArrayCall) arg;
-                                int index = (int) evaluate(a.getIndexNodes()[0], context);
-                                JTypeArray arrayType = (JTypeArray) a.getArrayType();
-                                JArray array = arrayType.asArray(evaluate(a.getArrayInstanceNode(), context));
-                                switch (argTypeName) {
-                                    case "java.lang.Byte": {
-                                        array.set(index, (retValue = ((Byte) array.get(index)) + inc));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Character": {
-                                        array.set(index, (retValue = ((Character) array.get(index)) + inc));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Short": {
-                                        array.set(index, (retValue = ((Short) array.get(index)) + inc));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Integer": {
-                                        array.set(index, (retValue = ((Integer) array.get(index)) + inc));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Long": {
-                                        array.set(index, (retValue = ((Long) array.get(index)) + inc));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Float": {
-                                        array.set(index, (retValue = ((Float) array.get(index)) + inc));
-                                        return retValue;
-                                    }
-                                    case "java.lang.Double": {
-                                        array.set(index, (retValue = ((Double) array.get(index)) + inc));
-                                        return retValue;
-                                    }
-                                    default: {
-                                        throw new JEvalException("Not supported type");
-                                    }
-                                }
+                            case H_BRACKETS_POSTFIX: {
+                                return evalArrayInc((HNBracketsPostfix) arg, inc, context)._2;
                             }
                             default: {
                                 throw new JEvalException("Unsupported");
@@ -631,10 +375,6 @@ public class HLEvaluator implements JEvaluator {
                 } else {
                     return impl.invoke(context);
                 }
-            }
-            case H_VAR: {
-                HNVar a = (HNVar) node;
-                return context.context().vars().getValue(a.getName());
             }
             case H_IDENTIFIER: {
                 HNIdentifier a = (HNIdentifier) node;
@@ -678,7 +418,7 @@ public class HLEvaluator implements JEvaluator {
 //                        return o;
 //                    }
                     case VAR: {
-                        HNVar a = (HNVar) n.getLeft();
+                        HNIdentifier a = (HNIdentifier) n.getLeft();
                         context.context().vars().setValue(a.getName(), o);
                         return o;
                     }
@@ -991,6 +731,89 @@ public class HLEvaluator implements JEvaluator {
         }
         throw new JEvalException("Unable to evaluate " + ((HNode)node).id() + "@" + node.getClass().getSimpleName() + " : " + node);
     }
+
+    private Tuple2<Object,Object> evalVarInc(HNIdentifier arg, int inc,JInvokeContext context) {
+        String argTypeName = HNodeUtils.getType(arg).boxed().name();
+        JVars vars = context.context().vars();
+        Object oldValue0 = vars.getValue(arg.getName());
+        Tuple2<Object, Object> ret = evalValueInc(argTypeName, oldValue0, inc);
+        vars.setValue(arg.getName(), ret._2);
+        return ret;
+    }
+    private Tuple2<Object,Object> evalFieldInc(HNIdentifier arg, int inc,JInvokeContext context) {
+        String argTypeName = HNodeUtils.getType(arg).boxed().name();
+        HNElementField efield=(HNElementField) arg.getElement();
+        JField field = efield.getField();
+        Object base=null;
+        if(field.isStatic()) {
+        }else{
+            HNode n=arg.parentNode();
+            if(n instanceof HNOpDot){
+                base=((HNOpDot) n).getLeft();
+            }
+        }
+        Object oldValue0 = field.get(base);
+        Tuple2<Object, Object> ret = evalValueInc(argTypeName, oldValue0, inc);
+        field.set(base,ret._2);
+        return ret;
+    }
+
+    private Tuple2<Object,Object> evalArrayInc(HNBracketsPostfix arg, int inc, JInvokeContext context) {
+        HNBracketsPostfix a = arg;
+        int index = (int) evaluate(a.getRight().get(0), context);
+        JTypeArray arrayType = (JTypeArray) a.getLeft().getElement().getType();
+        String argTypeName = arrayType.componentType().name();
+        JArray array = arrayType.asArray(evaluate(a.getLeft(), context));
+        Object oldValue0 = array.get(index);
+        Tuple2<Object, Object> ret = evalValueInc(argTypeName, oldValue0, inc);
+        array.set(index, ret._2);
+        return ret;
+    }
+
+    private Tuple2<Object,Object> evalValueInc(String argTypeName, Object oldValue0, int inc) {
+        switch (argTypeName) {
+            case "java.lang.Byte": {
+                Byte oldValue = ((Byte) oldValue0);
+                Byte newValue = (byte) (oldValue + (byte)inc);
+                return new Tuple2<>(oldValue,newValue);
+            }
+            case "java.lang.Character": {
+                Character oldValue = ((Character) oldValue0);
+                Character newValue = (char) (oldValue + (char)inc);
+                return new Tuple2<>(oldValue,newValue);
+            }
+            case "java.lang.Short": {
+                Short oldValue = ((Short) oldValue0);
+                Short newValue = (short) (oldValue + (short)inc);
+                return new Tuple2<>(oldValue,newValue);
+            }
+            case "java.lang.Integer": {
+                Integer oldValue = ((Integer) oldValue0);
+                Integer newValue = (int) (oldValue + (int)inc);
+                return new Tuple2<>(oldValue,newValue);
+            }
+            case "java.lang.Long": {
+                Long oldValue = ((Long) oldValue0);
+                Long newValue = (long) (oldValue + (long)inc);
+                return new Tuple2<>(oldValue,newValue);
+            }
+            case "java.lang.Float": {
+                Float oldValue = ((Float) oldValue0);
+                Float newValue = (float) (oldValue + (float)inc);
+                return new Tuple2<>(oldValue,newValue);
+            }
+            case "java.lang.Double": {
+                Double oldValue = ((Double) oldValue0);
+                Double newValue = (double) (oldValue + (double)inc);
+                return new Tuple2<>(oldValue,newValue);
+            }
+            default: {
+                throw new JEvalException("Not supported type");
+            }
+        }
+
+    }
+
 
     private Iterator resolveIteratorOrNull(Object a) {
         if (a == null) {

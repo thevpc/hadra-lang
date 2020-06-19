@@ -4,7 +4,7 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.AbstractJConverter;
 import net.vpc.common.jeep.core.DefaultJTypedValue;
 import net.vpc.common.jeep.core.JIndexQuery;
-import net.vpc.common.jeep.core.compiler.JSourceFactory;
+import net.vpc.common.textsource.JTextSourceFactory;
 import net.vpc.common.jeep.core.types.DefaultTypeName;
 import net.vpc.common.jeep.core.types.JTypeNameBounded;
 import net.vpc.common.jeep.impl.JTypesSPI;
@@ -432,7 +432,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
 
     private JImportInfo createJImportInfo(String imp, String src) {
         JToken token = new JToken();
-        token.compilationUnit = new DefaultJCompilationUnit(JSourceFactory.fromString(imp, src));
+        token.source = JTextSourceFactory.fromString(imp, src);
         return new DefaultJImportInfo(imp, token);
     }
 
@@ -722,6 +722,12 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             case "inc": {
                 all.add("++");
                 all.add("inc");
+                break;
+            }
+            case "~":
+            case "tilde": {
+                all.add("~");
+                all.add("tilde");
                 break;
             }
             case "--":
@@ -2094,7 +2100,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         return HNodeUtils.nextNameFromUserProperty(node, n);
     }
 
-    public HNDeclareType lookupEnclosingTypeNode(JNode node) {
+    public HNDeclareType lookupEnclosingDeclareTypeImmediate(JNode node) {
         HNode d = lookupEnclosingDeclaration(node);
         if (d == null) {
             return metaPackageType();
@@ -2106,7 +2112,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public JType lookupEnclosingType(JNode node) {
-        HNDeclareType d = lookupEnclosingTypeNode(node);
+        HNDeclareType d = lookupEnclosingDeclareTypeImmediate(node);
         if (d == null) {
             return null;
         } else {
@@ -2200,6 +2206,20 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             return metaPackageType();
         }
         return null;
+    }
+    public HNDeclareType lookupEnclosingDeclareType(JNode node) {
+        HNode n = (HNode) node;
+        while (n != null) {
+            HNode p = n.parentNode();
+            if (p == null) {
+                break;
+            }
+            if (p instanceof HNDeclareType) {
+                return (HNDeclareType) p;
+            }
+            n = p;
+        }
+        return metaPackageType();
     }
 
     public HNDeclareIdentifier lookupEnclosingDeclareIdentifier(HNDeclareToken node) {
@@ -2943,7 +2963,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         return isStaticContext((HNode) n.parentNode());
     }
 
-    public HNElement lookupElement(JOnError onError, String name, HNode dotBase, JNode[] arguments, boolean lhs, JToken location, JNode fromNode, FindMatchFailInfo failInfo) {
+    public HNElement lookupElement(JOnError onError, String name, HNode dotBase, HNode[] arguments, boolean lhs, JToken location, JNode fromNode, FindMatchFailInfo failInfo) {
         List<JTypeOrLambda> argTypes = new ArrayList<>();
         if (arguments != null) {
             for (JNode item : arguments) {
@@ -2978,7 +2998,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                                 } else {
                                     JInvokable t = findConstructorMatch(onError, jtype, argTypes.toArray(new JTypeOrLambda[0]), location, failInfo);
                                     if (t != null) {
-                                        return new HNElementConstructor(jtype, t, arguments == null ? new JNode[0] : arguments);
+                                        return new HNElementConstructor(jtype, t, arguments == null ? new HNode[0] : arguments);
                                     }
                                 }
                             }
@@ -3020,12 +3040,12 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             if (hnElement.getKind() == HNElementKind.METHOD) {
                 HNElementMethod m = (HNElementMethod) hnElement;
                 if (!m.isArg0TypeProcessed()) {
-                    m.setArgNodes(arguments == null ? new JNode[0] : arguments);
+                    m.setArgNodes(arguments == null ? new HNode[0] : arguments);
                     m.processArg0(dotBase);
                 }
             } else if (hnElement.getKind() == HNElementKind.CONSTRUCTOR) {
                 HNElementConstructor m = (HNElementConstructor) hnElement;
-                m.setArgNodes(arguments == null ? new JNode[0] : arguments);
+                m.setArgNodes(arguments == null ? new HNode[0] : arguments);
             }
         }
         return hnElement;

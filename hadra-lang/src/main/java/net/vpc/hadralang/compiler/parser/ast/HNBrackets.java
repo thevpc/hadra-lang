@@ -21,24 +21,19 @@ import net.vpc.common.jeep.JNodeCopyFactory;
 public class HNBrackets extends HNode {
 
     private HNode[] items;
-    private List<JToken> separators;
 
     private HNBrackets() {
         super(HNNodeId.H_BRACKETS);
     }
-    public HNBrackets(HNode[] items, JToken startToken, List<JToken> separators, JToken endToken) {
+    public HNBrackets(HNode[] items, JToken startToken, JToken[] separators, JToken endToken) {
         this();
         setItems(items);
         if(startToken==null && items.length>0){
             startToken=items[0].startToken();
         }
-        this.separators = separators;
         setStartToken(startToken);
         setEndToken(endToken);
-    }
-
-    public List<JToken> getSeparators() {
-        return separators;
+        setSeparators(separators);
     }
 
     public HNBrackets setItems(HNode[] items) {
@@ -74,7 +69,6 @@ public class HNBrackets extends HNode {
         if (node instanceof HNBrackets) {
             HNBrackets o = (HNBrackets) node;
             this.items = JNodeUtils.bindCopy(this, copyFactory, o.items,HNode.class);
-            this.separators = new ArrayList<>(o.separators);
         }
     }
 

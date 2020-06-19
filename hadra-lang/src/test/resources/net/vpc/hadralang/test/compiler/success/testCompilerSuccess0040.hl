@@ -33,10 +33,10 @@ import net.vpc.scholar.**
   // ****************
   val TE = 0;
   val TM = 1;
-  val p = param($);
+  val p = param();
 //  val t = param("t");
-  val m = param($);
-  val n = param($);
+  val m = param();
+  val n = param();
   param p();
 
   // ****************
@@ -78,7 +78,7 @@ import net.vpc.scholar.**
 
     val gpDef = ((cos((2 * p + 1) * π * X / (2 * l)))  * lineDomain).setTitle("gl${p}");
     gp = gpDef.inflate(p.in(0,P - 1)).normalize();
-    val fmnDef = (if(p === TE) (n / b) else -m / a) * √(2 * (if(m <> 0 && n <> 0) 2 else 1) / (a * b * ((n * π / b)² + (m * π / a)²))) *
+    val fmnDef = (if(p == TE) (n / b) else -m / a) * √(2 * (if(m <> 0 && n <> 0) 2 else 1) / (a * b * ((n * π / b)² + (m * π / a)²))) *
       sin((n * π / b) * (Y - box.ymin)) * cos((m * π / a) * (X - box.xmin)) * box;
 
 //    var json=@"json":{
@@ -109,7 +109,6 @@ import net.vpc.scholar.**
     });
 
     sp = matrix(gp :** fmn);
-
     A = matrix(gp.size, (i, j) -> csum(fmn.size, (nn) -> sp[i, n] * sp[j, n] * zmn[n]));
     B = columnMatrix(gp.size, (i) -> (gp(i) ** srcexpr));
     Xp = inv(A) * B;

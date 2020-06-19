@@ -2,7 +2,7 @@ package net.vpc.hadralang.compiler.parser;
 
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.JParserNodeFactory;
-import net.vpc.common.jeep.util.JTokenUtils;
+import net.vpc.common.jeep.core.nodes.JNodeTokens;
 import net.vpc.hadralang.compiler.parser.ast.*;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
 import net.vpc.hadralang.compiler.utils.HUtils;
@@ -32,9 +32,9 @@ public class HLFactory implements JParserNodeFactory<HNode> {
     }
 
     @Override
-    public HNLiteral createLiteralNode(Object literal, JToken token) {
+    public HNLiteral createLiteralNode(Object literal, JNodeTokens nodeTokens) {
         if(literal==null){
-            return new HNLiteral(null, token);
+            return new HNLiteral(null, nodeTokens.getStart());
         }
         Object literal2 = literal;
         Object literal3;
@@ -44,40 +44,40 @@ public class HLFactory implements JParserNodeFactory<HNode> {
                 literal2 = literal3;
             }
         }
-        HNLiteral lnode = new HNLiteral(literal2, token);
-        lnode.setStartToken(token);
+        HNLiteral lnode = new HNLiteral(literal2, nodeTokens.getStart());
+        lnode.setStartToken(nodeTokens.getStart());
         return lnode;
     }
 
 
     @Override
-    public HNode createParsNode(List<HNode> o, JToken startToken, List<JToken> separators, JToken endToken) {
+    public HNode createParsNode(List<HNode> o, JNodeTokens nodeTokens) {
         if(o.size()==1){
             //how can i create tuple of one??
-            return new HNPars(o.toArray(new HNode[0]), startToken,separators,endToken);
+            return new HNPars(o.toArray(new HNode[0]), nodeTokens.getStart(),nodeTokens.getSeparatorsArray(),nodeTokens.getEnd());
         }else{
-            return new HNTuple(o.toArray(new HNode[0]),startToken,separators.toArray(new JToken[0]),endToken);
+            return new HNTuple(o.toArray(new HNode[0]),nodeTokens.getStart(),nodeTokens.getSeparatorsArray(),nodeTokens.getEnd());
         }
     }
 
     @Override
-    public HNode createBracesNode(List<HNode> o, JToken startToken, JToken endToken) {
-        return new HNBraces(o.toArray(new HNode[0]), startToken,endToken);
+    public HNode createBracesNode(List<HNode> o, JNodeTokens nodeTokens) {
+        return new HNBraces(o.toArray(new HNode[0]), nodeTokens.getStart(),nodeTokens.getEnd());
     }
 
     @Override
-    public HNode createPrefixUnaryOperatorNode(JToken op, HNode arg2, JToken startToken, JToken endToken) {
-        return new HNOpUnaryCall(startToken, arg2, true, startToken,endToken);
+    public HNode createPrefixUnaryOperatorNode(JToken op, HNode arg2, JNodeTokens nodeTokens) {
+        return new HNOpUnaryCall(nodeTokens.getStart(), arg2, true, nodeTokens.getStart(),nodeTokens.getEnd());
     }
 
     @Override
-    public HNode createPostfixBracketsNode(HNode o, HNode indices, JToken startToken, JToken endToken) {
+    public HNode createPostfixBracketsNode(HNode o, HNode indices, JNodeTokens nodeTokens) {
         HNBrackets p=(HNBrackets) indices;
         return new HNParsPostfix(o, Arrays.asList(p.getItems()),
-                startToken,
+                nodeTokens.getStart(),
                 p.startToken(),
-                p.getSeparators(),
-                endToken);
+                Arrays.asList(p.getSeparators()),
+                nodeTokens.getEnd());
 
 //        if (!(indices instanceof HNBrackets)) {
 //            indices = new HNBrackets(new HNode[]{indices}, o.startToken(),indices.endToken());
@@ -86,18 +86,18 @@ public class HLFactory implements JParserNodeFactory<HNode> {
     }
 
     @Override
-    public HNode createPrefixBracketsNode(HNode indices, HNode o, JToken startToken, JToken endToken) {
+    public HNode createPrefixBracketsNode(HNode indices, HNode o, JNodeTokens nodeTokens) {
         throw new IllegalArgumentException("Unsupported");
     }
 
     @Override
-    public HNode createPostfixParenthesisNode(HNode o, HNode indices, JToken startToken, JToken endToken) {
+    public HNode createPostfixParenthesisNode(HNode o, HNode indices, JNodeTokens nodeTokens) {
         HNPars p=(HNPars) indices;
         return new HNParsPostfix(o, Arrays.asList(p.getItems()),
-                startToken,
+                nodeTokens.getStart(),
                 p.startToken(),
-                p.getSeparators(),
-                endToken);
+                Arrays.asList(p.getSeparators()),
+                nodeTokens.getEnd());
     }
 
     /**
@@ -105,78 +105,58 @@ public class HLFactory implements JParserNodeFactory<HNode> {
      *
      * @param indices
      * @param o
-     * @param endParsToken
-     * @param startToken
-     * @param endToken
      * @return
      */
     @Override
-    public HNode createPrefixParenthesisNode(HNode indices, HNode o, JToken endParsToken, JToken startToken, JToken endToken) {
-        return new HNCast(indices, o, endParsToken,startToken,endToken);
+    public HNode createPrefixParenthesisNode(HNode indices, HNode o, JNodeTokens nodeTokens) {
+        return new HNCast(indices, o, nodeTokens.getSeparatorsArray(),nodeTokens.getStart(),nodeTokens.getEnd());
     }
 
     @Override
-    public HNode createPostfixBracesNode(HNode o, HNode indices, JToken startToken, JToken endToken) {
+    public HNode createPostfixBracesNode(HNode o, HNode indices, JNodeTokens nodeTokens) {
         throw new IllegalArgumentException("Unsupported");
     }
 
     @Override
-    public HNode createPrefixBracesNode(HNode indices, HNode o, JToken startToken, JToken endToken) {
+    public HNode createPrefixBracesNode(HNode indices, HNode o, JNodeTokens nodeTokens) {
         throw new IllegalArgumentException("Unsupported");
     }
 
     @Override
-    public HNode createBracketsNode(List<HNode> o, JToken startToken, List<JToken> separators, JToken endToken) {
-        return new HNBrackets(o.toArray(new HNode[0]), startToken,separators,endToken);
+    public HNode createBracketsNode(List<HNode> o, JNodeTokens nodeTokens) {
+        return new HNBrackets(o.toArray(new HNode[0]), nodeTokens.getStart(), nodeTokens.getSeparatorsArray(),nodeTokens.getEnd());
     }
 
     @Override
-    public HNode createPostfixUnaryOperatorNode(JToken name, HNode arg1, HNode postNode, JToken startToken, JToken endToken) {
-        return new HNOpUnaryCall(name, arg1, false, startToken,endToken);
+    public HNode createPostfixUnaryOperatorNode(JToken name, HNode argumentChild, JNodeTokens nodeTokens) {
+        return new HNOpUnaryCall(name, argumentChild, false, nodeTokens.getStart(),nodeTokens.getEnd());
     }
 
     @Override
-    public HNode createListOperatorNode(JToken token, List<HNode> args, JToken startToken, JToken endToken) {
+    public HNode createListOperatorNode(JToken token, List<HNode> args, JNodeTokens nodeTokens) {
         throw new JShouldNeverHappenException();
 //        if (args.length == 2) {
 //            HNode o1 = args[0];
 //            HNode o2 = args[1];
-//            if (o2 instanceof HNInvokerCall && (((HNInvokerCall) o2).getName()).equals(token.image)) {
-//                HNInvokerCall o21 = (HNInvokerCall) o2;
+//            if (o2 instanceof HXInvokableCall && (((HXInvokableCall) o2).getName()).equals(token.image)) {
+//                HXInvokableCall o21 = (HXInvokableCall) o2;
 //                List<HNode> aa = new ArrayList<>();
 //                aa.add(o1);
 //                aa.addAll(Arrays.asList(o21.getArgs()));
-//                return new HNInvokerCall(token, aa.toArray(new HNode[0]), startToken,endToken);
+//                return new HXInvokableCall(token, aa.toArray(new HNode[0]), startToken,endToken);
 //            } else {
-//                return new HNInvokerCall(token, args, startToken,endToken);
+//                return new HXInvokableCall(token, args, startToken,endToken);
 //            }
 //        } else {
-//            return new HNInvokerCall(token, args, startToken,endToken);
+//            return new HXInvokableCall(token, args, startToken,endToken);
 //        }
     }
 
 
-//    @Override
-//    public HNode createFunctionCallNode(String name, HNode[] args, JToken startToken) {
-//        String[] o = name.split("[.]");
-//        if (o.length == 0) {
-//            log().error("S036", "No named methods are not allowed", startToken);
-//            return new HNInvokerCall("", args, startToken);
-//        }
-//        if (o.length == 1) {
-//            return new HNInvokerCall(name, args, startToken);
-//        }
-//        String[] rest = Arrays.copyOfRange(o, 0, o.length - 1);
-//        HNode n = new HNIdentifier(rest[0], startToken);
-//        for (int i = 1; i < rest.length; i++) {
-//            n = new HNOpDot(rest[1], n, startToken,n);
-//        }
-//        return new HNMethodCall(name, args, n, startToken);
-//    }
 
     @Override
-    public HNode createVarNameNode(JToken token) {
-        return new HNIdentifier(token);
+    public HNode createIdentifierNode(String name, JNodeTokens nodeTokens) {
+        return new HNIdentifier(nodeTokens.getStart());
 //        String[] y = varName.split("[.]");
 //        HNode n = null;
 //        for (String s : y) {
@@ -193,34 +173,33 @@ public class HLFactory implements JParserNodeFactory<HNode> {
 //        return n;
     }
 
-    public HNode createBinaryOperatorNode(JToken op, HNode o1, HNode o2, JToken startToken, JToken endToken) {
+    public HNode createBinaryOperatorNode(JToken op, HNode o1, HNode o2, JNodeTokens nodeTokens) {
         switch (op.image) {
             case "=": {
-                return new HNAssign(o1, op, o2, startToken,endToken);
+                return new HNAssign(o1, op, o2, nodeTokens.getStart(),nodeTokens.getEnd());
             }
             case "->": {
-                return createLambdaExpression(o1, op, o2, startToken, endToken);
+                return createLambdaExpression(o1, op, o2, nodeTokens);
             }
             case "??": {
-                return new HNOpCoalesce(o1, op, o2, startToken, endToken);
+                return new HNOpCoalesce(o1, op, o2, nodeTokens.getStart(),nodeTokens.getEnd());
             }
             case "?": {
-                return createNonNullExpr(o1, op, o2, startToken, endToken);
+                return createNonNullExpr(o1, op, o2, nodeTokens);
             }
             case ".": {
-                return createDotCheckedMember(o1, op, o2, startToken, endToken);
+                return createDotCheckedMember(o1, op, o2, nodeTokens);
             }
             case ".?": {
-                return createApplyUncheckedMember(o1, op, o2, startToken, endToken);
+                return createApplyUncheckedMember(o1, op, o2, nodeTokens);
             }
         }
-        return new HNOpBinaryCall(op, o1, o2, startToken, endToken);
+        return new HNOpBinaryCall(op, o1, o2, nodeTokens.getStart(),nodeTokens.getEnd());
     }
 
-    public HNode createApplyUncheckedMember(HNode o1, JToken op, HNode o2, JToken startToken, JToken endToken) {
+    public HNode createApplyUncheckedMember(HNode o1, JToken op, HNode o2, JNodeTokens nodeTokens) {
         return new HNOpDot(o1, op, o2,
-                startToken,
-                endToken
+                nodeTokens.getStart(),nodeTokens.getEnd()
         ).setUncheckedMember(true);
 //        return new HNFieldUnchecked(o1, op,
 //                o2,
@@ -229,11 +208,11 @@ public class HLFactory implements JParserNodeFactory<HNode> {
 //            return new HNFieldUnchecked(o1, op,
 //                    o2,
 //                    startToken,o2.endToken());
-//        } else if (o2 instanceof HNInvokerCall) {
+//        } else if (o2 instanceof HXInvokableCall) {
 //            throw new JFixMeLaterException();
 ////                    return new HNMethodUncheckedCall(
-////                            ((HNInvokerCall) node.getArg2()).getName(),
-////                            ((HNInvokerCall) node.getArg2()).getArgs(),
+////                            ((HXInvokableCall) node.getArg2()).getName(),
+////                            ((HXInvokableCall) node.getArg2()).getArgs(),
 ////                            new JNodeHApplyUncheckedOperator(node.getArg1(), node.token()),
 ////                            node.getArg2().token()
 ////                    ).setUnchecked(true);
@@ -244,55 +223,27 @@ public class HLFactory implements JParserNodeFactory<HNode> {
 //        }
     }
 
-    public HNode createDotCheckedMember(HNode o1, JToken op, HNode o2, JToken startToken, JToken endToken) {
+    public HNode createDotCheckedMember(HNode o1, JToken op, HNode o2, JNodeTokens nodeTokens) {
         return new HNOpDot(o1, op, o2,
-                startToken,
-                endToken
+                nodeTokens.getStart(),nodeTokens.getEnd()
         );
-//        if (o2 instanceof HNIdentifier) {
-//            return new HNOpDot(o1, op, o2,
-//                    startToken,
-//                    o2.endToken()
-//            );
-////        } else if (o2 instanceof HNParsPostfix && ((HNParsPostfix) o2).getBase() instanceof HNIdentifier) {
-////            HNIdentifier idn =(HNIdentifier) ((HNParsPostfix) o2).getBase();
-////            return new HNMethodCall(op,
-////                    idn.getNameToken(),
-////                    ((HNParsPostfix) o2).getItems(),
-////                    o1,
-////                    o1.startToken(),
-////                    ((HNParsPostfix) o2).endToken()
-////            );
-//        } else if (o2 instanceof HNInvokerCall) {
-//            return new HNMethodCall(op,
-//                    ((HNInvokerCall) o2).getNameToken(),
-//                    ((HNInvokerCall) o2).getArgs(),
-//                    o1,
-//                    o1.startToken(),
-//                    ((HNInvokerCall) o2).endToken()
-//            );
-//        } else {
-//            log().error("S046", "cannot call '.' operator on " + o2.getClass().getSimpleName(),
-//                    o2.startToken());
-//            return new HNOpBinaryCall(op, o1, o2, startToken, endToken);
-//        }
     }
 
-    public HNode createNonNullExpr(HNode o1, JToken op, HNode o2, JToken startToken, JToken endToken) {
+    public HNode createNonNullExpr(HNode o1, JToken op, HNode o2,JNodeTokens nodeTokens) {
         return new HNOpDot(
-                o1,op,o2,startToken,endToken
+                o1,op,o2,nodeTokens.getStart(),nodeTokens.getEnd()
         ).setNullableInstance(true);
     }
 
     @Override
-    public HNode createImplicitOperatorNode(HNode o1, HNode o2, JToken startToken, JToken endToken) {
+    public HNode createImplicitOperatorNode(HNode o1, HNode o2, JNodeTokens nodeTokens) {
         log().error("X300", null, "Implicit operator not allowed", o1.startToken());
-        return new HNTuple(new HNode[]{o1, o2}, startToken,new JToken[0], endToken);
+        return new HNTuple(new HNode[]{o1, o2}, nodeTokens.getStart(),new JToken[0], nodeTokens.getEnd());
     }
 
-    public HNode createLambdaExpression(HNode decl, JToken op, HNode body, JToken startToken, JToken endToken) {
+    public HNode createLambdaExpression(HNode decl, JToken op, HNode body, JNodeTokens nodeTokens) {
         //lambda expression
-        HNLambdaExpression lex = new HNLambdaExpression(op,startToken,endToken);
+        HNLambdaExpression lex = new HNLambdaExpression(op,nodeTokens.getStart(),nodeTokens.getEnd());
         if (decl instanceof HNPars) {
             for (HNode item : ((HNPars) decl).getItems()) {
                 if (item instanceof HNIdentifier) {

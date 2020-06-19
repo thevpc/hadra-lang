@@ -40,7 +40,11 @@ public class HLCStage03Indexer implements HLCStage{
             return;
         }
         Set<HLIndexedProject> hlIndexedProjects = indexer.searchProjects();
-        indexer.indexSDK(null, !incremental);
+        try {
+            indexer.indexSDK(null, !incremental);
+        }catch (Exception ex){
+            project.log().error("X000", null,"unresolvable SDK : "+ex.toString(),null);
+        }
         for (HLIndexedProject iproject : hlIndexedProjects) {
             for (String dependencyFile : iproject.getDependencyFiles()) {
                 indexer.indexLibrary(new File(dependencyFile), !incremental);

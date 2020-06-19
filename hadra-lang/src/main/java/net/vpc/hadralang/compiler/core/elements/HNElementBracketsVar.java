@@ -7,7 +7,7 @@ import net.vpc.common.jeep.JTypeOrLambda;
 import net.vpc.hadralang.compiler.parser.ast.HNBracketsPostfix;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
-public class HNElementBracketsVar extends HNElement {
+public class HNElementBracketsVar extends HNElement implements Cloneable{
     String name;
     HNBracketsPostfix declaration;
     JType effectiveType;

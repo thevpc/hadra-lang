@@ -20,13 +20,13 @@ import net.vpc.hadralang.compiler.core.HTokenId;
  */
 public class HNStringInterop extends HNode {
     private JToken[] tokens;
-    private JNode[] expressions;
+    private HNode[] expressions;
 
     private HNStringInterop() {
         super(HNNodeId.H_STRING_INTEROP);
     }
 
-    public HNStringInterop(JToken[] stringTokens, JNode[] expressions, JToken startToken, JToken endToken) {
+    public HNStringInterop(JToken[] stringTokens, HNode[] expressions, JToken startToken, JToken endToken) {
         this();
         setTokens(stringTokens);
         setExpressions(expressions);
@@ -43,11 +43,11 @@ public class HNStringInterop extends HNode {
         return this;
     }
 
-    public JNode[] getExpressions() {
+    public HNode[] getExpressions() {
         return expressions;
     }
 
-    public HNStringInterop setExpressions(JNode[] expressions) {
+    public HNStringInterop setExpressions(HNode[] expressions) {
         this.expressions = JNodeUtils.bind(this,expressions, "expressions");
         return this;
     }
@@ -100,7 +100,7 @@ public class HNStringInterop extends HNode {
         super.copyFrom(node,copyFactory);
         if (node instanceof HNStringInterop) {
             HNStringInterop o = (HNStringInterop) node;
-            this.expressions = JNodeUtils.bindCopy(this, copyFactory, o.expressions);
+            this.expressions = JNodeUtils.bindCopy(this, copyFactory, o.expressions,HNode.class);
             this.tokens = o.tokens;
         }
     }

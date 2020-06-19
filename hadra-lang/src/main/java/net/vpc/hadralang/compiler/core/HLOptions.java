@@ -4,12 +4,12 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import net.vpc.common.jeep.core.compiler.JSourceFactory;
-import net.vpc.common.jeep.core.compiler.JSourceRoot;
+import net.vpc.common.textsource.JTextSourceFactory;
+import net.vpc.common.textsource.JTextSourceRoot;
 
 public abstract class HLOptions<T extends HLOptions> {
 
-    private final List<JSourceRoot> roots = new ArrayList<>();
+    private final List<JTextSourceRoot> roots = new ArrayList<>();
     private final Set<String> classpath = new LinkedHashSet<>();
     private File generateJavaFolder;
     private String projectRoot;
@@ -71,8 +71,8 @@ public abstract class HLOptions<T extends HLOptions> {
         return (T)this;
     }
 
-    public JSourceRoot[] roots() {
-        return roots.toArray(new JSourceRoot[0]);
+    public JTextSourceRoot[] roots() {
+        return roots.toArray(new JTextSourceRoot[0]);
     }
 
     public File generateJavaFolder() {
@@ -89,12 +89,12 @@ public abstract class HLOptions<T extends HLOptions> {
     }
 
     public T addSourceResourcesFolder(String path) {
-        roots.add(JSourceFactory.rootResourceFolder(path, "*.hl"));
+        roots.add(JTextSourceFactory.rootResourceFolder(path, "*.hl"));
         return (T) this;
     }
 
     public T addSourceResourcesFile(String path) {
-        roots.add(JSourceFactory.rootResourceFile(path));
+        roots.add(JTextSourceFactory.rootResourceFile(path));
         return (T) this;
     }
 
@@ -104,18 +104,18 @@ public abstract class HLOptions<T extends HLOptions> {
     }
 
     public T addSourceFile(String path) {
-        roots.add(JSourceFactory.rootFile(new File(path)));
+        roots.add(JTextSourceFactory.rootFile(new File(path)));
         return (T) this;
     }
 
     public T addSourceFile(File file) {
-        roots.add(JSourceFactory.rootFile(file));
+        roots.add(JTextSourceFactory.rootFile(file));
         return (T) this;
     }
 
     public T addSourceLibraryURL(String url) {
         try {
-            roots.add(JSourceFactory.rootURLFolder(new URL(url), "*.hl"));
+            roots.add(JTextSourceFactory.rootURLFolder(new URL(url), "*.hl"));
         } catch (MalformedURLException e) {
             throw new UncheckedIOException(e);
         }
@@ -124,7 +124,7 @@ public abstract class HLOptions<T extends HLOptions> {
 
     public T addSourceFileURL(String url) {
         try {
-            roots.add(JSourceFactory.rootURL(new URL(url)));
+            roots.add(JTextSourceFactory.rootURL(new URL(url)));
         } catch (MalformedURLException e) {
             throw new UncheckedIOException(e);
         }
@@ -132,7 +132,7 @@ public abstract class HLOptions<T extends HLOptions> {
     }
 
     public T addSourceText(String text, String sourceName) {
-        roots.add(JSourceFactory.rootString(text,sourceName));
+        roots.add(JTextSourceFactory.rootString(text,sourceName));
         return (T) this;
     }
 

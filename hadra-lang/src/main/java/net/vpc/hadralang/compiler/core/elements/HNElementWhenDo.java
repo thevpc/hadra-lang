@@ -7,7 +7,7 @@ import net.vpc.common.jeep.JTypeOrLambda;
 import net.vpc.hadralang.compiler.parser.ast.HNIf;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
-public class HNElementWhenDo extends HNElement {
+public class HNElementWhenDo extends HNElement implements Cloneable{
     public String methodName;
     public JInvokable invokable;
     private JType condType;

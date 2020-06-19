@@ -5,7 +5,7 @@ import net.vpc.common.jeep.JTypes;
 import net.vpc.common.jeep.JTypeOrLambda;
 import net.vpc.common.jeep.util.JTypeUtils;
 
-public class HNElementStatement extends HNElement {
+public class HNElementStatement extends HNElement implements Cloneable{
     JTypeOrLambda voidType;
     public HNElementStatement(JTypes types) {
         super(HNElementKind.STATEMENT);

@@ -177,8 +177,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
             }
 
             case H_ARRAY_CALL:
-            case H_INVOKER_CALL:
-            case H_INVOKE_METHOD: {
+            case X_INVOKABLE_CALL: {
                 throw new JShouldNeverHappenException();
             }
         }
@@ -511,7 +510,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
     }
 
     private boolean onDeclareInvokable(HNDeclareInvokable method, HLJCompilerContext compilerContext) {
-        HNDeclareType tn = compilerContext.lookupEnclosingTypeNode(method);
+        HNDeclareType tn = compilerContext.lookupEnclosingDeclareTypeImmediate(method);
 //        DefaultJType jType = (DefaultJType) compilerContext.lookupEnclosingType(method);
         if (tn != null) {
             boolean indexable = isIndexableType(tn, compilerContext);

@@ -7,7 +7,7 @@ import net.vpc.hadralang.compiler.parser.ast.HNDeclareTokenBase;
 import net.vpc.common.jeep.JTypeOrLambda;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
-public class HNElementLocalVar extends HNElement {
+public class HNElementLocalVar extends HNElement implements Cloneable{
     String name;
     HNDeclareTokenBase declaration;
     JType effectiveType;

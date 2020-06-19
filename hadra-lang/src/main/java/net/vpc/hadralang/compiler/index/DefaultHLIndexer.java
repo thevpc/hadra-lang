@@ -29,11 +29,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class DefaultHLIndexer implements HLIndexer {
     private static final Logger LOG = Logger.getLogger(DefaultHLIndexer.class.getName());
     JIndexStore store;
-    private static Pattern BAD_CLASS_NAME = Pattern.compile(".*[$][0-9].*");
 
     public DefaultHLIndexer() {
         this(null);
@@ -54,10 +55,26 @@ public class DefaultHLIndexer implements HLIndexer {
         if (sdkHome != null) {
             File file = new File(sdkHome, "lib" + File.separator + "rt.jar");
             if (file.exists()) {
-                return indexLibrary(file, false);
+                //this is pre JDK 9 SDK
+                return indexLibrary(file, force);
+            }
+            file = new File(sdkHome, "jmods");
+            if (file.isDirectory()) {
+                //this is JDK 9 SDK or later
+                File[] files = file.listFiles(x -> x.getName().endsWith(".jmod") && x.isFile());
+                if(files!=null) {
+                    int x=0;
+                    for (File file1 : files) {
+                        int v = indexLibrary(file1, force);
+                        if(v>0){
+                            x+=v;
+                        }
+                    }
+                    return x;
+                }
             }
         }
-        return 0;
+        throw new JParseException("unable to resolve SDK location (rt.jar). using home :"+sdkHome);
     }
 
     @Override
@@ -142,19 +159,40 @@ public class DefaultHLIndexer implements HLIndexer {
                 return counter.get();
             }
         } else {
-            try (JarFile jar = new JarFile(uuid)) {
-                Stream<JarEntry> str = jar.stream();
-                str.forEach(z -> readJar(jar, z,counter));
-            } catch (IOException e) {
-                LOG.log(Level.INFO, "Index Library " + uuid + " failed with : " + e.toString());
-                return counter.get();
+            String fname = file.getName().toLowerCase();
+            if(fname.endsWith(".jar")) {
+                try (JarFile jar = new JarFile(uuid)) {
+                    Stream<JarEntry> str = jar.stream();
+                    str.forEach(z -> readJar(jar, z, counter));
+                } catch (IOException e) {
+                    LOG.log(Level.INFO, "Index Library " + uuid + " failed with : " + e.toString());
+                    return counter.get();
+                }
+            }else if(fname.endsWith(".jmod")) {
+                try (ZipFile jar = new ZipFile(uuid)) {
+                    Stream<ZipEntry> str = (Stream<ZipEntry>) jar.stream();
+                    str.forEach(z -> readJmod(jar, z, counter));
+                } catch (IOException e) {
+                    LOG.log(Level.INFO, "Index Library " + uuid + " failed with : " + e.toString());
+                    return counter.get();
+                }
+            }else if(fname.endsWith(".zip")) {
+                try (ZipFile jar = new ZipFile(uuid)) {
+                    Stream<ZipEntry> str = (Stream<ZipEntry>) jar.stream();
+                    str.forEach(z -> readJmod(jar, z, counter));
+                } catch (IOException e) {
+                    LOG.log(Level.INFO, "Index Library " + uuid + " failed with : " + e.toString());
+                    return counter.get();
+                }
+            }else {
+                throw new IllegalArgumentException("Unsupported file type : "+fname);
             }
         }
         store.index(uuid, elementType,
                 new DefaultJIndexDocument(uuid)
                         .add("lastModified", String.valueOf(lastModified), true), true
         );
-        LOG.log(Level.INFO, "Index Library " + uuid + " ("+counter.get()+" classes )"+ " finished in " + chrono.stop().getDuration());
+        LOG.log(Level.INFO, "Index Library " + uuid + " ("+counter.get()+" classes)"+ " finished in " + chrono.stop().getDuration());
         return counter.get();
     }
 
@@ -171,7 +209,7 @@ public class DefaultHLIndexer implements HLIndexer {
         }catch (Exception ex){
             //
         }
-        if (name.endsWith(".class") && !BAD_CLASS_NAME.matcher(name).matches()) {
+        if (name.endsWith(".class") && isValidClassFile(name)) {
             try (InputStream jis = new FileInputStream(entry)) {
                 ClassReader cr = new ClassReader(jis);
                 cr.accept(new JavaClassVisitor(this, rname), ClassReader.SKIP_FRAMES);
@@ -182,15 +220,40 @@ public class DefaultHLIndexer implements HLIndexer {
         }
     }
 
-    private void readJar(JarFile jar, JarEntry entry,IntRef typesCounter) {
+    private void readJar(JarFile jarFile, JarEntry entry,IntRef typesCounter) {
         String name = entry.getName();
-        if (name.endsWith(".class") && !BAD_CLASS_NAME.matcher(name).matches()) {
-            try (InputStream jis = jar.getInputStream(entry)) {
+        if (name.endsWith(".class") && isValidClassFile(name)) {
+            try (InputStream jis = jarFile.getInputStream(entry)) {
                 ClassReader cr = new ClassReader(jis);
-                cr.accept(new JavaClassVisitor(this, jar.getName()), ClassReader.SKIP_FRAMES);
+                cr.accept(new JavaClassVisitor(this, jarFile.getName()), ClassReader.SKIP_FRAMES);
                 typesCounter.inc();
             } catch (IOException e) {
-                LOG.log(Level.INFO, "Read Class file failed with : " + e.toString());
+                LOG.log(Level.INFO, "Read jar class file failed with : " + e.toString());
+            }
+        }
+    }
+
+    private void readJmod(ZipFile jmodFile, ZipEntry entry,IntRef typesCounter) {
+        String name = entry.getName();
+        if (name.startsWith("classes/") && name.endsWith(".class") && isValidClassFile(name)) {
+            try (InputStream jis = jmodFile.getInputStream(entry)) {
+                ClassReader cr = new ClassReader(jis);
+                cr.accept(new JavaClassVisitor(this, jmodFile.getName()), ClassReader.SKIP_FRAMES);
+                typesCounter.inc();
+            } catch (IOException e) {
+                LOG.log(Level.INFO, "Read jmod class file failed with : " + e.toString());
+            }
+        }
+    }
+    private void readJavaZip(ZipFile jmodFile, ZipEntry entry,IntRef typesCounter) {
+        String name = entry.getName();
+        if (name.endsWith(".class") && isValidClassFile(name)) {
+            try (InputStream jis = jmodFile.getInputStream(entry)) {
+                ClassReader cr = new ClassReader(jis);
+                cr.accept(new JavaClassVisitor(this, jmodFile.getName()), ClassReader.SKIP_FRAMES);
+                typesCounter.inc();
+            } catch (IOException e) {
+                LOG.log(Level.INFO, "Read jmod class file failed with : " + e.toString());
             }
         }
     }
@@ -454,6 +517,38 @@ public class DefaultHLIndexer implements HLIndexer {
     }
     public final void indexConstructor0(HLIndexedConstructor p) {
         store.index(p.getSource(), "Constructor", p, true);
+    }
+
+    public boolean isValidClassFile(String name){
+        int i=name.lastIndexOf('/');
+        if(i<0){
+            i=0;
+        }else{
+            i=i+1;
+        }
+        for (int j = i; j < name.length(); j++) {
+            char c = name.charAt(j);
+            switch (c){
+                case '-':{
+                    return false;
+                }
+                case '$':{
+                    if(j+1<name.length()) {
+                        char c2 = name.charAt(j + 1);
+                        if(c2>='0' && c2<='9'){
+                            return false;
+                        }
+                    }
+                    break;
+                }
+                default:{
+                    if(!Character.isJavaIdentifierPart(c) && c!='.'){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 }

@@ -11,7 +11,7 @@ import javax.swing.event.ChangeListener;
 import net.vpc.common.jeep.DefaultJCompilationUnit;
 import net.vpc.common.jeep.JCompilationUnit;
 import net.vpc.common.jeep.JContext;
-import net.vpc.common.jeep.core.compiler.JSourceFactory;
+import net.vpc.common.textsource.JTextSourceFactory;
 import net.vpc.hadralang.editor.hl4nb.HadraLanguageSingleton;
 import org.netbeans.modules.csl.spi.ParserResult;
 import org.netbeans.modules.parsing.api.Snapshot;
@@ -36,7 +36,7 @@ public class HLnbParser extends Parser {
         hcontext = HadraLanguageSingleton.HADRA_LANGUAGE.newContext();
         try {
             compilationUnit = new DefaultJCompilationUnit(
-                    JSourceFactory.fromString(snapshot.getText().toString(),
+                    JTextSourceFactory.fromString(snapshot.getText().toString(),
                             snapshot.getSource().getFileObject().getPath()
                     ), hcontext
             );

@@ -640,6 +640,14 @@ TODO
 TODO
             \end{lstlisting}
 
+            \subsection{'??=' Operator (set if not default)}
+            \lstset{language=HadraLang,backgroundcolor=\color{bgHL}}
+            \begin{lstlisting}
+String a="hello";
+String b=null;
+String c??=b;
+            \end{lstlisting}
+
             \section{Tuples}
             \lstset{language=HadraLang,backgroundcolor=\color{bgHL}}
             \begin{lstlisting}
@@ -968,6 +976,21 @@ class my.Complex{
         get;set;
     }
 }
+            \end{lstlisting}
+\lstset{mathescape=false}
+
+
+            \subsection{Builders}
+builder
+\lstset{mathescape=true}
+            \lstset{language=HadraLang,backgroundcolor=\color{bgHL}}
+            \begin{lstlisting}
+class my.Complex(double real,double imag);
+Complex c(0,0);
+var r2=c.{real=0;image=5}.real;
+
+Complex c2(0,0).{real=0;image=5};
+
             \end{lstlisting}
 \lstset{mathescape=false}
 

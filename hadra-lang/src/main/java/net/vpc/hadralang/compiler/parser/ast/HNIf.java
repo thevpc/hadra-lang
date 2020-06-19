@@ -114,8 +114,8 @@ public class HNIf extends HNode {
         super.copyFrom(node,copyFactory);
         if (node instanceof HNIf) {
             HNIf o = (HNIf) node;
-            this.elseNode = JNodeUtils.bindCopy(this, copyFactory, o.elseNode);
             this.branches = JNodeUtils.bindCopy(this, copyFactory, o.branches);
+            this.elseNode = JNodeUtils.bindCopy(this, copyFactory, o.elseNode);
         }
     }
 

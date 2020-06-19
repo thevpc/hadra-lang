@@ -16,11 +16,13 @@
     <orderEntry type="module" module-name="hadra-lang-stdlib" />
     <orderEntry type="module" module-name="hadra-lang" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm:6.0" level="project" />
-    <orderEntry type="module" module-name="nuts" />
+    <orderEntry type="library" name="Maven: net.vpc.app.nuts:nuts:0.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-util:6.0" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-tree:6.0" level="project" />
-    <orderEntry type="module" module-name="tson" />
-    <orderEntry type="module" module-name="vpc-common-jeep" />
-    <orderEntry type="module" module-name="vpc-common-classpath" />
+    <orderEntry type="library" name="Maven: net.vpc.common:tson:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: net.vpc.common:vpc-common-jeep:1.2.7" level="project" />
+    <orderEntry type="library" name="Maven: net.vpc.common:vpc-common-text-source:1.2.7" level="project" />
+    <orderEntry type="library" name="Maven: net.vpc.common:vpc-common-text-source-log:1.2.7" level="project" />
+    <orderEntry type="library" name="Maven: net.vpc.common:vpc-common-classpath:1.3.2" level="project" />
   </component>
 </module>

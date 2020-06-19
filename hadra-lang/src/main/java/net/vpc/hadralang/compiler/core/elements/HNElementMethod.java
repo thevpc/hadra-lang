@@ -6,15 +6,16 @@ import net.vpc.hadralang.compiler.parser.ast.HNDeclareInvokable;
 import net.vpc.hadralang.compiler.parser.ast.HNThis;
 import net.vpc.hadralang.compiler.index.HLIndexedMethod;
 import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.hadralang.compiler.parser.ast.HNode;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
-public class HNElementMethod extends HNElement {
+public class HNElementMethod extends HNElementInvokable implements Cloneable{
     public String methodName;
     public JType declaringType;
     public JInvokable invokable;
     public HLIndexedMethod indexedMethod;
     public HNDeclareInvokable declaration;
-    public JNode[] argNodes;
+    public HNode[] argNodes;
     public JTypeOrLambda[] argTypes;
     public Arg0Kind arg0Kind = Arg0Kind.NONE;
     public JTypeOrLambda arg0Type = null;
@@ -35,7 +36,7 @@ public class HNElementMethod extends HNElement {
         return indexedMethod;
     }
 
-    public JNode[] getArgNodes() {
+    public HNode[] getArgNodes() {
         return argNodes;
     }
 
@@ -48,7 +49,7 @@ public class HNElementMethod extends HNElement {
         return this;
     }
 
-    public HNElementMethod setArgNodes(JNode[] argNodes) {
+    public HNElementMethod setArgNodes(HNode[] argNodes) {
         this.argNodes = argNodes;
         return this;
     }
@@ -155,7 +156,7 @@ public class HNElementMethod extends HNElement {
         return this;
     }
 
-    public void processArg0(JNode dotBase){
+    public void processArg0(HNode dotBase){
         if(!this.isArg0TypeProcessed()) {
             if (this.getArg0Kind() == HNElementMethod.Arg0Kind.THIS) {
                 this.setArgNodes(
@@ -167,7 +168,7 @@ public class HNElementMethod extends HNElement {
                 this.setArg0TypeProcessed(true);
             } else if (this.getArg0Kind() == HNElementMethod.Arg0Kind.BASE) {
                 this.setArgNodes(
-                        JeepUtils.arrayAppend(JNode.class, dotBase, this.getArgNodes()==null?new JNode[0]:this.getArgNodes())
+                        JeepUtils.arrayAppend(HNode.class, dotBase, this.getArgNodes()==null?new HNode[0]:this.getArgNodes())
                 );
                 this.setArgTypes(
                         JeepUtils.arrayAppend(JTypeOrLambda.class, this.getArg0Type(), this.getArgTypes()==null?new JTypeOrLambda[0]:this.getArgTypes())

@@ -3,7 +3,7 @@ package net.vpc.hadralang.compiler.core.elements;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypeOrLambda;
 
-public class HNElementLambda extends HNElement {
+public class HNElementLambda extends HNElement implements Cloneable{
     public JTypeOrLambda typeOrLambda;
     public JType inferredType;
 

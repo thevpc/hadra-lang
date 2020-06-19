@@ -3,7 +3,7 @@ package net.vpc.hadralang.compiler.core.elements;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypeOrLambda;
 
-public class HNElementMetaPackageArtifact extends HNElement {
+public class HNElementMetaPackageArtifact extends HNElement implements Cloneable{
     String name;
 
     public HNElementMetaPackageArtifact(String name) {

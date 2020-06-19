@@ -105,19 +105,19 @@
 //        return null;
 //    }
 //
-//    public static HNInvokerCall createFunctionCall(JToken token, JInvokable f, JNode... nargs) {
+//    public static HXInvokableCall createFunctionCall(JToken token, JInvokable f, JNode... nargs) {
 //        JToken end=token;
 //        if(nargs.length==0){
 //            end=nargs[nargs.length-1].endToken();
 //        }
-//        HNInvokerCall jnf = new HNInvokerCall(JTokenUtils.createWordToken(f.name()), nargs,token,end);
+//        HXInvokableCall jnf = new HXInvokableCall(JTokenUtils.createWordToken(f.name()), nargs,token,end);
 //        jnf.setImpl(HUtils.createJInvokablePrefilled(f, nargs));
 //        jnf.setType(f.returnType());
 //        return jnf;
 //    }
 //
-//    public static HNInvokerCall createFunctionCall2(JToken token, JInvokable f, JEvaluable... nargs) {
-//        HNInvokerCall jnf = new HNInvokerCall(JTokenUtils.createWordToken(f.name()), new JNode[0], token,token);
+//    public static HXInvokableCall createFunctionCall2(JToken token, JInvokable f, JEvaluable... nargs) {
+//        HXInvokableCall jnf = new HXInvokableCall(JTokenUtils.createWordToken(f.name()), new JNode[0], token,token);
 //        jnf.setImpl(new JInvokablePrefilled(f, nargs));
 //        jnf.setType(f.returnType());
 //        return jnf;
@@ -168,7 +168,7 @@
 //                if (runModuleMethod1 != null) {
 //                    HNBlock body = (HNBlock) mainMethod.getBody();
 //                    body.getStatements().add(0,
-//                            new HNMethodCall(
+//                            new HNXInvokableCall(
 //                                    (JMethod) runModuleMethod1.getInvokable(), new JNode[0], null
 //                                    , body.startToken()
 //                                    , body.endToken()
@@ -1301,7 +1301,7 @@
 //                } else {
 //                    JInvokable c = compilerContext.createConverter(JOnError.TRACE, tr, tl, node, null);
 //                    if (c != null) {
-//                        HNInvokerCall r2 = createFunctionCall(node.startToken(), c, node.getRight());
+//                        HXInvokableCall r2 = createFunctionCall(node.startToken(), c, node.getRight());
 //                        node.setRight(r2);
 //                        return node;
 //                    }
@@ -2315,7 +2315,7 @@
 //
 //    public JNode onInvokerCall(JCompilerContext compilerContextBase) {
 //        HLJCompilerContext compilerContext = (HLJCompilerContext) compilerContextBase;
-//        HNInvokerCall node = (HNInvokerCall) compilerContext.node();
+//        HXInvokableCall node = (HXInvokableCall) compilerContext.node();
 //        JNode[] nargs = node.getArgs();
 //        processNextCompilerStage(node, nargs,compilerContext);
 //        if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
@@ -2577,7 +2577,7 @@
 //            //((HNode) arg).setType(JeepPlatformUtils.forObject(types));
 //            expandedArgs.add(arg);
 //        }
-//        HNMethodCall m = new HNMethodCall(jMethod, expandedArgs.toArray(new JNode[0]), null, s.startToken(), s.endToken());
+//        HNXInvokableCall m = new HNXInvokableCall(jMethod, expandedArgs.toArray(new JNode[0]), null, s.startToken(), s.endToken());
 //        m.setType(JTypeUtils.forString(types));
 //        return m;
 //    }
@@ -2605,7 +2605,7 @@
 //
 //    public JNode onInvokeMethodCall(JCompilerContext compilerContextBase) {
 //        HLJCompilerContext compilerContext = (HLJCompilerContext) compilerContextBase;
-//        HNMethodCall node = (HNMethodCall) compilerContext.node();
+//        HNXInvokableCall node = (HNXInvokableCall) compilerContext.node();
 //        JNode[] nargs = node.getArgs();
 //        processNextCompilerStage(node, nargs,compilerContext);
 //        processNextCompilerStage(node::getInstanceNode, node::setInstanceNode,compilerContext);
@@ -2622,7 +2622,7 @@
 //                                node.setMethod(jm);
 //                            }
 //                        } else if (f instanceof JFunction) {
-//                            HNInvokerCall jNodeHInvokerCall = new HNInvokerCall(
+//                            HXInvokableCall jNodeHInvokerCall = new HXInvokableCall(
 //                                    node.getMethodNameToken(), node.getArgs()
 //                                    , node.startToken()
 //                                    , node.endToken()
@@ -2963,7 +2963,7 @@
 //                    JEvaluable[] eargs = JNodeUtils.getEvaluatables(node.getRight().toArray(new JNode[0]));
 //                    JInvokable f = compilerContext.findFunctionMatch(JOnError.TRACE, id.getName(), HFunctionType.NORMAL, ntypes, node.startToken());
 //                    if (f != null) {
-//                        HNInvokerCall h = new HNInvokerCall(
+//                        HXInvokableCall h = new HXInvokableCall(
 //                                ((HNIdentifier) node.getLeft()).getNameToken()
 //                                , node.getRight().toArray(new JNode[0])
 //                                , node.startToken()
@@ -2977,7 +2977,7 @@
 //            } else {
 //                return node;
 //            }
-////            return new HNInvokerCall(((HNIdentifier) node.getBase()).getName(),node.getItems(),node.startToken());
+////            return new HXInvokableCall(((HNIdentifier) node.getBase()).getName(),node.getItems(),node.startToken());
 //        } else if (node.getLeft() instanceof HNTypeToken) {
 //            //this is mostly a constructor or generic method...
 //            HNTypeToken base = (HNTypeToken) node.getLeft();
@@ -3001,7 +3001,7 @@
 //                    JEvaluable[] eargs = JNodeUtils.getEvaluatables(allArgs);
 //                    JInvokable f = compilerContext.findFunctionMatch(JOnError.TRACE, HLExtensionNames.FUNCTION_APPLY, HFunctionType.SPECIAL, ntypes, node.startToken());
 //                    if (f != null) {
-//                        HNInvokerCall h = new HNInvokerCall(((HNIdentifier) node.getLeft()).getNameToken()
+//                        HXInvokableCall h = new HXInvokableCall(((HNIdentifier) node.getLeft()).getNameToken()
 //                                , node.getRight().toArray(new JNode[0])
 //                                , node.startToken()
 //                                , node.endToken()
@@ -3166,14 +3166,14 @@
 //                    FindMatchFailInfo failInfo = new FindMatchFailInfo(null);
 //                    JInvokable cc = compilerContext.createConverter(JOnError.NULL, from, vexpr.getType(), whenNode, failInfo);
 //                    if (cc != null) {
-//                        HNInvokerCall r2 = createFunctionCall(node.startToken(), cc, new HNLiteral(e, from, whenNode.startToken()));
+//                        HXInvokableCall r2 = createFunctionCall(node.startToken(), cc, new HNLiteral(e, from, whenNode.startToken()));
 //                        Object ce = HLUtils.evalCaseLiteral(r2, compilerContext, null, null);
 //                        kind = "simple";
 //                        e = ce;
 //                    } else {
 //                        cc = compilerContext.createConverter(JOnError.NULL, from, rangeType, whenNode, failInfo);
 //                        if (cc != null) {
-//                            HNInvokerCall r2 = createFunctionCall(node.startToken(), cc, new HNLiteral(e, from, whenNode.startToken()));
+//                            HXInvokableCall r2 = createFunctionCall(node.startToken(), cc, new HNLiteral(e, from, whenNode.startToken()));
 //                            Object ce = HLUtils.evalCaseLiteral(r2, compilerContext, null, null);
 //                            kind = "range";
 //                            e = ce;
@@ -3286,7 +3286,7 @@
 //                HNDeclareIdentifier i = (HNDeclareIdentifier) oe;
 //                i.setIdentifierTypeName(HUtils.createTypeToken(compilerContext.types().forName(String.class.getName())));
 //                i.setInitValue(
-//                        new HNMethodCall(
+//                        new HNXInvokableCall(
 //                                JTypeUtils.forString(compilerContext.types()).declaredMethod("valueOf(java.lang.Object)"),
 //                                new JNode[]{i.getInitValue()},
 //                                null,
@@ -3295,7 +3295,7 @@
 //                        )
 //                );
 //            } else {
-//                oe = new HNMethodCall(
+//                oe = new HNXInvokableCall(
 //                        JTypeUtils.forString(compilerContext.types()).declaredMethod("valueOf(java.lang.Object)"),
 //                        new JNode[]{oe},
 //                        null,
@@ -3437,7 +3437,7 @@
 //        JToken var1_tok = JTokenUtils.createTokenIdPointer(switchNode.startToken(), var1);
 //        forNode.addInit(new HNDeclareIdentifier(
 //                new JToken[]{var1_tok},
-//                new HNMethodCall(
+//                new HNXInvokableCall(
 //                        compilerContext.types().forName(HHelpers.class.getName()).declaredMethod(
 //                                instance ? "resolveInstanceClassWithParentNames(java.lang.Object)" :
 //                                        "resolveClassWithParentNames(java.lang.Class)"),
@@ -3593,7 +3593,7 @@
 //        fn.setLabel(lab1);
 //        fn.addInit(new HNDeclareIdentifier(
 //                new JToken[]{JTokenUtils.createTokenIdPointer(node.startToken(), var1)},
-//                new HNMethodCall(
+//                new HNXInvokableCall(
 //                        compilerContext.types().forName(HHelpers.class.getName()).declaredMethod("resolveInstanceClassWithParentNames(java.lang.Object)"),
 //                        new JNode[]{
 //                                vexpr
@@ -3702,7 +3702,7 @@
 //                        HNDeclareType t = compilerContext.lookupEnclosingTypeNode(compilerContext.node());
 //                        String pi = HUtils.nextNameFromUserProperty(t, "___$P");
 //                        t.addField(new HNDeclareIdentifier(
-//                                        new JToken[]{JTokenUtils.createTokenIdPointer(node.startToken(), pi)}, new HNMethodCall(
+//                                        new JToken[]{JTokenUtils.createTokenIdPointer(node.startToken(), pi)}, new HNXInvokableCall(
 //                                        compilerContext.types().forName(Pattern.class.getName()).declaredMethod("compile(java.lang.String)"),
 //                                        new JNode[]{new HNLiteral(p.pattern(), JTypeUtils.forString(compilerContext.types()), whenNode.startToken())},
 //                                        null
@@ -3713,10 +3713,10 @@
 //                                        , compilerContext.types().forName(Pattern.class.getName()), JTokenUtils.createOpToken("="), whenNode.startToken(), whenNode.startToken()
 //                                ).setModifiers(Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL).setSyntacticType(HNDeclareIdentifier.SyntacticType.LOCAL)
 //                                , compilerContext);
-//                        JNode nc = new HNMethodCall(
+//                        JNode nc = new HNXInvokableCall(
 //                                compilerContext.types().forName(Matcher.class.getName()).declaredMethod("matches()"),
 //                                new JNode[0],
-//                                new HNMethodCall(
+//                                new HNXInvokableCall(
 //                                        compilerContext.types().forName(Pattern.class.getName()).declaredMethod("matcher(java.lang.CharSequence)"),
 //                                        new JNode[]{vexpr},
 //                                        new HNField(

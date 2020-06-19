@@ -53,32 +53,32 @@
 \contentsline {subsection}{\numberline {3.0.4}Enumerations}{35}{subsection.3.0.4}%
 \contentsline {subsection}{\numberline {3.0.5}Fields and Properties}{35}{subsection.3.0.5}%
 \contentsline {subsection}{\numberline {3.0.6}Constructors}{37}{subsection.3.0.6}%
-\contentsline {subsection}{\numberline {3.0.7}Methods}{37}{subsection.3.0.7}%
+\contentsline {subsection}{\numberline {3.0.7}Methods}{38}{subsection.3.0.7}%
 \contentsline {subsection}{\numberline {3.0.8}Functions and global variables}{38}{subsection.3.0.8}%
 \contentsline {subsection}{\numberline {3.0.9}main function}{39}{subsection.3.0.9}%
 \contentsline {subsection}{\numberline {3.0.10}Extension functions}{39}{subsection.3.0.10}%
 \contentsline {subsection}{\numberline {3.0.11}Operators}{39}{subsection.3.0.11}%
 \contentsline {subsection}{\numberline {3.0.12}Extension constructors}{40}{subsection.3.0.12}%
 \contentsline {subsection}{\numberline {3.0.13}Package Class}{40}{subsection.3.0.13}%
-\contentsline {chapter}{\numberline {4}Compilation and Execution}{41}{chapter.4}%
-\contentsline {section}{\numberline {4.1}PreProcessor}{41}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Maven Support}{41}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Interpreter}{41}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Java Transpiler/Compiler}{41}{section.4.4}%
-\contentsline {part}{II\hspace {1em}Programming with Hadra-Lang}{43}{part.2}%
-\contentsline {chapter}{\numberline {5}IDE Support}{45}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Netbeans Support}{45}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Intellij Support}{45}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Eclipse Support}{45}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Visualcode Support}{45}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Other Text Tools support}{45}{section.5.5}%
-\contentsline {chapter}{\numberline {6}Standard Library}{47}{chapter.6}%
-\contentsline {chapter}{\numberline {7}Java Integration}{49}{chapter.7}%
-\contentsline {part}{III\hspace {1em}Future Features}{51}{part.3}%
-\contentsline {section}{\numberline {7.1}Javascript/Typescript Transpiler}{53}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Javascript/Typescript Transpiler}{53}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Native Compiler}{53}{section.7.3}%
-\contentsline {section}{\numberline {7.4}Language Server Protocol}{53}{section.7.4}%
-\contentsline {chapter}{Bibliography}{55}{chapter*.5}%
-\contentsline {chapter}{Index}{57}{chapter*.6}%
+\contentsline {chapter}{\numberline {4}Compilation and Execution}{43}{chapter.4}%
+\contentsline {section}{\numberline {4.1}PreProcessor}{43}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Maven Support}{43}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Interpreter}{43}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Java Transpiler/Compiler}{43}{section.4.4}%
+\contentsline {part}{II\hspace {1em}Programming with Hadra-Lang}{45}{part.2}%
+\contentsline {chapter}{\numberline {5}IDE Support}{47}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Netbeans Support}{47}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Intellij Support}{47}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Eclipse Support}{47}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Visualcode Support}{47}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Other Text Tools support}{47}{section.5.5}%
+\contentsline {chapter}{\numberline {6}Standard Library}{49}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Java Integration}{51}{chapter.7}%
+\contentsline {part}{III\hspace {1em}Future Features}{53}{part.3}%
+\contentsline {section}{\numberline {7.1}Javascript/Typescript Transpiler}{55}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Javascript/Typescript Transpiler}{55}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Native Compiler}{55}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Language Server Protocol}{55}{section.7.4}%
+\contentsline {chapter}{Bibliography}{57}{chapter*.5}%
+\contentsline {chapter}{Index}{59}{chapter*.6}%
 \contentsfinish 

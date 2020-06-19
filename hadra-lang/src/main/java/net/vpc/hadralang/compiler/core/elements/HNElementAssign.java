@@ -3,10 +3,9 @@ package net.vpc.hadralang.compiler.core.elements;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypeOrLambda;
 
-public class HNElementAssign extends HNElement {
+public class HNElementAssign extends HNElement implements Cloneable{
 
     public JTypeOrLambda type;
-    public String declareTempVarName;
 
     public HNElementAssign() {
         super(HNElementKind.ASSIGN);
@@ -15,14 +14,6 @@ public class HNElementAssign extends HNElement {
     public HNElementAssign(JType type) {
         super(HNElementKind.EXPR);
         setType(type);
-    }
-
-    public String getDeclareTempVarName() {
-        return declareTempVarName;
-    }
-
-    public void setDeclareTempVarName(String declareTempVarName) {
-        this.declareTempVarName = declareTempVarName;
     }
 
     public JType getType() {

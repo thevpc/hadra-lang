@@ -6,7 +6,7 @@
 package net.vpc.hadralang.test;
 
 import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.compiler.JSourceFactory;
+import net.vpc.common.textsource.JTextSourceFactory;
 import net.vpc.hadralang.compiler.HL;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -275,7 +275,7 @@ public class TestTokenizer {
     }
 
     private String _stringResource(String resourceName) {
-        return JSourceFactory.fromURL(getClass().getResource("/net/vpc/hadralang/test/tokenizer/" + resourceName)).text();
+        return JTextSourceFactory.fromURL(getClass().getResource("/net/vpc/hadralang/test/tokenizer/" + resourceName)).text();
     }
 
     private JTokenizer _tokenizeResource(String resourceName, HL hl) {

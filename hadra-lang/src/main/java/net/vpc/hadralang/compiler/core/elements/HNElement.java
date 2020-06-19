@@ -1,13 +1,18 @@
 package net.vpc.hadralang.compiler.core.elements;
 
 import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.textsource.JTextSource;
+import net.vpc.common.textsource.log.JSourceMessage;
 
 public abstract class HNElement {
     private HNElementKind kind;
     private JToken location;
-    private JSource source;
+    private JTextSource source;
     private JInvokable convertInvokable;
+
+    public HNElement(HNElementKind kind) {
+        this.kind = kind;
+    }
 
     public JToken getLocation() {
         return location;
@@ -18,27 +23,24 @@ public abstract class HNElement {
         return this;
     }
 
-    public JSource getSource() {
+    public JTextSource getSource() {
         return source;
     }
 
-    public HNElement setSource(JSource source) {
+    public HNElement setSource(JTextSource source) {
         this.source = source;
         return this;
-    }
-
-    public HNElement(HNElementKind kind) {
-        this.kind = kind;
     }
 
     public HNElementKind getKind() {
         return kind;
     }
-    public abstract JTypeOrLambda getTypeOrLambda() ;
 
-    public JType getType(){
+    public abstract JTypeOrLambda getTypeOrLambda();
+
+    public JType getType() {
         JTypeOrLambda typeOrLambda = getTypeOrLambda();
-        return typeOrLambda==null?null:typeOrLambda.getType();
+        return typeOrLambda == null ? null : typeOrLambda.getType();
     }
 
     @Override
@@ -49,17 +51,25 @@ public abstract class HNElement {
     }
 
     public String toDescString() {
-        if(getLocation()!=null && getSource()!=null){
-            return JCompilerMessage.toRangeString(getLocation(),getSource(),true);
+        if (getLocation() != null && getSource() != null) {
+            return JSourceMessage.toRangeString(getLocation(), getSource(), true);
         }
         return toString();
     }
 
     public void setConverterInvokable(JInvokable convertInvokable) {
-        this.convertInvokable=convertInvokable;
+        this.convertInvokable = convertInvokable;
     }
 
     public JInvokable getConvertInvokable() {
         return convertInvokable;
+    }
+
+    public HNElement copy() {
+        try {
+            return (HNElement) clone();
+        } catch (CloneNotSupportedException e) {
+            throw new JShouldNeverHappenException();
+        }
     }
 }

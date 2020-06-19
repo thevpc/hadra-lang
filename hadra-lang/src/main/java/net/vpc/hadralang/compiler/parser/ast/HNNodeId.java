@@ -13,6 +13,9 @@ public enum HNNodeId {
     H_WHILE,
     H_IF,
     H_SWITCH,
+    H_TRY_CATCH,
+    H_CATCH,
+    H_CATCH_EXPR,
     H_FOR,
     H_RETURN,
     H_TYPE_TOKEN,
@@ -20,7 +23,6 @@ public enum HNNodeId {
     H_OP_BINARY,
     H_OP_UNARY,
     H_BREAK,
-    H_VAR,
     H_LITERAL_DEFAULT,
     H_ARRAY_NEW,
     H_OBJECT_NEW,
@@ -63,10 +65,7 @@ public enum HNNodeId {
     H_STRING_INTEROP,
 
 
-    @Deprecated
-    H_INVOKE_METHOD,
-    @Deprecated
-    H_INVOKER_CALL,
+    X_INVOKABLE_CALL,
     @Deprecated
     H_ARRAY_CALL,
 }

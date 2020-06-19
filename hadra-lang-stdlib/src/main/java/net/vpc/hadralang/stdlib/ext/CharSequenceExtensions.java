@@ -18,6 +18,13 @@ public class CharSequenceExtensions {
     }
     //endregion
 
+    public static boolean tilde(Pattern a, CharSequence b) {
+        return a.matcher(b).matches();
+    }
+
+    public static boolean tilde(CharSequence a, Pattern b) {
+        return b.matcher(a).matches();
+    }
 
     public static boolean newPrimitiveBoolean(CharSequence string) {
         return Boolean.parseBoolean(string.toString());

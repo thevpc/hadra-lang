@@ -4,6 +4,7 @@ import net.vpc.common.jeep.JMethod;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.impl.types.host.HostJArray;
 import net.vpc.hadralang.compiler.parser.ast.*;
+import net.vpc.hadralang.compiler.parser.ast.extra.HXInvokableCall;
 import net.vpc.hadralang.stdlib.*;
 import net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators;
 import net.vpc.hadralang.stdlib.ext.RangeExtensions;
@@ -34,35 +35,11 @@ public class HLConstantEvaluator extends HLEvaluator {
             case H_ARRAY_NEW:{
                 throw new JParseException("unable to evaluate constant value : "+node);
             }
-
-            case H_INVOKE_METHOD: {
-                HNMethodCall a = (HNMethodCall) node;
-                JInvokable m = a.getMethod();
-                if(m instanceof JMethod && ((JMethod)m).isStatic()
-                    && (
-                            ((JMethod)m).declaringType().name().equals(HJavaDefaultOperators.class.getName())
-                        || ((JMethod)m).declaringType().name().equals(RangeExtensions.class.getName()))
-                ){
-                    //fallthrough
-                } else {
-                    throw new JParseException("unable to evaluate constant value : "+node);
-                }
-                break;
-            }
-//            case H_FIELD: {
-//                HNField a = (HNField) node;
-//                JField f = a.getField();
-//                if (f.isStatic() && f.isFinal()) {
-//                    //fallthrough
-//                } else {
-//                    throw new JParseException("unable to evaluate constant value : "+node);
-//                }
-//                break;
-//            }
-            case H_INVOKER_CALL: {
-                if(node instanceof HNInvokerCall){
-                    JInvokablePrefilled impl = ((HNInvokerCall) node).impl();
-                    JInvokable ii = impl.getInvokable();
+            case X_INVOKABLE_CALL: {
+                if(node instanceof HXInvokableCall){
+                    HXInvokableCall invokableCall = (HXInvokableCall) node;
+//                    JInvokablePrefilled impl = invokableCall.impl();
+                    JInvokable ii = invokableCall.getInvokable();
                     if(ii instanceof JMethod){
                         JMethod m=(JMethod) ii;
                         if (m.isStatic()) {

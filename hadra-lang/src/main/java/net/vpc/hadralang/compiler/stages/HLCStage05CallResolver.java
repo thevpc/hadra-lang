@@ -173,8 +173,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
 
             }
 
-            case H_INVOKER_CALL:
-            case H_INVOKE_METHOD: {
+            case X_INVOKABLE_CALL: {
                 throw new JShouldNeverHappenException();
             }
         }
@@ -831,143 +830,143 @@ public class HLCStage05CallResolver extends HLCStageType2 {
         return true;
     }
 
-    private boolean onAssign0(HNAssign node, HLJCompilerContext compilerContext) {
-        HNode left = (HNode) node.getLeft();
-        HNode right = (HNode) node.getRight();
-        HNElementAssign elementAssign = (HNElementAssign) node.getElement();
-        HNode rightReplace = right;
-        if (right.getElement() != null && HTypeUtils.isTupleType(right.getElement().getTypeOrLambda())) {
-            String vn = compilerContext.nextVarName();
-            HNIdentifier hi = new HNIdentifier(HNodeUtils.createToken(vn));
-            HNElementLocalVar element = new HNElementLocalVar(hi.getName());
-            element.setEffectiveType(right.getElement().getType());
-            hi.setElement(element);
-            elementAssign.setDeclareTempVarName(vn);
-            rightReplace = hi;
-        }
+//    private boolean onAssign0(HNAssign node, HLJCompilerContext compilerContext) {
+//        HNode left = (HNode) node.getLeft();
+//        HNode right = (HNode) node.getRight();
+//        HNElementAssign elementAssign = (HNElementAssign) node.getElement();
+//        HNode rightReplace = right;
+//        if (right.getElement() != null && HTypeUtils.isTupleType(right.getElement().getTypeOrLambda())) {
+//            String vn = compilerContext.nextVarName();
+//            HNIdentifier hi = new HNIdentifier(HNodeUtils.createToken(vn));
+//            HNElementLocalVar element = new HNElementLocalVar(hi.getName());
+//            element.setEffectiveType(right.getElement().getType());
+//            hi.setElement(element);
+////            elementAssign.setDeclareTempVarName(vn);
+//            rightReplace = hi;
+//        }
+//
+//        if (onAssign_deconstruct0(left, rightReplace, compilerContext)) {
+//            ((HNElementAssign) node.getElement()).setType(left.getElement().getTypeOrLambda());
+//            return true;
+//        }
+//        return false;
+//    }
 
-        if (onAssign_deconstruct0(left, rightReplace, compilerContext)) {
-            ((HNElementAssign) node.getElement()).setType(left.getElement().getTypeOrLambda());
-            return true;
-        }
-        return false;
-    }
-
-    private boolean onAssign_deconstruct0(HNode left, HNode right, HLJCompilerContext compilerContext) {
-        JTypeOrLambda rightToL = compilerContext.jTypeOrLambda(showFinalErrors, right);
-        if (rightToL == null) {
-            return false;
-        }
-        switch (left.getElement().getKind()) {
-            case LOCAL_VAR:
-            case FIELD: {
-                JTypeOrLambda leftToL = compilerContext.jTypeOrLambda(showFinalErrors, left);
-                if (leftToL == null) {
-                    return false;
-                }
-                return implicitConvert(leftToL, right, compilerContext);
-            }
-            case EXPR: {
-                if (left instanceof HNBracketsPostfix) {
-                    HNBracketsPostfix aleft = (HNBracketsPostfix) left;
-                    HNode base = aleft.getLeft();
-                    List<HNode> indicesNodes = aleft.getRight();
-                    JTypeOrLambda baseToL = compilerContext.jTypeOrLambda(showFinalErrors, base);
-                    JTypeOrLambda[] indicesToL = compilerContext.jTypeOrLambdas(showFinalErrors, indicesNodes);
-                    if (indicesToL == null) {
-                        return false;
-                    }
-                    if (baseToL == null) {
-                        return false;
-                    }
-                    boolean acceptMethodImpl = true;
-                    if (baseToL.getType().isArray()) {
-                        if (indicesNodes.stream()
-                                .map(x -> compilerContext.jTypeOrLambda(showFinalErrors, x))
-                                .allMatch(x -> x.isType() && x.getType().boxed().name().equals("java.lang.Integer"))) {
-                            // this is a regular array
-                            JTypeArray arrType = (JTypeArray) baseToL.getType();
-                            if (arrType.arrayDimension() >= indicesNodes.size()) {
-                                acceptMethodImpl = false;
-                                HNElementExpr element = (HNElementExpr) left.getElement();
-                                element.setType(
-                                        arrType.rootComponentType().toArray(arrType.arrayDimension() - indicesNodes.size())
-                                );
-                                //ok
-                            } else {
-                                acceptMethodImpl = false;
-                                compilerContext.log().error("S000", null, "array type expected",
-                                        indicesNodes.get(indicesNodes.size() - 1).startToken());
-                            }
-                        }
-                    }
-                    if (acceptMethodImpl) {
-                        HNode[] nargs = JeepUtils.arrayAppend(HNode.class, base, indicesNodes.toArray(new HNode[0]), right);
-                        JTypeOrLambda[] ntypes = JeepUtils.arrayAppend(JTypeOrLambda.class, baseToL, indicesToL, rightToL);
-                        JInvokable m = compilerContext.lookupFunctionMatch(JOnError.TRACE, HLExtensionNames.BRACKET_SET_SHORT, HFunctionType.SPECIAL, ntypes, left.startToken());
-                        if (m != null) {
-                            HNElementMethod impl = new HNElementMethod(m);
-                            impl.setArgNodes(nargs);
-                            impl.setArg0TypeProcessed(true);
-                            setElement(left, impl);
-                            inferType(base, m.signature().argType(0), compilerContext);
-                            for (int i = 0; i < indicesNodes.size(); i++) {
-                                inferType(indicesNodes.get(i), m.signature().argType(i + 1), compilerContext);
-                            }
-                        }
-                    }
-                    return true;
-
-                } else if (left instanceof HNTuple) {
-                    HNTuple tuple = (HNTuple) left;
-                    //de-constructor matcher
-                    if (!right.getElement().getTypeOrLambda().isType()) {
-                        compilerContext.log().error("S000", null, "invalid Tuple", right.startToken());
-                    } else {
-                        JType encountered = right.getElement().getTypeOrLambda().getType();
-                        if (!HTypeUtils.isTupleType(encountered)) {
-                            compilerContext.log().error("X000", null, "expected tuple type", right.startToken());
-                            return false;
-                        }
-                        JType[] tupleArgTypes;
-                        try {
-                            tupleArgTypes = HTypeUtils.tupleArgTypes(encountered);
-                        } catch (Exception ex) {
-                            compilerContext.log().error("X000", null, "invalid tuple type", right.startToken());
-                            return false;
-                        }
-                        if (tupleArgTypes.length != tuple.getItems().length) {
-                            compilerContext.log().error("X000", null, "tuple mismatch " + tupleArgTypes.length + "!=" + tuple.getItems().length, right.startToken());
-                            return false;
-                        }
-                        HNElement lelement = tuple.getElement();
-                        ((HNElementExpr) lelement).setType(right.getElement().getTypeOrLambda());
-                        //if(_checkTypeMismatch(expected,encountered,left.startToken(),compilerContext)){
-                        for (int i = 0; i < tupleArgTypes.length; i++) {
-                            HNOpDot tempRight = new HNOpDot(
-                                    right,
-                                    HNodeUtils.createToken("."),
-                                    new HNIdentifier(HNodeUtils.createToken("_" + (i + 1))),
-                                    null, null
-                            );
-                            setElement(tempRight, new HNElementExpr(tupleArgTypes[i]));
-                            if (!onAssign_deconstruct0(
-                                    (HNode) tuple.getItems()[i],
-                                    tempRight, compilerContext
-                            )) {
-                                return false;
-                            }
-                        }
-                        //}
-                    }
-                } else {
-                    throw new JShouldNeverHappenException();
-                }
-                break;
-            }
-        }
-        return true;
-    }
+//    private boolean onAssign_deconstruct0(HNode left, HNode right, HLJCompilerContext compilerContext) {
+//        JTypeOrLambda rightToL = compilerContext.jTypeOrLambda(showFinalErrors, right);
+//        if (rightToL == null) {
+//            return false;
+//        }
+//        switch (left.getElement().getKind()) {
+//            case LOCAL_VAR:
+//            case FIELD: {
+//                JTypeOrLambda leftToL = compilerContext.jTypeOrLambda(showFinalErrors, left);
+//                if (leftToL == null) {
+//                    return false;
+//                }
+//                return implicitConvert(leftToL, right, compilerContext);
+//            }
+//            case EXPR: {
+//                if (left instanceof HNBracketsPostfix) {
+//                    HNBracketsPostfix aleft = (HNBracketsPostfix) left;
+//                    HNode base = aleft.getLeft();
+//                    List<HNode> indicesNodes = aleft.getRight();
+//                    JTypeOrLambda baseToL = compilerContext.jTypeOrLambda(showFinalErrors, base);
+//                    JTypeOrLambda[] indicesToL = compilerContext.jTypeOrLambdas(showFinalErrors, indicesNodes);
+//                    if (indicesToL == null) {
+//                        return false;
+//                    }
+//                    if (baseToL == null) {
+//                        return false;
+//                    }
+//                    boolean acceptMethodImpl = true;
+//                    if (baseToL.getType().isArray()) {
+//                        if (indicesNodes.stream()
+//                                .map(x -> compilerContext.jTypeOrLambda(showFinalErrors, x))
+//                                .allMatch(x -> x.isType() && x.getType().boxed().name().equals("java.lang.Integer"))) {
+//                            // this is a regular array
+//                            JTypeArray arrType = (JTypeArray) baseToL.getType();
+//                            if (arrType.arrayDimension() >= indicesNodes.size()) {
+//                                acceptMethodImpl = false;
+//                                HNElementExpr element = (HNElementExpr) left.getElement();
+//                                element.setType(
+//                                        arrType.rootComponentType().toArray(arrType.arrayDimension() - indicesNodes.size())
+//                                );
+//                                //ok
+//                            } else {
+//                                acceptMethodImpl = false;
+//                                compilerContext.log().error("S000", null, "array type expected",
+//                                        indicesNodes.get(indicesNodes.size() - 1).startToken());
+//                            }
+//                        }
+//                    }
+//                    if (acceptMethodImpl) {
+//                        HNode[] nargs = JeepUtils.arrayAppend(HNode.class, base, indicesNodes.toArray(new HNode[0]), right);
+//                        JTypeOrLambda[] ntypes = JeepUtils.arrayAppend(JTypeOrLambda.class, baseToL, indicesToL, rightToL);
+//                        JInvokable m = compilerContext.lookupFunctionMatch(JOnError.TRACE, HLExtensionNames.BRACKET_SET_SHORT, HFunctionType.SPECIAL, ntypes, left.startToken());
+//                        if (m != null) {
+//                            HNElementMethod impl = new HNElementMethod(m);
+//                            impl.setArgNodes(nargs);
+//                            impl.setArg0TypeProcessed(true);
+//                            setElement(left, impl);
+//                            inferType(base, m.signature().argType(0), compilerContext);
+//                            for (int i = 0; i < indicesNodes.size(); i++) {
+//                                inferType(indicesNodes.get(i), m.signature().argType(i + 1), compilerContext);
+//                            }
+//                        }
+//                    }
+//                    return true;
+//
+//                } else if (left instanceof HNTuple) {
+//                    HNTuple tuple = (HNTuple) left;
+//                    //de-constructor matcher
+//                    if (!right.getElement().getTypeOrLambda().isType()) {
+//                        compilerContext.log().error("S000", null, "invalid Tuple", right.startToken());
+//                    } else {
+//                        JType encountered = right.getElement().getTypeOrLambda().getType();
+//                        if (!HTypeUtils.isTupleType(encountered)) {
+//                            compilerContext.log().error("X000", null, "expected tuple type", right.startToken());
+//                            return false;
+//                        }
+//                        JType[] tupleArgTypes;
+//                        try {
+//                            tupleArgTypes = HTypeUtils.tupleArgTypes(encountered);
+//                        } catch (Exception ex) {
+//                            compilerContext.log().error("X000", null, "invalid tuple type", right.startToken());
+//                            return false;
+//                        }
+//                        if (tupleArgTypes.length != tuple.getItems().length) {
+//                            compilerContext.log().error("X000", null, "tuple mismatch " + tupleArgTypes.length + "!=" + tuple.getItems().length, right.startToken());
+//                            return false;
+//                        }
+//                        HNElement lelement = tuple.getElement();
+//                        ((HNElementExpr) lelement).setType(right.getElement().getTypeOrLambda());
+//                        //if(_checkTypeMismatch(expected,encountered,left.startToken(),compilerContext)){
+//                        for (int i = 0; i < tupleArgTypes.length; i++) {
+//                            HNOpDot tempRight = new HNOpDot(
+//                                    right,
+//                                    HNodeUtils.createToken("."),
+//                                    new HNIdentifier(HNodeUtils.createToken("_" + (i + 1))),
+//                                    null, null
+//                            );
+//                            setElement(tempRight, new HNElementExpr(tupleArgTypes[i]));
+//                            if (!onAssign_deconstruct0(
+//                                    (HNode) tuple.getItems()[i],
+//                                    tempRight, compilerContext
+//                            )) {
+//                                return false;
+//                            }
+//                        }
+//                        //}
+//                    }
+//                } else {
+//                    throw new JShouldNeverHappenException();
+//                }
+//                break;
+//            }
+//        }
+//        return true;
+//    }
 
     private boolean onAssign(HNAssign node, HLJCompilerContext compilerContext) {
         HNode left = (HNode) node.getLeft();
@@ -1131,7 +1130,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                         JType tt = compilerContext.getOrCreateType(di.getDeclaringType());
                         JInvokable c = compilerContext.findConstructorMatch(JOnError.TRACE, tt, argTypes.toArray(new JTypeOrLambda[0]), node.startToken(), null);
                         if (c != null) {
-                            d.setElement(new HNElementConstructor(tt, c, arguments.toArray(new JNode[0])));
+                            d.setElement(new HNElementConstructor(tt, c, arguments.toArray(new HNode[0])));
                         }
                         HNElementExpr.get(node).setType(JTypeUtils.forVoid(compilerContext.types()));
                         return true;
@@ -1152,7 +1151,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                         } else {
                             JInvokable c = compilerContext.findConstructorMatch(JOnError.TRACE, st, argTypes.toArray(new JTypeOrLambda[0]), node.startToken(), null);
                             if (c != null) {
-                                d.setElement(new HNElementConstructor(st, c, arguments.toArray(new JNode[0])));
+                                d.setElement(new HNElementConstructor(st, c, arguments.toArray(new HNode[0])));
                             }
                         }
                         HNElementExpr.get(node).setType(JTypeUtils.forVoid(compilerContext.types()));
@@ -1166,7 +1165,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
         JInvokable ctrInvokable = compilerContext.lookupFunctionMatch(JOnError.TRACE, HLExtensionNames.FUNCTION_APPLY, HFunctionType.SPECIAL, argTypes.toArray(new JTypeOrLambda[0]), node.startToken(), null);
         if (ctrInvokable != null) {
             HNElementMethod element = new HNElementMethod(ctrInvokable);
-            element.setArgNodes(arguments.toArray(new JNode[0]));
+            element.setArgNodes(arguments.toArray(new HNode[0]));
             element.setArg0TypeProcessed(true);
             setElement(node, element);
         }
@@ -1211,7 +1210,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                     HFunctionType.SPECIAL, argsTypes.toArray(new JTypeOrLambda[0]), node.startToken());
             if (f != null) {
                 HNElementMethod element = new HNElementMethod(f);
-                element.setArgNodes(argsNodes.toArray(new JNode[0]));
+                element.setArgNodes(argsNodes.toArray(new HNode[0]));
                 element.setArg0TypeProcessed(true);
                 setElement(node, element);
                 //infer back types
@@ -1369,7 +1368,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                 node.isPrefixOperator() ? HFunctionType.PREFIX_UNARY : HFunctionType.POSTFIX_UNARY, args, node.startToken());
         if (f != null) {
             HNElementMethod element = new HNElementMethod(f);
-            element.setArgNodes(new JNode[]{expr});
+            element.setArgNodes(new HNode[]{expr});
             element.setArg0TypeProcessed(true);
             setElement(node, element);
             inferType(expr, f.signature().argType(0), compilerContext);

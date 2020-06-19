@@ -3,6 +3,7 @@ package net.vpc.hadralang.compiler.utils;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.eval.JEvaluableNode;
 import net.vpc.common.jeep.impl.functions.*;
+import net.vpc.common.textsource.JTextSource;
 import net.vpc.hadralang.compiler.parser.ast.*;
 
 import java.lang.reflect.Modifier;
@@ -258,19 +259,19 @@ public class HUtils {
         return imports.toArray(new String[0]);
     }
 
-    public static void setSource(JNode node,JSource src) {
-        node.setUserObject(JSource.class.getName(),src);
+    public static void setSource(JNode node, JTextSource src) {
+        node.setUserObject(JTextSource.class.getName(),src);
     }
-    public static JSource getSource(JNode node) {
+    public static JTextSource getSource(JNode node) {
         while (node != null) {
-            Object ss = node.userObjects().get(JSource.class.getName());
-            if(ss instanceof JSource){
-                return (JSource)ss;
+            Object ss = node.userObjects().get(JTextSource.class.getName());
+            if(ss instanceof JTextSource){
+                return (JTextSource)ss;
             }
             if (node instanceof HNBlock.CompilationUnitBlock) {
                 JCompilationUnit cu=((HNBlock.CompilationUnitBlock) node).getCompilationUnit();
                 if(cu!=null){
-                    JSource s = cu.getSource();
+                    JTextSource s = cu.getSource();
                     if(s!=null){
                         return s;
                     }
@@ -282,7 +283,7 @@ public class HUtils {
     }
 
     public static String getSourceName(JNode node) {
-        JSource cu = getSource(node);
+        JTextSource cu = getSource(node);
         if (cu != null) {
             return cu.name();
         }

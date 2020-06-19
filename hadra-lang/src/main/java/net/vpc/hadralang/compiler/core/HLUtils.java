@@ -523,8 +523,8 @@ public class HLUtils {
 //                }
 //            }
 //            compilerContextBase.log().error("S003", "expected constant " + type.name() + " value", n.token());
-//        } else if (n instanceof HNInvokerCall) {
-//            HNInvokerCall ic = (HNInvokerCall) n;
+//        } else if (n instanceof HXInvokableCall) {
+//            HXInvokableCall ic = (HXInvokableCall) n;
 //            JInvokablePrefilled impl = ic.impl();
 //            JEvaluable[] evaluables = impl.getEvaluables();
 //            boolean ok = true;

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JSource;
+
+import net.vpc.common.textsource.JTextSource;
 import net.vpc.hadralang.compiler.core.HLProject;
 import net.vpc.hadralang.compiler.parser.ast.HNDeclareType;
 
@@ -22,7 +22,7 @@ public class JavaNodes {
 
     private HNDeclareType metaPackage;
     private List<HNDeclareType> topLevelTypes = new ArrayList<>();
-    private Set<JSource> metaPackageSources = new HashSet<JSource>();
+    private Set<JTextSource> metaPackageSources = new HashSet<JTextSource>();
 
     public static JavaNodes of(HLProject project) {
         return (JavaNodes) project.getUserProperties().computeIfAbsent(JavaNodes.class.getName(), (k) -> new JavaNodes());
@@ -31,7 +31,7 @@ public class JavaNodes {
     public JavaNodes() {
     }
 
-    public Set<JSource> getMetaPackageSources() {
+    public Set<JTextSource> getMetaPackageSources() {
         return metaPackageSources;
     }
 

@@ -13,7 +13,7 @@ package net.vpc.hadralang.editor.hl4nb.editor.parser;
 //import javax.swing.text.BadLocationException;
 //import javax.swing.text.Document;
 //import net.vpc.common.jeep.JCompilerLog;
-//import net.vpc.common.jeep.JCompilerMessage;
+//import net.vpc.common.textsource.log.JSourceMessage;
 //import net.vpc.common.jeep.JToken;
 //import org.netbeans.modules.parsing.spi.Parser.Result;
 //import org.netbeans.modules.parsing.spi.ParserResultTask;
@@ -41,7 +41,7 @@ package net.vpc.hadralang.editor.hl4nb.editor.parser;
 //            JCompilerLog syntaxErrors = sjResult.getHcontext().log();
 //            Document document = result.getSnapshot().getSource().getDocument(false);
 //            List<ErrorDescription> errors = new ArrayList<ErrorDescription>();
-//            for (JCompilerMessage syntaxError : syntaxErrors) {
+//            for (JSourceMessage syntaxError : syntaxErrors) {
 //                JToken token = syntaxError.token();
 //
 ////                int start = NbDocument.findLineOffset ((StyledDocument) document, token.startLineNumber) + token.startColumnNumber;

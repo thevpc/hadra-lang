@@ -9,7 +9,7 @@ import net.vpc.hadralang.compiler.index.HLIndexedField;
 import net.vpc.common.jeep.JTypeOrLambda;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
-public class HNElementField extends HNElement {
+public class HNElementField extends HNElement implements Cloneable{
 
     public JType declaringType;
     public String name;

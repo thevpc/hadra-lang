@@ -1,6 +1,6 @@
 package net.vpc.hadralang.editor.test;
 
-import net.vpc.common.jeep.core.compiler.JSourceFactory;
+import net.vpc.common.textsource.JTextSourceFactory;
 import net.vpc.common.jeep.editor.JEditorPaneBuilder;
 import net.vpc.common.jeep.editor.JSyntaxUtils;
 import net.vpc.common.jeep.editor.comp.JSyntaxPosLabel;
@@ -42,8 +42,8 @@ public class TestHLEditorPane {
         f.setVisible(true);
 
         URL resource = TestHLEditorPane.class.getResource("Example.hl");
-//        JSyntaxUtils.setText(editorBuilder.editor(),JSourceFactory.fromURL(resource));
-        JSyntaxUtils.setText(editorBuilder.editor(),JSourceFactory.fromString("","<text>"));
+//        JSyntaxUtils.setText(editorBuilder.editor(),JTextSourceFactory.fromURL(resource));
+        JSyntaxUtils.setText(editorBuilder.editor(), JTextSourceFactory.fromString("","<text>"));
 
 //        long allTime = 0;
 //        int count = 0;

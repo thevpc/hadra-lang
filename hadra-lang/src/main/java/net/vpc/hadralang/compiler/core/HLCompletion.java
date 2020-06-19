@@ -575,8 +575,8 @@ public class HLCompletion implements JCompletion {
 //            case "HNIs":
 //                return JNodeHIs_ToString((HNIs) node, cuctx, path);
             case "HNField":
-            case "HNInvokerCall":
-            case "HNMethodCall":
+            case "HXInvokableCall":
+            case "HNXInvokableCall":
             case "JNodeRaw":
             case "HNVar": {
                 throw new JShouldNeverHappenException();

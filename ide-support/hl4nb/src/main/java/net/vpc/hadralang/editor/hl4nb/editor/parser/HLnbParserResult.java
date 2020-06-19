@@ -8,11 +8,10 @@ package net.vpc.hadralang.editor.hl4nb.editor.parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import net.vpc.common.jeep.JCompilationUnit;
-import net.vpc.common.jeep.JCompilerLog;
-import net.vpc.common.jeep.JCompilerMessage;
-import net.vpc.common.jeep.JContext;
-import net.vpc.common.jeep.JToken;
+
+import net.vpc.common.jeep.*;
+import net.vpc.common.textsource.JTextSourceToken;
+import net.vpc.common.textsource.log.JSourceMessage;
 import org.netbeans.modules.csl.api.Error;
 import org.netbeans.modules.csl.spi.DefaultError;
 import org.netbeans.modules.parsing.api.Snapshot;
@@ -37,19 +36,19 @@ public class HLnbParserResult extends ParserResult {
 
         JCompilerLog syntaxErrors = hcontext.log();
 //        Document document = snapshot.getSource().getDocument(false);
-        for (JCompilerMessage syntaxError : syntaxErrors) {
-            JToken token = syntaxError.token();
-            int start = (int) token.startCharacterNumber;
-            int end = (int) token.endCharacterNumber;
+        for (JSourceMessage syntaxError : syntaxErrors) {
+            JTextSourceToken token = syntaxError.getToken();
+            int start = token.getStartCharacterNumber();
+            int end = token.getEndCharacterNumber();
             String desc = syntaxError.toString(false);
             String name = desc.split("\n")[0];
             boolean isLineError = (end == -1) || (start == -1);
 
             Severity sev
-                    = (syntaxError.level().intValue() > Level.SEVERE.intValue()) ? Severity.FATAL
-                    : (syntaxError.level().intValue() >= Level.SEVERE.intValue()) ? Severity.ERROR
-                    : (syntaxError.level().intValue() >= Level.WARNING.intValue()) ? Severity.WARNING
-                    : (syntaxError.level().intValue() >= Level.INFO.intValue()) ? Severity.INFO
+                    = (syntaxError.getLevel().intValue() > Level.SEVERE.intValue()) ? Severity.FATAL
+                    : (syntaxError.getLevel().intValue() >= Level.SEVERE.intValue()) ? Severity.ERROR
+                    : (syntaxError.getLevel().intValue() >= Level.WARNING.intValue()) ? Severity.WARNING
+                    : (syntaxError.getLevel().intValue() >= Level.INFO.intValue()) ? Severity.INFO
                     : null;
             if (sev != null) {
                 Error e = DefaultError.createDefaultError("SYNTAX_ERROR", name, desc, snapshot.getSource().getFileObject(), start, end, isLineError, sev);

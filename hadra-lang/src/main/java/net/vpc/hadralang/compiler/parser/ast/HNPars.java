@@ -6,12 +6,10 @@
 package net.vpc.hadralang.compiler.parser.ast;
 
 import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JNodeVisitor;
 import net.vpc.common.jeep.JToken;
 import net.vpc.common.jeep.JNodeFindAndReplace;
 import net.vpc.common.jeep.util.JNodeUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.vpc.common.jeep.JNodeCopyFactory;
@@ -22,25 +20,19 @@ import net.vpc.common.jeep.JNodeCopyFactory;
 public class HNPars extends HNode {
 
     private HNode[] items;
-    private List<JToken> separators;
-
     public HNPars() {
         super(HNNodeId.H_PARS);
     }
 
-    public HNPars(HNode[] items, JToken startToken, List<JToken> separators, JToken endToken) {
+    public HNPars(HNode[] items, JToken startToken, JToken[] separators, JToken endToken) {
         this();
         setItems(items);
         if (startToken == null && items.length > 0) {
             startToken = items[0].startToken();
         }
-        this.separators = separators;
+        setSeparators(separators);
         setStartToken(startToken);
         setEndToken(endToken);
-    }
-
-    public List<JToken> getSeparators() {
-        return separators;
     }
 
     public HNPars setItems(HNode[] items) {
@@ -71,7 +63,6 @@ public class HNPars extends HNode {
         if (node instanceof HNPars) {
             HNPars o = (HNPars) node;
             this.items = JNodeUtils.bindCopy(this, copyFactory, o.items,HNode.class);
-            this.separators = new ArrayList<>(o.separators);
         }
     }
 

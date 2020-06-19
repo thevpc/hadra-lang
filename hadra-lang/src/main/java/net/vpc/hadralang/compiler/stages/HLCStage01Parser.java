@@ -1,8 +1,9 @@
 package net.vpc.hadralang.compiler.stages;
 
 import net.vpc.common.jeep.DefaultJCompilationUnit;
-import net.vpc.common.jeep.JSource;
-import net.vpc.common.jeep.core.compiler.JSourceRoot;
+import net.vpc.common.textsource.JTextSource;
+import net.vpc.common.textsource.JTextSourceRoot;
+import net.vpc.common.jeep.log.LogJTextSourceReport;
 import net.vpc.common.jeep.util.JStringUtils;
 import net.vpc.hadralang.compiler.core.HLOptions;
 import net.vpc.hadralang.compiler.core.HLProject;
@@ -11,7 +12,7 @@ import net.vpc.hadralang.compiler.parser.ast.HNBlock;
 public class HLCStage01Parser implements HLCStage {
     @Override
     public void processProject(HLProject project, HLOptions options) {
-        JSourceRoot[] inputs = options.roots();
+        JTextSourceRoot[] inputs = options.roots();
         int foundCompilationUnits = 0;
         if (inputs.length > 0) {
             if (JStringUtils.isBlank(options.getProjectRoot())) {
@@ -24,8 +25,8 @@ public class HLCStage01Parser implements HLCStage {
             }
             project.setRootId(options.getProjectRoot());
 
-            for (JSourceRoot input : inputs) {
-                for (JSource inputItem : input.iterate(project.log())) {
+            for (JTextSourceRoot input : inputs) {
+                for (JTextSource inputItem : input.iterate(new LogJTextSourceReport(project.log()))) {
                     foundCompilationUnits++;
                     DefaultJCompilationUnit c = new DefaultJCompilationUnit(inputItem, project.languageContext());
                     ((HNBlock.CompilationUnitBlock) c.getAst()).setCompilationUnit(c);

@@ -4,7 +4,7 @@ import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypeOrLambda;
 import net.vpc.hadralang.compiler.parser.ast.HNode;
 
-public class HNElementExpr extends HNElement {
+public class HNElementExpr extends HNElement implements Cloneable{
     public JTypeOrLambda type;
 
     public HNElementExpr() {

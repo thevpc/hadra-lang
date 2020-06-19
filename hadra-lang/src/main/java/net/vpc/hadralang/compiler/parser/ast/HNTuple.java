@@ -19,7 +19,6 @@ import java.util.List;
 public class HNTuple extends HNode {
 
     private HNode[] items;
-    private JToken[] separators;
 
     public HNTuple() {
         super(HNNodeId.H_TUPLE);
@@ -30,14 +29,11 @@ public class HNTuple extends HNode {
         if(startToken==null && items.length>0){
             startToken=items[0].startToken();
         }
-        this.separators=separators;
+        setSeparators(separators);
         setStartToken(startToken);
         setEndToken(endToken);
     }
 
-    public JToken[] getSeparators() {
-        return separators;
-    }
 
     public HNTuple setItems(HNode[] items) {
         this.items = JNodeUtils.bind(this,items,"items");
@@ -59,7 +55,6 @@ public class HNTuple extends HNode {
         if (node instanceof HNTuple) {
             HNTuple o =(HNTuple) node;
             this.items=JNodeUtils.bindCopy(this, copyFactory, o.items,HNode.class);
-            this.separators=Arrays.copyOf(o.separators,o.separators.length);
         }
     }
 

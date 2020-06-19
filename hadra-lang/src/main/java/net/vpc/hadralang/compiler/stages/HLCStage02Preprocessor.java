@@ -231,8 +231,8 @@ public class HLCStage02Preprocessor implements HLCStage {
                 Set<String> foundIds = new HashSet<>();
                 Set<String> dfiles = new HashSet<>();
                 NutsWorkspace ws = Nuts.openWorkspace("-y");
-                NutsSearchCommand search = ws.search().dependencies(true)
-                        .latest().content();
+                NutsSearchCommand search = ws.search().setDependencies(true)
+                        .setLatest(true).setContent(true);
                 Set<String> classPath = new LinkedHashSet<>();
 
                 boolean someSearch = false;
