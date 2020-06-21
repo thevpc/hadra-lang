@@ -74,7 +74,7 @@ public class HNLiteralDefault extends HNode {
 
     @Override
     public String toString() {
-        return "default("+getElement().getTypeOrLambda()+")";
+        return "default("+getElement().getTypePattern()+")";
     }
 
 }

@@ -1,12 +1,9 @@
 package net.vpc.hadralang.compiler.core.elements;
 
-import net.vpc.common.jeep.JField;
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JToken;
-import net.vpc.common.jeep.JType;
+import net.vpc.common.jeep.*;
 import net.vpc.hadralang.compiler.parser.ast.HNDeclareTokenBase;
 import net.vpc.hadralang.compiler.index.HLIndexedField;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
 public class HNElementField extends HNElement implements Cloneable{
@@ -62,9 +59,9 @@ public class HNElementField extends HNElement implements Cloneable{
     }
 
     @Override
-    public JTypeOrLambda getTypeOrLambda() {
+    public JTypePattern getTypePattern() {
         if(effectiveType!=null){
-            return JTypeOrLambda.of(effectiveType);
+            return JTypePattern.of(effectiveType);
         }
         if (field != null) {
             JType type = field.type();
@@ -72,11 +69,11 @@ public class HNElementField extends HNElement implements Cloneable{
                 //type is not resolved yet...
                 return null;
             }
-            return JTypeOrLambda.of(field.type());
+            return JTypePattern.of(field.type());
         }
         if (declaration != null) {
             if (declaration.getIdentifierType() != null) {
-                return JTypeOrLambda.of(declaration.getIdentifierType());
+                return JTypePattern.of(declaration.getIdentifierType());
             }
         }
         return null;

@@ -16,15 +16,16 @@ def void sum(int[] arr){
     int slice=5;
     AtomicInteger ai(0);
     var pool = Executors.newFixedThreadPool(10);
+    List<Runnable> tasks();
     for(i=0;i<arr.length;i=i+slice){
-        pool.submit(()->sum(arr,i,max(arr.length,i+slice),ai));
+        tasks.add(()->sum(arr,i,max(arr.length,i+slice),ai));
     }
-    pool.waitFor;
+    pool.invokeAll(tasks);
     println(ai);
 
 }
 def void sum(int[] arr2,int from,int to,AtomicInteger ai2){
-    ai2.getAndInc(arr2[from..(to-from)].sum());
+    ai2.getAndAdd(arr2[from..(to-from)].sum());
 }
 
 

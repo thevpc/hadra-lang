@@ -3,8 +3,8 @@ package net.vpc.hadralang.compiler.core.elements;
 import net.vpc.common.jeep.JInvokable;
 import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JType;
+import net.vpc.common.jeep.JTypePattern;
 import net.vpc.hadralang.compiler.parser.ast.HNDeclareInvokable;
-import net.vpc.common.jeep.JTypeOrLambda;
 import net.vpc.hadralang.compiler.parser.ast.HNode;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
@@ -58,12 +58,12 @@ public class HNElementConstructor extends HNElementInvokable implements Cloneabl
         return declaringType;
     }
 
-    public JTypeOrLambda getTypeOrLambda() {
+    public JTypePattern getTypePattern() {
         JType t = getDeclaringType();
         if (t == null) {
             throw new NullPointerException();
         }
-        return JTypeOrLambda.of(t);
+        return JTypePattern.of(t);
     }
 
     @Override

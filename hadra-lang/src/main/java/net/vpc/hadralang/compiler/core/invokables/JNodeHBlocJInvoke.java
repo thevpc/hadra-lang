@@ -36,7 +36,7 @@ public class JNodeHBlocJInvoke implements JInvoke {
 
     @Override
     public Object invoke(JInvokeContext context) {
-        JContext c = context.context().newContext();
+        JContext c = context.getContext().newContext();
         try {
             //should i declare some things here?????
             for (HNDeclareIdentifier dec : vars) {
@@ -59,7 +59,7 @@ public class JNodeHBlocJInvoke implements JInvoke {
 //            }
             Object result = null;
             for (HNode jNode : runnables) {
-                result = context.evaluator().evaluate(jNode, context.builder().context(c).build());
+                result = context.getEvaluator().evaluate(jNode, context.builder().setContext(c).build());
             }
             return result;
         } finally {

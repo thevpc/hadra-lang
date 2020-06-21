@@ -5,7 +5,7 @@ import net.vpc.common.jeep.util.JeepUtils;
 import net.vpc.hadralang.compiler.parser.ast.HNDeclareInvokable;
 import net.vpc.hadralang.compiler.parser.ast.HNThis;
 import net.vpc.hadralang.compiler.index.HLIndexedMethod;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 import net.vpc.hadralang.compiler.parser.ast.HNode;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
@@ -16,9 +16,9 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
     public HLIndexedMethod indexedMethod;
     public HNDeclareInvokable declaration;
     public HNode[] argNodes;
-    public JTypeOrLambda[] argTypes;
+    public JTypePattern[] argTypes;
     public Arg0Kind arg0Kind = Arg0Kind.NONE;
-    public JTypeOrLambda arg0Type = null;
+    public JTypePattern arg0Type = null;
     public boolean arg0TypeProcessed = false;
 
     public HNElementMethod(JInvokable invokable) {
@@ -40,11 +40,11 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
         return argNodes;
     }
 
-    public JTypeOrLambda[] getArgTypes() {
+    public JTypePattern[] getArgTypes() {
         return argTypes;
     }
 
-    public HNElementMethod setArgTypes(JTypeOrLambda[] argTypes) {
+    public HNElementMethod setArgTypes(JTypePattern[] argTypes) {
         this.argTypes = argTypes;
         return this;
     }
@@ -90,13 +90,13 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
     }
 
     @Override
-    public JTypeOrLambda getTypeOrLambda() {
+    public JTypePattern getTypePattern() {
         if(invokable!=null){
             JType type = invokable.genericReturnType();
             if(type==null){
                 return null;
             }
-            return JTypeOrLambda.of(type);
+            return JTypePattern.of(type);
         }
         return null;
     }
@@ -138,11 +138,11 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
         return this;
     }
 
-    public JTypeOrLambda getArg0Type() {
+    public JTypePattern getArg0Type() {
         return arg0Type;
     }
 
-    public HNElementMethod setArg0Type(JTypeOrLambda arg0Type) {
+    public HNElementMethod setArg0Type(JTypePattern arg0Type) {
         this.arg0Type = arg0Type;
         return this;
     }
@@ -163,7 +163,7 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
                         JeepUtils.arrayAppend(JNode.class, new HNThis(this.getArg0Type().getType(), null), this.getArgNodes())
                 );
                 this.setArgTypes(
-                        JeepUtils.arrayAppend(JTypeOrLambda.class, this.getArg0Type(), this.getArgTypes())
+                        JeepUtils.arrayAppend(JTypePattern.class, this.getArg0Type(), this.getArgTypes())
                 );
                 this.setArg0TypeProcessed(true);
             } else if (this.getArg0Kind() == HNElementMethod.Arg0Kind.BASE) {
@@ -171,7 +171,7 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
                         JeepUtils.arrayAppend(HNode.class, dotBase, this.getArgNodes()==null?new HNode[0]:this.getArgNodes())
                 );
                 this.setArgTypes(
-                        JeepUtils.arrayAppend(JTypeOrLambda.class, this.getArg0Type(), this.getArgTypes()==null?new JTypeOrLambda[0]:this.getArgTypes())
+                        JeepUtils.arrayAppend(JTypePattern.class, this.getArg0Type(), this.getArgTypes()==null?new JTypePattern[0]:this.getArgTypes())
                 );
                 this.setArg0TypeProcessed(true);
             }

@@ -36,11 +36,11 @@ public abstract class HNElement {
         return kind;
     }
 
-    public abstract JTypeOrLambda getTypeOrLambda();
+    public abstract JTypePattern getTypePattern();
 
     public JType getType() {
-        JTypeOrLambda typeOrLambda = getTypeOrLambda();
-        return typeOrLambda == null ? null : typeOrLambda.getType();
+        JTypePattern typePattern = getTypePattern();
+        return typePattern == null ? null : typePattern.getType();
     }
 
     @Override

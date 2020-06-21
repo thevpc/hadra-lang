@@ -2,6 +2,9 @@ package net.vpc.hadralang.compiler;
 
 import net.vpc.app.nuts.*;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class HLMain extends NutsApplication {
     public static void main(String[] args) {
         // just create an instance and call runAndExit in the main method

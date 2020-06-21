@@ -3,7 +3,7 @@ package net.vpc.hadralang.compiler.core.elements;
 import net.vpc.common.jeep.JInvokable;
 import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 import net.vpc.hadralang.compiler.parser.ast.HNIf;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
@@ -60,13 +60,13 @@ public class HNElementWhenDo extends HNElement implements Cloneable{
     }
 
     @Override
-    public JTypeOrLambda getTypeOrLambda() {
+    public JTypePattern getTypePattern() {
         if(invokable!=null){
             JType type = invokable.returnType();
             if(type==null){
                 return null;
             }
-            return JTypeOrLambda.of(type);
+            return JTypePattern.of(type);
         }
         return null;
     }

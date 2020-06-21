@@ -3,7 +3,7 @@ package net.vpc.hadralang.compiler.core.elements;
 import net.vpc.common.jeep.JInvokable;
 import net.vpc.common.jeep.JToken;
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 import net.vpc.hadralang.compiler.parser.ast.HNBracketsPostfix;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
@@ -60,10 +60,10 @@ public class HNElementBracketsVar extends HNElement implements Cloneable{
     }
 
     @Override
-    public JTypeOrLambda getTypeOrLambda() {
+    public JTypePattern getTypePattern() {
         JType t = getType();
         if(t!=null){
-            return JTypeOrLambda.of(t);
+            return JTypePattern.of(t);
         }
         return null;
     }

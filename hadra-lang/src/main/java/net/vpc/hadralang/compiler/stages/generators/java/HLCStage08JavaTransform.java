@@ -788,7 +788,7 @@ public class HLCStage08JavaTransform implements HLCStage {
                 } else if (left instanceof HNDeclareTokenIdentifier) {
                     ll = (((HNDeclareTokenIdentifier) left).getIdentifierType());
                 } else {
-                    ll = compilerContext.base.jTypeOrLambda(left).getType();
+                    ll = compilerContext.base.getTypePattern(left).getType();
                 }
                 if (ll.isPrimitive()) {
                     switch (ll.getName()) {
@@ -1020,16 +1020,16 @@ public class HLCStage08JavaTransform implements HLCStage {
             }
             String newVarName = compilerContext.base.nextVarName2(null, valDeclContext);
             JToken newVarToken = HTokenUtils.createToken(newVarName);
-            JTypeOrLambda rightTypeOrLambda = right.getElement().getTypeOrLambda();
-            if (rightTypeOrLambda.isLambda()) {
-                rightTypeOrLambda = left.getElement().getTypeOrLambda();
+            JTypePattern rightTypePattern = right.getElement().getTypePattern();
+            if (rightTypePattern.isLambda()) {
+                rightTypePattern = left.getElement().getTypePattern();
             }
             if (!fieldTemp || dissociatedBlock == null || right == null) {
                 HNDeclareIdentifier decl = new HNDeclareIdentifier(
                         (HNDeclareToken) new HNDeclareTokenIdentifier(newVarToken)
-                                .setElement(new HNElementLocalVar(newVarName).setEffectiveType(rightTypeOrLambda.getType()))
+                                .setElement(new HNElementLocalVar(newVarName).setEffectiveType(rightTypePattern.getType()))
                         , right,
-                        new HNTypeToken(rightTypeOrLambda.getType(), null), assignOp, null, null);
+                        new HNTypeToken(rightTypePattern.getType(), null), assignOp, null, null);
                 int modifiers = 0;
                 if (fieldTemp) {
                     modifiers |= (isField) ? Modifier.PRIVATE : 0;
@@ -1041,15 +1041,15 @@ public class HLCStage08JavaTransform implements HLCStage {
                 valDeclContext.add(decl);
                 right = new HNIdentifier(newVarToken)
                         .setElement(
-                                isField ? new HNElementField(newVarName).setEffectiveType(rightTypeOrLambda.getType())
-                                        : new HNElementLocalVar(newVarName).setEffectiveType(rightTypeOrLambda.getType())
+                                isField ? new HNElementField(newVarName).setEffectiveType(rightTypePattern.getType())
+                                        : new HNElementLocalVar(newVarName).setEffectiveType(rightTypePattern.getType())
                         );
             } else {
                 HNDeclareIdentifier decl = new HNDeclareIdentifier(
                         (HNDeclareToken) new HNDeclareTokenIdentifier(newVarToken)
-                                .setElement(new HNElementLocalVar(newVarName).setEffectiveType(rightTypeOrLambda.getType()))
+                                .setElement(new HNElementLocalVar(newVarName).setEffectiveType(rightTypePattern.getType()))
                         , null,
-                        new HNTypeToken(rightTypeOrLambda.getType(), null), assignOp, null, null);
+                        new HNTypeToken(rightTypePattern.getType(), null), assignOp, null, null);
                 int modifiers = 0;
                 if (fieldTemp) {
                     modifiers |= (isField) ? Modifier.PRIVATE : 0;
@@ -1064,12 +1064,12 @@ public class HLCStage08JavaTransform implements HLCStage {
 
                 HNIdentifier newRight = (HNIdentifier) new HNIdentifier(newVarToken)
                         .setElement(
-                                isField ? new HNElementField(newVarName).setEffectiveType(rightTypeOrLambda.getType())
-                                        : new HNElementLocalVar(newVarName).setEffectiveType(rightTypeOrLambda.getType())
+                                isField ? new HNElementField(newVarName).setEffectiveType(rightTypePattern.getType())
+                                        : new HNElementLocalVar(newVarName).setEffectiveType(rightTypePattern.getType())
                         );
 
                 HNAssign hass = new HNAssign((HNode) copyFactory.copy(newRight), assignOp, right, null, null);
-                hass.setElement(new HNElementAssign(rightTypeOrLambda.getType()));
+                hass.setElement(new HNElementAssign(rightTypePattern.getType()));
                 body.add(hass);
 
                 right = newRight;

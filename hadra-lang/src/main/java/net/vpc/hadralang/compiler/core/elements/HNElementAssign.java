@@ -1,11 +1,11 @@
 package net.vpc.hadralang.compiler.core.elements;
 
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 
 public class HNElementAssign extends HNElement implements Cloneable{
 
-    public JTypeOrLambda type;
+    public JTypePattern type;
 
     public HNElementAssign() {
         super(HNElementKind.ASSIGN);
@@ -21,17 +21,17 @@ public class HNElementAssign extends HNElement implements Cloneable{
     }
 
     public HNElementAssign setType(JType type) {
-        this.type = type == null ? null : JTypeOrLambda.of(type);
+        this.type = type == null ? null : JTypePattern.of(type);
         return this;
     }
 
-    public HNElementAssign setType(JTypeOrLambda type) {
+    public HNElementAssign setType(JTypePattern type) {
         this.type = type;
         return this;
     }
 
     @Override
-    public JTypeOrLambda getTypeOrLambda() {
+    public JTypePattern getTypePattern() {
         return type;
     }
 

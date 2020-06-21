@@ -79,4 +79,9 @@ public class PrimitiveCompareInvokable implements JFunction {
     public int hashCode() {
         return Objects.hash(sig, boolType, op);
     }
+    @Override
+    public String getSourceName() {
+        return "<runtime>";
+    }
+
 }

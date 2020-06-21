@@ -53,4 +53,10 @@ public class SafeNotEqualsInvokable implements JFunction {
     public int hashCode() {
         return Objects.hash(sig, boolType);
     }
+
+    @Override
+    public String getSourceName() {
+        return "<runtime>";
+    }
+
 }

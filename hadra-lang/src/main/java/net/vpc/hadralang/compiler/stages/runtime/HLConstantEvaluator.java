@@ -195,7 +195,7 @@ public class HLConstantEvaluator extends HLEvaluator {
 
     private JArray evaluateArray(JNode expr, JInvokeContext jContext) {
         Object a = evaluate(expr, jContext);
-        JTypes types = jContext.context().types();
+        JTypes types = jContext.getContext().types();
         if (a == null) {
             return null;
         }
@@ -308,14 +308,14 @@ public class HLConstantEvaluator extends HLEvaluator {
         }
 
         public Object run(JInvokeContext context) {
-            JInvokeContext cc = context.builder().context(context.context().newContext()).build();
+            JInvokeContext cc = context.builder().setContext(context.getContext().newContext()).build();
             Iterator iter = this.iter.iterator();
-            cc.context().vars().declareVar(varName, type, null);
+            cc.getContext().vars().declareVar(varName, type, null);
             runInit(cc);
             Object ret=null;
             while (iter.hasNext()) {
                 Object item = iter.next();
-                cc.context().vars().setValue(varName, item);
+                cc.getContext().vars().setValue(varName, item, context);
                 runItem(context, item);
                 if (filter != null) {
                     Boolean b = (Boolean) cc.evaluate(filter);

@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 public class HTypeUtils {
 
-    public static boolean isTupleType(JTypeOrLambda t) {
+    public static boolean isTupleType(JTypePattern t) {
         return t != null && t.isType() && isTupleType(t.getType());
     }
 
@@ -81,15 +81,6 @@ public class HTypeUtils {
 
     public static JType[] extractLambdaArgTypes(JType type) {
         JMethod[] jMethods = type.getDeclaredMethods();
-        if (jMethods.length == 1) {
-            return jMethods[0].argTypes();
-        } else {
-            return null;
-        }
-    }
-
-    public static JType[] extractLambdaArgTypesOrError(JType type, int expectedArgCount, JToken location, JCompilerLog log) {
-        JMethod[] jMethods = type.getDeclaredMethods();
         if (jMethods.length > 1) {
             jMethods = Arrays.stream(type.getDeclaredMethods()).filter(x -> !x.isDefault()
                     && x.isPublic()
@@ -97,36 +88,10 @@ public class HTypeUtils {
             ).toArray(JMethod[]::new);
         }
         if (jMethods.length == 1) {
-            JType[] jTypes = jMethods[0].argTypes();
-            if (expectedArgCount >= 0) {
-                if (jMethods[0].signature().isVarArgs()) {
-                    if (jTypes.length - 1 <= expectedArgCount) {
-                        if (log != null) {
-                            log.error("X000", null, "lambda expression arguments count mismatch " + jTypes.length + "!=" + expectedArgCount, location);
-                        }
-                        return null;
-                    }
-                } else {
-                    if (expectedArgCount != jTypes.length) {
-                        if (log != null) {
-                            log.error("X000", null, "lambda expression arguments count mismatch " + jTypes.length + "!=" + expectedArgCount, location);
-                        }
-                        return null;
-                    }
-                }
-            }
-            return jTypes;
+            return jMethods[0].argTypes();
         } else {
-            if (log != null) {
-                log.error("X000", null, "expected functional type as Lambda expression. methods count " + jMethods.length + "!=1", location);
-            }
             return null;
         }
-    }
-
-    public static JType classOf(JType tv) {
-        JRawType raw = (JRawType) tv.types().forName(Class.class.getName());
-        return raw.parametrize(tv);
     }
 
     public static ElementTypeAndConstraint resolveIterableComponentType(JType valType, JTypes types) {

@@ -133,7 +133,7 @@ public class HLProject implements HLProjectContext{
                             new JEvaluable[]{
                                     new JEvaluableValue(new String[0],context.types().forName(String.class.getName()).toArray())
                             },
-                            "main"
+                            "main",null
                     ));
 
             //then executing main with arguments
@@ -142,7 +142,7 @@ public class HLProject implements HLProjectContext{
                     this.context.evaluators().newEvaluator(),
                     null,
                     new JEvaluable[]{new JEvaluableValue(args,context.types().forName(String.class.getName()).toArray())},
-                    "main"
+                    "main",null
             ));
         } else {
             //no entry point is found
@@ -153,7 +153,7 @@ public class HLProject implements HLProjectContext{
                             this.context.evaluators().newEvaluator(),
                             null,
                             new JEvaluable[]{new JEvaluableValue(args,context.types().forName(String.class.getName()).toArray())},
-                            "main"
+                            "main",null
                     ));
         }
     }

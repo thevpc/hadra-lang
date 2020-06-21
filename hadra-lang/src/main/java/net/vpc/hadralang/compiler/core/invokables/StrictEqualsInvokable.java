@@ -37,4 +37,10 @@ public class StrictEqualsInvokable implements JFunction {
     public String name() {
         return "strictEquals";
     }
+
+    @Override
+    public String getSourceName() {
+        return "<runtime>";
+    }
+
 }

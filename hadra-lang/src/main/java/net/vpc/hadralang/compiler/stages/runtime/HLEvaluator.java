@@ -48,7 +48,7 @@ public class HLEvaluator implements JEvaluator {
                 //already declared, now just initialize!
                 Object varValue = evaluate(a.getInitValue(), context);
                 for (HNDeclareTokenIdentifier name : HNodeUtils.flatten(a.getIdentifierToken())) {
-                    context.context().vars().setValue(name.getName(),varValue);
+                    context.getContext().vars().setValue(name.getName(),varValue, context);
                 }
                 return varValue;
             }
@@ -73,7 +73,7 @@ public class HLEvaluator implements JEvaluator {
                 if (a.getElseNode() != null) {
                     return evaluate(a.getElseNode(), context);
                 }
-                return a.getElement().getTypeOrLambda().getType().getDefaultValue();
+                return a.getElement().getTypePattern().getType().getDefaultValue();
             }
             case H_WHILE: {
                 HNWhile a = (HNWhile) node;
@@ -128,7 +128,7 @@ public class HLEvaluator implements JEvaluator {
                 if (items.length < Tuple.MAX_ELEMENTS) {
                     Class<?> c = null;
                     try {
-                        c = Class.forName(HTypeUtils.tupleTypeForCount(items.length,context.context().types()).getName());
+                        c = Class.forName(HTypeUtils.tupleTypeForCount(items.length,context.getContext().types()).getName());
                         return c.getConstructors()[0].newInstance(items);
                     } catch (Exception e) {
                         throw new JShouldNeverHappenException();
@@ -140,7 +140,7 @@ public class HLEvaluator implements JEvaluator {
             case H_FOR: {
                 HNFor a = (HNFor) node;
                 List<HNode> initExprs = a.getInitExprs();
-                JInvokeContext ncc = context.builder().context(context.context().newContext()).build();
+                JInvokeContext ncc = context.builder().setContext(context.getContext().newContext()).build();
                 if (a.isIteratorType()) {
                     HNode initExpr = a.getInitExprs().get(0);
                     if (initExpr instanceof HNDeclareIdentifier) {
@@ -198,7 +198,7 @@ public class HLEvaluator implements JEvaluator {
                                     public void runInit(JInvokeContext context) {
                                         for (int i = 0; i < identifiers.length; i++) {
                                             HNDeclareTokenIdentifier id = identifiers[i];
-                                            context.context().vars().declareVar(id.getName(), id.getIdentifierType(), null);
+                                            context.getContext().vars().declareVar(id.getName(), id.getIdentifierType(), null);
                                         }
                                     }
 
@@ -207,7 +207,7 @@ public class HLEvaluator implements JEvaluator {
                                         Tuple t = (Tuple) item;
                                         for (int i = 0; i < identifiers.length; i++) {
                                             HNDeclareTokenIdentifier id = identifiers[i];
-                                            context.context().vars().setValue(id.getName(), t.valueAt(i));
+                                            context.getContext().vars().setValue(id.getName(), t.valueAt(i), context);
                                         }
                                     }
                                 };
@@ -222,14 +222,14 @@ public class HLEvaluator implements JEvaluator {
                             Object initValue = evaluate(i.getInitValue(), ncc);
                             if(i.getIdentifierToken() instanceof HNDeclareTokenIdentifier) {
                                 String name = ((HNDeclareTokenIdentifier) i.getIdentifierToken()).getName();
-                                ncc.context().vars().declareVar(name, i.getIdentifierType(), initValue);
+                                ncc.getContext().vars().declareVar(name, i.getIdentifierType(), initValue);
                             }else{
                                 HNDeclareTokenTuple ti = (HNDeclareTokenTuple) i.getIdentifierToken();
                                 Tuple tupleInit = (Tuple) evaluate(i.getInitValue(), ncc);
                                 for (int ii = 0; ii < ti.getItems().length; ii++) {
                                     //TODO must process HNDeclareTokenTuple
                                     HNDeclareTokenIdentifier id = (HNDeclareTokenIdentifier) ti.getItems()[ii];
-                                    ncc.context().vars().declareVar(id.getName(), id.getIdentifierType(), tupleInit.valueAt(ii));
+                                    ncc.getContext().vars().declareVar(id.getName(), id.getIdentifierType(), tupleInit.valueAt(ii));
                                 }
                             }
                         }
@@ -259,10 +259,10 @@ public class HLEvaluator implements JEvaluator {
             }
             case X_INVOKABLE_CALL: {
                 HXInvokableCall a = (HXInvokableCall) node;
-                JContext newCtx = context.context().newContext();
+                JContext newCtx = context.getContext().newContext();
                 return a.getInvokable().invoke(
-                        context.builder().context(newCtx)
-                                .instance(null)
+                        context.builder().setContext(newCtx)
+                                .setInstance(null)
                                 .build()
                 );
             }
@@ -381,7 +381,7 @@ public class HLEvaluator implements JEvaluator {
                 switch (a.getElement().getKind()){
                     case LOCAL_VAR:{
                         HNElementLocalVar ee = (HNElementLocalVar) a.getElement();
-                        return context.context().vars().getValue(ee.getName());
+                        return context.getContext().vars().getValue(ee.getName(), context);
                     }
                     case FIELD:{
                         HNElementField ee = (HNElementField) a.getElement();
@@ -394,7 +394,7 @@ public class HLEvaluator implements JEvaluator {
                                 HNOpDot d=(HNOpDot) p;
                                 return f.get(evaluate(d.getLeft(),context));
                             }
-                            return f.get(context.instance().getValue());
+                            return f.get(context.getInstance().getValue());
                         }
                     }
                     default:{
@@ -419,7 +419,7 @@ public class HLEvaluator implements JEvaluator {
 //                    }
                     case VAR: {
                         HNIdentifier a = (HNIdentifier) n.getLeft();
-                        context.context().vars().setValue(a.getName(), o);
+                        context.getContext().vars().setValue(a.getName(), o, context);
                         return o;
                     }
                     case ARRAY: {
@@ -429,7 +429,7 @@ public class HLEvaluator implements JEvaluator {
                             throw new NullPointerException();
                         }
                         int index = ((Number) evaluate(a.getIndexNodes()[0], context)).intValue();
-                        JTypeArray t = (JTypeArray) context.context().types().typeOf(v);
+                        JTypeArray t = (JTypeArray) context.getContext().types().typeOf(v);
                         JArray aa = t.asArray(v);
                         aa.set(index, o);
                         return o;
@@ -454,14 +454,14 @@ public class HLEvaluator implements JEvaluator {
                         HNDeclareInvokable fd = (HNDeclareInvokable) setter;
                         JArray jarr0 = arrayType.asArray(newArray);
                         JFunction functionHandler = (JFunction) fd.getInvokable();
-                        JType intType = JTypeUtils.forInt(context.context().types());
+                        JType intType = JTypeUtils.forInt(context.getContext().types());
                         switch (arrayType.arrayDimension()) {
                             case 1: {
                                 for (int i = 0; i < allLen[0]; i++) {
                                     Object v = functionHandler.invoke(
                                             context.builder()
-                                                    .name("<anonymous-function>")
-                                                    .arguments(new JEvaluable[]{
+                                                    .setName("<anonymous-function>")
+                                                    .setArguments(new JEvaluable[]{
                                                             new JEvaluableValue(i, intType)
                                                     })
                                                     .build()
@@ -477,8 +477,8 @@ public class HLEvaluator implements JEvaluator {
                                     for (int j = 0; j < allLen[1]; j++) {
                                         Object v = functionHandler.invoke(
                                                 context.builder()
-                                                        .name("anonymous-function")
-                                                        .arguments(new JEvaluable[]{
+                                                        .setName("anonymous-function")
+                                                        .setArguments(new JEvaluable[]{
                                                                 new JEvaluableValue(i, intType),
                                                                 new JEvaluableValue(j, intType)
                                                         })
@@ -499,8 +499,8 @@ public class HLEvaluator implements JEvaluator {
                                         for (int k = 0; k < allLen[2]; k++) {
                                             Object v = functionHandler.invoke(
                                                     context.builder()
-                                                            .name("anonymous-function")
-                                                            .arguments(new JEvaluable[]{
+                                                            .setName("anonymous-function")
+                                                            .setArguments(new JEvaluable[]{
                                                                     new JEvaluableValue(i, intType),
                                                                     new JEvaluableValue(j, intType),
                                                                     new JEvaluableValue(k, intType),
@@ -526,8 +526,8 @@ public class HLEvaluator implements JEvaluator {
                                             for (int l = 0; l < allLen[3]; l++) {
                                                 Object v = functionHandler.invoke(
                                                         context.builder()
-                                                                .name("anonymous-function")
-                                                                .arguments(new JEvaluable[]{
+                                                                .setName("anonymous-function")
+                                                                .setArguments(new JEvaluable[]{
                                                                         new JEvaluableValue(i, intType),
                                                                         new JEvaluableValue(j, intType),
                                                                         new JEvaluableValue(k, intType),
@@ -613,7 +613,7 @@ public class HLEvaluator implements JEvaluator {
                     throw new NullPointerException();
                 }
                 int index = ((Number) evaluate(n.getIndexNodes()[0], context)).intValue();
-                JTypeArray t = (JTypeArray) context.context().types().typeOf(v);
+                JTypeArray t = (JTypeArray) context.getContext().types().typeOf(v);
                 JArray a = t.asArray(v);
                 return a.get(index);
             }
@@ -627,7 +627,7 @@ public class HLEvaluator implements JEvaluator {
                 return a.getConstructor().invoke(context);
             }
             case H_THIS: {
-                Object instance = context.instance().getValue();
+                Object instance = context.getInstance().getValue();
                 if (instance == null) {
                     throw new JEvalException("No This in context");
                 }
@@ -635,7 +635,7 @@ public class HLEvaluator implements JEvaluator {
             }
             case H_META_IMPORT_PACKAGE: {
                 HNMetaImportPackage a = (HNMetaImportPackage) node;
-                Object instance = context.instance().getValue();
+                Object instance = context.getInstance().getValue();
                 if (!(instance instanceof HLCompilerEnv)) {
                     throw new JEvalException("No Compiler in context");
                 }
@@ -675,8 +675,8 @@ public class HLEvaluator implements JEvaluator {
                                             for (int i = 0; i < a.length; i++) {
                                                 a[i] = new JEvaluableValue(args[i], lnode.getArguments().get(i).getIdentifierType());
                                             }
-                                            JInvokeContext b = newContext.builder().arguments(a)
-                                                    .instance(new DefaultJTypedValue(proxy, t))
+                                            JInvokeContext b = newContext.builder().setArguments(a)
+                                                    .setInstance(new DefaultJTypedValue(proxy, t))
                                                     .build();
                                             return new BodyJInvoke(lnode).invoke(b);
                                         } else if (method.getName().equals("toString")) {
@@ -718,7 +718,7 @@ public class HLEvaluator implements JEvaluator {
                 if (t.isInstance(e)) {
                     return e;
                 }
-                throw new ClassCastException("Cannot cast " + (e == null ? "null" : context.context().types().typeOf(e)) + " to " + t.getName());
+                throw new ClassCastException("Cannot cast " + (e == null ? "null" : context.getContext().types().typeOf(e)) + " to " + t.getName());
             }
             case H_STRING_INTEROP: {
                 HNStringInterop n = (HNStringInterop) node;
@@ -734,10 +734,10 @@ public class HLEvaluator implements JEvaluator {
 
     private Tuple2<Object,Object> evalVarInc(HNIdentifier arg, int inc,JInvokeContext context) {
         String argTypeName = HNodeUtils.getType(arg).boxed().getName();
-        JVars vars = context.context().vars();
-        Object oldValue0 = vars.getValue(arg.getName());
+        JVars vars = context.getContext().vars();
+        Object oldValue0 = vars.getValue(arg.getName(), context);
         Tuple2<Object, Object> ret = evalValueInc(argTypeName, oldValue0, inc);
-        vars.setValue(arg.getName(), ret._2);
+        vars.setValue(arg.getName(), ret._2, context);
         return ret;
     }
     private Tuple2<Object,Object> evalFieldInc(HNIdentifier arg, int inc,JInvokeContext context) {
@@ -943,7 +943,7 @@ public class HLEvaluator implements JEvaluator {
 
     private JArray evaluateArray(HNode expr, JInvokeContext jContext) {
         Object a = evaluate(expr, jContext);
-        JTypes types = jContext.context().types();
+        JTypes types = jContext.getContext().types();
         if (a == null) {
             return null;
         }
@@ -1056,14 +1056,14 @@ public class HLEvaluator implements JEvaluator {
         }
 
         public Object run(JInvokeContext context) {
-            JInvokeContext cc = context.builder().context(context.context().newContext()).build();
+            JInvokeContext cc = context.builder().setContext(context.getContext().newContext()).build();
             Iterator iter = this.iter.iterator();
-            cc.context().vars().declareVar(varName, type, null);
+            cc.getContext().vars().declareVar(varName, type, null);
             runInit(cc);
             Object ret = null;
             while (iter.hasNext()) {
                 Object item = iter.next();
-                cc.context().vars().setValue(varName, item);
+                cc.getContext().vars().setValue(varName, item, context);
                 runItem(context, item);
                 if (filter != null) {
                     Boolean b = (Boolean) cc.evaluate(filter);

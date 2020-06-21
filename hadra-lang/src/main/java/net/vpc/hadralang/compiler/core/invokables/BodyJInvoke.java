@@ -46,12 +46,12 @@ public class BodyJInvoke implements JInvoke {
 
     @Override
     public Object invoke(JInvokeContext context) {
-        JContext c = context.context().newContext();
+        JContext c = context.getContext().newContext();
         try {
             for (int i = 0; i < vars.length; i++) {
-                c.vars().declareVar(vars[i].name, vars[i].type, context.arguments()[i].evaluate(context));
+                c.vars().declareVar(vars[i].name, vars[i].type, context.getArguments()[i].evaluate(context));
             }
-            return context.evaluator().evaluate(body, context.builder().context(c).build());
+            return context.getEvaluator().evaluate(body, context.builder().setContext(c).build());
         } finally {
             //c.dispose();
         }

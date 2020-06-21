@@ -228,7 +228,7 @@ public class HLCStage02Preprocessor implements HLCStage {
                                         new String[0],
                                         preProcessorContext.types().forName("String[]")
                                 )},
-                                "compile"
+                                "compile",null
                         ));
                 Set<String> foundIds = new HashSet<>();
                 Set<String> dfiles = new HashSet<>();

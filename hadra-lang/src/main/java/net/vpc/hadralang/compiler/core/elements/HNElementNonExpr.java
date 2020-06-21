@@ -1,7 +1,7 @@
 package net.vpc.hadralang.compiler.core.elements;
 
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 
 public class HNElementNonExpr extends HNElement implements Cloneable{
     public HNElementNonExpr() {
@@ -12,7 +12,7 @@ public class HNElementNonExpr extends HNElement implements Cloneable{
         return null;
     }
 
-    public JTypeOrLambda getTypeOrLambda() {
+    public JTypePattern getTypePattern() {
         return null;
     }
     @Override

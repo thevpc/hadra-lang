@@ -322,7 +322,8 @@ public class HLUtils {
                     context,
                     HLConstantEvaluator.INSTANCE,
                     null, new JEvaluable[0],
-                    "<<preprocessor>>"
+                    "<<preprocessor>>",
+                    compilerContextBase.getCallerInfo()
             ));
         }catch (Exception ex){
             compilerContextBase.log().error("X470", null,"unable to evaluate constant value "+n,n.startToken());

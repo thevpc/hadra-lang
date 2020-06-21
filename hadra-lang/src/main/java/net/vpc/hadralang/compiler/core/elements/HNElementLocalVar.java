@@ -4,7 +4,7 @@ import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JToken;
 import net.vpc.common.jeep.JType;
 import net.vpc.hadralang.compiler.parser.ast.HNDeclareTokenBase;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
 public class HNElementLocalVar extends HNElement implements Cloneable{
@@ -54,9 +54,9 @@ public class HNElementLocalVar extends HNElement implements Cloneable{
     }
 
     @Override
-    public JTypeOrLambda getTypeOrLambda() {
+    public JTypePattern getTypePattern() {
         if(effectiveType!=null){
-            return JTypeOrLambda.of(effectiveType);
+            return JTypePattern.of(effectiveType);
         }
         return null;
     }

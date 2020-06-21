@@ -1,11 +1,11 @@
 package net.vpc.hadralang.compiler.core.elements;
 
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 import net.vpc.hadralang.compiler.parser.ast.HNode;
 
 public class HNElementExpr extends HNElement implements Cloneable{
-    public JTypeOrLambda type;
+    public JTypePattern type;
 
     public HNElementExpr() {
         super(HNElementKind.EXPR);
@@ -15,7 +15,7 @@ public class HNElementExpr extends HNElement implements Cloneable{
         super(HNElementKind.EXPR);
         setType(type);
     }
-    public HNElementExpr(JTypeOrLambda type) {
+    public HNElementExpr(JTypePattern type) {
         super(HNElementKind.EXPR);
         setType(type);
     }
@@ -33,17 +33,17 @@ public class HNElementExpr extends HNElement implements Cloneable{
     }
 
     public HNElementExpr setType(JType type) {
-        this.type = type==null?null:JTypeOrLambda.of(type);
+        this.type = type==null?null: JTypePattern.of(type);
         return this;
     }
 
-    public HNElementExpr setType(JTypeOrLambda type) {
+    public HNElementExpr setType(JTypePattern type) {
         this.type = type;
         return this;
     }
 
     @Override
-    public JTypeOrLambda getTypeOrLambda() {
+    public JTypePattern getTypePattern() {
         return type;
     }
 

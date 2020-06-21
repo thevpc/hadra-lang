@@ -782,11 +782,11 @@
 //                    && !node.isSetUserObject("AssignLeftNode")
 //            ) {
 //                JNode[] oldNodes = node.getIndexNodes();
-//                JTypeOrLambda[] oldTypes = compilerContext.jTypeOrLambdas(oldNodes);
-//                JTypeOrLambda baseTypeOrLambda = compilerContext.jTypeOrLambda(base);
+//                JTypePattern[] oldTypes = compilerContext.jTypeOrLambdas(oldNodes);
+//                JTypePattern baseTypeOrLambda = compilerContext.jTypeOrLambda(base);
 //                if (oldTypes != null && baseTypeOrLambda != null) {
 //                    JNode[] nargs = JeepUtils.arrayAppend(JNode.class, base, oldNodes);
-//                    JTypeOrLambda[] ntypes = JeepUtils.arrayAppend(JTypeOrLambda.class, baseTypeOrLambda, oldTypes);
+//                    JTypePattern[] ntypes = JeepUtils.arrayAppend(JTypePattern.class, baseTypeOrLambda, oldTypes);
 //                    JInvokable m = compilerContext.findFunctionMatch(JOnError.TRACE, HLExtensionNames.BRACKET_GET_SHORT, HFunctionType.SPECIAL, ntypes, node.startToken());
 //                    if (m != null) {
 //                        return createFunctionCall(node.startToken(), m, nargs);
@@ -1111,7 +1111,7 @@
 //        }
 //    }
 //
-//    private JTypeOrLambda[] resolveTupleTypes(JNode n, HLJCompilerContext compilerContext) {
+//    private JTypePattern[] resolveTupleTypes(JNode n, HLJCompilerContext compilerContext) {
 //        if (n instanceof HNTuple) {
 //            return compilerContext.jTypeOrLambdas(((HNTuple) n).getItems());
 //        }
@@ -1120,9 +1120,9 @@
 //            JType r = t.rawType();
 //            if (r.name().startsWith("net.vpc.hadralang.stdlib.Tuple")) {
 //                JType[] jTypeOrVariables = ((JParameterizedType) t).actualTypeArguments();
-//                JTypeOrLambda[] a = new JTypeOrLambda[jTypeOrVariables.length];
+//                JTypePattern[] a = new JTypePattern[jTypeOrVariables.length];
 //                for (int i = 0; i < a.length; i++) {
-//                    a[i] = JTypeOrLambda.of((JType) jTypeOrVariables[i]);
+//                    a[i] = JTypePattern.of((JType) jTypeOrVariables[i]);
 //                }
 //                return a;
 //            } else {
@@ -1174,8 +1174,8 @@
 //            } else {
 //                if (left.getType() != null) {
 //                    //how to check types....
-//                    JTypeOrLambda[] tl = resolveTupleTypes(left, compilerContext);
-//                    JTypeOrLambda[] tr = resolveTupleTypes(right, compilerContext);
+//                    JTypePattern[] tl = resolveTupleTypes(left, compilerContext);
+//                    JTypePattern[] tr = resolveTupleTypes(right, compilerContext);
 //                    if (tl != null && tr != null) {
 //                        int max = Math.max(tl.length, tr.length);
 //                        for (int i = 0; i < max; i++) {
@@ -1271,12 +1271,12 @@
 //            if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
 //                if (!regularArrayIndexing) {
 //                    JNode[] oldNodes = left.getIndexNodes();
-//                    JTypeOrLambda valueType = compilerContext.jTypeOrLambda(right);
-//                    JTypeOrLambda[] oldTypes = compilerContext.jTypeOrLambdas(oldNodes);
-//                    JTypeOrLambda baseTypeOrLambda = compilerContext.jTypeOrLambda(base);
+//                    JTypePattern valueType = compilerContext.jTypeOrLambda(right);
+//                    JTypePattern[] oldTypes = compilerContext.jTypeOrLambdas(oldNodes);
+//                    JTypePattern baseTypeOrLambda = compilerContext.jTypeOrLambda(base);
 //                    if (oldTypes != null && baseTypeOrLambda != null && valueType != null) {
 //                        JNode[] nargs = JeepUtils.arrayAppend(JNode.class, base, oldNodes, right);
-//                        JTypeOrLambda[] ntypes = JeepUtils.arrayAppend(JTypeOrLambda.class, baseTypeOrLambda, oldTypes, valueType);
+//                        JTypePattern[] ntypes = JeepUtils.arrayAppend(JTypePattern.class, baseTypeOrLambda, oldTypes, valueType);
 //                        JInvokable m = compilerContext.findFunctionMatch(JOnError.TRACE, HLExtensionNames.BRACKET_SET_SHORT, HFunctionType.SPECIAL, ntypes, left.startToken());
 //                        if (m != null) {
 //                            attachLambdaTypes(m, nargs, compilerContext);
@@ -1974,7 +1974,7 @@
 //        processNextCompilerStage(node::getFilter, node::setFilter,compilerContext);
 //        processNextCompilerStage(node, node.getIncs(),compilerContext);
 //        processNextCompilerStage(node, node.getInitExprs(),compilerContext);
-//        JTypeOrLambda ft = compilerContext.jTypeOrLambda(node.getFilter());
+//        JTypePattern ft = compilerContext.jTypeOrLambda(node.getFilter());
 //        if (ft != null) {
 //            if (!ft.isType() || !ft.getType().boxed().name().equals("java.lang.Boolean")) {
 //                compilerContext.log().error("S013", "for statement filter must be of boolean type", node.getFilter().startToken());
@@ -2091,7 +2091,7 @@
 //                                if (compilerContext.isStage(STAGE_3_WIRE_CALLS)
 ////                                        && !arr.isSetUserObject("AssignLeftNode")
 //                                ) {
-//                                    JTypeOrLambda baseTypeOrLambda = compilerContext.jTypeOrLambda(base);
+//                                    JTypePattern baseTypeOrLambda = compilerContext.jTypeOrLambda(base);
 //                                    if (baseTypeOrLambda != null) {
 //                                        String baseTypeNameSafe = baseType.name();
 //                                        if (baseTypeNameSafe.endsWith("[]")) {
@@ -2103,25 +2103,25 @@
 //                                                intType,
 //                                                node.startToken()
 //                                        )};
-//                                        JTypeOrLambda[] ntypes = new JTypeOrLambda[]{baseTypeOrLambda, JTypeOrLambda.of(intType)};
+//                                        JTypePattern[] ntypes = new JTypePattern[]{baseTypeOrLambda, JTypePattern.of(intType)};
 //                                        FindMatchFailInfo failInfo = new FindMatchFailInfo("[$] operator");
 //                                        JInvokable m = compilerContext.findFunctionMatch(JOnError.NULL, "upperBound", HFunctionType.NORMAL, ntypes, arr.startToken(), failInfo);
 //                                        if (m != null) {
 //                                            return createFunctionCall(arr.startToken(), m, nargs);
 //                                        } else {
-////                                            alternatives.add("instance method: " + baseTypeNameSafe + ".upperBound" + JTypeOrLambda.signatureString(new JTypeOrLambda(intType)));
-////                                            alternatives.add("static   method: " + "upperBound" + JTypeOrLambda.signatureString(ntypes));
+////                                            alternatives.add("instance method: " + baseTypeNameSafe + ".upperBound" + JTypePattern.signatureString(new JTypePattern(intType)));
+////                                            alternatives.add("static   method: " + "upperBound" + JTypePattern.signatureString(ntypes));
 //                                        }
 //                                        if (goodIndex == 0) {
 //                                            //one more test!
 //                                            nargs = new JNode[]{base};
-//                                            ntypes = new JTypeOrLambda[]{baseTypeOrLambda};
+//                                            ntypes = new JTypePattern[]{baseTypeOrLambda};
 //                                            m = compilerContext.findFunctionMatch(JOnError.NULL, "upperBound", HFunctionType.NORMAL, ntypes, arr.startToken(), failInfo);
 //                                            if (m != null) {
 //                                                return createFunctionCall(arr.startToken(), m, nargs);
 //                                            } else {
 ////                                                alternatives.add("instance method: " + baseTypeNameSafe + ".upperBound()");
-////                                                alternatives.add("static   method: " + "upperBound" + JTypeOrLambda.signatureString(baseTypeOrLambda));
+////                                                alternatives.add("static   method: " + "upperBound" + JTypePattern.signatureString(baseTypeOrLambda));
 //                                            }
 //                                        }
 ////                                        StringBuilder errorMsg = new StringBuilder("To use " + baseTypeNameSafe + "[$] operator, you should implement either ");
@@ -2177,19 +2177,19 @@
 //        processNextCompilerStage(node::getElseNode, node::setElse,compilerContext);
 //        List<HNIf.WhenDoBranchNode> cond = node.getBranches();
 //        boolean allTypesOk = true;
-//        JTypeOrLambda upperBoundCond = null;
-//        JTypeOrLambda upperBoundResult = null;
+//        JTypePattern upperBoundCond = null;
+//        JTypePattern upperBoundResult = null;
 //        for (int i = 0; i < cond.size(); i++) {
-//            JTypeOrLambda a = compilerContext.jTypeOrLambda(cond.get(i).getWhenNode());
+//            JTypePattern a = compilerContext.jTypeOrLambda(cond.get(i).getWhenNode());
 //            if (a == null) {
 //                allTypesOk = false;
 //                break;
 //            } else {
 //                if (a.isType()) {
 //                    if (upperBoundCond == null) {
-//                        upperBoundCond = JTypeOrLambda.of(a.getType());
+//                        upperBoundCond = JTypePattern.of(a.getType());
 //                    } else {
-//                        upperBoundCond = JTypeOrLambda.of(a.getType().firstCommonSuperType(upperBoundCond.getType()));
+//                        upperBoundCond = JTypePattern.of(a.getType().firstCommonSuperType(upperBoundCond.getType()));
 //                    }
 //                } else {
 //                    throw new IllegalArgumentException("Fix me later");
@@ -2202,9 +2202,9 @@
 //            } else {
 //                if (a.isType()) {
 //                    if (upperBoundResult == null) {
-//                        upperBoundResult = JTypeOrLambda.of(a.getType());
+//                        upperBoundResult = JTypePattern.of(a.getType());
 //                    } else {
-//                        upperBoundResult = JTypeOrLambda.of(a.getType().firstCommonSuperType(upperBoundResult.getType()));
+//                        upperBoundResult = JTypePattern.of(a.getType().firstCommonSuperType(upperBoundResult.getType()));
 //                    }
 //                } else {
 //                    throw new IllegalArgumentException("Fix me later");
@@ -2212,15 +2212,15 @@
 //            }
 //        }
 //        if (node.getElseNode() != null) {
-//            JTypeOrLambda a = compilerContext.jTypeOrLambda(node.getElseNode());
+//            JTypePattern a = compilerContext.jTypeOrLambda(node.getElseNode());
 //            if (a == null) {
 //                allTypesOk = false;
 //            } else {
 //                if (a.isType()) {
 //                    if (upperBoundResult == null) {
-//                        upperBoundResult = JTypeOrLambda.of(a.getType());
+//                        upperBoundResult = JTypePattern.of(a.getType());
 //                    } else {
-//                        upperBoundResult = JTypeOrLambda.of(a.getType().firstCommonSuperType(upperBoundResult.getType()));
+//                        upperBoundResult = JTypePattern.of(a.getType().firstCommonSuperType(upperBoundResult.getType()));
 //                    }
 //                } else {
 //                    throw new IllegalArgumentException("Fix me later");
@@ -2263,7 +2263,7 @@
 //                    //do nothing special
 //                } else {
 //                    if (upperBoundResult == null) {
-//                        upperBoundResult = JTypeOrLambda.of(JTypeUtils.forObject(context.types()));
+//                        upperBoundResult = JTypePattern.of(JTypeUtils.forObject(context.types()));
 //                    }
 //                    if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
 //                        JType branchesArrayType = context.types().forName("net.vpc.hadralang.stdlib.Branch<" + upperBoundCond.getType().name()
@@ -2275,9 +2275,9 @@
 //                        FindMatchFailInfo failInfo = new FindMatchFailInfo("<if> function");
 //                        JInvokable fct = compilerContext.findFunctionMatch(
 //                                JOnError.TRACE, "If",
-//                                HFunctionType.NORMAL, new JTypeOrLambda[]{
-//                                        JTypeOrLambda.of(branchesArrayType),
-//                                        JTypeOrLambda.of(elseType)
+//                                HFunctionType.NORMAL, new JTypePattern[]{
+//                                        JTypePattern.of(branchesArrayType),
+//                                        JTypePattern.of(elseType)
 //                                }
 //                                ,
 //                                node.startToken(), failInfo
@@ -2288,10 +2288,10 @@
 //                                    new HNIf.JEvaluableFromSupplier(node.getElseNode(), elseType)
 //                            );
 //                        } else {
-////                            alternatives.add("static   method: " + "If" + JTypeOrLambda.signatureString(
-////                                    new JTypeOrLambda[]{
-////                                            new JTypeOrLambda(branchesArrayType),
-////                                            new JTypeOrLambda(elseType)
+////                            alternatives.add("static   method: " + "If" + JTypePattern.signatureString(
+////                                    new JTypePattern[]{
+////                                            new JTypePattern(branchesArrayType),
+////                                            new JTypePattern(elseType)
 ////                                    }
 ////                            ));
 ////                            StringBuilder errorMsg = new StringBuilder("To use if statement with non boolean condition, you should implement ");
@@ -2320,7 +2320,7 @@
 //        processNextCompilerStage(node, nargs,compilerContext);
 //        if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
 //            if (node.impl() == null || node.getType() == null) {
-//                JTypeOrLambda[] ntypes = compilerContext.jTypeOrLambdas(nargs);
+//                JTypePattern[] ntypes = compilerContext.jTypeOrLambdas(nargs);
 //                if (ntypes != null) {
 //                    JEvaluable[] eargs = JNodeUtils.getEvaluatables(nargs);
 //                    JInvokable f = compilerContext.findFunctionMatch(JOnError.TRACE, node.getName(), HFunctionType.NORMAL, ntypes, node.startToken());
@@ -2610,7 +2610,7 @@
 //        processNextCompilerStage(node, nargs,compilerContext);
 //        processNextCompilerStage(node::getInstanceNode, node::setInstanceNode,compilerContext);
 //        if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
-//            JTypeOrLambda[] ntypes = compilerContext.jTypeOrLambdas(nargs);
+//            JTypePattern[] ntypes = compilerContext.jTypeOrLambdas(nargs);
 //            if (ntypes != null) {
 //                JEvaluable[] eargs = JNodeUtils.getEvaluatables(nargs);
 //                if (node.getMethod() == null) {
@@ -2646,14 +2646,14 @@
 //                        }
 //                    } else {
 //                        //instance methods are handled as functions with 'this' as first argument
-//                        JTypeOrLambda otype = compilerContext.jTypeOrLambda(node.getInstanceNode());
+//                        JTypePattern otype = compilerContext.jTypeOrLambda(node.getInstanceNode());
 //                        if (compilerContext.isTypes(ntypes)) {
 //                            if (otype != null) {
-//                                JTypeOrLambda[] newArgs = JeepUtils.arrayAppend(JTypeOrLambda.class, otype, ntypes);
+//                                JTypePattern[] newArgs = JeepUtils.arrayAppend(JTypePattern.class, otype, ntypes);
 //                                node.setMethod(compilerContext.findFunctionMatch(JOnError.TRACE, node.getMethodNameToken().image, HFunctionType.NORMAL, newArgs, node.startToken()));
 //                            }
 //                        } else {
-//                            compilerContext.log().error("S035", "method not found " + otype.getType().name() + "." + JTypeOrLambda.signatureString(ntypes) + ". Lambda expressions not supported here yet", node.startToken());
+//                            compilerContext.log().error("S035", "method not found " + otype.getType().name() + "." + JTypePattern.signatureString(ntypes) + ". Lambda expressions not supported here yet", node.startToken());
 //                        }
 //                    }
 //                }
@@ -2700,7 +2700,7 @@
 ////                        node.setConstructor(new JInvokablePrefilled(constructor, inits));
 ////                    }
 ////                } else {
-//                JTypeOrLambda[] consTypes = compilerContext.jTypeOrLambdas(inits);
+//                JTypePattern[] consTypes = compilerContext.jTypeOrLambdas(inits);
 //                JInvokable constructor = compilerContext.findConstructorMatch(JOnError.TRACE, node.getType(), consTypes, node.startToken(), new FindMatchFailInfo(null));
 //                if (constructor != null) {
 //                    node.setConstructor(HUtils.createJInvokablePrefilled(constructor, inits));
@@ -2726,7 +2726,7 @@
 //            JNode arg1 = processNextCompilerStage(node::getLeft, node::setLeft,compilerContext);
 //            JNode arg2 = processNextCompilerStage(node::getRight, node::setRight,compilerContext);
 //            if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
-//                JTypeOrLambda[] args = compilerContext.jTypeOrLambdas(arg1, node.getRight());
+//                JTypePattern[] args = compilerContext.jTypeOrLambdas(arg1, node.getRight());
 //                if (args != null) {
 //                    JInvokable f = compilerContext.findFunctionMatch(JOnError.TRACE, opName, HFunctionType.INFIX_BINARY, args, node.startToken());
 //                    if (f != null) {
@@ -2790,7 +2790,7 @@
 //            return new HNAssign(arg1, JTokenUtils.createOpToken("="), arg2, node.startToken(), node.endToken());
 //        } else {
 //            if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
-//                JTypeOrLambda[] args = compilerContext.jTypeOrLambdas(arg1, arg2);
+//                JTypePattern[] args = compilerContext.jTypeOrLambdas(arg1, arg2);
 //                if (args != null) {
 //                    String opName = node.getName();
 //                    FindMatchFailInfo failInfo = new FindMatchFailInfo("'=' assignment");
@@ -2820,7 +2820,7 @@
 //                boolean plus = node.getName().equals("++");
 //                if (node.isPrefixOperator()) {
 //                    HNLiteral oneLiteral = new HNLiteral(1, JTypeUtils.forInt(compilerContext.types()), arg.startToken());
-//                    JTypeOrLambda[] argTypes = compilerContext.jTypeOrLambdas(arg);
+//                    JTypePattern[] argTypes = compilerContext.jTypeOrLambdas(arg);
 //                    FindMatchFailInfo failInfo = new FindMatchFailInfo("prefix " + node.getName() + " operator");
 //                    if (argTypes != null) {
 //                        JInvokable f = compilerContext.findFunctionMatch(JOnError.NULL, node.getName(), HFunctionType.PREFIX_UNARY, argTypes, node.startToken(), failInfo);
@@ -2855,7 +2855,7 @@
 //                        return node;
 //                    }
 //                    FindMatchFailInfo failInfo = new FindMatchFailInfo("postfix " + node.getName() + " operator");
-//                    JTypeOrLambda[] argTypes = compilerContext.jTypeOrLambdas(arg);
+//                    JTypePattern[] argTypes = compilerContext.jTypeOrLambdas(arg);
 //                    if (argTypes != null) {
 //                        JInvokable f = compilerContext.findFunctionMatch(JOnError.NULL, plus ? "++" : "--", HFunctionType.POSTFIX_UNARY, argTypes, node.startToken(), failInfo);
 //                        if (f != null) {
@@ -2911,7 +2911,7 @@
 //
 //                }
 //            } else {
-//                JTypeOrLambda[] argTypes = compilerContext.jTypeOrLambdas(arg);
+//                JTypePattern[] argTypes = compilerContext.jTypeOrLambdas(arg);
 //                FindMatchFailInfo failInfo = new FindMatchFailInfo((node.isPrefixOperator() ? "prefix " : "postfix ") + node.getName() + " operator");
 //                if (argTypes != null) {
 //                    JInvokable f = compilerContext.findFunctionMatch(JOnError.TRACE, node.isPrefixOperator() ? node.getName() : ("postfix_" + node.getName()), null, argTypes, node.startToken(), failInfo);
@@ -2958,7 +2958,7 @@
 //            //this is mostly a method...
 //            if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
 //                HNIdentifier id = (HNIdentifier) node.getLeft();
-//                JTypeOrLambda[] ntypes = compilerContext.jTypeOrLambdas(node.getRight().toArray(new JNode[0]));
+//                JTypePattern[] ntypes = compilerContext.jTypeOrLambdas(node.getRight().toArray(new JNode[0]));
 //                if (ntypes != null) {
 //                    JEvaluable[] eargs = JNodeUtils.getEvaluatables(node.getRight().toArray(new JNode[0]));
 //                    JInvokable f = compilerContext.findFunctionMatch(JOnError.TRACE, id.getName(), HFunctionType.NORMAL, ntypes, node.startToken());
@@ -2983,7 +2983,7 @@
 //            HNTypeToken base = (HNTypeToken) node.getLeft();
 //            if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
 //                JType baseType = base.getTypeVal();
-//                JTypeOrLambda[] tol = compilerContext.jTypeOrLambdas(node.getRight().toArray(new JNode[0]));
+//                JTypePattern[] tol = compilerContext.jTypeOrLambdas(node.getRight().toArray(new JNode[0]));
 //                if (tol != null) {
 //                    JInvokable e = compilerContext.findConstructorMatch(JOnError.TRACE, baseType, tol, base.startToken(), new FindMatchFailInfo(null));
 //                    if (e != null) {
@@ -2996,7 +2996,7 @@
 //            if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
 //                HNode id = (HNode) node.getLeft();
 //                JNode[] allArgs = JeepUtils.arrayAppend(JNode.class, id, node.getRight().toArray(new JNode[0]));
-//                JTypeOrLambda[] ntypes = compilerContext.jTypeOrLambdas(allArgs);
+//                JTypePattern[] ntypes = compilerContext.jTypeOrLambdas(allArgs);
 //                if (ntypes != null) {
 //                    JEvaluable[] eargs = JNodeUtils.getEvaluatables(allArgs);
 //                    JInvokable f = compilerContext.findFunctionMatch(JOnError.TRACE, HLExtensionNames.FUNCTION_APPLY, HFunctionType.SPECIAL, ntypes, node.startToken());
@@ -3838,7 +3838,7 @@
 //                    + values.length + ">" + Tuple.MAX_ELEMENTS, node.startToken());
 //        }
 //        processNextCompilerStage(node, values,compilerContext);
-//        JTypeOrLambda[] atypes = compilerContext.jTypeOrLambdas(values);
+//        JTypePattern[] atypes = compilerContext.jTypeOrLambdas(values);
 //        if (atypes != null) {
 //            JTypes types = compilerContext.types();
 //            if (values.length > Tuple.MAX_ELEMENTS) {
@@ -3919,9 +3919,9 @@
 //        processNextCompilerStage(node::getBlock, node::setBlock,compilerContext);
 //        if (compilerContext.isStage(STAGE_3_WIRE_CALLS)) {
 //            JNode expr = node.getExpr();
-//            JTypeOrLambda exprTypeOrLambda = compilerContext.jTypeOrLambda(expr);
+//            JTypePattern exprTypeOrLambda = compilerContext.jTypeOrLambda(expr);
 //            JNode block = node.getBlock();
-//            JTypeOrLambda blockTypeOrLambda = compilerContext.jTypeOrLambda(block);
+//            JTypePattern blockTypeOrLambda = compilerContext.jTypeOrLambda(block);
 //            if (exprTypeOrLambda != null && blockTypeOrLambda != null) {
 //                if (exprTypeOrLambda.isType() && exprTypeOrLambda.getType().boxed().name().equals("java.lang.Boolean")) {
 //                    //default case
@@ -3933,9 +3933,9 @@
 //                    FindMatchFailInfo failInfo = new FindMatchFailInfo("<while> function");
 //                    JInvokable fct = compilerContext.findFunctionMatch(
 //                            JOnError.NULL, "While",
-//                            HFunctionType.NORMAL, new JTypeOrLambda[]{
-//                                    JTypeOrLambda.of(exprType),
-//                                    JTypeOrLambda.of(blockType)
+//                            HFunctionType.NORMAL, new JTypePattern[]{
+//                                    JTypePattern.of(exprType),
+//                                    JTypePattern.of(blockType)
 //                            }
 //                            ,
 //                            node.startToken(), failInfo
@@ -3946,10 +3946,10 @@
 //                                new HNWhile.JEvaluableNodeSupplier(blockType, block)
 //                        );
 //                    } else {
-////                        alternatives.add("static   method: " + "While" + JTypeOrLambda.signatureString(
-////                                new JTypeOrLambda[]{
-////                                        new JTypeOrLambda(exprType),
-////                                        new JTypeOrLambda(blockType)
+////                        alternatives.add("static   method: " + "While" + JTypePattern.signatureString(
+////                                new JTypePattern[]{
+////                                        new JTypePattern(exprType),
+////                                        new JTypePattern(blockType)
 ////                                }
 ////                        ));
 ////                        StringBuilder errorMsg=new StringBuilder("To use while statement with non boolean condition, you should implement ");

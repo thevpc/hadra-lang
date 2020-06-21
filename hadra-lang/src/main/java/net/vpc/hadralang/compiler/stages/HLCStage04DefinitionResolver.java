@@ -3,6 +3,7 @@ package net.vpc.hadralang.compiler.stages;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.impl.functions.JNameSignature;
 import net.vpc.common.jeep.impl.functions.JSignature;
+import net.vpc.common.jeep.impl.types.DefaultJRawMethod;
 import net.vpc.common.jeep.impl.types.DefaultJType;
 import net.vpc.common.jeep.util.JTypeUtils;
 import net.vpc.hadralang.compiler.core.elements.*;
@@ -14,7 +15,6 @@ import net.vpc.hadralang.compiler.index.HLIndexedField;
 import net.vpc.hadralang.compiler.index.HLIndexedMethod;
 import net.vpc.hadralang.compiler.parser.ast.*;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
-import net.vpc.hadralang.compiler.utils.HTypeUtils;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
 import java.lang.reflect.Modifier;
@@ -197,7 +197,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
 
     private boolean onDotClass(HNDotClass node, HLJCompilerContext compilerContext) {
         JType tv = node.getTypeRefName().getTypeVal();
-        node.setElement(new HNElementExpr(tv == null ? null : HTypeUtils.classOf(tv)));
+        node.setElement(new HNElementExpr(tv == null ? null : JTypeUtils.classOf(tv)));
         return true;
     }
 
@@ -545,7 +545,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
                 } else {
                     HNTypeToken returnTypeName = method.getReturnTypeName();
                     JType returnType = returnTypeName == null ? null : returnTypeName.getTypeVal();
-                    JMethod jMethod = jType.addMethod(
+                    DefaultJRawMethod jMethod =(DefaultJRawMethod) jType.addMethod(
                             compilerContext.signature(JSignature.of(
                                     method.getNameToken().sval,
                                     method.getArguments().stream()
@@ -559,6 +559,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
                             new BodyJInvoke(method),
                             method.getModifiers(), false
                     );
+                    jMethod.setSourceName(HUtils.getSourceName(method));
                     method.setInvokable(jMethod);
                     if (returnType == null) {
                         List<JMethod> noTypeMethods = HLCStageUtils.getNoTypeMethods(compilerContext);

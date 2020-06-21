@@ -8,9 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import net.vpc.common.jeep.JNodeCopyFactory;
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypeOrLambda;
 import net.vpc.common.jeep.util.JNodeUtils;
-import net.vpc.hadralang.compiler.core.elements.HNElement;
 
 public class HNDeclareTokenList extends HNDeclareToken implements HNDeclare {
     private HNDeclareTokenIdentifier[] items;

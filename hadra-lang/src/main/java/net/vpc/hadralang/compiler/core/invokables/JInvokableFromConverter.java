@@ -25,7 +25,7 @@ public class JInvokableFromConverter implements JInvokable {
 
     @Override
     public Object invoke(JInvokeContext context) {
-        return converter.convert(context.arguments()[0].evaluate(context), context);
+        return converter.convert(context.getArguments()[0].evaluate(context), context);
     }
 
     @Override
@@ -46,6 +46,9 @@ public class JInvokableFromConverter implements JInvokable {
     public JConverter getConverter() {
         return converter;
     }
-    
-    
+
+    @Override
+    public String getSourceName() {
+        return "<unknown-source>";
+    }
 }

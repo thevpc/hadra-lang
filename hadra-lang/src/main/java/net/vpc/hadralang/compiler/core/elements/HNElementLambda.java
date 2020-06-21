@@ -1,24 +1,24 @@
 package net.vpc.hadralang.compiler.core.elements;
 
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 
 public class HNElementLambda extends HNElement implements Cloneable{
-    public JTypeOrLambda typeOrLambda;
+    public JTypePattern typePattern;
     public JType inferredType;
 
     public HNElementLambda() {
         super(HNElementKind.LAMBDA);
     }
 
-    public HNElementLambda setArgTypes(JType[] lambdaArgType) {
-        this.typeOrLambda = new JTypeOrLambda(lambdaArgType);
+    public HNElementLambda setArgTypes(JType[] lambdaArgType,JType returnType) {
+        this.typePattern = JTypePattern.of(lambdaArgType,returnType);
         return this;
     }
 
     @Override
-    public JTypeOrLambda getTypeOrLambda() {
-        return typeOrLambda;
+    public JTypePattern getTypePattern() {
+        return typePattern;
     }
 
     public JType getInferredType() {
@@ -33,7 +33,7 @@ public class HNElementLambda extends HNElement implements Cloneable{
     @Override
     public String toString() {
         return "Lambda(" +
-                typeOrLambda +
+                typePattern +
                 ')';
     }
 }

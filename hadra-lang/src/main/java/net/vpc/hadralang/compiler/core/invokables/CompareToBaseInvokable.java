@@ -39,4 +39,9 @@ public abstract class CompareToBaseInvokable implements JInvokable {
     public String name() {
         return signature.name();
     }
+
+    @Override
+    public String getSourceName() {
+        return base.getSourceName();
+    }
 }
