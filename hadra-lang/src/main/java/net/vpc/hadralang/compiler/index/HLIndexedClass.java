@@ -1,6 +1,5 @@
 package net.vpc.hadralang.compiler.index;
 
-import net.vpc.common.jeep.JCompilationUnit;
 import net.vpc.common.jeep.JIndexDocument;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.core.index.DefaultJIndexDocument;
@@ -22,27 +21,27 @@ public class HLIndexedClass implements HLIndexedElement{
     private int modifiers;
     private String source;
     public HLIndexedClass(JType type,String source) {
-        fullName=type.name();
+        fullName=type.getName();
         simpleName=type.simpleName();
         simpleName2=simpleName;
-        JType nn=type.declaringType();
+        JType nn=type.getDeclaringType();
         while(nn!=null){
-            simpleName2=nn.name()+"."+simpleName2;
-            nn=type.declaringType();
+            simpleName2=nn.getName()+"."+simpleName2;
+            nn=type.getDeclaringType();
         }
 
-        if(type.declaringType()!=null) {
-            declaringType =type.declaringType().name();
+        if(type.getDeclaringType()!=null) {
+            declaringType =type.getDeclaringType().getName();
         }else{
             declaringType="";
         }
-        packageName =type.packageName();
+        packageName =type.getPackageName();
         this.source=source;
         modifiers=type.modifiers();
         imports=new String[0];
         List<String> superTypesList=new ArrayList<>();
-        for (JType extend : type.parents()) {
-            superTypesList.add(extend.name());
+        for (JType extend : type.getParents()) {
+            superTypesList.add(extend.getName());
         }
         this.superTypes=superTypesList.toArray(new String[0]);
         this.exports=new String[0]; //fix me;

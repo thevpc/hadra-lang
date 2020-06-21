@@ -3,9 +3,6 @@ package net.vpc.hadralang.compiler.index;
 import net.vpc.common.jeep.JField;
 import net.vpc.common.jeep.JIndexDocument;
 import net.vpc.common.jeep.core.index.DefaultJIndexDocument;
-import net.vpc.hadralang.compiler.parser.ast.HNDeclareIdentifier;
-import net.vpc.hadralang.compiler.parser.ast.HNDeclareType;
-import net.vpc.hadralang.compiler.utils.HUtils;
 
 public class HLIndexedField implements HLIndexedElement {
     private String declaringType;
@@ -17,8 +14,8 @@ public class HLIndexedField implements HLIndexedElement {
     private String source;
 
     public HLIndexedField(JField item, String source) {
-        this.declaringType = item.declaringType().name();
-        this.type = item.type()==null?"":item.type().name();
+        this.declaringType = item.declaringType().getName();
+        this.type = item.type()==null?"":item.type().getName();
         this.name = item.name();
         this.modifiers = item.modifiers();
         this.imports= new String[0];

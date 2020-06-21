@@ -74,7 +74,7 @@ public class HLGenCompilationUnitContext {
                     if (noPrimitive) {
                         return nameWithImports(type.boxed(),noPrimitive);
                     }
-                    return type.name();
+                    return type.getName();
                 }
                 StringBuilder sb = new StringBuilder();
                 while (true) {
@@ -82,9 +82,9 @@ public class HLGenCompilationUnitContext {
                         sb.insert(0, ".");
                     }
                     sb.insert(0, type.simpleName());
-                    JType dt = type.declaringType();
+                    JType dt = type.getDeclaringType();
                     if (dt == null) {
-                        String ns = type.packageName();
+                        String ns = type.getPackageName();
                         if(ns==null){
                             ns="";
                         }
@@ -98,7 +98,7 @@ public class HLGenCompilationUnitContext {
                             }
                             full += "." + simpleName;
                         }
-                        String s = currentType.packageName();
+                        String s = currentType.getPackageName();
                         if(s==null){
                             s="";
                         }
@@ -133,7 +133,7 @@ public class HLGenCompilationUnitContext {
                     type = dt;
                 }
             }
-            String rawFullString = nameWithImports(type.rawType(), false);
+            String rawFullString = nameWithImports(type.getRawType(), false);
 //        String name = type.name();
 //            if (rawFullString.equals(currentType.rawType().name())
 //                    || Objects.equals(currentType.packageName(), type.packageName())) {

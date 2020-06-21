@@ -98,7 +98,7 @@ public class HNodeUtils {
                         //jm.declaringType()==null for convert functions...
                         if (
                                 jm.declaringType()!=null &&
-                                jm.declaringType().name().equals("net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators")) {
+                                jm.declaringType().getName().equals("net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators")) {
                             //this is a standard operator
                             return false;
                         }
@@ -359,5 +359,27 @@ public class HNodeUtils {
             }
         }
         return null;
+    }
+    public static HNode assignToDeclare(HNode expr,boolean skipPar){
+        if(skipPar && expr instanceof HNPars){
+            HNPars p = (HNPars) expr;
+            HNode[] i = p.getItems();
+            if(i.length==1){
+                HNode n2=assignToDeclare(i[0],false);
+                if(n2!=i[0]){
+                    p.setItems(new HNode[]{n2});
+                    return p;
+                }
+            }
+            return expr;
+        }
+        if (expr instanceof HNAssign && ((HNAssign) expr).getLeft() instanceof HNIdentifier) {
+            return new HNDeclareIdentifier(
+                    new HNDeclareTokenIdentifier(((HNIdentifier) ((HNAssign) expr).getLeft()).getNameToken()),
+                    ((HNAssign) expr).getRight(), null, ((HNAssign) expr).getOp(), expr.startToken(),
+                    expr.endToken()
+            );
+        }
+        return expr;
     }
 }

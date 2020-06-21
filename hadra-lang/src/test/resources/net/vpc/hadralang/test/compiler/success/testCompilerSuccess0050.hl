@@ -1,8 +1,0 @@
-Object o=null;
-
-if(o is List li && li[0] is Map<String,Object> m &&
-    (m["Hello"] is String s && s.length()>0)
-    
-    ){
-
-}

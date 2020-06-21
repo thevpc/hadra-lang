@@ -130,13 +130,6 @@ public class HNSwitch extends HNode {
     }
 
     @Override
-    protected void findAndReplaceChildren(JNodeFindAndReplace findAndReplace) {
-        JNodeUtils.findAndReplaceNext(this, findAndReplace, this::getExpr, this::setExpr);
-        JNodeUtils.findAndReplaceNext(this, findAndReplace, this.getCases());
-        JNodeUtils.findAndReplaceNext(this, findAndReplace, this::getElseNode, this::setElse);
-    }
-
-    @Override
     public List<JNode> childrenNodes() {
         List<JNode> li = new ArrayList<>();
         li.add(expr);

@@ -44,11 +44,11 @@ public class HLIndexedConstructor implements HLIndexedElement{
     }
     public HLIndexedConstructor(JConstructor m,String source) {
         name=m.name();
-        declaringType=m.declaringType().name();
+        declaringType=m.declaringType().getName();
         returnType=declaringType;
         modifiers=m.modifiers();
         parameterNames=m.argNames();
-        parameterTypes= Arrays.stream(m.argTypes()).map(JType::name).toArray(String[]::new);
+        parameterTypes= Arrays.stream(m.argTypes()).map(JType::getName).toArray(String[]::new);
         imports= new String[0];
         signature=JNameSignature.of(name,parameterTypes);
         this.source=source;

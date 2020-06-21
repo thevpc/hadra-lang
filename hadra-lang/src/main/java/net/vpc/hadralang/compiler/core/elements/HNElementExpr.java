@@ -15,6 +15,10 @@ public class HNElementExpr extends HNElement implements Cloneable{
         super(HNElementKind.EXPR);
         setType(type);
     }
+    public HNElementExpr(JTypeOrLambda type) {
+        super(HNElementKind.EXPR);
+        setType(type);
+    }
 
     public static HNElementExpr get(HNode n) {
         return get(n.getElement());

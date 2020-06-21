@@ -73,7 +73,7 @@ public class HLEvaluator implements JEvaluator {
                 if (a.getElseNode() != null) {
                     return evaluate(a.getElseNode(), context);
                 }
-                return a.getElement().getTypeOrLambda().getType().defaultValue();
+                return a.getElement().getTypeOrLambda().getType().getDefaultValue();
             }
             case H_WHILE: {
                 HNWhile a = (HNWhile) node;
@@ -128,7 +128,7 @@ public class HLEvaluator implements JEvaluator {
                 if (items.length < Tuple.MAX_ELEMENTS) {
                     Class<?> c = null;
                     try {
-                        c = Class.forName(HTypeUtils.tupleTypeForCount(items.length,context.context().types()).name());
+                        c = Class.forName(HTypeUtils.tupleTypeForCount(items.length,context.context().types()).getName());
                         return c.getConstructors()[0].newInstance(items);
                     } catch (Exception e) {
                         throw new JShouldNeverHappenException();
@@ -659,7 +659,7 @@ public class HLEvaluator implements JEvaluator {
                     if (t instanceof HostJRawType) {
                         Class<?> aClass = null;
                         try {
-                            aClass = Class.forName(t.name());
+                            aClass = Class.forName(t.getName());
                         } catch (ClassNotFoundException e) {
                             throw new IllegalArgumentException(e);
                         }
@@ -680,7 +680,7 @@ public class HLEvaluator implements JEvaluator {
                                                     .build();
                                             return new BodyJInvoke(lnode).invoke(b);
                                         } else if (method.getName().equals("toString")) {
-                                            return "ProxyForLambda(" + lnode.getElement().getType().name() + ")";
+                                            return "ProxyForLambda(" + lnode.getElement().getType().getName() + ")";
                                         } else if (method.getName().equals("equals")) {
                                             return false;
                                         } else if (method.getName().equals("hashCode")) {
@@ -718,7 +718,7 @@ public class HLEvaluator implements JEvaluator {
                 if (t.isInstance(e)) {
                     return e;
                 }
-                throw new ClassCastException("Cannot cast " + (e == null ? "null" : context.context().types().typeOf(e)) + " to " + t.name());
+                throw new ClassCastException("Cannot cast " + (e == null ? "null" : context.context().types().typeOf(e)) + " to " + t.getName());
             }
             case H_STRING_INTEROP: {
                 HNStringInterop n = (HNStringInterop) node;
@@ -733,7 +733,7 @@ public class HLEvaluator implements JEvaluator {
     }
 
     private Tuple2<Object,Object> evalVarInc(HNIdentifier arg, int inc,JInvokeContext context) {
-        String argTypeName = HNodeUtils.getType(arg).boxed().name();
+        String argTypeName = HNodeUtils.getType(arg).boxed().getName();
         JVars vars = context.context().vars();
         Object oldValue0 = vars.getValue(arg.getName());
         Tuple2<Object, Object> ret = evalValueInc(argTypeName, oldValue0, inc);
@@ -741,7 +741,7 @@ public class HLEvaluator implements JEvaluator {
         return ret;
     }
     private Tuple2<Object,Object> evalFieldInc(HNIdentifier arg, int inc,JInvokeContext context) {
-        String argTypeName = HNodeUtils.getType(arg).boxed().name();
+        String argTypeName = HNodeUtils.getType(arg).boxed().getName();
         HNElementField efield=(HNElementField) arg.getElement();
         JField field = efield.getField();
         Object base=null;
@@ -762,7 +762,7 @@ public class HLEvaluator implements JEvaluator {
         HNBracketsPostfix a = arg;
         int index = (int) evaluate(a.getRight().get(0), context);
         JTypeArray arrayType = (JTypeArray) a.getLeft().getElement().getType();
-        String argTypeName = arrayType.componentType().name();
+        String argTypeName = arrayType.componentType().getName();
         JArray array = arrayType.asArray(evaluate(a.getLeft(), context));
         Object oldValue0 = array.get(index);
         Tuple2<Object, Object> ret = evalValueInc(argTypeName, oldValue0, inc);

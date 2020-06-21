@@ -155,6 +155,9 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
             case H_DOT_CLASS: {
                 return onDotClass((HNDotClass) node, compilerContext);
             }
+            case H_DOT_THIS: {
+                return onDotThis((HNDotThis) node, compilerContext);
+            }
             case H_EXTENDS: {
                 return onExtends((HNExtends) node, compilerContext);
             }
@@ -195,6 +198,12 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
     private boolean onDotClass(HNDotClass node, HLJCompilerContext compilerContext) {
         JType tv = node.getTypeRefName().getTypeVal();
         node.setElement(new HNElementExpr(tv == null ? null : HTypeUtils.classOf(tv)));
+        return true;
+    }
+
+    private boolean onDotThis(HNDotThis node, HLJCompilerContext compilerContext) {
+        JType tv = node.getTypeRefName().getTypeVal();
+        node.setElement(new HNElementExpr(tv));
         return true;
     }
 
@@ -579,11 +588,11 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
         }
         return !inPreprocessor
                 //                && !(tn instanceof HNDeclareTypeMetaPackage)
-                && !compilerContext.getOrCreateType(tn).name().matches(".*[$][0-9]+.*");
+                && !compilerContext.getOrCreateType(tn).getName().matches(".*[$][0-9]+.*");
     }
 
     private boolean isIndexableType(JType jType) {
-        return !inPreprocessor && !jType.name().matches(".*[$][0-9]+.*");
+        return !inPreprocessor && !jType.getName().matches(".*[$][0-9]+.*");
     }
 
     private boolean onBlock(HNBlock node, HLJCompilerContext compilerContext) {
@@ -682,8 +691,8 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
         return false;
     }
     private boolean onAssign(HNAssign node, HLJCompilerContext compilerContext) {
-        HNode left = (HNode) node.getLeft();
-        HNode right = (HNode) node.getLeft();
+        HNode left = node.getLeft();
+        HNode right = node.getLeft();
         node.setElement(new HNElementAssign());
         switch (left.getElement().getKind()) {
             case LOCAL_VAR:

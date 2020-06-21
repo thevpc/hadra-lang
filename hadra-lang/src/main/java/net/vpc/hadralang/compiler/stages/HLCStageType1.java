@@ -125,7 +125,7 @@ public abstract class HLCStageType1 implements HLCStage{
                 HNLambdaExpression lx=(HNLambdaExpression) narg;
                 JType y = f.signature().argType(i);
 //                lx.setType(y);
-                JMethod[] dm = Arrays.stream(y.declaredMethods()).filter(x->x.isAbstract() && !x.isStatic())
+                JMethod[] dm = Arrays.stream(y.getDeclaredMethods()).filter(x->x.isAbstract() && !x.isStatic())
                         .toArray(JMethod[]::new);
                 if(dm.length==1){
                     JSignature signature = dm[0].signature();

@@ -101,7 +101,7 @@ public class HLCStage08JavaTransform implements HLCStage {
                             //jm.declaringType()==null for convert functions...
                             if (
                                     jm.declaringType() != null &&
-                                            jm.declaringType().name().equals("net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators")) {
+                                            jm.declaringType().getName().equals("net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators")) {
                                 //this is a standard operator
                                 return null;
                             }
@@ -270,7 +270,7 @@ public class HLCStage08JavaTransform implements HLCStage {
         JType MessageFormatType=compilerContext.base.types().forName("java.text.MessageFormat");
         JType StringType = JTypeUtils.forString(compilerContext.base.types());
 
-        JMethod jMethod = MessageFormatType.declaredMethod("format(java.lang.String,java.lang.Object[])");
+        JMethod jMethod = MessageFormatType.getDeclaredMethod("format(java.lang.String,java.lang.Object[])");
         List<HNode> allArgs=new ArrayList<>();
         allArgs.add(new HNLiteral(newNode.getJavaMessageFormatString(), StringType,null).setElement(new HNElementExpr(StringType)));
         allArgs.addAll(Arrays.asList(newNode.getExpressions()));
@@ -624,7 +624,23 @@ public class HLCStage08JavaTransform implements HLCStage {
     }
 
     private HNode onSwitch(HNSwitch node, HLJCompilerContext2 compilerContext) {
-        return copy0(node);
+        HNode r = copy0(node);
+        if(r instanceof HNSwitch){
+            HNSwitch sw = (HNSwitch) r;
+            HNode e = sw.getExpr();
+            sw.setExpr(e=HUtils.skipFirstPar(e));
+            if(e instanceof HNDeclareIdentifier){
+                HNBlock b = createExprGroup();
+                b.add(e);
+                HNDeclareTokenIdentifier identifierToken = (HNDeclareTokenIdentifier) ((HNDeclareIdentifier) e).getIdentifierToken();
+                sw.setExpr(new HNIdentifier(identifierToken.getToken()));
+            }
+        }
+        return r;
+    }
+
+    private HNBlock createExprGroup() {
+        return new HNBlock(HNBlock.BlocType.EXPR_GROUP, new HNode[0], null, null);
     }
 
     private HNode onDeclareTokenTuple(HNDeclareTokenTuple node, HLJCompilerContext2 compilerContext) {
@@ -723,7 +739,7 @@ public class HLCStage08JavaTransform implements HLCStage {
     }
 
     private HNode onAssign(HNAssign node, HLJCompilerContext2 compilerContext) {
-        HNBlock b = new HNBlock(HNBlock.BlocType.EXPR_GROUP, new HNode[0], null, null);
+        HNBlock b = createExprGroup();
         HNode left = (HNode) copyFactory.copy(node.getLeft());
         HNode right = (HNode) copyFactory.copy(node.getRight());
         _fillBlockAssign(left, right, b, null,
@@ -737,7 +753,7 @@ public class HLCStage08JavaTransform implements HLCStage {
     }
 
     private HNode onDeclareIdentifier(HNDeclareIdentifier node, HLJCompilerContext2 compilerContext) {
-        HNBlock b = new HNBlock(HNBlock.BlocType.EXPR_GROUP, new HNode[0], null, null);
+        HNBlock b = createExprGroup();
         HNode left = (HNode) copyFactory.copy(node.getIdentifierToken());
         HNode right = (HNode) (node.getInitValue() == null ? null : copyFactory.copy(node.getInitValue()));
         right = initializeAssignRight(compilerContext, left, right, true);
@@ -775,7 +791,7 @@ public class HLCStage08JavaTransform implements HLCStage {
                     ll = compilerContext.base.jTypeOrLambda(left).getType();
                 }
                 if (ll.isPrimitive()) {
-                    switch (ll.name()) {
+                    switch (ll.getName()) {
                         case "boolean": {
                             right = new HNLiteral(false, JTypeUtils.forBoolean(compilerContext.base.types()), null);
                             break;

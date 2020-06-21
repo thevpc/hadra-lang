@@ -69,7 +69,7 @@ public class HNElementConstructor extends HNElementInvokable implements Cloneabl
     @Override
     public String toString() {
         return "Constructor{"
-                + (declaringType == null ? "null" : declaringType.name())
+                + (declaringType == null ? "null" : declaringType.getName())
                 + '}';
     }
 }

@@ -84,14 +84,19 @@ public final class HadraLanguage extends DefaultJeep {
         config.setNumberSuffixes(new char[]{'b', 'B', 'd', 'D', 'f', 'F', 'l', 'L', 's', 'S'});
 
         config.addKeywords("public", "private", "protected", "abstract", "static", "final", "package", "import");
-        config.addKeywords("void", "var", "val", "class", "record", "interface", "extends", "return", "default");
+        config.addKeywords("try", "catch", "finally");
+        config.addKeywords("void", "var", "val", "class", "interface", "extends", "return", "default");
         config.addKeywords("if", "else", "switch", "case", "break", "continue", "for", "do", "while");
         config.addKeywords("double", "float", "long", "int", "short", "byte", "float", "char", "boolean");
-        config.addKeywords("null");
-        config.addKeywords("def", "struct", "implicit", "const", "is"); //"set", "get"
-        config.addKeywords("super", "this", "constructor", "operator", "true", "false"); //"set", "get"
+        config.addKeywords("null", "true", "false");
+        config.addKeywords("readonly", "strictfp", "volatile","transient");
+
+        config.addKeywords("def", "struct", "const", "is"); //"set", "get"
+        config.addKeywords("super", "this", "constructor", "operator");
         //for future usage
-        config.addKeywords("yield", "_", "it",
+        config.addKeywords("record","instanceof","native","synchronized");
+
+        config.addKeywords("yield", "_", "it", "record","fun", "implicit",
                 "bool","decimal", "bigint", "bigdecimal", "string","object",
                  "date","time","datetime",
                 "int8","int16","int32","int64","int128",
@@ -136,7 +141,7 @@ public final class HadraLanguage extends DefaultJeep {
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, ":*", ":**", ":***");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, "++", "--", "~");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, ":++", ":--", ":~");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_15, ".", "?", ".?", "??");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_15, ".", "?", ".?", "??","::");
 
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, "∘", "±", "∓", "∔", "∴", "∵", "∷");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, "×", "÷");

@@ -88,7 +88,7 @@ public class HCompletionProposals {
     }
 
     static JCompletionProposal proposeType(int offset, JType jtype) {
-        return proposeType(offset,jtype.name());
+        return proposeType(offset,jtype.getName());
     }
 
 

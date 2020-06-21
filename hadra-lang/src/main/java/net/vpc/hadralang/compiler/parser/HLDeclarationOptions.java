@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HLDeclarationOptions {
+    boolean acceptDotName = true;
     boolean acceptFunction = true;
     boolean acceptClass = true;
     boolean acceptEqValue = true;
@@ -116,6 +117,15 @@ public class HLDeclarationOptions {
 
     public HLDeclarationOptions setNoTypeNameOption(NoTypeNameOption noTypeNameOption) {
         this.noTypeNameOption = noTypeNameOption;
+        return this;
+    }
+
+    public boolean isAcceptDotName() {
+        return acceptDotName;
+    }
+
+    public HLDeclarationOptions setAcceptDotName(boolean acceptDotName) {
+        this.acceptDotName = acceptDotName;
         return this;
     }
 

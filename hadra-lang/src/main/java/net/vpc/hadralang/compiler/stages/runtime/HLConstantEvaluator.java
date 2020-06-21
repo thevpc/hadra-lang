@@ -44,9 +44,9 @@ public class HLConstantEvaluator extends HLEvaluator {
                         JMethod m=(JMethod) ii;
                         if (m.isStatic()) {
                             if(
-                                    m.declaringType().name().equals(HJavaDefaultOperators.class.getName())
+                                    m.declaringType().getName().equals(HJavaDefaultOperators.class.getName())
                                             ||
-                                            m.declaringType().name().equals(RangeExtensions.class.getName())){
+                                            m.declaringType().getName().equals(RangeExtensions.class.getName())){
                                 //should i limit methods to call?
                                 //fallthrough
                             }else{

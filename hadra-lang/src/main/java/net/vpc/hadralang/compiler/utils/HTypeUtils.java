@@ -21,13 +21,13 @@ public class HTypeUtils {
 
     public static JType[] tupleArgTypes(JType t) {
         if (!tupleTypeBase(t.types()).isAssignableFrom(t)) {
-            throw new IllegalArgumentException("Expected Tuple Type : " + t.name());
+            throw new IllegalArgumentException("Expected Tuple Type : " + t.getName());
         }
         JType n = t;
         while (n != null) {
-            JType r = n.rawType();
-            if (r.name().startsWith("net.vpc.hadralang.stdlib.Tuple")) {
-                String s = r.name().substring("net.vpc.hadralang.stdlib.Tuple".length());
+            JType r = n.getRawType();
+            if (r.getName().startsWith("net.vpc.hadralang.stdlib.Tuple")) {
+                String s = r.getName().substring("net.vpc.hadralang.stdlib.Tuple".length());
                 if (s.equals("N")) {
                     return new JType[0];
                 }
@@ -38,7 +38,7 @@ public class HTypeUtils {
                     //ignore
                 }
                 if (i < 0) {
-                    throw new IllegalArgumentException("Expected a valid Tuple Type : " + t.name());
+                    throw new IllegalArgumentException("Expected a valid Tuple Type : " + t.getName());
                 }
                 if (i <= Tuple.MAX_ELEMENTS) {
                     JType[] e = new JType[i];
@@ -52,7 +52,7 @@ public class HTypeUtils {
             }
             n = n.getSuperType();
         }
-        throw new IllegalArgumentException("Expected a valid Tuple Type : " + t.name());
+        throw new IllegalArgumentException("Expected a valid Tuple Type : " + t.getName());
     }
 
     public static JType tupleTypeBase(JTypes t) {
@@ -80,7 +80,7 @@ public class HTypeUtils {
     }
 
     public static JType[] extractLambdaArgTypes(JType type) {
-        JMethod[] jMethods = type.declaredMethods();
+        JMethod[] jMethods = type.getDeclaredMethods();
         if (jMethods.length == 1) {
             return jMethods[0].argTypes();
         } else {
@@ -89,9 +89,9 @@ public class HTypeUtils {
     }
 
     public static JType[] extractLambdaArgTypesOrError(JType type, int expectedArgCount, JToken location, JCompilerLog log) {
-        JMethod[] jMethods = type.declaredMethods();
+        JMethod[] jMethods = type.getDeclaredMethods();
         if (jMethods.length > 1) {
-            jMethods = Arrays.stream(type.declaredMethods()).filter(x -> !x.isDefault()
+            jMethods = Arrays.stream(type.getDeclaredMethods()).filter(x -> !x.isDefault()
                     && x.isPublic()
                     && !JTypeUtils.isSynthetic(x.modifiers())
             ).toArray(JMethod[]::new);
@@ -147,7 +147,7 @@ public class HTypeUtils {
                     InitValueConstraint.ITERABLE
             );
         } else if (types.forName("java.util.Iterable").isAssignableFrom(valType)) {
-            if (types.forName("java.util.Iterable").equals(valType.rawType())) {
+            if (types.forName("java.util.Iterable").equals(valType.getRawType())) {
                 JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).actualTypeArguments() : new JType[0];
                 if (a.length == 0) {
                     valType = (JTypeUtils.forObject(types));
@@ -162,7 +162,7 @@ public class HTypeUtils {
                     InitValueConstraint.ITERABLE
             );
         } else if (types.forName("java.util.Iterator").isAssignableFrom(valType)) {
-            if (types.forName("java.util.Iterator").equals(valType.rawType())) {
+            if (types.forName("java.util.Iterator").equals(valType.getRawType())) {
                 JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).actualTypeArguments() : new JType[0];
                 if (a.length == 0) {
                     valType = (JTypeUtils.forObject(types));
@@ -178,7 +178,7 @@ public class HTypeUtils {
             );
         } else if (types.forName("java.util.stream.BaseStream").isAssignableFrom(valType)) {
             if (types.forName("java.util.stream.Stream").isAssignableFrom(valType)) {
-                if (types.forName("java.util.stream.Stream").equals(valType.rawType())) {
+                if (types.forName("java.util.stream.Stream").equals(valType.getRawType())) {
                     JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).actualTypeArguments() : new JType[0];
                     if (a.length == 0) {
                         valType = (JTypeUtils.forObject(types));

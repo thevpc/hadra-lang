@@ -243,7 +243,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
     private StringPrec onIs(HNIs node, HLGenCompilationUnitContext cuctx, JNodePath path) {
         return new StringPrec(nodeToString(node.getBase(), cuctx, path)
                 //always box type in instanceof and de-generify it
-                + " instanceof " + cuctx.nameWithImports(node.getIdentifierType().boxed().rawType()));
+                + " instanceof " + cuctx.nameWithImports(node.getIdentifierType().boxed().getRawType()));
     }
 
     private StringPrec onTypeToken(HNTypeToken node, HLGenCompilationUnitContext cuctx, JNodePath path) {
@@ -276,19 +276,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
     private StringPrec onSwitch(HNSwitch node, HLGenCompilationUnitContext cuctx, JNodePath path) {
         HNode ee = node.getExpr();
         StringBuilder sb = new StringBuilder();
-        if (ee instanceof HNDeclareIdentifier) {
-            HNDeclareIdentifier nid = (HNDeclareIdentifier) ee;
-            String identifierName = ((HNDeclareTokenIdentifier) nid.getIdentifierToken()).getName();
-            sb.append(nid.getIdentifierTypeName());
-            sb.append(" ");
-            sb.append(identifierName);
-            sb.append("=");
-            sb.append(nodeToString(nid.getInitValue(), cuctx, path));
-            sb.append(";");
-            sb.append("\nswitch(").append(identifierName).append("){");
-        } else {
-            sb.append("\nswitch(").append(nodeToString(ee, cuctx, path)).append("){");
-        }
+        sb.append("\nswitch(").append(nodeToString(ee, cuctx, path)).append("){");
         for (HNSwitch.SwitchBranch aCase : node.getCases()) {
             StringBuilder sb2 = new StringBuilder();
             if (aCase instanceof HNSwitch.SwitchCase) {
@@ -805,28 +793,28 @@ public class HLCStage09JavaGenerator implements HLCStage {
     private StringPrec onLiteralDefault(HNLiteralDefault node, HLGenCompilationUnitContext cuctx, JNodePath path) {
         JType t = node.getElement().getType();
         if (t.isPrimitive()) {
-            if (t.name().equals("boolean")) {
+            if (t.getName().equals("boolean")) {
                 return new StringPrec("false");
             }
-            if (t.name().equals("char")) {
+            if (t.getName().equals("char")) {
                 return new StringPrec("'\0'");
             }
-            if (t.name().equals("byte")) {
+            if (t.getName().equals("byte")) {
                 return new StringPrec("(byte)0");
             }
-            if (t.name().equals("short")) {
+            if (t.getName().equals("short")) {
                 return new StringPrec("(short)0");
             }
-            if (t.name().equals("int")) {
+            if (t.getName().equals("int")) {
                 return new StringPrec("0");
             }
-            if (t.name().equals("long")) {
+            if (t.getName().equals("long")) {
                 return new StringPrec("0L");
             }
-            if (t.name().equals("float")) {
+            if (t.getName().equals("float")) {
                 return new StringPrec("0.0f");
             }
-            if (t.name().equals("double")) {
+            if (t.getName().equals("double")) {
                 return new StringPrec("0.0");
             }
             throw new JParseException("Unsupported type " + t);
@@ -1120,7 +1108,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
             JMethod m = (JMethod) invokable;
             StringBuilder sb = new StringBuilder();
             JType t = m.declaringType();
-            if (m.isStatic() && t.name().equals(HJavaDefaultOperators.class.getName())) {
+            if (m.isStatic() && t.getName().equals(HJavaDefaultOperators.class.getName())) {
                 switch (m.name()) {
                     case "neg": {
                         if (args.length == 1) {
@@ -1199,12 +1187,12 @@ public class HLCStage09JavaGenerator implements HLCStage {
             } else {
                 if (m.isStatic()) {
                     boolean doPrint = true;
-                    if (m.declaringType().name().equals("net.vpc.hadralang.stdlib.HDefaults")) {
+                    if (m.declaringType().getName().equals("net.vpc.hadralang.stdlib.HDefaults")) {
                         if (staticStdDefaults) {
                             cuctx.nameWithImports(t, true);
                             doPrint = false;
                         }
-                    } else if (m.declaringType().name().startsWith("net.vpc.hadralang.stdlib.ext.")) {
+                    } else if (m.declaringType().getName().startsWith("net.vpc.hadralang.stdlib.ext.")) {
                         if (staticStdImportExtensions) {
                             cuctx.nameWithImports(t, true);
                             doPrint = true;
@@ -1357,7 +1345,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
                         = !node.isConstructor()
                         && node.getInvokableType() != HLInvokableType.CONSTRUCTOR
                         && node.getInvokableType() != HLInvokableType.MAIN_CONSTRUCTOR
-                        && !node.getReturnType().name().equals("void");
+                        && !node.getReturnType().getName().equals("void");
                 sb.append(onBlock(jb, cuctx, withReturn, true, node.isSetUserObject("javagen.injectRunModule"), path.append(node)));
             }
         }
@@ -1553,7 +1541,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
                     JInvokable ik = m.getInvokable();
                     if (ik instanceof JMethod) {
                         JMethod jm = (JMethod) ik;
-                        if (jm.declaringType().name().equals("net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators")) {
+                        if (jm.declaringType().getName().equals("net.vpc.hadralang.stdlib.ext.HJavaDefaultOperators")) {
                             //this is a standard operator
                             return binop(node.getName(), nodeToString(node.getLeft(), cuctx, path.append(node)), nodeToString(node.getRight(), cuctx, path.append(node)));
                         }

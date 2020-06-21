@@ -52,12 +52,12 @@ public class HLIndexedMethod implements HLIndexedElement{
         if(m.returnType()==null){
             returnType="";
         }else{
-            returnType=m.returnType().name();
+            returnType=m.returnType().getName();
         }
-        declaringType=m.declaringType()==null?"":m.declaringType().name();
+        declaringType=m.declaringType()==null?"":m.declaringType().getName();
         modifiers=m.modifiers();
         parameterNames=m.argNames();
-        parameterTypes=Arrays.stream(m.argTypes()).map(JType::name).toArray(String[]::new);
+        parameterTypes=Arrays.stream(m.argTypes()).map(JType::getName).toArray(String[]::new);
         imports= new String[0];
         this.source=source;
         this.signature=JNameSignature.of(name,parameterTypes);

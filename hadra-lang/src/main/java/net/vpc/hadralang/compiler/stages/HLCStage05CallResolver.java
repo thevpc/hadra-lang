@@ -137,6 +137,9 @@ public class HLCStage05CallResolver extends HLCStageType2 {
             case H_DOT_CLASS: {
                 return onDotClass((HNDotClass) node, compilerContext);
             }
+            case H_DOT_THIS: {
+                return onDotThis((HNDotThis) node, compilerContext);
+            }
             case H_EXTENDS: {
                 return onExtends((HNExtends) node, compilerContext);
             }
@@ -205,6 +208,29 @@ public class HLCStage05CallResolver extends HLCStageType2 {
         return true;
     }
 
+    private boolean onDotThis(HNDotThis node, HLJCompilerContext compilerContext) {
+        HNElementExpr e = (HNElementExpr) node.getElement();
+        if (e.getType() == null) {
+            JType tv = node.getTypeRefName().getTypeVal();
+            if (tv != null) {
+                e.setType(tv);
+            }
+        }
+
+        JType tv = node.getTypeRefName().getTypeVal();
+        if (tv != null) {
+            JType y = compilerContext.lookupEnclosingType(node);
+            while(y!=null) {
+                if (y == tv) {
+                    return true;
+                }
+                y=y.getDeclaringType();
+            }
+            compilerContext.log().error("X000",null,"not an enclosing type : "+tv.getName(),node.startToken());
+        }
+        return true;
+    }
+
     private boolean onReturn(HNReturn node, HLJCompilerContext compilerContext) {
         return true;
     }
@@ -229,24 +255,23 @@ public class HLCStage05CallResolver extends HLCStageType2 {
     }
 
     private boolean onSwitch(HNSwitch node, HLJCompilerContext compilerContext) {
-        JTypeOrLambda t = null;
-        for (HNSwitch.SwitchBranch aCase : node.getCases()) {
-            if (aCase.getOp().isImage("->")) {
-                HNode e = (HNode) aCase.getDoNode();
+        if (node.isExpressionMode()) {
+            JTypeOrLambda t = null;
+            for (HNSwitch.SwitchBranch aCase : node.getCases()) {
+                HNode e = aCase.getDoNode();
                 JTypeOrLambda t2 = e.getElement().getTypeOrLambda();
                 if (t2 == null) {
                     return false;
                 }
                 t = JTypeUtils.firstCommonSuperTypeOrLambda(t, t2, compilerContext.types());
-            } else {
-                ((HNElementExpr) node.getElement()).setType(JTypeUtils.forVoid(compilerContext.types()));
-                return true;
             }
+            if (t == null) {
+                return false;
+            }
+            HNElementExpr.get(node).setType(t);
+        } else {
+            HNElementExpr.get(node).setType(JTypeUtils.forVoid(compilerContext.types()));
         }
-        if (t == null) {
-            return false;
-        }
-        ((HNElementExpr) node.getElement()).setType(t);
         return true;
     }
 
@@ -314,8 +339,8 @@ public class HLCStage05CallResolver extends HLCStageType2 {
         if (exprTypeOrLambda.isType() && JTypeUtils.isBooleanResolvableType(exprTypeOrLambda)) {
             ((HNElementExpr) node.getElement()).setType(JTypeUtils.forVoid(compilerContext.types()));
         } else {
-            JType exprType = compilerContext.types().forName("java.util.function.Supplier<" + exprTypeOrLambda.getType().name() + ">");
-            JType blockType = compilerContext.types().forName("java.util.function.Supplier<" + blockTypeOrLambda.getType().name() + ">");
+            JType exprType = compilerContext.types().forName("java.util.function.Supplier<" + exprTypeOrLambda.getType().getName() + ">");
+            JType blockType = compilerContext.types().forName("java.util.function.Supplier<" + blockTypeOrLambda.getType().getName() + ">");
             FindMatchFailInfo failInfo = new FindMatchFailInfo("<while> function");
             JInvokable fct = compilerContext.lookupFunctionMatch(
                     JOnError.TRACE, "While",
@@ -446,11 +471,11 @@ public class HLCStage05CallResolver extends HLCStageType2 {
             condType = JTypeOrLambda.of(JTypeUtils.forBoolean(compilerContext.types()));
         }
         if (!JTypeUtils.isBooleanResolvableType(condType)) {
-            JType branchesArrayType = compilerContext.types().forName("net.vpc.hadralang.stdlib.Branch<" + condType.getType().name()
+            JType branchesArrayType = compilerContext.types().forName("net.vpc.hadralang.stdlib.Branch<" + condType.getType().getName()
                     + ","
-                    + resultType.getType().name()
+                    + resultType.getType().getName()
                     + ">");
-            JType elseType = compilerContext.types().forName("java.util.function.Supplier<" + resultType.getType().name() + ">");
+            JType elseType = compilerContext.types().forName("java.util.function.Supplier<" + resultType.getType().getName() + ">");
             FindMatchFailInfo failInfo = new FindMatchFailInfo("<if> function");
             JInvokable fct = compilerContext.lookupFunctionMatch(
                     JOnError.TRACE, "if",
@@ -476,9 +501,13 @@ public class HLCStage05CallResolver extends HLCStageType2 {
 
     private boolean onPars(HNPars node, HLJCompilerContext compilerContext) {
         if (node.getItems().length == 1) {
-            HNode n = (HNode) node.getItems()[0];
+            HNode n = node.getItems()[0];
             if (n.getElement().getTypeOrLambda() != null) {
-                ((HNElementExpr) node.getElement()).setType(n.getElement().getTypeOrLambda());
+                if(node.getElement() instanceof HNElementExpr){
+                    HNElementExpr.get(node).setType(n.getElement().getTypeOrLambda());
+                }else {
+                    node.setElement(new HNElementExpr(n.getElement().getTypeOrLambda()));
+                }
                 return true;
             }
         }
@@ -581,7 +610,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
             if (baseToL.getType().isArray()) {
                 if (Arrays.stream(inodes)
                         .map(x -> compilerContext.jTypeOrLambda(showFinalErrors, x))
-                        .allMatch(x -> x.isType() && x.getType().boxed().name().equals("java.lang.Integer"))) {
+                        .allMatch(x -> x.isType() && x.getType().boxed().getName().equals("java.lang.Integer"))) {
                     // this is a regular array
                     JTypeArray arrType = (JTypeArray) baseToL.getType();
                     if (arrType.arrayDimension() >= inodes.length) {
@@ -732,7 +761,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                     if (baseToL.getType().isArray()) {
                         if (indicesNodes.stream()
                                 .map(x -> compilerContext.jTypeOrLambda(showFinalErrors, x))
-                                .allMatch(x -> x.isType() && x.getType().boxed().name().equals("java.lang.Integer"))) {
+                                .allMatch(x -> x.isType() && x.getType().boxed().getName().equals("java.lang.Integer"))) {
                             // this is a regular array
                             JTypeArray arrType = (JTypeArray) baseToL.getType();
                             if (arrType.arrayDimension() >= indicesNodes.size()) {
@@ -966,8 +995,8 @@ public class HLCStage05CallResolver extends HLCStageType2 {
 //    }
 
     private boolean onAssign(HNAssign node, HLJCompilerContext compilerContext) {
-        HNode left = (HNode) node.getLeft();
-        HNode right = (HNode) node.getRight();
+        HNode left = node.getLeft();
+        HNode right = node.getRight();
         if (onAssign_deconstruct(left, right, compilerContext)) {
             ((HNElementAssign) node.getElement()).setType(left.getElement().getTypeOrLambda());
             if (left.isSetUserObject("StaticLHS")) {
@@ -1035,7 +1064,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                     HNElementLocalVar lv = (HNElementLocalVar) e;
                     HNDeclareIdentifier id = compilerContext.lookupEnclosingDeclareIdentifier(identifierToken);
                     if (id != null) {
-                        if (id.getAssignOperator()==null || id.getAssignOperator().isImage("=")) {
+                        if (id.getAssignOperator() == null || id.getAssignOperator().isImage("=")) {
                             lv.setEffectiveType(identifierType.getType());
                         } else if (id.getAssignOperator().isImage(":")) {
                             ElementTypeAndConstraint cc = HTypeUtils.resolveIterableComponentType(identifierType.getType(), compilerContext.types());
@@ -1057,7 +1086,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
         } else if (identifierToken instanceof HNDeclareTokenTuple) {
             HNDeclareTokenTuple tt = (HNDeclareTokenTuple) identifierToken;
             if (!HTypeUtils.isTupleType(identifierType.getType())) {
-                compilerContext.log().error("S000", null, "expected tuple type, found " + identifierType.getType().name(), identifierToken.startToken());
+                compilerContext.log().error("S000", null, "expected tuple type, found " + identifierType.getType().getName(), identifierToken.startToken());
             } else {
                 JType[] jTypes = HTypeUtils.tupleArgTypes(identifierType.getType());
                 if (jTypes.length != tt.getItems().length) {
@@ -1157,8 +1186,37 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                 }
                 break;
             }
-        }
+            case H_TYPE_TOKEN: {
+                HNTypeToken d = (HNTypeToken) left;
+                JType declaringType = d.getTypeVal();
+                if(declaringType==null){
+                    return false;
+                }
+                JInvokable m = compilerContext.findConstructorMatch(JOnError.TRACE, declaringType, argTypes.toArray(new JTypeOrLambda[0]), node.startToken(), null);
+                if (m != null) {
+                    HNElement e = node.getElement();
+                    if (e instanceof HNElementConstructor) {
+                        HNElementConstructor cc = (HNElementConstructor) e;
+                        cc.setInvokable(m);
+                        cc.setArgNodes(arguments.toArray(new HNode[0]));
+                    } else {
+                        setElement(node, new HNElementConstructor(declaringType, m, arguments.toArray(new HNode[0])));
+                    }
+                }
+                return true;
 
+            }
+        }
+        JTypeOrLambda t = compilerContext.jTypeOrLambda(node.getLeft());
+        if(t==null){
+            return false;
+        }
+        if(t.isLambda()){
+            compilerContext.log().error("X000",null,"unresolved call of a lambda expression",node.getRight().get(0).startToken());
+            return true;
+        }
+        argTypes.add(0,t);
+        arguments.add(0,node.getLeft());
         JInvokable ctrInvokable = compilerContext.lookupFunctionMatch(JOnError.TRACE, HLExtensionNames.FUNCTION_APPLY, HFunctionType.SPECIAL, argTypes.toArray(new JTypeOrLambda[0]), node.startToken(), null);
         if (ctrInvokable != null) {
             HNElementMethod element = new HNElementMethod(ctrInvokable);
@@ -1259,7 +1317,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                             ert = JTypeUtils.forVoid(compilerContext.types());
                             method.setGenericReturnType(ert);
                             compilerContext.indexer().indexMethod(new HLIndexedMethod(method, HUtils.getSourceName(node)));
-                        }else{
+                        } else {
                             HNode[] exitPoints = initValue.getExitPoints();
                             if (exitPoints.length == 0) {
                                 compilerContext.log().error("S000", null, "type inference failed for function/method without body", initValue.startToken());
@@ -1278,7 +1336,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                                         ert = ert == null ? args[i].getType() : ert.firstCommonSuperType(args[i].getType());
                                     }
                                 }
-                                if (!error && ert!=null) {
+                                if (!error && ert != null) {
                                     //ert = method.genericReturnType();
                                     method.setGenericReturnType(ert);
                                     compilerContext.indexer().indexMethod(new HLIndexedMethod(method, HUtils.getSourceName(node)));
@@ -1337,7 +1395,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
             case "++":
             case "--": {
                 if (args[0].isType()) {
-                    switch (args[0].getType().name()) {
+                    switch (args[0].getType().getName()) {
                         case "byte":
                         case "short":
                         case "char":

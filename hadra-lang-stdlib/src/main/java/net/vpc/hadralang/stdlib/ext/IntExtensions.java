@@ -12,6 +12,14 @@ public class IntExtensions {
         return s.length - 1;
     }
 
+    public static int sum(int[] array) {
+        int a=0;
+        for (int i : array) {
+            a+=i;
+        }
+        return a;
+    }
+
     public static int[] getAt(int[] array, IntRange range) {
 
         int from = range.lowerValueInclusive();

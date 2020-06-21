@@ -18,7 +18,7 @@ public class HLUtils {
     public static final int EXPAND_RANGE_SIZE = 50;
 
     public static Object checkSimpleValue(Object value, JNode node, JType type, HLJCompilerContext compilerContextBase, boolean acceptSwitchCaseAlternatives, boolean[] refError) {
-        if (type.boxed().name().equals(Byte.class.getName())) {
+        if (type.boxed().getName().equals(Byte.class.getName())) {
             if (value instanceof Long || value instanceof Integer || value instanceof Short || value instanceof Byte) {
                 long f = ((Number) value).longValue();
                 if (f < Byte.MIN_VALUE || f > Byte.MAX_VALUE) {
@@ -46,7 +46,7 @@ public class HLUtils {
                 compilerContextBase.log().error("X451", null, "expected constant byte value", node.startToken());
                 return 0;
             }
-        } else if (type.boxed().name().equals(Short.class.getName())) {
+        } else if (type.boxed().getName().equals(Short.class.getName())) {
             if (value instanceof Long || value instanceof Integer || value instanceof Short || value instanceof Byte) {
                 long f = ((Number) value).longValue();
                 if (f < Short.MIN_VALUE || f > Short.MAX_VALUE) {
@@ -74,7 +74,7 @@ public class HLUtils {
                 compilerContextBase.log().error("X453", null, "expected constant short value", node.startToken());
                 return 0;
             }
-        } else if (type.boxed().name().equals(Character.class.getName())) {
+        } else if (type.boxed().getName().equals(Character.class.getName())) {
             if (value instanceof Character) {
                 return (char) value;
             } else if (value instanceof Long || value instanceof Integer || value instanceof Short || value instanceof Byte) {
@@ -104,7 +104,7 @@ public class HLUtils {
                 compilerContextBase.log().error("X456", null, "expected constant short value", node.startToken());
                 return 0;
             }
-        } else if (type.boxed().name().equals(Integer.class.getName())) {
+        } else if (type.boxed().getName().equals(Integer.class.getName())) {
             if (value instanceof Long || value instanceof Integer || value instanceof Short || value instanceof Byte) {
                 long f = ((Number) value).longValue();
                 if (f < Integer.MIN_VALUE || f > Integer.MAX_VALUE) {
@@ -132,7 +132,7 @@ public class HLUtils {
                 compilerContextBase.log().error("X458", null, "expected constant int value", node.startToken());
                 return 0;
             }
-        } else if (type.boxed().name().equals(Long.class.getName())) {
+        } else if (type.boxed().getName().equals(Long.class.getName())) {
             if (value instanceof Long || value instanceof Integer || value instanceof Short || value instanceof Byte) {
                 return ((Number) value).longValue();
             } else if (value instanceof BigInteger) {
@@ -155,7 +155,7 @@ public class HLUtils {
                 compilerContextBase.log().error("X460", null, "expected constant long value", node.startToken());
                 return 0;
             }
-        } else if (type.boxed().name().equals(BigInteger.class.getName())) {
+        } else if (type.boxed().getName().equals(BigInteger.class.getName())) {
             if (value instanceof Long || value instanceof Integer || value instanceof Short || value instanceof Byte) {
                 return BigInteger.valueOf(((Number) value).longValue());
             } else if (value instanceof BigInteger) {
@@ -170,7 +170,7 @@ public class HLUtils {
                 compilerContextBase.log().error("X461", null, "expected constant bigint value", node.startToken());
                 return 0;
             }
-        } else if (type.boxed().name().equals(Float.class.getName())) {
+        } else if (type.boxed().getName().equals(Float.class.getName())) {
             if (value instanceof Double || value instanceof Float || value instanceof Long || value instanceof Integer || value instanceof Short || value instanceof Byte) {
                 double f = ((Number) value).doubleValue();
                 if (f < Float.MIN_VALUE || f > Float.MAX_VALUE) {
@@ -209,7 +209,7 @@ public class HLUtils {
                 compilerContextBase.log().error("X464", null, "expected constant float value", node.startToken());
                 return 0;
             }
-        } else if (type.boxed().name().equals(Double.class.getName())) {
+        } else if (type.boxed().getName().equals(Double.class.getName())) {
             if (value instanceof Double || value instanceof Float || value instanceof Long || value instanceof Integer || value instanceof Short || value instanceof Byte) {
                 return ((Number) value).doubleValue();
             } else if (value instanceof BigInteger) {
@@ -243,7 +243,7 @@ public class HLUtils {
                 compilerContextBase.log().error("X466", null, "expected constant double value", node.startToken());
                 return 0;
             }
-        } else if (type.boxed().name().equals(BigDecimal.class.getName())) {
+        } else if (type.boxed().getName().equals(BigDecimal.class.getName())) {
             if (value instanceof Double || value instanceof Float || value instanceof Long || value instanceof Integer || value instanceof Short || value instanceof Byte) {
                 return BigDecimal.valueOf(((Number) value).doubleValue());
             } else if (value instanceof BigInteger) {
@@ -261,7 +261,7 @@ public class HLUtils {
                 compilerContextBase.log().error("X466", null, "expected constant double value", node.startToken());
                 return 0;
             }
-        } else if (type.boxed().name().equals(Boolean.class.getName())) {
+        } else if (type.boxed().getName().equals(Boolean.class.getName())) {
             if (value instanceof Boolean) {
                 return value;
             } else {
@@ -269,7 +269,7 @@ public class HLUtils {
                 compilerContextBase.log().error("X467", null, "expected constant boolean value", node.startToken());
                 return false;
             }
-        } else if (type.boxed().name().equals(String.class.getName())) {
+        } else if (type.boxed().getName().equals(String.class.getName())) {
             if (value instanceof String) {
                 return value;
             } else {
@@ -284,21 +284,21 @@ public class HLUtils {
             }
         } else if (type.isAssignableFrom(compilerContextBase.context().types().typeOf(value))) {
             return value;
-        } else if (type.name().equals(Pattern.class.getName())) {
+        } else if (type.getName().equals(Pattern.class.getName())) {
             if (value instanceof Pattern) {
                 return value;
             } else if (value instanceof CharSequence) {
                 refError[0]=true;
-                compilerContextBase.log().error("X469", null, "expected constant " + type.name() + " value", node.startToken());
+                compilerContextBase.log().error("X469", null, "expected constant " + type.getName() + " value", node.startToken());
                 return Pattern.compile(value.toString());
             } else {
                 refError[0]=true;
-                compilerContextBase.log().error("X469", null, "expected constant " + type.name() + " value", node.startToken());
+                compilerContextBase.log().error("X469", null, "expected constant " + type.getName() + " value", node.startToken());
                 return null;
             }
         } else {
             refError[0]=true;
-            compilerContextBase.log().error("X469", null, "expected constant " + type.name() + " value", node.startToken());
+            compilerContextBase.log().error("X469", null, "expected constant " + type.getName() + " value", node.startToken());
             return null;
         }
     }
@@ -334,25 +334,25 @@ public class HLUtils {
     public static Object simplifyCaseLiteral(JNode n, JType type, HLJCompilerContext compilerContextBase, boolean acceptSwitchCaseAlternatives, boolean[] refError) {
         JTypes types = compilerContextBase.types();
         Map<String,JTypedValue> csts=new HashMap<>();
-        if (type.boxed().name().equals(Byte.class.getName())) {
+        if (type.boxed().getName().equals(Byte.class.getName())) {
             csts.put("MIN_VALUE",new DefaultJTypedValue(Byte.MIN_VALUE, JTypeUtils.forByte(types)));
             csts.put("MAX_VALUE",new DefaultJTypedValue(Byte.MAX_VALUE, JTypeUtils.forByte(types)));
-        } else if (type.boxed().name().equals(Short.class.getName())) {
+        } else if (type.boxed().getName().equals(Short.class.getName())) {
             csts.put("MIN_VALUE",new DefaultJTypedValue(Short.MIN_VALUE, JTypeUtils.forShort(types)));
             csts.put("MAX_VALUE",new DefaultJTypedValue(Short.MAX_VALUE, JTypeUtils.forShort(types)));
-        } else if (type.boxed().name().equals(Integer.class.getName())) {
+        } else if (type.boxed().getName().equals(Integer.class.getName())) {
             csts.put("MIN_VALUE",new DefaultJTypedValue(Integer.MIN_VALUE, JTypeUtils.forInt(types)));
             csts.put("MAX_VALUE",new DefaultJTypedValue(Integer.MAX_VALUE, JTypeUtils.forInt(types)));
-        } else if (type.boxed().name().equals(Long.class.getName())) {
+        } else if (type.boxed().getName().equals(Long.class.getName())) {
             csts.put("MIN_VALUE",new DefaultJTypedValue(Long.MIN_VALUE, JTypeUtils.forLong(types)));
             csts.put("MAX_VALUE",new DefaultJTypedValue(Long.MAX_VALUE, JTypeUtils.forLong(types)));
-        } else if (type.boxed().name().equals(Float.class.getName())) {
+        } else if (type.boxed().getName().equals(Float.class.getName())) {
             csts.put("MIN_VALUE",new DefaultJTypedValue(Float.MIN_VALUE, JTypeUtils.forFloat(types)));
             csts.put("MAX_VALUE",new DefaultJTypedValue(Float.MAX_VALUE, JTypeUtils.forFloat(types)));
             csts.put("POSITIVE_INFINITY",new DefaultJTypedValue(Float.POSITIVE_INFINITY, JTypeUtils.forFloat(types)));
             csts.put("NEGATIVE_INFINITY",new DefaultJTypedValue(Float.NEGATIVE_INFINITY, JTypeUtils.forFloat(types)));
             csts.put("NaN",new DefaultJTypedValue(Float.NaN, JTypeUtils.forFloat(types)));
-        } else if (type.boxed().name().equals(Double.class.getName())) {
+        } else if (type.boxed().getName().equals(Double.class.getName())) {
             JType aDouble = JTypeUtils.forDouble(types);
             csts.put("MIN_VALUE",new DefaultJTypedValue(Double.MIN_VALUE, aDouble));
             csts.put("MAX_VALUE",new DefaultJTypedValue(Double.MAX_VALUE, aDouble));

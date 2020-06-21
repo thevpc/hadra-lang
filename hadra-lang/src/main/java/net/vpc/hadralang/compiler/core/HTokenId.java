@@ -285,9 +285,23 @@ public final class HTokenId {
     public static final int KEYWORD_CASE = 508;
 
     /**
-     * Token Id for KEYWORD_CHAR
+     * Token Id for KEYWORD_CATCH
      * <pre>
      * ID         : 509
+     * ID_NAME    : KEYWORD_CATCH
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : catch
+     * </pre>
+     */
+    public static final int KEYWORD_CATCH = 509;
+
+    /**
+     * Token Id for KEYWORD_CHAR
+     * <pre>
+     * ID         : 510
      * ID_NAME    : KEYWORD_CHAR
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -296,12 +310,12 @@ public final class HTokenId {
      * LAYOUT     : char
      * </pre>
      */
-    public static final int KEYWORD_CHAR = 509;
+    public static final int KEYWORD_CHAR = 510;
 
     /**
      * Token Id for KEYWORD_CLASS
      * <pre>
-     * ID         : 510
+     * ID         : 511
      * ID_NAME    : KEYWORD_CLASS
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -310,12 +324,12 @@ public final class HTokenId {
      * LAYOUT     : class
      * </pre>
      */
-    public static final int KEYWORD_CLASS = 510;
+    public static final int KEYWORD_CLASS = 511;
 
     /**
      * Token Id for KEYWORD_CONST
      * <pre>
-     * ID         : 511
+     * ID         : 512
      * ID_NAME    : KEYWORD_CONST
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -324,12 +338,12 @@ public final class HTokenId {
      * LAYOUT     : const
      * </pre>
      */
-    public static final int KEYWORD_CONST = 511;
+    public static final int KEYWORD_CONST = 512;
 
     /**
      * Token Id for KEYWORD_CONSTRUCTOR
      * <pre>
-     * ID         : 512
+     * ID         : 513
      * ID_NAME    : KEYWORD_CONSTRUCTOR
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -338,12 +352,12 @@ public final class HTokenId {
      * LAYOUT     : constructor
      * </pre>
      */
-    public static final int KEYWORD_CONSTRUCTOR = 512;
+    public static final int KEYWORD_CONSTRUCTOR = 513;
 
     /**
      * Token Id for KEYWORD_CONTINUE
      * <pre>
-     * ID         : 513
+     * ID         : 514
      * ID_NAME    : KEYWORD_CONTINUE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -352,12 +366,12 @@ public final class HTokenId {
      * LAYOUT     : continue
      * </pre>
      */
-    public static final int KEYWORD_CONTINUE = 513;
+    public static final int KEYWORD_CONTINUE = 514;
 
     /**
      * Token Id for KEYWORD_DATE
      * <pre>
-     * ID         : 514
+     * ID         : 515
      * ID_NAME    : KEYWORD_DATE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -366,12 +380,12 @@ public final class HTokenId {
      * LAYOUT     : date
      * </pre>
      */
-    public static final int KEYWORD_DATE = 514;
+    public static final int KEYWORD_DATE = 515;
 
     /**
      * Token Id for KEYWORD_DATETIME
      * <pre>
-     * ID         : 515
+     * ID         : 516
      * ID_NAME    : KEYWORD_DATETIME
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -380,12 +394,12 @@ public final class HTokenId {
      * LAYOUT     : datetime
      * </pre>
      */
-    public static final int KEYWORD_DATETIME = 515;
+    public static final int KEYWORD_DATETIME = 516;
 
     /**
      * Token Id for KEYWORD_DECIMAL
      * <pre>
-     * ID         : 516
+     * ID         : 517
      * ID_NAME    : KEYWORD_DECIMAL
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -394,12 +408,12 @@ public final class HTokenId {
      * LAYOUT     : decimal
      * </pre>
      */
-    public static final int KEYWORD_DECIMAL = 516;
+    public static final int KEYWORD_DECIMAL = 517;
 
     /**
      * Token Id for KEYWORD_DEF
      * <pre>
-     * ID         : 517
+     * ID         : 518
      * ID_NAME    : KEYWORD_DEF
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -408,12 +422,12 @@ public final class HTokenId {
      * LAYOUT     : def
      * </pre>
      */
-    public static final int KEYWORD_DEF = 517;
+    public static final int KEYWORD_DEF = 518;
 
     /**
      * Token Id for KEYWORD_DEFAULT
      * <pre>
-     * ID         : 518
+     * ID         : 519
      * ID_NAME    : KEYWORD_DEFAULT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -422,12 +436,12 @@ public final class HTokenId {
      * LAYOUT     : default
      * </pre>
      */
-    public static final int KEYWORD_DEFAULT = 518;
+    public static final int KEYWORD_DEFAULT = 519;
 
     /**
      * Token Id for KEYWORD_DO
      * <pre>
-     * ID         : 519
+     * ID         : 520
      * ID_NAME    : KEYWORD_DO
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -436,12 +450,12 @@ public final class HTokenId {
      * LAYOUT     : do
      * </pre>
      */
-    public static final int KEYWORD_DO = 519;
+    public static final int KEYWORD_DO = 520;
 
     /**
      * Token Id for KEYWORD_DOUBLE
      * <pre>
-     * ID         : 520
+     * ID         : 521
      * ID_NAME    : KEYWORD_DOUBLE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -450,12 +464,12 @@ public final class HTokenId {
      * LAYOUT     : double
      * </pre>
      */
-    public static final int KEYWORD_DOUBLE = 520;
+    public static final int KEYWORD_DOUBLE = 521;
 
     /**
      * Token Id for KEYWORD_ELSE
      * <pre>
-     * ID         : 521
+     * ID         : 522
      * ID_NAME    : KEYWORD_ELSE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -464,12 +478,12 @@ public final class HTokenId {
      * LAYOUT     : else
      * </pre>
      */
-    public static final int KEYWORD_ELSE = 521;
+    public static final int KEYWORD_ELSE = 522;
 
     /**
      * Token Id for KEYWORD_EXTENDS
      * <pre>
-     * ID         : 522
+     * ID         : 523
      * ID_NAME    : KEYWORD_EXTENDS
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -478,12 +492,12 @@ public final class HTokenId {
      * LAYOUT     : extends
      * </pre>
      */
-    public static final int KEYWORD_EXTENDS = 522;
+    public static final int KEYWORD_EXTENDS = 523;
 
     /**
      * Token Id for KEYWORD_FALSE
      * <pre>
-     * ID         : 523
+     * ID         : 524
      * ID_NAME    : KEYWORD_FALSE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -492,12 +506,12 @@ public final class HTokenId {
      * LAYOUT     : false
      * </pre>
      */
-    public static final int KEYWORD_FALSE = 523;
+    public static final int KEYWORD_FALSE = 524;
 
     /**
      * Token Id for KEYWORD_FINAL
      * <pre>
-     * ID         : 524
+     * ID         : 525
      * ID_NAME    : KEYWORD_FINAL
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -506,12 +520,26 @@ public final class HTokenId {
      * LAYOUT     : final
      * </pre>
      */
-    public static final int KEYWORD_FINAL = 524;
+    public static final int KEYWORD_FINAL = 525;
+
+    /**
+     * Token Id for KEYWORD_FINALLY
+     * <pre>
+     * ID         : 526
+     * ID_NAME    : KEYWORD_FINALLY
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : finally
+     * </pre>
+     */
+    public static final int KEYWORD_FINALLY = 526;
 
     /**
      * Token Id for KEYWORD_FLOAT
      * <pre>
-     * ID         : 525
+     * ID         : 527
      * ID_NAME    : KEYWORD_FLOAT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -520,12 +548,12 @@ public final class HTokenId {
      * LAYOUT     : float
      * </pre>
      */
-    public static final int KEYWORD_FLOAT = 525;
+    public static final int KEYWORD_FLOAT = 527;
 
     /**
      * Token Id for KEYWORD_FOR
      * <pre>
-     * ID         : 526
+     * ID         : 528
      * ID_NAME    : KEYWORD_FOR
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -534,12 +562,26 @@ public final class HTokenId {
      * LAYOUT     : for
      * </pre>
      */
-    public static final int KEYWORD_FOR = 526;
+    public static final int KEYWORD_FOR = 528;
+
+    /**
+     * Token Id for KEYWORD_FUN
+     * <pre>
+     * ID         : 529
+     * ID_NAME    : KEYWORD_FUN
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : fun
+     * </pre>
+     */
+    public static final int KEYWORD_FUN = 529;
 
     /**
      * Token Id for KEYWORD_IF
      * <pre>
-     * ID         : 527
+     * ID         : 530
      * ID_NAME    : KEYWORD_IF
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -548,12 +590,12 @@ public final class HTokenId {
      * LAYOUT     : if
      * </pre>
      */
-    public static final int KEYWORD_IF = 527;
+    public static final int KEYWORD_IF = 530;
 
     /**
      * Token Id for KEYWORD_IMPLICIT
      * <pre>
-     * ID         : 528
+     * ID         : 531
      * ID_NAME    : KEYWORD_IMPLICIT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -562,12 +604,12 @@ public final class HTokenId {
      * LAYOUT     : implicit
      * </pre>
      */
-    public static final int KEYWORD_IMPLICIT = 528;
+    public static final int KEYWORD_IMPLICIT = 531;
 
     /**
      * Token Id for KEYWORD_IMPORT
      * <pre>
-     * ID         : 529
+     * ID         : 532
      * ID_NAME    : KEYWORD_IMPORT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -576,12 +618,12 @@ public final class HTokenId {
      * LAYOUT     : import
      * </pre>
      */
-    public static final int KEYWORD_IMPORT = 529;
+    public static final int KEYWORD_IMPORT = 532;
 
     /**
      * Token Id for KEYWORD_INIT
      * <pre>
-     * ID         : 530
+     * ID         : 533
      * ID_NAME    : KEYWORD_INIT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -590,12 +632,26 @@ public final class HTokenId {
      * LAYOUT     : init
      * </pre>
      */
-    public static final int KEYWORD_INIT = 530;
+    public static final int KEYWORD_INIT = 533;
+
+    /**
+     * Token Id for KEYWORD_INSTANCEOF
+     * <pre>
+     * ID         : 534
+     * ID_NAME    : KEYWORD_INSTANCEOF
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : instanceof
+     * </pre>
+     */
+    public static final int KEYWORD_INSTANCEOF = 534;
 
     /**
      * Token Id for KEYWORD_INT
      * <pre>
-     * ID         : 531
+     * ID         : 535
      * ID_NAME    : KEYWORD_INT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -604,12 +660,12 @@ public final class HTokenId {
      * LAYOUT     : int
      * </pre>
      */
-    public static final int KEYWORD_INT = 531;
+    public static final int KEYWORD_INT = 535;
 
     /**
      * Token Id for KEYWORD_INT128
      * <pre>
-     * ID         : 532
+     * ID         : 536
      * ID_NAME    : KEYWORD_INT128
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -618,12 +674,12 @@ public final class HTokenId {
      * LAYOUT     : int128
      * </pre>
      */
-    public static final int KEYWORD_INT128 = 532;
+    public static final int KEYWORD_INT128 = 536;
 
     /**
      * Token Id for KEYWORD_INT16
      * <pre>
-     * ID         : 533
+     * ID         : 537
      * ID_NAME    : KEYWORD_INT16
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -632,12 +688,12 @@ public final class HTokenId {
      * LAYOUT     : int16
      * </pre>
      */
-    public static final int KEYWORD_INT16 = 533;
+    public static final int KEYWORD_INT16 = 537;
 
     /**
      * Token Id for KEYWORD_INT32
      * <pre>
-     * ID         : 534
+     * ID         : 538
      * ID_NAME    : KEYWORD_INT32
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -646,12 +702,12 @@ public final class HTokenId {
      * LAYOUT     : int32
      * </pre>
      */
-    public static final int KEYWORD_INT32 = 534;
+    public static final int KEYWORD_INT32 = 538;
 
     /**
      * Token Id for KEYWORD_INT64
      * <pre>
-     * ID         : 535
+     * ID         : 539
      * ID_NAME    : KEYWORD_INT64
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -660,12 +716,12 @@ public final class HTokenId {
      * LAYOUT     : int64
      * </pre>
      */
-    public static final int KEYWORD_INT64 = 535;
+    public static final int KEYWORD_INT64 = 539;
 
     /**
      * Token Id for KEYWORD_INT8
      * <pre>
-     * ID         : 536
+     * ID         : 540
      * ID_NAME    : KEYWORD_INT8
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -674,12 +730,12 @@ public final class HTokenId {
      * LAYOUT     : int8
      * </pre>
      */
-    public static final int KEYWORD_INT8 = 536;
+    public static final int KEYWORD_INT8 = 540;
 
     /**
      * Token Id for KEYWORD_INTERFACE
      * <pre>
-     * ID         : 537
+     * ID         : 541
      * ID_NAME    : KEYWORD_INTERFACE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -688,12 +744,12 @@ public final class HTokenId {
      * LAYOUT     : interface
      * </pre>
      */
-    public static final int KEYWORD_INTERFACE = 537;
+    public static final int KEYWORD_INTERFACE = 541;
 
     /**
      * Token Id for KEYWORD_IS
      * <pre>
-     * ID         : 538
+     * ID         : 542
      * ID_NAME    : KEYWORD_IS
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -702,12 +758,12 @@ public final class HTokenId {
      * LAYOUT     : is
      * </pre>
      */
-    public static final int KEYWORD_IS = 538;
+    public static final int KEYWORD_IS = 542;
 
     /**
      * Token Id for KEYWORD_IT
      * <pre>
-     * ID         : 539
+     * ID         : 543
      * ID_NAME    : KEYWORD_IT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -716,12 +772,12 @@ public final class HTokenId {
      * LAYOUT     : it
      * </pre>
      */
-    public static final int KEYWORD_IT = 539;
+    public static final int KEYWORD_IT = 543;
 
     /**
      * Token Id for KEYWORD_LONG
      * <pre>
-     * ID         : 540
+     * ID         : 544
      * ID_NAME    : KEYWORD_LONG
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -730,12 +786,26 @@ public final class HTokenId {
      * LAYOUT     : long
      * </pre>
      */
-    public static final int KEYWORD_LONG = 540;
+    public static final int KEYWORD_LONG = 544;
+
+    /**
+     * Token Id for KEYWORD_NATIVE
+     * <pre>
+     * ID         : 545
+     * ID_NAME    : KEYWORD_NATIVE
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : native
+     * </pre>
+     */
+    public static final int KEYWORD_NATIVE = 545;
 
     /**
      * Token Id for KEYWORD_NULL
      * <pre>
-     * ID         : 541
+     * ID         : 546
      * ID_NAME    : KEYWORD_NULL
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -744,12 +814,12 @@ public final class HTokenId {
      * LAYOUT     : null
      * </pre>
      */
-    public static final int KEYWORD_NULL = 541;
+    public static final int KEYWORD_NULL = 546;
 
     /**
      * Token Id for KEYWORD_OBJECT
      * <pre>
-     * ID         : 542
+     * ID         : 547
      * ID_NAME    : KEYWORD_OBJECT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -758,12 +828,12 @@ public final class HTokenId {
      * LAYOUT     : object
      * </pre>
      */
-    public static final int KEYWORD_OBJECT = 542;
+    public static final int KEYWORD_OBJECT = 547;
 
     /**
      * Token Id for KEYWORD_OPERATOR
      * <pre>
-     * ID         : 543
+     * ID         : 548
      * ID_NAME    : KEYWORD_OPERATOR
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -772,12 +842,12 @@ public final class HTokenId {
      * LAYOUT     : operator
      * </pre>
      */
-    public static final int KEYWORD_OPERATOR = 543;
+    public static final int KEYWORD_OPERATOR = 548;
 
     /**
      * Token Id for KEYWORD_PACKAGE
      * <pre>
-     * ID         : 544
+     * ID         : 549
      * ID_NAME    : KEYWORD_PACKAGE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -786,12 +856,12 @@ public final class HTokenId {
      * LAYOUT     : package
      * </pre>
      */
-    public static final int KEYWORD_PACKAGE = 544;
+    public static final int KEYWORD_PACKAGE = 549;
 
     /**
      * Token Id for KEYWORD_PRIVATE
      * <pre>
-     * ID         : 545
+     * ID         : 550
      * ID_NAME    : KEYWORD_PRIVATE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -800,12 +870,12 @@ public final class HTokenId {
      * LAYOUT     : private
      * </pre>
      */
-    public static final int KEYWORD_PRIVATE = 545;
+    public static final int KEYWORD_PRIVATE = 550;
 
     /**
      * Token Id for KEYWORD_PROTECTED
      * <pre>
-     * ID         : 546
+     * ID         : 551
      * ID_NAME    : KEYWORD_PROTECTED
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -814,12 +884,12 @@ public final class HTokenId {
      * LAYOUT     : protected
      * </pre>
      */
-    public static final int KEYWORD_PROTECTED = 546;
+    public static final int KEYWORD_PROTECTED = 551;
 
     /**
      * Token Id for KEYWORD_PUBLIC
      * <pre>
-     * ID         : 547
+     * ID         : 552
      * ID_NAME    : KEYWORD_PUBLIC
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -828,12 +898,26 @@ public final class HTokenId {
      * LAYOUT     : public
      * </pre>
      */
-    public static final int KEYWORD_PUBLIC = 547;
+    public static final int KEYWORD_PUBLIC = 552;
+
+    /**
+     * Token Id for KEYWORD_READONLY
+     * <pre>
+     * ID         : 553
+     * ID_NAME    : KEYWORD_READONLY
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : readonly
+     * </pre>
+     */
+    public static final int KEYWORD_READONLY = 553;
 
     /**
      * Token Id for KEYWORD_RECORD
      * <pre>
-     * ID         : 548
+     * ID         : 554
      * ID_NAME    : KEYWORD_RECORD
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -842,12 +926,12 @@ public final class HTokenId {
      * LAYOUT     : record
      * </pre>
      */
-    public static final int KEYWORD_RECORD = 548;
+    public static final int KEYWORD_RECORD = 554;
 
     /**
      * Token Id for KEYWORD_REF
      * <pre>
-     * ID         : 549
+     * ID         : 555
      * ID_NAME    : KEYWORD_REF
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -856,12 +940,12 @@ public final class HTokenId {
      * LAYOUT     : ref
      * </pre>
      */
-    public static final int KEYWORD_REF = 549;
+    public static final int KEYWORD_REF = 555;
 
     /**
      * Token Id for KEYWORD_RETURN
      * <pre>
-     * ID         : 550
+     * ID         : 556
      * ID_NAME    : KEYWORD_RETURN
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -870,12 +954,12 @@ public final class HTokenId {
      * LAYOUT     : return
      * </pre>
      */
-    public static final int KEYWORD_RETURN = 550;
+    public static final int KEYWORD_RETURN = 556;
 
     /**
      * Token Id for KEYWORD_SHORT
      * <pre>
-     * ID         : 551
+     * ID         : 557
      * ID_NAME    : KEYWORD_SHORT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -884,12 +968,12 @@ public final class HTokenId {
      * LAYOUT     : short
      * </pre>
      */
-    public static final int KEYWORD_SHORT = 551;
+    public static final int KEYWORD_SHORT = 557;
 
     /**
      * Token Id for KEYWORD_STATIC
      * <pre>
-     * ID         : 552
+     * ID         : 558
      * ID_NAME    : KEYWORD_STATIC
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -898,12 +982,26 @@ public final class HTokenId {
      * LAYOUT     : static
      * </pre>
      */
-    public static final int KEYWORD_STATIC = 552;
+    public static final int KEYWORD_STATIC = 558;
+
+    /**
+     * Token Id for KEYWORD_STRICTFP
+     * <pre>
+     * ID         : 559
+     * ID_NAME    : KEYWORD_STRICTFP
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : strictfp
+     * </pre>
+     */
+    public static final int KEYWORD_STRICTFP = 559;
 
     /**
      * Token Id for KEYWORD_STRING
      * <pre>
-     * ID         : 553
+     * ID         : 560
      * ID_NAME    : KEYWORD_STRING
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -912,12 +1010,12 @@ public final class HTokenId {
      * LAYOUT     : string
      * </pre>
      */
-    public static final int KEYWORD_STRING = 553;
+    public static final int KEYWORD_STRING = 560;
 
     /**
      * Token Id for KEYWORD_STRUCT
      * <pre>
-     * ID         : 554
+     * ID         : 561
      * ID_NAME    : KEYWORD_STRUCT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -926,12 +1024,12 @@ public final class HTokenId {
      * LAYOUT     : struct
      * </pre>
      */
-    public static final int KEYWORD_STRUCT = 554;
+    public static final int KEYWORD_STRUCT = 561;
 
     /**
      * Token Id for KEYWORD_SUPER
      * <pre>
-     * ID         : 555
+     * ID         : 562
      * ID_NAME    : KEYWORD_SUPER
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -940,12 +1038,12 @@ public final class HTokenId {
      * LAYOUT     : super
      * </pre>
      */
-    public static final int KEYWORD_SUPER = 555;
+    public static final int KEYWORD_SUPER = 562;
 
     /**
      * Token Id for KEYWORD_SWITCH
      * <pre>
-     * ID         : 556
+     * ID         : 563
      * ID_NAME    : KEYWORD_SWITCH
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -954,12 +1052,26 @@ public final class HTokenId {
      * LAYOUT     : switch
      * </pre>
      */
-    public static final int KEYWORD_SWITCH = 556;
+    public static final int KEYWORD_SWITCH = 563;
+
+    /**
+     * Token Id for KEYWORD_SYNCHRONIZED
+     * <pre>
+     * ID         : 564
+     * ID_NAME    : KEYWORD_SYNCHRONIZED
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : synchronized
+     * </pre>
+     */
+    public static final int KEYWORD_SYNCHRONIZED = 564;
 
     /**
      * Token Id for KEYWORD_THIS
      * <pre>
-     * ID         : 557
+     * ID         : 565
      * ID_NAME    : KEYWORD_THIS
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -968,12 +1080,12 @@ public final class HTokenId {
      * LAYOUT     : this
      * </pre>
      */
-    public static final int KEYWORD_THIS = 557;
+    public static final int KEYWORD_THIS = 565;
 
     /**
      * Token Id for KEYWORD_TIME
      * <pre>
-     * ID         : 558
+     * ID         : 566
      * ID_NAME    : KEYWORD_TIME
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -982,12 +1094,26 @@ public final class HTokenId {
      * LAYOUT     : time
      * </pre>
      */
-    public static final int KEYWORD_TIME = 558;
+    public static final int KEYWORD_TIME = 566;
+
+    /**
+     * Token Id for KEYWORD_TRANSIENT
+     * <pre>
+     * ID         : 567
+     * ID_NAME    : KEYWORD_TRANSIENT
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : transient
+     * </pre>
+     */
+    public static final int KEYWORD_TRANSIENT = 567;
 
     /**
      * Token Id for KEYWORD_TRUE
      * <pre>
-     * ID         : 559
+     * ID         : 568
      * ID_NAME    : KEYWORD_TRUE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -996,12 +1122,26 @@ public final class HTokenId {
      * LAYOUT     : true
      * </pre>
      */
-    public static final int KEYWORD_TRUE = 559;
+    public static final int KEYWORD_TRUE = 568;
+
+    /**
+     * Token Id for KEYWORD_TRY
+     * <pre>
+     * ID         : 569
+     * ID_NAME    : KEYWORD_TRY
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : try
+     * </pre>
+     */
+    public static final int KEYWORD_TRY = 569;
 
     /**
      * Token Id for KEYWORD_UINT
      * <pre>
-     * ID         : 560
+     * ID         : 570
      * ID_NAME    : KEYWORD_UINT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1010,12 +1150,12 @@ public final class HTokenId {
      * LAYOUT     : uint
      * </pre>
      */
-    public static final int KEYWORD_UINT = 560;
+    public static final int KEYWORD_UINT = 570;
 
     /**
      * Token Id for KEYWORD_UINT128
      * <pre>
-     * ID         : 561
+     * ID         : 571
      * ID_NAME    : KEYWORD_UINT128
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1024,12 +1164,12 @@ public final class HTokenId {
      * LAYOUT     : uint128
      * </pre>
      */
-    public static final int KEYWORD_UINT128 = 561;
+    public static final int KEYWORD_UINT128 = 571;
 
     /**
      * Token Id for KEYWORD_UINT16
      * <pre>
-     * ID         : 562
+     * ID         : 572
      * ID_NAME    : KEYWORD_UINT16
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1038,12 +1178,12 @@ public final class HTokenId {
      * LAYOUT     : uint16
      * </pre>
      */
-    public static final int KEYWORD_UINT16 = 562;
+    public static final int KEYWORD_UINT16 = 572;
 
     /**
      * Token Id for KEYWORD_UINT32
      * <pre>
-     * ID         : 563
+     * ID         : 573
      * ID_NAME    : KEYWORD_UINT32
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1052,12 +1192,12 @@ public final class HTokenId {
      * LAYOUT     : uint32
      * </pre>
      */
-    public static final int KEYWORD_UINT32 = 563;
+    public static final int KEYWORD_UINT32 = 573;
 
     /**
      * Token Id for KEYWORD_UINT64
      * <pre>
-     * ID         : 564
+     * ID         : 574
      * ID_NAME    : KEYWORD_UINT64
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1066,12 +1206,12 @@ public final class HTokenId {
      * LAYOUT     : uint64
      * </pre>
      */
-    public static final int KEYWORD_UINT64 = 564;
+    public static final int KEYWORD_UINT64 = 574;
 
     /**
      * Token Id for KEYWORD_UINT8
      * <pre>
-     * ID         : 565
+     * ID         : 575
      * ID_NAME    : KEYWORD_UINT8
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1080,12 +1220,12 @@ public final class HTokenId {
      * LAYOUT     : uint8
      * </pre>
      */
-    public static final int KEYWORD_UINT8 = 565;
+    public static final int KEYWORD_UINT8 = 575;
 
     /**
      * Token Id for KEYWORD_ULONG
      * <pre>
-     * ID         : 566
+     * ID         : 576
      * ID_NAME    : KEYWORD_ULONG
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1094,12 +1234,12 @@ public final class HTokenId {
      * LAYOUT     : ulong
      * </pre>
      */
-    public static final int KEYWORD_ULONG = 566;
+    public static final int KEYWORD_ULONG = 576;
 
     /**
      * Token Id for KEYWORD_UNSAFE
      * <pre>
-     * ID         : 567
+     * ID         : 577
      * ID_NAME    : KEYWORD_UNSAFE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1108,12 +1248,12 @@ public final class HTokenId {
      * LAYOUT     : unsafe
      * </pre>
      */
-    public static final int KEYWORD_UNSAFE = 567;
+    public static final int KEYWORD_UNSAFE = 577;
 
     /**
      * Token Id for KEYWORD_VAL
      * <pre>
-     * ID         : 568
+     * ID         : 578
      * ID_NAME    : KEYWORD_VAL
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1122,12 +1262,12 @@ public final class HTokenId {
      * LAYOUT     : val
      * </pre>
      */
-    public static final int KEYWORD_VAL = 568;
+    public static final int KEYWORD_VAL = 578;
 
     /**
      * Token Id for KEYWORD_VAR
      * <pre>
-     * ID         : 569
+     * ID         : 579
      * ID_NAME    : KEYWORD_VAR
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1136,12 +1276,12 @@ public final class HTokenId {
      * LAYOUT     : var
      * </pre>
      */
-    public static final int KEYWORD_VAR = 569;
+    public static final int KEYWORD_VAR = 579;
 
     /**
      * Token Id for KEYWORD_VOID
      * <pre>
-     * ID         : 570
+     * ID         : 580
      * ID_NAME    : KEYWORD_VOID
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1150,12 +1290,26 @@ public final class HTokenId {
      * LAYOUT     : void
      * </pre>
      */
-    public static final int KEYWORD_VOID = 570;
+    public static final int KEYWORD_VOID = 580;
+
+    /**
+     * Token Id for KEYWORD_VOLATILE
+     * <pre>
+     * ID         : 581
+     * ID_NAME    : KEYWORD_VOLATILE
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : volatile
+     * </pre>
+     */
+    public static final int KEYWORD_VOLATILE = 581;
 
     /**
      * Token Id for KEYWORD_WHILE
      * <pre>
-     * ID         : 571
+     * ID         : 582
      * ID_NAME    : KEYWORD_WHILE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1164,12 +1318,12 @@ public final class HTokenId {
      * LAYOUT     : while
      * </pre>
      */
-    public static final int KEYWORD_WHILE = 571;
+    public static final int KEYWORD_WHILE = 582;
 
     /**
      * Token Id for KEYWORD_YIELD
      * <pre>
-     * ID         : 572
+     * ID         : 583
      * ID_NAME    : KEYWORD_YIELD
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1178,7 +1332,7 @@ public final class HTokenId {
      * LAYOUT     : yield
      * </pre>
      */
-    public static final int KEYWORD_YIELD = 572;
+    public static final int KEYWORD_YIELD = 583;
 
     /**
      * Token Id for COMMA
@@ -1671,9 +1825,23 @@ public final class HTokenId {
     public static final int COLON_MINUS2 = 130;
 
     /**
-     * Token Id for COLON_EQ
+     * Token Id for COLON2
      * <pre>
      * ID         : 131
+     * ID_NAME    : COLON2
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : ::
+     * </pre>
+     */
+    public static final int COLON2 = 131;
+
+    /**
+     * Token Id for COLON_EQ
+     * <pre>
+     * ID         : 132
      * ID_NAME    : COLON_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1682,12 +1850,12 @@ public final class HTokenId {
      * LAYOUT     : :=
      * </pre>
      */
-    public static final int COLON_EQ = 131;
+    public static final int COLON_EQ = 132;
 
     /**
      * Token Id for COLON_TILDE
      * <pre>
-     * ID         : 132
+     * ID         : 133
      * ID_NAME    : COLON_TILDE
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1696,12 +1864,12 @@ public final class HTokenId {
      * LAYOUT     : :~
      * </pre>
      */
-    public static final int COLON_TILDE = 132;
+    public static final int COLON_TILDE = 133;
 
     /**
      * Token Id for LT
      * <pre>
-     * ID         : 133
+     * ID         : 134
      * ID_NAME    : LT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1710,12 +1878,12 @@ public final class HTokenId {
      * LAYOUT     : <
      * </pre>
      */
-    public static final int LT = 133;
+    public static final int LT = 134;
 
     /**
      * Token Id for LT_MINUS
      * <pre>
-     * ID         : 134
+     * ID         : 135
      * ID_NAME    : LT_MINUS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1724,12 +1892,12 @@ public final class HTokenId {
      * LAYOUT     : <-
      * </pre>
      */
-    public static final int LT_MINUS = 134;
+    public static final int LT_MINUS = 135;
 
     /**
      * Token Id for LT_DOT2
      * <pre>
-     * ID         : 135
+     * ID         : 136
      * ID_NAME    : LT_DOT2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1738,12 +1906,12 @@ public final class HTokenId {
      * LAYOUT     : <..
      * </pre>
      */
-    public static final int LT_DOT2 = 135;
+    public static final int LT_DOT2 = 136;
 
     /**
      * Token Id for LT2
      * <pre>
-     * ID         : 136
+     * ID         : 137
      * ID_NAME    : LT2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1752,12 +1920,12 @@ public final class HTokenId {
      * LAYOUT     : <<
      * </pre>
      */
-    public static final int LT2 = 136;
+    public static final int LT2 = 137;
 
     /**
      * Token Id for LT3
      * <pre>
-     * ID         : 137
+     * ID         : 138
      * ID_NAME    : LT3
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1766,12 +1934,12 @@ public final class HTokenId {
      * LAYOUT     : <<<
      * </pre>
      */
-    public static final int LT3 = 137;
+    public static final int LT3 = 138;
 
     /**
      * Token Id for LT_EQ
      * <pre>
-     * ID         : 138
+     * ID         : 139
      * ID_NAME    : LT_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1780,12 +1948,12 @@ public final class HTokenId {
      * LAYOUT     : <=
      * </pre>
      */
-    public static final int LT_EQ = 138;
+    public static final int LT_EQ = 139;
 
     /**
      * Token Id for LT_GT
      * <pre>
-     * ID         : 139
+     * ID         : 140
      * ID_NAME    : LT_GT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1794,12 +1962,12 @@ public final class HTokenId {
      * LAYOUT     : <>
      * </pre>
      */
-    public static final int LT_GT = 139;
+    public static final int LT_GT = 140;
 
     /**
      * Token Id for EQ
      * <pre>
-     * ID         : 140
+     * ID         : 141
      * ID_NAME    : EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1808,12 +1976,12 @@ public final class HTokenId {
      * LAYOUT     : =
      * </pre>
      */
-    public static final int EQ = 140;
+    public static final int EQ = 141;
 
     /**
      * Token Id for EQ_LT
      * <pre>
-     * ID         : 141
+     * ID         : 142
      * ID_NAME    : EQ_LT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1822,12 +1990,12 @@ public final class HTokenId {
      * LAYOUT     : =<
      * </pre>
      */
-    public static final int EQ_LT = 141;
+    public static final int EQ_LT = 142;
 
     /**
      * Token Id for EQ2
      * <pre>
-     * ID         : 142
+     * ID         : 143
      * ID_NAME    : EQ2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1836,12 +2004,12 @@ public final class HTokenId {
      * LAYOUT     : ==
      * </pre>
      */
-    public static final int EQ2 = 142;
+    public static final int EQ2 = 143;
 
     /**
      * Token Id for EQ3
      * <pre>
-     * ID         : 143
+     * ID         : 144
      * ID_NAME    : EQ3
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1850,12 +2018,12 @@ public final class HTokenId {
      * LAYOUT     : ===
      * </pre>
      */
-    public static final int EQ3 = 143;
+    public static final int EQ3 = 144;
 
     /**
      * Token Id for EQ_GT
      * <pre>
-     * ID         : 144
+     * ID         : 145
      * ID_NAME    : EQ_GT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1864,12 +2032,12 @@ public final class HTokenId {
      * LAYOUT     : =>
      * </pre>
      */
-    public static final int EQ_GT = 144;
+    public static final int EQ_GT = 145;
 
     /**
      * Token Id for GT
      * <pre>
-     * ID         : 145
+     * ID         : 146
      * ID_NAME    : GT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1878,12 +2046,12 @@ public final class HTokenId {
      * LAYOUT     : >
      * </pre>
      */
-    public static final int GT = 145;
+    public static final int GT = 146;
 
     /**
      * Token Id for GT_EQ
      * <pre>
-     * ID         : 146
+     * ID         : 147
      * ID_NAME    : GT_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1892,12 +2060,12 @@ public final class HTokenId {
      * LAYOUT     : >=
      * </pre>
      */
-    public static final int GT_EQ = 146;
+    public static final int GT_EQ = 147;
 
     /**
      * Token Id for GT2
      * <pre>
-     * ID         : 147
+     * ID         : 148
      * ID_NAME    : GT2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1906,12 +2074,12 @@ public final class HTokenId {
      * LAYOUT     : >>
      * </pre>
      */
-    public static final int GT2 = 147;
+    public static final int GT2 = 148;
 
     /**
      * Token Id for GT3
      * <pre>
-     * ID         : 148
+     * ID         : 149
      * ID_NAME    : GT3
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1920,12 +2088,12 @@ public final class HTokenId {
      * LAYOUT     : >>>
      * </pre>
      */
-    public static final int GT3 = 148;
+    public static final int GT3 = 149;
 
     /**
      * Token Id for QUESTION
      * <pre>
-     * ID         : 149
+     * ID         : 150
      * ID_NAME    : QUESTION
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1934,12 +2102,12 @@ public final class HTokenId {
      * LAYOUT     : ?
      * </pre>
      */
-    public static final int QUESTION = 149;
+    public static final int QUESTION = 150;
 
     /**
      * Token Id for QUESTION2
      * <pre>
-     * ID         : 150
+     * ID         : 151
      * ID_NAME    : QUESTION2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1948,12 +2116,12 @@ public final class HTokenId {
      * LAYOUT     : ??
      * </pre>
      */
-    public static final int QUESTION2 = 150;
+    public static final int QUESTION2 = 151;
 
     /**
      * Token Id for QUESTION2_EQ
      * <pre>
-     * ID         : 151
+     * ID         : 152
      * ID_NAME    : QUESTION2_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1962,12 +2130,12 @@ public final class HTokenId {
      * LAYOUT     : ??=
      * </pre>
      */
-    public static final int QUESTION2_EQ = 151;
+    public static final int QUESTION2_EQ = 152;
 
     /**
      * Token Id for CIRCUMFLEX
      * <pre>
-     * ID         : 152
+     * ID         : 153
      * ID_NAME    : CIRCUMFLEX
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1976,12 +2144,12 @@ public final class HTokenId {
      * LAYOUT     : ^
      * </pre>
      */
-    public static final int CIRCUMFLEX = 152;
+    public static final int CIRCUMFLEX = 153;
 
     /**
      * Token Id for CIRCUMFLEX_EQ
      * <pre>
-     * ID         : 153
+     * ID         : 154
      * ID_NAME    : CIRCUMFLEX_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1990,12 +2158,12 @@ public final class HTokenId {
      * LAYOUT     : ^=
      * </pre>
      */
-    public static final int CIRCUMFLEX_EQ = 153;
+    public static final int CIRCUMFLEX_EQ = 154;
 
     /**
      * Token Id for CIRCUMFLEX2
      * <pre>
-     * ID         : 154
+     * ID         : 155
      * ID_NAME    : CIRCUMFLEX2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2004,12 +2172,12 @@ public final class HTokenId {
      * LAYOUT     : ^^
      * </pre>
      */
-    public static final int CIRCUMFLEX2 = 154;
+    public static final int CIRCUMFLEX2 = 155;
 
     /**
      * Token Id for IS
      * <pre>
-     * ID         : 155
+     * ID         : 156
      * ID_NAME    : IS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2018,12 +2186,12 @@ public final class HTokenId {
      * LAYOUT     : is
      * </pre>
      */
-    public static final int IS = 155;
+    public static final int IS = 156;
 
     /**
      * Token Id for PIPE
      * <pre>
-     * ID         : 156
+     * ID         : 157
      * ID_NAME    : PIPE
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2032,12 +2200,12 @@ public final class HTokenId {
      * LAYOUT     : |
      * </pre>
      */
-    public static final int PIPE = 156;
+    public static final int PIPE = 157;
 
     /**
      * Token Id for PIPE_EQ
      * <pre>
-     * ID         : 157
+     * ID         : 158
      * ID_NAME    : PIPE_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2046,12 +2214,12 @@ public final class HTokenId {
      * LAYOUT     : |=
      * </pre>
      */
-    public static final int PIPE_EQ = 157;
+    public static final int PIPE_EQ = 158;
 
     /**
      * Token Id for PIPE2
      * <pre>
-     * ID         : 158
+     * ID         : 159
      * ID_NAME    : PIPE2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2060,12 +2228,12 @@ public final class HTokenId {
      * LAYOUT     : ||
      * </pre>
      */
-    public static final int PIPE2 = 158;
+    public static final int PIPE2 = 159;
 
     /**
      * Token Id for TILDE
      * <pre>
-     * ID         : 159
+     * ID         : 160
      * ID_NAME    : TILDE
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2074,12 +2242,12 @@ public final class HTokenId {
      * LAYOUT     : ~
      * </pre>
      */
-    public static final int TILDE = 159;
+    public static final int TILDE = 160;
 
     /**
      * Token Id for TILDE_EQ
      * <pre>
-     * ID         : 160
+     * ID         : 161
      * ID_NAME    : TILDE_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2088,12 +2256,12 @@ public final class HTokenId {
      * LAYOUT     : ~=
      * </pre>
      */
-    public static final int TILDE_EQ = 160;
+    public static final int TILDE_EQ = 161;
 
     /**
      * Token Id for PLUS_MINUS_SIGN
      * <pre>
-     * ID         : 161
+     * ID         : 162
      * ID_NAME    : PLUS_MINUS_SIGN
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2102,12 +2270,12 @@ public final class HTokenId {
      * LAYOUT     : ±
      * </pre>
      */
-    public static final int PLUS_MINUS_SIGN = 161;
+    public static final int PLUS_MINUS_SIGN = 162;
 
     /**
      * Token Id for MULTIPLICATION_SIGN
      * <pre>
-     * ID         : 162
+     * ID         : 163
      * ID_NAME    : MULTIPLICATION_SIGN
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2116,12 +2284,12 @@ public final class HTokenId {
      * LAYOUT     : ×
      * </pre>
      */
-    public static final int MULTIPLICATION_SIGN = 162;
+    public static final int MULTIPLICATION_SIGN = 163;
 
     /**
      * Token Id for DIVISION_SIGN
      * <pre>
-     * ID         : 163
+     * ID         : 164
      * ID_NAME    : DIVISION_SIGN
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2130,12 +2298,12 @@ public final class HTokenId {
      * LAYOUT     : ÷
      * </pre>
      */
-    public static final int DIVISION_SIGN = 163;
+    public static final int DIVISION_SIGN = 164;
 
     /**
      * Token Id for FOR_ALL
      * <pre>
-     * ID         : 164
+     * ID         : 165
      * ID_NAME    : FOR_ALL
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2144,12 +2312,12 @@ public final class HTokenId {
      * LAYOUT     : ∀
      * </pre>
      */
-    public static final int FOR_ALL = 164;
+    public static final int FOR_ALL = 165;
 
     /**
      * Token Id for PARTIAL_DIFFERENTIAL
      * <pre>
-     * ID         : 165
+     * ID         : 166
      * ID_NAME    : PARTIAL_DIFFERENTIAL
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2158,12 +2326,12 @@ public final class HTokenId {
      * LAYOUT     : ∂
      * </pre>
      */
-    public static final int PARTIAL_DIFFERENTIAL = 165;
+    public static final int PARTIAL_DIFFERENTIAL = 166;
 
     /**
      * Token Id for THERE_EXISTS
      * <pre>
-     * ID         : 166
+     * ID         : 167
      * ID_NAME    : THERE_EXISTS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2172,12 +2340,12 @@ public final class HTokenId {
      * LAYOUT     : ∃
      * </pre>
      */
-    public static final int THERE_EXISTS = 166;
+    public static final int THERE_EXISTS = 167;
 
     /**
      * Token Id for THERE_DOES_NOT_EXIST
      * <pre>
-     * ID         : 167
+     * ID         : 168
      * ID_NAME    : THERE_DOES_NOT_EXIST
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2186,12 +2354,12 @@ public final class HTokenId {
      * LAYOUT     : ∄
      * </pre>
      */
-    public static final int THERE_DOES_NOT_EXIST = 167;
+    public static final int THERE_DOES_NOT_EXIST = 168;
 
     /**
      * Token Id for INCREMENT
      * <pre>
-     * ID         : 168
+     * ID         : 169
      * ID_NAME    : INCREMENT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2200,12 +2368,12 @@ public final class HTokenId {
      * LAYOUT     : ∆
      * </pre>
      */
-    public static final int INCREMENT = 168;
+    public static final int INCREMENT = 169;
 
     /**
      * Token Id for NABLA
      * <pre>
-     * ID         : 169
+     * ID         : 170
      * ID_NAME    : NABLA
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2214,12 +2382,12 @@ public final class HTokenId {
      * LAYOUT     : ∇
      * </pre>
      */
-    public static final int NABLA = 169;
+    public static final int NABLA = 170;
 
     /**
      * Token Id for ELEMENT_OF
      * <pre>
-     * ID         : 170
+     * ID         : 171
      * ID_NAME    : ELEMENT_OF
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2228,12 +2396,12 @@ public final class HTokenId {
      * LAYOUT     : ∈
      * </pre>
      */
-    public static final int ELEMENT_OF = 170;
+    public static final int ELEMENT_OF = 171;
 
     /**
      * Token Id for NOT_AN_ELEMENT_OF
      * <pre>
-     * ID         : 171
+     * ID         : 172
      * ID_NAME    : NOT_AN_ELEMENT_OF
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2242,12 +2410,12 @@ public final class HTokenId {
      * LAYOUT     : ∉
      * </pre>
      */
-    public static final int NOT_AN_ELEMENT_OF = 171;
+    public static final int NOT_AN_ELEMENT_OF = 172;
 
     /**
      * Token Id for SMALL_ELEMENT_OF
      * <pre>
-     * ID         : 172
+     * ID         : 173
      * ID_NAME    : SMALL_ELEMENT_OF
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2256,12 +2424,12 @@ public final class HTokenId {
      * LAYOUT     : ∊
      * </pre>
      */
-    public static final int SMALL_ELEMENT_OF = 172;
+    public static final int SMALL_ELEMENT_OF = 173;
 
     /**
      * Token Id for CONTAINS_AS_MEMBER
      * <pre>
-     * ID         : 173
+     * ID         : 174
      * ID_NAME    : CONTAINS_AS_MEMBER
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2270,12 +2438,12 @@ public final class HTokenId {
      * LAYOUT     : ∋
      * </pre>
      */
-    public static final int CONTAINS_AS_MEMBER = 173;
+    public static final int CONTAINS_AS_MEMBER = 174;
 
     /**
      * Token Id for DOES_NOT_CONTAIN_AS_MEMBER
      * <pre>
-     * ID         : 174
+     * ID         : 175
      * ID_NAME    : DOES_NOT_CONTAIN_AS_MEMBER
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2284,12 +2452,12 @@ public final class HTokenId {
      * LAYOUT     : ∌
      * </pre>
      */
-    public static final int DOES_NOT_CONTAIN_AS_MEMBER = 174;
+    public static final int DOES_NOT_CONTAIN_AS_MEMBER = 175;
 
     /**
      * Token Id for SMALL_CONTAINS_AS_MEMBER
      * <pre>
-     * ID         : 175
+     * ID         : 176
      * ID_NAME    : SMALL_CONTAINS_AS_MEMBER
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2298,12 +2466,12 @@ public final class HTokenId {
      * LAYOUT     : ∍
      * </pre>
      */
-    public static final int SMALL_CONTAINS_AS_MEMBER = 175;
+    public static final int SMALL_CONTAINS_AS_MEMBER = 176;
 
     /**
      * Token Id for END_OF_PROOF
      * <pre>
-     * ID         : 176
+     * ID         : 177
      * ID_NAME    : END_OF_PROOF
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2312,12 +2480,12 @@ public final class HTokenId {
      * LAYOUT     : ∎
      * </pre>
      */
-    public static final int END_OF_PROOF = 176;
+    public static final int END_OF_PROOF = 177;
 
     /**
      * Token Id for N_ARY_PRODUCT
      * <pre>
-     * ID         : 177
+     * ID         : 178
      * ID_NAME    : N_ARY_PRODUCT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2326,12 +2494,12 @@ public final class HTokenId {
      * LAYOUT     : ∏
      * </pre>
      */
-    public static final int N_ARY_PRODUCT = 177;
+    public static final int N_ARY_PRODUCT = 178;
 
     /**
      * Token Id for N_ARY_COPRODUCT
      * <pre>
-     * ID         : 178
+     * ID         : 179
      * ID_NAME    : N_ARY_COPRODUCT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2340,12 +2508,12 @@ public final class HTokenId {
      * LAYOUT     : ∐
      * </pre>
      */
-    public static final int N_ARY_COPRODUCT = 178;
+    public static final int N_ARY_COPRODUCT = 179;
 
     /**
      * Token Id for N_ARY_SUMMATION
      * <pre>
-     * ID         : 179
+     * ID         : 180
      * ID_NAME    : N_ARY_SUMMATION
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2354,12 +2522,12 @@ public final class HTokenId {
      * LAYOUT     : ∑
      * </pre>
      */
-    public static final int N_ARY_SUMMATION = 179;
+    public static final int N_ARY_SUMMATION = 180;
 
     /**
      * Token Id for MINUS_OR_PLUS_SIGN
      * <pre>
-     * ID         : 180
+     * ID         : 181
      * ID_NAME    : MINUS_OR_PLUS_SIGN
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2368,12 +2536,12 @@ public final class HTokenId {
      * LAYOUT     : ∓
      * </pre>
      */
-    public static final int MINUS_OR_PLUS_SIGN = 180;
+    public static final int MINUS_OR_PLUS_SIGN = 181;
 
     /**
      * Token Id for DOT_PLUS
      * <pre>
-     * ID         : 181
+     * ID         : 182
      * ID_NAME    : DOT_PLUS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2382,12 +2550,12 @@ public final class HTokenId {
      * LAYOUT     : ∔
      * </pre>
      */
-    public static final int DOT_PLUS = 181;
+    public static final int DOT_PLUS = 182;
 
     /**
      * Token Id for RING_OPERATOR
      * <pre>
-     * ID         : 182
+     * ID         : 183
      * ID_NAME    : RING_OPERATOR
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2396,12 +2564,12 @@ public final class HTokenId {
      * LAYOUT     : ∘
      * </pre>
      */
-    public static final int RING_OPERATOR = 182;
+    public static final int RING_OPERATOR = 183;
 
     /**
      * Token Id for SQUARE_ROOT
      * <pre>
-     * ID         : 183
+     * ID         : 184
      * ID_NAME    : SQUARE_ROOT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2410,12 +2578,12 @@ public final class HTokenId {
      * LAYOUT     : √
      * </pre>
      */
-    public static final int SQUARE_ROOT = 183;
+    public static final int SQUARE_ROOT = 184;
 
     /**
      * Token Id for CUBE_ROOT
      * <pre>
-     * ID         : 184
+     * ID         : 185
      * ID_NAME    : CUBE_ROOT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2424,12 +2592,12 @@ public final class HTokenId {
      * LAYOUT     : ∛
      * </pre>
      */
-    public static final int CUBE_ROOT = 184;
+    public static final int CUBE_ROOT = 185;
 
     /**
      * Token Id for FOURTH_ROOT
      * <pre>
-     * ID         : 185
+     * ID         : 186
      * ID_NAME    : FOURTH_ROOT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2438,12 +2606,12 @@ public final class HTokenId {
      * LAYOUT     : ∜
      * </pre>
      */
-    public static final int FOURTH_ROOT = 185;
+    public static final int FOURTH_ROOT = 186;
 
     /**
      * Token Id for THEREFORE
      * <pre>
-     * ID         : 186
+     * ID         : 187
      * ID_NAME    : THEREFORE
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2452,12 +2620,12 @@ public final class HTokenId {
      * LAYOUT     : ∴
      * </pre>
      */
-    public static final int THEREFORE = 186;
+    public static final int THEREFORE = 187;
 
     /**
      * Token Id for BECAUSE
      * <pre>
-     * ID         : 187
+     * ID         : 188
      * ID_NAME    : BECAUSE
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2466,12 +2634,12 @@ public final class HTokenId {
      * LAYOUT     : ∵
      * </pre>
      */
-    public static final int BECAUSE = 187;
+    public static final int BECAUSE = 188;
 
     /**
      * Token Id for PROPORTION
      * <pre>
-     * ID         : 188
+     * ID         : 189
      * ID_NAME    : PROPORTION
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2480,7 +2648,7 @@ public final class HTokenId {
      * LAYOUT     : ∷
      * </pre>
      */
-    public static final int PROPORTION = 188;
+    public static final int PROPORTION = 189;
 
     /**
      * Token Id for LEFT_PARENTHESIS

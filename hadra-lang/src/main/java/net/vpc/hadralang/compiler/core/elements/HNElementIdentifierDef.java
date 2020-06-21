@@ -27,7 +27,7 @@ public class HNElementIdentifierDef extends HNElement implements Cloneable {
     @Override
     public String toString() {
         return "IdentifierDef{" +
-                (type == null ? "null" : type.name()) +
+                (type == null ? "null" : type.getName()) +
                 '}';
     }
 }

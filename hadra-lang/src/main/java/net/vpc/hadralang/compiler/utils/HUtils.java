@@ -326,7 +326,7 @@ public class HUtils {
 
     //    @Override
     public static String getStaticConstructorName(JType baseType) {
-        JType jType = baseType.rawType();
+        JType jType = baseType.getRawType();
         if (jType.isArray()) {
             JTypeArray ta = (JTypeArray) jType;
             jType = ta.rootComponentType();
@@ -433,5 +433,15 @@ public class HUtils {
             throw new JParseException("local date/time must be in the ISO format ex: "+mostLikelyFormat);
         }
         return parsed;
+    }
+
+    public static HNode skipFirstPar(HNode n){
+        if(n instanceof HNPars){
+            HNode[] i = ((HNPars) n).getItems();
+            if(i.length==1){
+                return i[0];
+            }
+        }
+        return n;
     }
 }

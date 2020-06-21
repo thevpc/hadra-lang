@@ -27,7 +27,7 @@ public class HNElementType extends HNElement implements Cloneable{
     @Override
     public String toString() {
         return "Type{" +
-                (type == null ? "null" : type.name()) +
+                (type == null ? "null" : type.getName()) +
                 '}';
     }
 }
