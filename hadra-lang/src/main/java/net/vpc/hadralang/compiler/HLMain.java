@@ -6,7 +6,6 @@ public class HLMain extends NutsApplication {
     public static void main(String[] args) {
         // just create an instance and call runAndExit in the main method
 //        System.setProperty("nuts.boot.args","-z -y");
-//        new net.vpc.hadralang.compiler.core.HadraLanguage().generateTokensClass(System.out);
         new HLMain().runAndExit(args);
     }
 

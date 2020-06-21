@@ -19,6 +19,7 @@ import net.vpc.hadralang.compiler.index.HLIndexedProject;
 import net.vpc.hadralang.compiler.parser.ast.*;
 import net.vpc.hadralang.compiler.stages.generators.java.HLCStage08JavaTransform;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
+import net.vpc.hadralang.compiler.utils.HTokenUtils;
 
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -81,7 +82,7 @@ public class HLCStage02Preprocessor implements HLCStage {
         }
         mpt.setMetaPackageName(resolvePackageName(jModuleId.getGroupId()));
         mpt.setPackageName(null);
-        mpt.setNameToken(HNodeUtils.createToken(resolveClassName(jModuleId.getArtifactId())));
+        mpt.setNameToken(HTokenUtils.createToken(resolveClassName(jModuleId.getArtifactId())));
     }
 
     protected String resolvePackageName(String groupId) {
@@ -161,13 +162,13 @@ public class HLCStage02Preprocessor implements HLCStage {
                 //create a root block so that  content will be considered as local vars and
                 // no fields will be defined
                 HNDeclareInvokable mainMethod = new HNDeclareInvokable(
-                        HNodeUtils.createToken("main"),
+                        HTokenUtils.createToken("main"),
                         block.startToken(),block.endToken()
                         ).setModifiers(Modifier.STATIC);
                 mainMethod.setArguments(new ArrayList<>(
                         Arrays.asList(
                                 new HNDeclareIdentifier(
-                                        new HNDeclareTokenIdentifier(HNodeUtils.createToken("args")),
+                                        new HNDeclareTokenIdentifier(HTokenUtils.createToken("args")),
                                         null,
                                         HNodeUtils.createTypeToken("String"),
                                         null,
@@ -202,9 +203,10 @@ public class HLCStage02Preprocessor implements HLCStage {
                                 new String[0]
                         )
                 );
-                preProcessorProgram.getMetaPackageType().setNameToken(HNodeUtils.createToken("HLPreprocessor"));
+                preProcessorProgram.getMetaPackageType().setNameToken(HTokenUtils.createToken("HLPreprocessor"));
                 LOG.log(Level.INFO, "Running Preprocessor with code \n"+preprocessorRootNode);
                 preProcessorProgram.addCompilationUnit(new DefaultJCompilationUnit(cub.getCompilationUnit().getSource(), preprocessorRootNode));
+                preProcessorProgram.setRootId("<preprocessor>:"+projectId);
                 for (HLCStage hlcStage : new HLCStage[]{
                         new HLCStage03Indexer(),
                         new HLCStage04DefinitionResolver(true),
@@ -230,7 +232,7 @@ public class HLCStage02Preprocessor implements HLCStage {
                         ));
                 Set<String> foundIds = new HashSet<>();
                 Set<String> dfiles = new HashSet<>();
-                NutsWorkspace ws = Nuts.openWorkspace("-y");
+                NutsWorkspace ws = Nuts.openWorkspace("-y"/*,"-z"*/);
                 NutsSearchCommand search = ws.search().setDependencies(true)
                         .setLatest(true).setContent(true);
                 Set<String> classPath = new LinkedHashSet<>();

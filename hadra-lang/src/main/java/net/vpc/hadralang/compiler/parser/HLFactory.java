@@ -5,6 +5,7 @@ import net.vpc.common.jeep.JParserNodeFactory;
 import net.vpc.common.jeep.core.nodes.JNodeTokens;
 import net.vpc.hadralang.compiler.parser.ast.*;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
+import net.vpc.hadralang.compiler.utils.HTokenUtils;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
 import java.util.Arrays;
@@ -252,7 +253,7 @@ public class HLFactory implements JParserNodeFactory<HNode> {
                                     HNodeUtils.toDeclareTokenIdentifier((HNIdentifier) item),
                                     null,
                                     (HNTypeToken) null,
-                                    HNodeUtils.createToken("="), item.startToken(),
+                                    HTokenUtils.createToken("="), item.startToken(),
                                     item.endToken()
                             )
                     );
@@ -279,7 +280,7 @@ public class HLFactory implements JParserNodeFactory<HNode> {
                             HNodeUtils.toDeclareTokenIdentifier((HNIdentifier) decl),
                             null,
                             (HNTypeToken) null,
-                            HNodeUtils.createToken("="), decl.startToken(),
+                            HTokenUtils.createToken("="), decl.startToken(),
                             decl.endToken()
                     )
             );

@@ -35,6 +35,10 @@ public final class HadraLanguage extends DefaultJeep {
         JTokenType.JTOKEN_TYPES.addIntField("TT_SUPERSCRIPT", HTokenTTypes.TT_SUPERSCRIPT);
     }
 
+    public static void main(String[] args) {
+        new net.vpc.hadralang.compiler.core.HadraLanguage().generateTokensClass(System.out, "net.vpc.hadralang.compiler.core.HTokenId");
+    }
+
     public HadraLanguage() {
         this(null);
     }
@@ -61,13 +65,15 @@ public final class HadraLanguage extends DefaultJeep {
         //this will be handled in a special way
         config.addPatterns(new SeparatorsPattern("Separators2",
                 HTokenIdOffsets.OFFSET_RIGHT_CURLY_BRACKET,
+                JTokenPatternOrder.ORDER_OPERATOR,
                 JTokenType.Enums.TT_GROUP_SEPARATOR,
                 "}")
         );
 
         config.addPatterns(new SeparatorsPattern("Separators3", HTokenIdOffsets.OFFSET_COMMA,
+                JTokenPatternOrder.valueOf(JTokenPatternOrder.ORDER_OPERATOR.getValue()-1,"BEFORE_OPERATOR"), //to force handling of '->' separator before '-' operator
                 JTokenType.Enums.TT_SEPARATOR,
-                ",", ";")
+                ",", ";",":","->")
         );
 
         //superscript powers
@@ -84,7 +90,15 @@ public final class HadraLanguage extends DefaultJeep {
         config.addKeywords("null");
         config.addKeywords("def", "struct", "implicit", "const", "is"); //"set", "get"
         config.addKeywords("super", "this", "constructor", "operator", "true", "false"); //"set", "get"
-//        this.tokens().config().addKeywords("decimal", "bigint", "bigdecimal", "date", "string");
+        //for future usage
+        config.addKeywords("yield", "_", "it",
+                "bool","decimal", "bigint", "bigdecimal", "string","object",
+                 "date","time","datetime",
+                "int8","int16","int32","int64","int128",
+                "uint8","uint16","uint32","uint64","uint128",
+                "uint","ulong","ref","unsafe","init"
+                ); //"set", "get"
+//        this.tokens().config().addKeywords();
         config.setCStyleComments();
 
         tokens().setConfig(config);
@@ -102,10 +116,10 @@ public final class HadraLanguage extends DefaultJeep {
 //        this.operators().declareBinaryOperators("<<", "<<<", "<<<<");
 //        this.operators().declareBinaryOperators(">>", ">>>", ">>>>");
 //        this.operators().declareBinaryOperators("->", "=>", "<-", "<=");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_0, "->");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_1, "=", "+=", "-=", "*=", "|=", "&=", "~=", "^=", "%=");
+//        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_0, "->");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_1, "=", "+=", "-=", "*=", "|=", "&=", "~=", "^=", "%=","??=");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_2, "=>", "=<", "<-", ":=");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_2, ":");
+//        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_2, ":");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_3, "||");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_4, "&&");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_5, "|");
@@ -172,7 +186,7 @@ public final class HadraLanguage extends DefaultJeep {
         config_INTERP_CODE.addPattern(new PushStatePattern(
                 HTokenIdOffsets.OFFSET_STRING_INTERP_DOLLAR_END, "STRING_INTERP_DOLLAR_END",
                 JTokenType.TT_STRING_INTERP, "TT_STRING_INTERP", "}",
-                JTokenPattern.ORDER_OPERATOR, "}",
+                JTokenPatternOrder.ORDER_OPERATOR, "}",
                 Jeep.POP_STATE));
 
         tokens().setFactory((reader, config1, skipComments, skipSpaces, context) -> {

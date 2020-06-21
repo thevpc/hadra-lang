@@ -149,7 +149,7 @@ public class FindMatchFailInfo {
             }
         } else {
             if(someText) {
-                sb.append("\n\thowever the following do not apply : ");
+                sb.append("\n\tthe following do not apply : ");
                 for (JInvokable alt : available) {
                     sb.append("\n\t\t").append(alt);
                 }

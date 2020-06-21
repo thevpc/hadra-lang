@@ -367,6 +367,13 @@ public class TestCompilerSuccess {
                         .errorCount());
     }
 
+    @Test
+    public void testCompiler0050() {
+        Assertions.assertEquals(0,
+                _compileResource("testCompilerSuccess0050.hl")
+                        .errorCount());
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // HELPER METHODS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////

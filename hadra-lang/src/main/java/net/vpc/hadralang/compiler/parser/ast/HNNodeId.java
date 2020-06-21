@@ -35,6 +35,7 @@ public enum HNNodeId {
     H_BRACKETS,
     H_BRACKETS_POSTFIX,
     H_OP_DOT,
+    H_STATIC_EVAL,
     H_IDENTIFIER,
     H_LITERAL,
     H_PARS,

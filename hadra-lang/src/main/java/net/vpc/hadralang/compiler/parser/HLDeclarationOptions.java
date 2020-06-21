@@ -15,6 +15,7 @@ public class HLDeclarationOptions {
     boolean acceptVarArg = true;
     boolean acceptMultiVars = false;
     NoTypeNameOption noTypeNameOption = NoTypeNameOption.ERROR;
+    String defaultVarName = "value";
     boolean noMessages = false;
 
     List<JSourceMessage> silencedMessages = new ArrayList<>();
@@ -88,6 +89,15 @@ public class HLDeclarationOptions {
 
     public HLDeclarationOptions setAcceptMultiVars(boolean acceptMultiVars) {
         this.acceptMultiVars = acceptMultiVars;
+        return this;
+    }
+
+    public String getDefaultVarName() {
+        return defaultVarName;
+    }
+
+    public HLDeclarationOptions setDefaultVarName(String defaultVarName) {
+        this.defaultVarName = defaultVarName;
         return this;
     }
 

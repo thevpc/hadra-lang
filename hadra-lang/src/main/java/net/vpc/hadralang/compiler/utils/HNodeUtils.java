@@ -117,32 +117,6 @@ public class HNodeUtils {
         );
     }
 
-    public static JToken createToken(String image) {
-        switch (image) {
-            case "null":
-            case "void":
-            case "int":
-            case "long":
-            case "float":
-            case "byte":
-            case "short":
-            case "char":
-            case "boolean":
-            case "double": {
-                return JTokenUtils.createKeywordToken(image);
-            }
-            case "=":
-            case ":":
-            case "^":
-            case "*":
-            case "+":
-            case ".": {
-                return JTokenUtils.createOpToken(image);
-            }
-        }
-        return JTokenUtils.createWordToken(image);
-    }
-
     public static HNTypeToken createTypeToken(String type) {
         return new HNTypeToken(
                 JTokenUtils.createKeywordToken(type),
@@ -253,7 +227,7 @@ public class HNodeUtils {
         if (typename == null) {
             return null;
         }
-        JToken wordToken = createToken(typename.toString());
+        JToken wordToken = HTokenUtils.createToken(typename.toString());
         return new HNTypeToken(
                 wordToken,
                 typename,
@@ -269,7 +243,7 @@ public class HNodeUtils {
         if (typename == null) {
             return null;
         }
-        JToken wordToken = createToken(typename.toString());
+        JToken wordToken = HTokenUtils.createToken(typename.toString());
         HNTypeToken jNodeHTypeToken = new HNTypeToken(
                 wordToken,
                 typename.typeName(),

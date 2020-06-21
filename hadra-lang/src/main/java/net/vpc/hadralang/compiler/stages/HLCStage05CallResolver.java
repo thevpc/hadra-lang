@@ -15,10 +15,7 @@ import net.vpc.hadralang.compiler.core.invokables.HLJCompilerContext;
 import net.vpc.hadralang.compiler.index.HLIndexedField;
 import net.vpc.hadralang.compiler.index.HLIndexedMethod;
 import net.vpc.hadralang.compiler.parser.ast.*;
-import net.vpc.hadralang.compiler.utils.HLExtensionNames;
-import net.vpc.hadralang.compiler.utils.HNodeUtils;
-import net.vpc.hadralang.compiler.utils.HTypeUtils;
-import net.vpc.hadralang.compiler.utils.HUtils;
+import net.vpc.hadralang.compiler.utils.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -804,8 +801,8 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                         for (int i = 0; i < tupleArgTypes.length; i++) {
                             HNOpDot tempRight = new HNOpDot(
                                     right.copy(),
-                                    HNodeUtils.createToken("."),
-                                    new HNIdentifier(HNodeUtils.createToken("_" + (i + 1))),
+                                    HTokenUtils.createToken("."),
+                                    new HNIdentifier(HTokenUtils.createToken("_" + (i + 1))),
                                     null, null
                             );
                             setElement(tempRight, new HNElementExpr(tupleArgTypes[i]));
@@ -1038,7 +1035,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                     HNElementLocalVar lv = (HNElementLocalVar) e;
                     HNDeclareIdentifier id = compilerContext.lookupEnclosingDeclareIdentifier(identifierToken);
                     if (id != null) {
-                        if (id.getAssignOperator().isImage("=")) {
+                        if (id.getAssignOperator()==null || id.getAssignOperator().isImage("=")) {
                             lv.setEffectiveType(identifierType.getType());
                         } else if (id.getAssignOperator().isImage(":")) {
                             ElementTypeAndConstraint cc = HTypeUtils.resolveIterableComponentType(identifierType.getType(), compilerContext.types());
@@ -1249,7 +1246,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
     private boolean onDeclareInvokable(HNDeclareInvokable node, HLJCompilerContext compilerContext) {
         if (node.getReturnType() == null) {
             //inference of method type from body
-            HNode initValue = (HNode) node.getBody();
+            HNode initValue = node.getBody();
             if (initValue == null) {
                 //no body
                 compilerContext.log().error("S000", null, "type inference failed for function/method without body", node.startToken());
@@ -1260,35 +1257,36 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                         JType ert = null;
                         if (method.signature().toString().equals("main(java.lang.String[])")) {
                             ert = JTypeUtils.forVoid(compilerContext.types());
-                        }
-                        method.setGenericReturnType(ert);
-                        compilerContext.indexer().indexMethod(new HLIndexedMethod(method, HUtils.getSourceName(node)));
-                        node.setEffectiveReturnType(ert);
-                    } else {
-                        HNode[] exitPoints = initValue.getExitPoints();
-                        if (exitPoints.length == 0) {
-                            compilerContext.log().error("S000", null, "type inference failed for function/method without body", initValue.startToken());
-                        } else {
-                            JTypeOrLambda[] args = compilerContext.jTypeOrLambdas(showFinalErrors, exitPoints);
-                            if (args == null) {
-                                return false;
-                            }
-                            boolean error = false;
-                            JType ert = null;
-                            for (int i = 0; i < args.length; i++) {
-                                if (args[i].isLambda()) {
-                                    error = true;
-                                    compilerContext.log().error("S000", null, "type inference failed with unresolvable lambda expression", initValue.startToken());
-                                    break;
-                                } else {
-                                    ert = ert == null ? args[i].getType() : ert.firstCommonSuperType(args[i].getType());
+                            method.setGenericReturnType(ert);
+                            compilerContext.indexer().indexMethod(new HLIndexedMethod(method, HUtils.getSourceName(node)));
+                        }else{
+                            HNode[] exitPoints = initValue.getExitPoints();
+                            if (exitPoints.length == 0) {
+                                compilerContext.log().error("S000", null, "type inference failed for function/method without body", initValue.startToken());
+                            } else {
+                                JTypeOrLambda[] args = compilerContext.jTypeOrLambdas(showFinalErrors, exitPoints);
+                                if (args == null) {
+                                    return false;
+                                }
+                                boolean error = false;
+                                for (int i = 0; i < args.length; i++) {
+                                    if (args[i].isLambda()) {
+                                        error = true;
+                                        compilerContext.log().error("S000", null, "type inference failed with unresolvable lambda expression", initValue.startToken());
+                                        break;
+                                    } else {
+                                        ert = ert == null ? args[i].getType() : ert.firstCommonSuperType(args[i].getType());
+                                    }
+                                }
+                                if (!error && ert!=null) {
+                                    //ert = method.genericReturnType();
+                                    method.setGenericReturnType(ert);
+                                    compilerContext.indexer().indexMethod(new HLIndexedMethod(method, HUtils.getSourceName(node)));
                                 }
                             }
-                            if (!error) {
-                                ert = method.genericReturnType();
-                                node.setEffectiveReturnType(ert);
-                            }
                         }
+                        ert = method.genericReturnType();
+                        node.setEffectiveReturnType(ert);
                     }
                 }
             }

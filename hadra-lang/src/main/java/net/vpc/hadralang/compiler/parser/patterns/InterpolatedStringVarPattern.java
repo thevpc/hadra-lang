@@ -3,6 +3,7 @@ package net.vpc.hadralang.compiler.parser.patterns;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.tokens.AbstractJTokenMatcher;
 import net.vpc.common.jeep.core.tokens.JTokenDef;
+import net.vpc.common.jeep.core.tokens.JTokenPatternOrder;
 import net.vpc.common.jeep.impl.tokens.AbstractTokenPattern;
 import net.vpc.common.jeep.impl.tokens.JTokenId;
 import net.vpc.hadralang.compiler.core.HadraLanguage;
@@ -19,7 +20,7 @@ public class InterpolatedStringVarPattern extends AbstractTokenPattern {
 
 
     public InterpolatedStringVarPattern() {
-        super(ORDER_STRING,"InterpolatedStringVar");
+        super(JTokenPatternOrder.ORDER_STRING,"InterpolatedStringVar");
     }
 
     @Override

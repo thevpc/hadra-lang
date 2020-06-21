@@ -13,6 +13,7 @@ import net.vpc.hadralang.compiler.parser.ast.*;
 import net.vpc.hadralang.compiler.parser.ast.extra.HXInvokableCall;
 import net.vpc.hadralang.compiler.stages.HLCStage;
 import net.vpc.hadralang.compiler.utils.HNodeUtils;
+import net.vpc.hadralang.compiler.utils.HTokenUtils;
 import net.vpc.hadralang.compiler.utils.HUtils;
 import net.vpc.hadralang.stdlib.BooleanRef;
 
@@ -317,7 +318,7 @@ public class HLCStage08JavaTransform implements HLCStage {
                 }
             }
             String nextVar = compilerContext.base.nextVarName(null, newType);
-            JToken nextVarToken = HNodeUtils.createToken(nextVar);
+            JToken nextVarToken = HTokenUtils.createToken(nextVar);
             HNDeclareTokenIdentifier hnDeclareTokenIdentifier = new HNDeclareTokenIdentifier(nextVarToken);
             HNDeclareIdentifier newDecl = new HNDeclareIdentifier(
                     (HNDeclareToken)
@@ -328,7 +329,7 @@ public class HLCStage08JavaTransform implements HLCStage {
                                     null
                             ).setEffectiveType(patternType)),
                     copy0(node), HNodeUtils.createTypeToken(patternType),
-                    HNodeUtils.createToken("="), null, null
+                    HTokenUtils.createToken("="), null, null
             ).setModifiers(Modifier.STATIC | Modifier.PRIVATE);
             newDecl.setUserObject("CompilerGeneratedPattern");
             body.add(newDecl);
@@ -838,7 +839,7 @@ public class HLCStage08JavaTransform implements HLCStage {
                     }
                     return new HNOpDot(
                             new HNTypeToken(jm.declaringType(), null),
-                            HNodeUtils.createToken("."),
+                            HTokenUtils.createToken("."),
                             m,
                             null, null
                     ).setElement(m.getElement());
@@ -976,8 +977,8 @@ public class HLCStage08JavaTransform implements HLCStage {
 
     private void _fillBlockAssign(HNode left, HNode right, HNBlock block, Supplier<HNBlock> dissociatedBlock, boolean requireTempVar, boolean isField, boolean isStatic,
                                   HLJCompilerContext2 compilerContext) {
-        JToken dot = HNodeUtils.createToken(".");
-        JToken assignOp = HNodeUtils.createToken("=");
+        JToken dot = HTokenUtils.createToken(".");
+        JToken assignOp = HTokenUtils.createToken("=");
         if (right != null && requireTempVar) {
             HNBlock valDeclContext = null;
             boolean fieldTemp = isField;
@@ -1002,7 +1003,7 @@ public class HLCStage08JavaTransform implements HLCStage {
                 }
             }
             String newVarName = compilerContext.base.nextVarName2(null, valDeclContext);
-            JToken newVarToken = HNodeUtils.createToken(newVarName);
+            JToken newVarToken = HTokenUtils.createToken(newVarName);
             JTypeOrLambda rightTypeOrLambda = right.getElement().getTypeOrLambda();
             if (rightTypeOrLambda.isLambda()) {
                 rightTypeOrLambda = left.getElement().getTypeOrLambda();
@@ -1065,14 +1066,14 @@ public class HLCStage08JavaTransform implements HLCStage {
             for (int i = 1; i <= items.length; i++) {
                 HNode n = (HNode) items[i - 1];
                 String tupleMemberName = "_" + i;
-                HNIdentifier tupleMember = new HNIdentifier(HNodeUtils.createToken(tupleMemberName));
+                HNIdentifier tupleMember = new HNIdentifier(HTokenUtils.createToken(tupleMemberName));
                 tupleMember.setElement(new HNElementField(tupleMemberName));
                 _fillBlockAssign(n, new HNOpDot(right, dot, tupleMember, null, null), block, dissociatedBlock, false, isField, isStatic, compilerContext);
             }
         } else if (left instanceof HNIdentifier) {
             HNIdentifier leftId = (HNIdentifier) left;
             JType identifierType = leftId.getElement().getType();
-            HNAssign hass = new HNAssign(left, HNodeUtils.createToken("="), right, null, null);
+            HNAssign hass = new HNAssign(left, HTokenUtils.createToken("="), right, null, null);
 
             hass.setElement(new HNElementAssign(identifierType));
             block.add(hass);
@@ -1126,7 +1127,7 @@ public class HLCStage08JavaTransform implements HLCStage {
             for (int i = 1; i <= items.length; i++) {
                 HNode n = (HNode) items[i - 1];
                 String tupleMemberName = "_" + i;
-                HNIdentifier tupleMember = new HNIdentifier(HNodeUtils.createToken(tupleMemberName));
+                HNIdentifier tupleMember = new HNIdentifier(HTokenUtils.createToken(tupleMemberName));
                 tupleMember.setElement(new HNElementField(tupleMemberName));
                 _fillBlockAssign(n, new HNOpDot(right, dot, tupleMember, null, null), block, dissociatedBlock, false, isField, isStatic, compilerContext);
             }

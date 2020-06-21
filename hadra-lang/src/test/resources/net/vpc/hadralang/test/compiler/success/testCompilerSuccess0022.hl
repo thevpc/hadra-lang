@@ -8,11 +8,11 @@ package net.vpc.hadralang.test:test05;
  *   * fixed array $ in index for non arrays
  */
 {
-    string s1="hello world";
+    String s1="hello world";
     char[] s2=s1[6..10];//world
     char[] s2p=s1[($/2+1)..$];
     println(s2+" :: expected 'world'");
-    string s3=s2[0..2]+s2[4];//word
+    String s3=s2[0..2]+s2[4];//word
     println(s3+" :: expected 'word'");
     stringb sb();
     sb=s3+" of "+s2+'s'; //world of words
@@ -22,6 +22,6 @@ package net.vpc.hadralang.test:test05;
     println(sb+" :: expected 'words of the world'");
     sb;
 
-    string s8="*"*3;
+    String s8="*"*3;
     println(s8);
 }

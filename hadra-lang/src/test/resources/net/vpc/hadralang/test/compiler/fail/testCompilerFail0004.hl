@@ -1,0 +1,2 @@
+var h(3)=5;//error call constructor and initializer at the same time
+String z("3")="4";

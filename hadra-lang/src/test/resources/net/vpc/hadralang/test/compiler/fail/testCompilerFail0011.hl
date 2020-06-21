@@ -1,1 +1,2 @@
-int i="hello"
+Object hello=null;
+int i=hello;

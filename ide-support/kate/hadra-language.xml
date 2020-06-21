@@ -3747,6 +3747,8 @@
       <item>operator</item>
       <item>constructor</item>
       <item>def</item>
+      <item>var</item>
+      <item>val</item>
     </list>
     <list name="types">
       <item>boolean</item>
@@ -3762,12 +3764,43 @@
       <item>static</item>
       <item>void</item>
     </list>
+    <list name="reserved">
+      <item>int8</item>
+      <item>int16</item>
+      <item>int32</item>
+      <item>int64</item>
+      <item>int128</item>
+      <item>uint8</item>
+      <item>uint16</item>
+      <item>uint32</item>
+      <item>uint64</item>
+      <item>uint128</item>
+      <item>uint</item>
+      <item>ulong</item>
+      <item>ref</item>
+      <item>unsafe</item>
+
+      <item>yield</item>
+      <item>_</item>
+      <item>it</item>
+      <item>bool</item>
+      <item>decimal</item>
+      <item>bigint</item>
+      <item>bigdecimal</item>
+      <item>date</item>
+      <item>time</item>
+      <item>datetime</item>
+      <item>string</item>
+      <item>object</item>
+      <item>init</item>
+    </list>
     <contexts>
       <context attribute="Normal Text" lineEndContext="#stay" name="Normal">
         <!-- Comment next line if you don't use Javadoc tool -->
         <IncludeRules context="##Javadoc"/>
         <keyword attribute="Keyword" context="#stay" String="keywords"/>
         <keyword attribute="Data Type" context="#stay" String="types"/>
+        <keyword attribute="Reserved" context="#stay" String="reserved"/>
         <keyword attribute="Java15" context="#stay" String="java15"/>
         <RegExpr attribute="Float" context="#stay" String="(\b&int;\.?|(\b&int;)?\.&int;)([eE][\-\+]?&int;[fFdD]?|[fFdD])\b"/>
         <RegExpr attribute="Float" context="#stay" String="(\b&int;\.|(\b&int;)?\.&int;\b)"/>
@@ -3858,6 +3891,7 @@
       <itemData name="Comment"      defStyleNum="dsComment"/>
       <itemData name="Symbol"       defStyleNum="dsNormal" spellChecking="false"/>
       <itemData name="Java15"       defStyleNum="dsBuiltIn" spellChecking="false"/>
+      <itemData name="Reserved"       defStyleNum="dsWarning" spellChecking="false"/>
     </itemDatas>
   </highlighting>
   <general>
