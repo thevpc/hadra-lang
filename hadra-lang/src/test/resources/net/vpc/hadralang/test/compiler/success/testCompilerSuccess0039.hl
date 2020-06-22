@@ -15,12 +15,22 @@ def main(String[] args){
 def void sum(int[] arr){
     int slice=5;
     AtomicInteger ai(0);
+
+    //alternative 1
     var pool = Executors.newFixedThreadPool(10);
     List<Runnable> tasks();
     for(i=0;i<arr.length;i=i+slice){
         tasks.add(()->sum(arr,i,max(arr.length,i+slice),ai));
     }
     pool.invokeAll(tasks);
+    
+    //alternative 2
+    //try(pool = Executors.newFixedThreadPool(10)){
+    //    pool.invokeAll(for(i=0;i<arr.length;i=i+slice)
+    //        ai2+=(arr2[from..(to-from)].sum())
+    //    );
+    //}
+    
     println(ai);
 
 }
