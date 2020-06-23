@@ -1,0 +1,4 @@
+//IllegalArgumentException already handled by RuntimeException
+ int x3=try(c=connexion) int("one")
+        catch(IOException|RuntimeException x) 2
+        catch(IllegalArgumentException) 3;

@@ -150,6 +150,15 @@ public class HLCStage05CallResolver extends HLCStageType2 {
             case H_SUPER: {
                 return onSuper((HNSuper) node, compilerContext);
             }
+            case H_CATCH: {
+                return onCatch((HNTryCatch.CatchBranch) node, compilerContext);
+            }
+            case H_TRY_CATCH: {
+                return onTryCatch((HNTryCatch) node, compilerContext);
+            }
+            case H_CAST: {
+                return onCast((HNCast) node, compilerContext);
+            }
             case H_LITERAL_DEFAULT:
             case H_LITERAL:
             case H_BLOCK:
@@ -181,6 +190,78 @@ public class HLCStage05CallResolver extends HLCStageType2 {
         //in stage 1 wont change node instance
         throw new JShouldNeverHappenException("Unsupported node class in " + getClass().getSimpleName() + ": " + node.getClass().getSimpleName());
 //        return node;
+    }
+
+    private boolean onTryCatch(HNTryCatch node, HLJCompilerContext compilerContext) {
+        JTypePattern res=null;
+        //the resource init is never typed!!
+//        if(node.getResource()!=null){
+//            JTypePattern typePattern = compilerContext.getTypePattern(showFinalErrors, node.getResource());
+//            if(typePattern==null){
+//                return false;
+//            }
+//            res=JTypeUtils.firstCommonSuperTypePattern(res,typePattern,compilerContext.types());
+//        }
+        {
+            JTypePattern typePattern = compilerContext.getTypePattern(showFinalErrors, node.getBody());
+            if(typePattern==null){
+                return false;
+            }
+            res=JTypeUtils.firstCommonSuperTypePattern(res,typePattern,compilerContext.types());
+        }
+        List<JType> visitedExceptions=new ArrayList<>();
+        for (HNTryCatch.CatchBranch aCatch : node.getCatches()) {
+            for (HNTypeToken exceptionType : aCatch.getExceptionTypes()) {
+                JType nev = exceptionType.getTypeVal();
+                for (JType v : visitedExceptions) {
+                    if(v.isAssignableFrom(nev)){
+                        compilerContext.log().error("X000","catch","expected type already handled by previous "+v.getName(),exceptionType.getNameToken());
+                    }
+                }
+                visitedExceptions.add(nev);
+            }
+            JTypePattern typePattern = compilerContext.getTypePattern(showFinalErrors, aCatch);
+            if(typePattern==null){
+                return false;
+            }
+            res=JTypeUtils.firstCommonSuperTypePattern(res,typePattern,compilerContext.types());
+        }
+        //the finally is never typed!!
+
+        HNElementExpr.get(node).setType(res);
+        return true;
+    }
+
+    private boolean onCatch(HNTryCatch.CatchBranch node, HLJCompilerContext compilerContext) {
+        HNDeclareTokenIdentifier id = node.getIdentifier();
+        HNTypeToken[] exceptionTypes = node.getExceptionTypes();
+        if(exceptionTypes.length==0){
+            if(id!=null) {
+                HNElementLocalVar.get(id).setEffectiveType(JTypeUtils.forException(compilerContext.types()));
+            }
+        }else{
+            JType throwableType = JTypeUtils.forThrowable(compilerContext.types());
+            JType s=null;
+            for (HNTypeToken exceptionType : exceptionTypes) {
+                if(throwableType.isAssignableFrom(exceptionType.getTypeVal())){
+                    s=JTypeUtils.firstCommonSuperType(s,exceptionType.getTypeVal(),compilerContext.types());
+                }else{
+                    compilerContext.log().error("X000","catch","expected Throwable type",exceptionType.getNameToken());
+                }
+            }
+            if(s==null){
+                s=JTypeUtils.forException(compilerContext.types());
+            }
+            if(id!=null) {
+                HNElementLocalVar.get(id).setEffectiveType(s);
+            }
+        }
+        JTypePattern typePattern = compilerContext.getTypePattern(showFinalErrors, node.getDoNode());
+        if(typePattern==null){
+            return false;
+        }
+        HNElementExpr.get(node).setType(typePattern);
+        return true;
     }
 
     private boolean onExtends(HNExtends node, HLJCompilerContext compilerContext) {
@@ -252,6 +333,14 @@ public class HLCStage05CallResolver extends HLCStageType2 {
 
     private boolean onSwitchCase(HNSwitch.SwitchCase node, HLJCompilerContext compilerContext) {
         ((HNElementExpr) node.getElement()).setType(JTypeUtils.forVoid(compilerContext.types()));
+        return true;
+    }
+    private boolean onCast(HNCast node, HLJCompilerContext compilerContext) {
+        JType tv = ((HNTypeToken) node.getTypeNode()).getTypeVal();
+        if(tv==null){
+            return false;
+        }
+        HNElementExpr.get(node).setType(tv);
         return true;
     }
 
@@ -503,6 +592,9 @@ public class HLCStage05CallResolver extends HLCStageType2 {
     private boolean onPars(HNPars node, HLJCompilerContext compilerContext) {
         if (node.getItems().length == 1) {
             HNode n = node.getItems()[0];
+            if(node.getElement()==null){
+                node.setElement(n.getElement());
+            }
             if (n.getElement().getTypePattern() != null) {
                 if(node.getElement() instanceof HNElementExpr){
                     HNElementExpr.get(node).setType(n.getElement().getTypePattern());
@@ -1481,6 +1573,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
 
     private boolean onLambdaExpression(HNLambdaExpression node, HLJCompilerContext compilerContext) {
         List<HNDeclareIdentifier> arguments = node.getArguments();
+        boolean ok=true;
         List<JType> argTypes = new ArrayList<>();
         for (HNDeclareIdentifier argument : arguments) {
             JType eit = argument.getEffectiveIdentifierType();
@@ -1488,18 +1581,20 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                 eit = argument.getIdentifierType();
             }
             if(eit==null){
-                return false;
+                ok=false;
+//                return false;
             }
             argTypes.add(eit);
         }
         HNode b = node.getBody();
         JTypePattern t = compilerContext.getTypePattern(false, b);
         if(t==null){
-            return false;
+            ok=false;
+//            return false;
         }
         HNElementLambda element = (HNElementLambda) node.getElement();
-        element.setArgTypes(argTypes.toArray(new JType[0]),t.getType());
-        return true;
+        element.setArgTypes(argTypes.toArray(new JType[0]),t==null?null:t.getType());
+        return ok;
     }
 
     protected boolean onIdentifier(HNIdentifier node, HLJCompilerContext compilerContext) {
@@ -1538,7 +1633,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
     protected void processProjectReplay(HLProject project, HLOptions options) {
         if (!replays.isEmpty()) {
             while (true) {
-                LOG.log(Level.INFO, "process pending " + replays.size() + " nodes");
+                LOG.log(Level.INFO, "process ng " + replays.size() + " nodes");
                 List<HLJCompilerContext> oldRedos = new ArrayList<>(replays);
                 replays.clear();
                 int progress = 0;
@@ -1606,6 +1701,11 @@ public class HLCStage05CallResolver extends HLCStageType2 {
             //succeeded=false;
         }
         return /*succeeded && */ processCompilerStage0(compilerContextBase);
+    }
+
+    @Override
+    public boolean isRequiredCheck(HLProject project, HLOptions options) {
+        return super.isRequiredCheck(project, options) && project.log().isSuccessful();
     }
 
     protected void processProjectMain(HLProject project, HLOptions options) {

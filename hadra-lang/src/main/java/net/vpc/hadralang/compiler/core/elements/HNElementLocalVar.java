@@ -5,6 +5,7 @@ import net.vpc.common.jeep.JToken;
 import net.vpc.common.jeep.JType;
 import net.vpc.hadralang.compiler.parser.ast.HNDeclareTokenBase;
 import net.vpc.common.jeep.JTypePattern;
+import net.vpc.hadralang.compiler.parser.ast.HNode;
 import net.vpc.hadralang.compiler.utils.HUtils;
 
 public class HNElementLocalVar extends HNElement implements Cloneable{
@@ -66,5 +67,13 @@ public class HNElementLocalVar extends HNElement implements Cloneable{
         return "LocalVar{" +
                 name+
                 '}';
+    }
+
+    public static HNElementLocalVar get(HNode n) {
+        return get(n.getElement());
+    }
+
+    public static HNElementLocalVar get(HNElement element) {
+        return (HNElementLocalVar) element;
     }
 }

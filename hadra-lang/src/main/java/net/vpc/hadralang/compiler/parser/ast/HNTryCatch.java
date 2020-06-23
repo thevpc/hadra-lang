@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
  */
 public class HNTryCatch extends HNode {
 
-    private HNode resource;
+    private HNPars resource;
     private HNode body;
     private List<CatchBranch> catches = new ArrayList<CatchBranch>();
     private HNode finallyBranch;
     private boolean expressionMode;
     public HNTryCatch() {
-        super(HNNodeId.H_SWITCH);
+        super(HNNodeId.H_TRY_CATCH);
     }
 
     public HNTryCatch(JToken token) {
@@ -68,7 +68,7 @@ public class HNTryCatch extends HNode {
         return resource;
     }
 
-    public HNTryCatch setResource(HNode resource) {
+    public HNTryCatch setResource(HNPars resource) {
         this.resource=JNodeUtils.bind(this,resource, "resource");
         return this;
     }
@@ -78,17 +78,10 @@ public class HNTryCatch extends HNode {
         StringBuilder sb = new StringBuilder();
         sb.append("try");
         if(resource!=null){
-            sb.append("(");
             sb.append(resource);
-            sb.append(")");
         }
-        if(expressionMode){
-            sb.append("->");
-            sb.append(body);
-        }else{
-            sb.append("\n");
-            sb.append(body);
-        }
+        sb.append(" ");
+        sb.append(body);
         for (CatchBranch switchBranch : catches) {
             sb.append("\n");
             sb.append(switchBranch);
@@ -97,7 +90,6 @@ public class HNTryCatch extends HNode {
             sb.append("\nfinally ");
             sb.append(finallyBranch.toString());
         }
-        sb.append("\n}");
         return sb.toString();
     }
 
@@ -117,7 +109,7 @@ public class HNTryCatch extends HNode {
     public List<JNode> childrenNodes() {
         List<JNode> li = new ArrayList<>();
         li.add(resource);
-        li.add(resource);
+        li.add(body);
         li.addAll(catches);
         li.add(finallyBranch);
         return li;
@@ -231,6 +223,35 @@ public class HNTryCatch extends HNode {
             list.add(identifier);
             list.add(doNode);
             return list;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb=new StringBuilder();
+            sb.append("catch");
+            if (((exceptionTypes!=null && exceptionTypes.length>0)) || identifier!=null){
+                sb.append("(");
+                if(exceptionTypes==null || exceptionTypes.length==0){
+                    sb.append("var");
+                }else{
+                    for (int i = 0; i < exceptionTypes.length; i++) {
+                        if(i>0){
+                            sb.append("|");
+                        }
+                        sb.append(exceptionTypes[i]);
+                    }
+                }
+                if(identifier!=null){
+                    if(!sb.toString().endsWith("(")){
+                        sb.append(" ");
+                    }
+                    sb.append(identifier);
+                }
+                sb.append(")");
+            }
+            sb.append(" ");
+            sb.append(doNode);
+            return sb.toString();
         }
     }
 

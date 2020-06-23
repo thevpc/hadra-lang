@@ -10,9 +10,23 @@ package net.vpc.hadralang.test:test05;
  * using extension methods.
  */
 def void myMethod(){
+    //try (ExprOrDecl) Block catch (Decl) Block catch Decl Block;
+    try (1) catch(Exception){}
+    try (1) catch(Exception)1;
+    try 1 catch 1;
+    
+
+
     String one="one";
-    int x1="one" catch 1
-    int x2=int("one") catch 1
+    FileInputStream connexion;
+
+    int x1=try int("one") catch 1;
+    int x2=try(c=connexion) int("one") catch 1;
+    
+    
+    int x3=try(c=connexion) int("one")
+        catch(IOException|IllegalArgumentException x) 2 
+        catch(RuntimeException) 3;
 
     int y=0;
     try{
@@ -22,4 +36,11 @@ def void myMethod(){
     }finally{
         y=1;
     }
+    
+    /*
+    try(f=open("file")){
+        y="one";
+    }catch(Exception e){
+        y=1;
+    }*/
 }

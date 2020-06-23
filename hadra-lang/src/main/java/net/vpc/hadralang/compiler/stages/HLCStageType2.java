@@ -23,11 +23,19 @@ public abstract class HLCStageType2 implements HLCStage {
     @Override
     public void processProject(HLProject project, HLOptions options) {
         processProjectMain(project, options);
-        if (check) {
+        if (isRequiredCheck(project, options)) {
             for (JCompilationUnit compilationUnit : project.getCompilationUnits()) {
                 processCompilerStageCheck(project.newCompilerContext(compilationUnit));
             }
         }
+    }
+
+    public boolean isRequiredCheck(HLProject project, HLOptions options) {
+        return isCheck();
+    }
+
+    public boolean isCheck() {
+        return check;
     }
 
     public boolean processAllNextCompilerStage(JCompilerContext compilerContextBase) {

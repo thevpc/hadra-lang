@@ -18,10 +18,7 @@ import net.vpc.hadralang.compiler.utils.HUtils;
 import net.vpc.hadralang.stdlib.BooleanRef;
 
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -248,6 +245,9 @@ public class HLCStage08JavaTransform implements HLCStage {
             case H_STRING_INTEROP: {
                 return onStringInterop((HNStringInterop) node, compilerContext);
             }
+            case H_EXTENDS: {
+                return onExtends((HNExtends) node, compilerContext);
+            }
             case H_THIS:
             case H_LITERAL_DEFAULT:
             case H_TYPE_TOKEN:
@@ -263,6 +263,10 @@ public class HLCStage08JavaTransform implements HLCStage {
         //in stage 1 wont change node instance
         throw new JShouldNeverHappenException("Unsupported node class in " + getClass().getSimpleName() + ": " + node.getClass().getSimpleName());
 //        return node;
+    }
+
+    private HNode onExtends(HNExtends node, HLJCompilerContext2 compilerContext) {
+        return copy0(node);
     }
 
     private HNode onStringInterop(HNStringInterop node, HLJCompilerContext2 compilerContext) {
@@ -696,6 +700,18 @@ public class HLCStage08JavaTransform implements HLCStage {
             HNDeclareType newType = new HNDeclareType();
             contextStack.push(newType);
             newType.copyFrom(node, copyFactory);
+            List<HNExtends> anExtends = newType.getExtends();
+            List<HNExtends> interfaces = new ArrayList<>();
+            for (Iterator<HNExtends> iterator = anExtends.iterator(); iterator.hasNext(); ) {
+                HNExtends anExtend = iterator.next();
+                JType jt = compilerContext.base.lookupType(anExtend.getFullName());
+                if(jt.isInterface()){
+                    interfaces.add(anExtend);
+                    iterator.remove();
+                }
+            }
+            //put interfaces at the end of the extends clause
+            anExtends.addAll(interfaces);
             newType.setPackageName(newType.getFullPackage());
             newType.setMetaPackageName(null);
             newType.setModifiers(HUtils.publifyModifiers(newType.getModifiers()));

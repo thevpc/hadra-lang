@@ -73,6 +73,7 @@ public class HNOpDot extends HNode {
             HNOpDot o = (HNOpDot) node;
             this.right = JNodeUtils.bindCopy(this, copyFactory, o.right);
             this.left = JNodeUtils.bindCopy(this, copyFactory, o.left);
+            this.op = o.op;
             this.nullableInstance = o.nullableInstance;
             this.uncheckedMember = o.uncheckedMember;
         }

@@ -1,6 +1,7 @@
 package net.vpc.hadralang.compiler.parser;
 
 import net.vpc.common.textsource.log.JSourceMessage;
+import net.vpc.hadralang.compiler.core.HTokenId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class HLDeclarationOptions {
     boolean acceptVar = true;
     boolean acceptVarArg = true;
     boolean acceptMultiVars = false;
+    int multiVarSeparator = HTokenId.COMMA;
     NoTypeNameOption noTypeNameOption = NoTypeNameOption.ERROR;
     String defaultVarName = "value";
     boolean noMessages = false;
@@ -126,6 +128,15 @@ public class HLDeclarationOptions {
 
     public HLDeclarationOptions setAcceptDotName(boolean acceptDotName) {
         this.acceptDotName = acceptDotName;
+        return this;
+    }
+
+    public int getMultiVarSeparator() {
+        return multiVarSeparator;
+    }
+
+    public HLDeclarationOptions setMultiVarSeparator(int multiVarSeparator) {
+        this.multiVarSeparator = multiVarSeparator;
         return this;
     }
 

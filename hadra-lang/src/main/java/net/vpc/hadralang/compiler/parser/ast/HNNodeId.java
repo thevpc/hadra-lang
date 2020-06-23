@@ -64,6 +64,8 @@ public enum HNNodeId {
     H_META_PACKAGE_ARTIFACT,
     H_META_PACKAGE_VERSION,
     H_STRING_INTEROP,
+    H_MAP,
+    H_MAP_ENTRY,
 
 
     X_INVOKABLE_CALL,

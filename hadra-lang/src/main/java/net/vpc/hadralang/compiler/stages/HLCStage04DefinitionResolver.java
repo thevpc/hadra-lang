@@ -169,11 +169,22 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
                 node.setElement(new HNElementNonExpr());
                 return true;
             }
+            case H_CATCH: {
+                node.setElement(new HNElementExpr());
+                return true;
+            }
+            case H_TRY_CATCH: {
+                node.setElement(new HNElementExpr());
+                return true;
+            }
+            case H_CAST: {
+                node.setElement(new HNElementExpr());
+                return true;
+            }
             case H_DECLARE_META_PACKAGE: {
                 //wont happen
                 throw new JShouldNeverHappenException();
             }
-
             /////////////////////////////////////////
             case H_META_IMPORT_PACKAGE: {
                 return onMetaImportPackage((HNMetaImportPackage) node, compilerContext);
@@ -372,7 +383,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
             compilerContext.log().error("S000", null, "cannot resolve type symbol " + node.getTypename(), node.startToken());
         }
         node.setTypeVal(type);
-        node.setElement(new HNElementType(type));
+        node.setElement(new HNElementType(type,compilerContext.types()));
         return true;
     }
 

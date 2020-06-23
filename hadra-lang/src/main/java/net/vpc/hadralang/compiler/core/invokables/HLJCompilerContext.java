@@ -4,7 +4,6 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.AbstractJConverter;
 import net.vpc.common.jeep.core.DefaultJTypedValue;
 import net.vpc.common.jeep.core.JIndexQuery;
-import net.vpc.common.textsource.JTextSourceFactory;
 import net.vpc.common.jeep.core.types.DefaultTypeName;
 import net.vpc.common.jeep.core.types.JTypeNameBounded;
 import net.vpc.common.jeep.impl.JTypesSPI;
@@ -13,6 +12,7 @@ import net.vpc.common.jeep.impl.compiler.JCompilerContextImpl;
 import net.vpc.common.jeep.impl.functions.*;
 import net.vpc.common.jeep.impl.types.DefaultJType;
 import net.vpc.common.jeep.util.*;
+import net.vpc.common.textsource.JTextSourceFactory;
 import net.vpc.hadralang.compiler.core.HFunctionType;
 import net.vpc.hadralang.compiler.core.HLProject;
 import net.vpc.hadralang.compiler.core.HMissingLinkageException;
@@ -20,10 +20,7 @@ import net.vpc.hadralang.compiler.core.elements.*;
 import net.vpc.hadralang.compiler.index.HLIndexedClass;
 import net.vpc.hadralang.compiler.index.HLIndexer;
 import net.vpc.hadralang.compiler.parser.ast.*;
-import net.vpc.hadralang.compiler.utils.HLExtensionNames;
-import net.vpc.hadralang.compiler.utils.HNodeUtils;
-import net.vpc.hadralang.compiler.utils.HTypeUtils;
-import net.vpc.hadralang.compiler.utils.HUtils;
+import net.vpc.hadralang.compiler.utils.*;
 import net.vpc.hadralang.stdlib.Tuple;
 
 import java.lang.reflect.Modifier;
@@ -1288,9 +1285,9 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         int callArgumentsCount = args.length;
         Set<String> staticImportedTypes = resolveImportStatics();
         for (String nameAlternative : nameAlternatives) {
-            if(staticImportedTypes.isEmpty()){
+            if (staticImportedTypes.isEmpty()) {
                 failInfo.addAlternative("function", nameAlternative + JTypePattern.signatureString(args));
-            }else {
+            } else {
                 for (String importedType : staticImportedTypes) {
                     failInfo.addAlternative("function", importedType + "." + nameAlternative + JTypePattern.signatureString(args));
                     failInfo.addImport(importedType);
@@ -1370,7 +1367,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     JMethod m2 = null;
                     try {
                         m2 = (JMethod) context().functions().resolveBestMatch(getCallerInfo(), possibleMethods, failInfo.getConversions(), type2, null);
-                    }catch (JMultipleInvokableMatchFound ex){
+                    } catch (JMultipleInvokableMatchFound ex) {
                         log().error("X057", null, ex.getMessage(), null);
                         failInfo.setError(true);
                         return new JInvokableCost[0];
@@ -1380,13 +1377,13 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     }
                     if (m2 != null) {
                         JArgumentConverter[] ac = new JArgumentConverter[m2.signature().argsCount()];
-                        JType[] cTypes=new JType[ac.length+1];
-                        cTypes[0]=arg0;
+                        JType[] cTypes = new JType[ac.length + 1];
+                        cTypes[0] = arg0;
                         for (int i = 0; i < ac.length; i++) {
                             int newIndex = i + 1;
                             JType newType = m2.signature().argType(i);
                             ac[i] = new JArgumentConverterByIndex(newIndex, newType);
-                            cTypes[i+1]=newType;
+                            cTypes[i + 1] = newType;
                         }
                         int instanceArgumentIndex = 0;
                         JType instanceArgumentType = arg0;
@@ -1434,7 +1431,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         ConvertedJMethod2 cc = new ConvertedJMethod2(
                                 m2, new JArgumentConverter[]{
                                 new JArgumentConverterByIndex(0, args[0].getType())
-                        },new JType[]{args[0].getType(),args[1].getType()},
+                        }, new JType[]{args[0].getType(), args[1].getType()},
                                 new JInstanceArgumentResolverFromArgumentByIndex(1, args[1].getType()),
                                 null
                         );
@@ -1474,8 +1471,8 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         }
         Set<JInvokable> acceptable = new LinkedHashSet<>();
         List<JInvokableCost> finalResultNonBestOnly = new ArrayList<>();
-        int callArgumentsCount = args==null?0:args.length;
-        JTypePattern[] nonNullArgs=args==null?new JTypePattern[0] :args;
+        int callArgumentsCount = args == null ? 0 : args.length;
+        JTypePattern[] nonNullArgs = args == null ? new JTypePattern[0] : args;
 //        boolean noLambda = this.isTypes(args);
         JInvokableCost[] anyResult;
 
@@ -1499,7 +1496,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
 
         Set<String> staticImportedTypes = resolveImportStatics();
         for (String nameAlternative : nameAlternatives) {
-            if (isValidTypeName(nameAlternative) && args!=null/*constructors should alwaèys have pars*/) {
+            if (isValidTypeName(nameAlternative) && args != null/*constructors should alwaèys have pars*/) {
                 JType t = lookupTypeOrNull(DefaultTypeName.of(nameAlternative));
                 if (t != null) {
                     //we looking for a constructor?
@@ -1793,7 +1790,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             if (lookupTypes == null || lookupTypes.contains(LookupType.TYPE)) {
                 JType t = lookupTypeOrNull(name);
                 if (t != null) {
-                    result.add(new HNElementType(t));
+                    result.add(new HNElementType(t,types()));
                 }
             }
             if (lookupTypes == null
@@ -1822,10 +1819,10 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             m = lookupFunctionMatch(JOnError.NULL, name, HFunctionType.NORMAL, args, location, failInfo);
             boolean noArguments = args == null || args.length == 0;
             if (m == null) {
-                if(lhs){
+                if (lhs) {
 
-                }else{
-                    if(noArguments){
+                } else {
+                    if (noArguments) {
                         m = lookupFunctionMatch(JOnError.NULL, name, HFunctionType.GET, args, location, failInfo);
                     }
                 }
@@ -1942,7 +1939,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     if (c != null) {
                         return c;
                     }
-                    if(name.equals(name2)){
+                    if (name.equals(name2)) {
                         return getOrCreateType(statement);
                     }
                 }
@@ -1966,7 +1963,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         validImports.add(createJImportInfo("java.io.*", "<default>"));
         validImports.add(createJImportInfo("net.vpc.hadralang.stdlib.*", "<default>"));
         String fullPackage = project().getMetaPackageType().getFullPackage();
-        if(!JStringUtils.isBlank(fullPackage)) {
+        if (!JStringUtils.isBlank(fullPackage)) {
             validImports.add(createJImportInfo(fullPackage + ".*", "<default>"));
         }
         //                ,"net.vpc.hadralang.stdlib.HDefaults"
@@ -2161,7 +2158,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     public HNode lookupEnclosingDeclaration(JNode node, boolean returnMetaPackage) {
         HNode n = (HNode) node;
         while (n != null) {
-            HNode p = (HNode) n.parentNode();
+            HNode p = n.parentNode();
             if (p == null) {
                 break;
             }
@@ -2172,6 +2169,12 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 return p;
             }
             if (p instanceof HNDeclareInvokable) {
+                return p;
+            }
+            if (p instanceof HNTryCatch.CatchBranch) {
+                return p;
+            }
+            if (p instanceof HNTryCatch) {
                 return p;
             }
             if (p instanceof HNFor) {
@@ -2189,6 +2192,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         }
         return null;
     }
+
     public HNDeclareType lookupEnclosingDeclareType(JNode node) {
         HNode n = (HNode) node;
         while (n != null) {
@@ -2213,7 +2217,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             }
             if (p instanceof HNDeclareIdentifier) {
                 return (HNDeclareIdentifier) p;
-            }else {
+            } else {
                 if (p instanceof HNDeclareType) {
                     return null;
                 }
@@ -2285,7 +2289,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         List<HNDeclareIdentifier> arguments = d.getMainConstructorArgs();
                         if (arguments != null) {
                             for (HNDeclareIdentifier argument : arguments) {
-                                fillFields(name,dt, result, argument);
+                                fillFields(name, dt, result, argument);
                             }
                         }
                     }
@@ -2389,16 +2393,65 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
+            case H_TRY_CATCH: {
+                if (noArguments) {
+                    if (lookupTypes == null || lookupTypes.contains(LookupType.LOCAL_VAR)) {
+                        HNTryCatch d = (HNTryCatch) whereToLookInto;
+                        JNode e = HUtils.skipFirstPar(d.getResource());
+                        if (e instanceof HNDeclareIdentifier) {
+                            HNDeclareIdentifier argument = (HNDeclareIdentifier) e;
+                            fillVars(name, result, argument, lookupTypes);
+                        }
+                    }
+                }
+                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                break;
+            }
+            case H_CATCH: {
+                if (noArguments) {
+                    if (lookupTypes == null || lookupTypes.contains(LookupType.LOCAL_VAR)) {
+                        HNTryCatch.CatchBranch d = (HNTryCatch.CatchBranch) whereToLookInto;
+                        HNTypeToken[] exceptionTypes = d.getExceptionTypes();
+                        JType excType = null;
+                        if (exceptionTypes.length == 0) {
+                            excType = types().forName(Exception.class.getName());
+                        } else {
+                            for (HNTypeToken exceptionType : exceptionTypes) {
+                                excType = JTypeUtils.firstCommonSuperType(excType,
+                                        getTypePattern(true, exceptionType).getType(),
+                                        types()
+                                );
+                            }
+                        }
+                        HNDeclareTokenIdentifier identifier = d.getIdentifier();
+                        if(identifier==null){
+                            identifier=new HNDeclareTokenIdentifier(
+                                    HTokenUtils.createToken("exception")
+                            );
+                        }
+                        if(identifier.getElement()==null){
+                            identifier.setElement(new HNElementLocalVar(identifier.getToken().sval,identifier,whereToLookInto.startToken())
+                            .setEffectiveType(excType)
+                            );
+                        }
+                        if (identifier.getName().equals(name)) {
+                            result.add(identifier.getElement());
+                        }
+                    }
+                }
+                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                break;
+            }
             case H_SWITCH_CASE: {
                 if (noArguments) {
                     HNSwitch.SwitchCase d = (HNSwitch.SwitchCase) whereToLookInto;
-                    if(lookupTypes==null  || lookupTypes.contains(LookupType.STATIC_FIELD)) {
+                    if (lookupTypes == null || lookupTypes.contains(LookupType.STATIC_FIELD)) {
                         HNSwitch parentNode = (HNSwitch) d.parentNode();
                         HNode switchExpr = HUtils.skipFirstPar(parentNode.getExpr());
-                        JTypePattern u=null;
-                        if(switchExpr instanceof HNDeclareIdentifier){
-                            u= JTypePattern.ofTypeOrNull(((HNDeclareIdentifier) switchExpr).getEffectiveIdentifierType());
-                        }else{
+                        JTypePattern u = null;
+                        if (switchExpr instanceof HNDeclareIdentifier) {
+                            u = JTypePattern.ofTypeOrNull(((HNDeclareIdentifier) switchExpr).getEffectiveIdentifierType());
+                        } else {
                             u = getTypePattern(false, switchExpr);
                         }
                         if (u == null) {
@@ -2450,7 +2503,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             case H_IS: {
                 if (noArguments) {
                     HNDeclareTokenHolder holder = (HNDeclareTokenHolder) whereToLookInto;
-                    if(lookupTypes==null  || lookupTypes.contains(LookupType.LOCAL_VAR)) {
+                    if (lookupTypes == null || lookupTypes.contains(LookupType.LOCAL_VAR)) {
                         HNDeclareToken argument = holder.getDeclareIdentifierTokenBase();
                         fillVars(name, result, argument, lookupTypes);
                     }
@@ -2462,7 +2515,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 //should i handle other names?
                 //perhaps 'last', 'size', 'length' ...
                 if (name.equals("$")) {
-                    if(lookupTypes==null  || lookupTypes.contains(LookupType.DOLLAR_VAR)) {
+                    if (lookupTypes == null || lookupTypes.contains(LookupType.DOLLAR_VAR)) {
                         HNBracketsPostfix lop = (HNBracketsPostfix) whereToLookInto;
                         HNElementBracketsVar u = new HNElementBracketsVar(name, lop, whereToLookInto.startToken());
                         HNode a = (HNode) lop.getLeft();
@@ -2530,7 +2583,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         return;
                     }
                 }
-                if(lookupTypes==null||lookupTypes.contains(LookupType.LOCAL_VAR)) {
+                if (lookupTypes == null || lookupTypes.contains(LookupType.LOCAL_VAR)) {
                     result.add(new HNElementLocalVar(name, argument, r));
                 }
             }
@@ -2982,7 +3035,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                             JType jtype = lookupType(n2);
                             if (jtype != null) {
                                 if (arguments == null) {
-                                    return new HNElementType(jtype);
+                                    return new HNElementType(jtype,types());
                                 } else {
                                     JInvokable t = findConstructorMatch(onError, jtype, argTypes.toArray(new JTypePattern[0]), location, failInfo);
                                     if (t != null) {
@@ -3199,13 +3252,13 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         type.setjType(jt);
         for (HNExtends extend : type.getExtends()) {
             JType tt = lookupType(extend.getFullName());
-            DefaultJType djt=(DefaultJType) jt;
-            if(tt.isInterface()){
-                LinkedHashSet<JType> ifs=new LinkedHashSet<>();
+            DefaultJType djt = (DefaultJType) jt;
+            if (tt.isInterface()) {
+                LinkedHashSet<JType> ifs = new LinkedHashSet<>();
                 ifs.addAll(Arrays.asList(djt.getInterfaces()));
-                ifs.add(djt);
+                ifs.add(tt);
                 djt.setInterfaces(ifs.toArray(new JType[0]));
-            }else{
+            } else {
                 djt.setSuperType(tt);
             }
         }
@@ -3260,6 +3313,12 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         return new HLJCompilerContext(iteration,
                 pass, path, imports, context, packageName, log, project, compilationUnit, (HLJCompilerContext) parent
         );
+    }
+
+    public JCallerInfo getCallerInfo() {
+        String n = HUtils.getSourceName(node());
+        JType y = lookupEnclosingType(node());
+        return new HLCallerInfo(n, y);
     }
 
     public enum LookupType {
@@ -3338,10 +3397,5 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             searchedConverters.addAll(Arrays.asList(t));
             return t;
         }
-    }
-    public JCallerInfo getCallerInfo(){
-        String n = HUtils.getSourceName(node());
-        JType y = lookupEnclosingType(node());
-        return new HLCallerInfo(n,y);
     }
 }

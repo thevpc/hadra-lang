@@ -5,7 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f1cf708f-f133-4792-a05e-0ddd77f1da07" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/success/testCompilerSuccess0039.hl" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/success/testCompilerSuccess0039.hl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/HLParserOptions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNMap.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/fail/testCompilerFail0043.hl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-example/hadra-example.iml" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-example/hadra-example.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/elements/HNElementLocalVar.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/elements/HNElementLocalVar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/elements/HNElementType.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/elements/HNElementType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/invokables/HLJCompilerContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/invokables/HLJCompilerContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/HLDeclarationOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/HLDeclarationOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/HLParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/HLParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNBlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNCast.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNCast.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNNodeId.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNNodeId.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNOpDot.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNOpDot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNTryCatch.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNTryCatch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage04DefinitionResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage04DefinitionResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage05CallResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage05CallResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStageType2.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStageType2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/generators/java/HLCStage08JavaTransform.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/generators/java/HLCStage08JavaTransform.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/utils/HTokenUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/utils/HTokenUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/success/testCompilerSuccess0038.hl" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/success/testCompilerSuccess0038.hl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/success/testCompilerSuccess0050.hl" beforeDir="false" afterPath="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/success/testCompilerSuccess0050.hl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +65,7 @@
     <property name="eu.ydp.idea.ts.spec.generator.settings.spec.template" value="import {$ClassName$} from '$TestsRelativePath$../src/$classRelativePath$/$ClassName$';&#10;&#10;describe('$ClassName$', () =&gt; {&#10;  let $ObjName$:$ClassName$;&#10;&#10;  beforeEach(() =&gt; {&#10;    $ObjName$ = new $ClassName$();&#10;  });&#10;&#10;  describe('', () =&gt; {&#10;    it('', () =&gt; {&#10;      // given&#10;&#10;      // when&#10;&#10;      // then&#10;    });&#10;  });&#10;});&#10;" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/success" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/hadra-example" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -52,6 +73,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="net.vpc.hadralang.compiler.parser.HLParserOptions" />
       <recent name="net.vpc.common.jeep.util.JTypeUtils" />
       <recent name="net.vpc.hadralang.compiler.utils.HTokenUtils" />
     </key>
@@ -64,11 +86,31 @@
       <recent name="net.vpc.common.jeep.core.nodes" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/success" />
       <recent name="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/fail" />
+      <recent name="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/success" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TestCompilerSuccess.testCompiler0039">
+  <component name="RunManager" selected="Application.TestCompile">
+    <configuration name="HadraLanguage" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="net.vpc.hadralang.compiler.core.HadraLanguage" />
+      <module name="hadra-lang" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="net.vpc.hadralang.compiler.core.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestCompile" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TestCompile" />
+      <module name="hadra-example" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TestCompilerSuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="hadra-lang" />
       <extension name="coverage">
@@ -84,7 +126,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestCompilerSuccess.testCompiler0027" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCompilerSuccess.testCompiler0020" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="hadra-lang" />
       <extension name="coverage">
         <pattern>
@@ -94,13 +136,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="net.vpc.hadralang.test" />
       <option name="MAIN_CLASS_NAME" value="net.vpc.hadralang.test.TestCompilerSuccess" />
-      <option name="METHOD_NAME" value="testCompiler0027" />
+      <option name="METHOD_NAME" value="testCompiler0020" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestCompilerSuccess.testCompiler0028" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCompilerSuccess.testCompiler0038" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="hadra-lang" />
       <extension name="coverage">
         <pattern>
@@ -110,39 +152,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="net.vpc.hadralang.test" />
       <option name="MAIN_CLASS_NAME" value="net.vpc.hadralang.test.TestCompilerSuccess" />
-      <option name="METHOD_NAME" value="testCompiler0028" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestCompilerSuccess.testCompiler0039" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="hadra-lang" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="net.vpc.hadralang.test.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="net.vpc.hadralang.test" />
-      <option name="MAIN_CLASS_NAME" value="net.vpc.hadralang.test.TestCompilerSuccess" />
-      <option name="METHOD_NAME" value="testCompiler0039" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestCompilerSuccess.testCompiler0050" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="hadra-lang" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="net.vpc.hadralang.test.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="net.vpc.hadralang.test" />
-      <option name="MAIN_CLASS_NAME" value="net.vpc.hadralang.test.TestCompilerSuccess" />
-      <option name="METHOD_NAME" value="testCompiler0050" />
+      <option name="METHOD_NAME" value="testCompiler0038" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -150,11 +160,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.TestCompilerSuccess.testCompiler0039" />
+        <item itemvalue="Application.TestCompile" />
+        <item itemvalue="JUnit.TestCompilerSuccess.testCompiler0038" />
+        <item itemvalue="Application.HadraLanguage" />
+        <item itemvalue="JUnit.TestCompilerSuccess.testCompiler0020" />
         <item itemvalue="JUnit.TestCompilerSuccess" />
-        <item itemvalue="JUnit.TestCompilerSuccess.testCompiler0050" />
-        <item itemvalue="JUnit.TestCompilerSuccess.testCompiler0028" />
-        <item itemvalue="JUnit.TestCompilerSuccess.testCompiler0027" />
       </list>
     </recent_temporary>
   </component>
@@ -202,7 +212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592783381622</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="JTypeOrLambda-&gt;JTypePattern">
+      <created>1592784176099</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1592784176099</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -213,18 +230,25 @@
     <option name="LAST_COMMIT_MESSAGE" value="JTypeOrLambda-&gt;JTypePattern" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="328" y="85" width="1024" height="844" key="#Project_Structure" timestamp="1592672690056">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="328" y="100" width="1024" height="844" key="#Project_Structure" timestamp="1592904338522">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state x="328" y="85" width="1024" height="844" key="#Project_Structure/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592672690056" />
-    <state x="304" y="165" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1592575160550">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="328" y="100" key="#Project_Structure/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592904338522" />
+    <state x="304" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1592895639155">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state x="304" y="165" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592575160550" />
-    <state x="300" y="181" width="727" height="597" key="#com.intellij.ide.util.MemberChooser" timestamp="1592781513593">
+    <state x="304" y="180" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592895639155" />
+    <state x="300" y="196" width="727" height="597" key="#com.intellij.ide.util.MemberChooser" timestamp="1592907502806">
+      <screen x="0" y="15" width="1680" height="1050" />
+    </state>
+    <state x="300" y="181" width="727" height="597" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592828848934" />
+    <state x="300" y="196" key="#com.intellij.ide.util.MemberChooser/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592907502806" />
+    <state x="627" y="182" width="576" height="686" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog" timestamp="1592824906091">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="300" y="181" width="727" height="597" key="#com.intellij.ide.util.MemberChooser/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592781513593" />
+    <state x="627" y="182" width="576" height="686" key="#com.intellij.refactoring.encapsulateFields.EncalpsulateFieldsDialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592824906091" />
     <state x="546" y="241" key="#com.intellij.refactoring.memberPullUp.PullUpDialog" timestamp="1592766024023">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -241,74 +265,81 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="620" y="338" key="#com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodDialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592516070394" />
-    <state x="556" y="215" width="568" height="493" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1592769613065">
+    <state x="556" y="215" width="568" height="493" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog" timestamp="1592825421458">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="556" y="215" width="568" height="493" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592769613065" />
-    <state x="197" y="0" width="1285" height="1014" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1592770002886">
+    <state x="556" y="215" width="568" height="493" key="#com.intellij.refactoring.move.moveMembers.MoveMembersDialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592825421458" />
+    <state x="197" y="15" width="1285" height="1014" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1592829337897">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="197" y="0" width="1285" height="1014" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592770002886" />
+    <state x="197" y="15" width="1285" height="1014" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592829337897" />
     <state x="578" y="256" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1592517832712">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="578" y="256" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592517832712" />
-    <state x="310" y="270" width="1079" height="502" key="#xdebugger.evaluate" timestamp="1592766842371">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="310" y="285" width="1042" height="502" key="#xdebugger.evaluate" timestamp="1592907131103">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state x="310" y="270" width="1079" height="502" key="#xdebugger.evaluate/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592766842371" />
-    <state x="0" y="0" width="1551" height="982" key="CommitChangelistDialog2" timestamp="1592783381277">
+    <state x="310" y="285" width="1042" height="502" key="#xdebugger.evaluate/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592907131103" />
+    <state x="0" y="0" width="1551" height="982" key="CommitChangelistDialog2" timestamp="1592784175944">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="0" y="0" width="1551" height="982" key="CommitChangelistDialog2/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592783381277" />
-    <state width="1098" height="506" key="DebuggerActiveHint" timestamp="1592782082400">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="0" y="0" width="1551" height="982" key="CommitChangelistDialog2/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592784175944" />
+    <state width="1098" height="506" key="DebuggerActiveHint" timestamp="1592900240702">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state width="1098" height="506" key="DebuggerActiveHint/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592782082400" />
+    <state width="1098" height="506" key="DebuggerActiveHint/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592900240702" />
     <state x="100" y="100" width="1480" height="814" maximized="true" key="DiffContextDialog" timestamp="1592783400265">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="100" y="100" width="1480" height="814" maximized="true" key="DiffContextDialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592783400265" />
-    <state x="628" y="280" key="FileChooserDialogImpl" timestamp="1592730343821">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="628" y="295" key="FileChooserDialogImpl" timestamp="1592904334865">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state x="628" y="280" key="FileChooserDialogImpl/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592730343821" />
-    <state width="1634" height="191" key="GridCell.Tab.0.bottom" timestamp="1592783480318">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="628" y="295" key="FileChooserDialogImpl/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592904334865" />
+    <state width="1634" height="9" key="GridCell.Tab.0.bottom" timestamp="1592907655394">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state width="1874" height="54" key="GridCell.Tab.0.bottom.inPresentationMode" timestamp="1592469640986">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state width="1874" height="54" key="GridCell.Tab.0.bottom.inPresentationMode/0.0.1920.1044@0.0.1920.1044" timestamp="1592469640986" />
-    <state width="1634" height="191" key="GridCell.Tab.0.bottom/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592783480318" />
+    <state width="1634" height="308" key="GridCell.Tab.0.bottom/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592829775147" />
     <state width="1874" height="54" key="GridCell.Tab.0.bottom/0.0.1920.1044@0.0.1920.1044" timestamp="1592491035238" />
-    <state width="1634" height="191" key="GridCell.Tab.0.center" timestamp="1592783480318">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state width="1634" height="9" key="GridCell.Tab.0.bottom/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592907655394" />
+    <state width="1634" height="9" key="GridCell.Tab.0.center" timestamp="1592907655394">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state width="1874" height="54" key="GridCell.Tab.0.center.inPresentationMode" timestamp="1592469640986">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state width="1874" height="54" key="GridCell.Tab.0.center.inPresentationMode/0.0.1920.1044@0.0.1920.1044" timestamp="1592469640986" />
-    <state width="1634" height="191" key="GridCell.Tab.0.center/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592783480318" />
+    <state width="1634" height="308" key="GridCell.Tab.0.center/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592829775147" />
     <state width="1874" height="54" key="GridCell.Tab.0.center/0.0.1920.1044@0.0.1920.1044" timestamp="1592491035237" />
-    <state width="1634" height="191" key="GridCell.Tab.0.left" timestamp="1592783480318">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state width="1634" height="9" key="GridCell.Tab.0.center/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592907655394" />
+    <state width="1634" height="9" key="GridCell.Tab.0.left" timestamp="1592907655394">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state width="1874" height="54" key="GridCell.Tab.0.left.inPresentationMode" timestamp="1592469640985">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state width="1874" height="54" key="GridCell.Tab.0.left.inPresentationMode/0.0.1920.1044@0.0.1920.1044" timestamp="1592469640985" />
-    <state width="1634" height="191" key="GridCell.Tab.0.left/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592783480318" />
+    <state width="1634" height="308" key="GridCell.Tab.0.left/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592829775147" />
     <state width="1874" height="54" key="GridCell.Tab.0.left/0.0.1920.1044@0.0.1920.1044" timestamp="1592491035237" />
-    <state width="1634" height="191" key="GridCell.Tab.0.right" timestamp="1592783480318">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state width="1634" height="9" key="GridCell.Tab.0.left/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592907655394" />
+    <state width="1634" height="9" key="GridCell.Tab.0.right" timestamp="1592907655394">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state width="1874" height="54" key="GridCell.Tab.0.right.inPresentationMode" timestamp="1592469640986">
       <screen x="0" y="0" width="1920" height="1044" />
     </state>
     <state width="1874" height="54" key="GridCell.Tab.0.right.inPresentationMode/0.0.1920.1044@0.0.1920.1044" timestamp="1592469640986" />
-    <state width="1634" height="191" key="GridCell.Tab.0.right/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592783480318" />
+    <state width="1634" height="308" key="GridCell.Tab.0.right/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592829775147" />
     <state width="1874" height="54" key="GridCell.Tab.0.right/0.0.1920.1044@0.0.1920.1044" timestamp="1592491035238" />
+    <state width="1634" height="9" key="GridCell.Tab.0.right/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592907655394" />
     <state width="1634" height="256" key="GridCell.Tab.1.bottom" timestamp="1592603210526">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -329,10 +360,11 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="428" y="253" key="IDE.errors.dialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592766716270" />
-    <state x="482" y="254" key="NewModule_or_Project.wizard" timestamp="1592672687982">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="482" y="269" key="NewModule_or_Project.wizard" timestamp="1592904336395">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state x="482" y="254" key="NewModule_or_Project.wizard/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592672687982" />
+    <state x="482" y="269" key="NewModule_or_Project.wizard/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592904336395" />
     <state x="440" y="444" key="ReplaceDuplicatesPrompt" timestamp="1592744563953">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -345,14 +377,15 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="692" y="422" key="VCS.ChangelistChooser/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592745432733" />
-    <state x="440" y="243" key="Vcs.Push.Dialog.v2" timestamp="1592783401382">
+    <state x="440" y="243" key="Vcs.Push.Dialog.v2" timestamp="1592784177555">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="440" y="243" key="Vcs.Push.Dialog.v2/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592783401382" />
-    <state width="840" height="507" key="XDebugger.FullValuePopup" timestamp="1592754758547">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="440" y="243" key="Vcs.Push.Dialog.v2/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592784177555" />
+    <state width="840" height="489" key="XDebugger.FullValuePopup" timestamp="1592907244099">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
-    <state width="840" height="507" key="XDebugger.FullValuePopup/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592754758547" />
+    <state width="840" height="507" key="XDebugger.FullValuePopup/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592790992361" />
+    <state width="840" height="489" key="XDebugger.FullValuePopup/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592907244099" />
     <state x="33" y="668" width="1480" height="844" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1592750230225">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -365,10 +398,11 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="546" y="442" width="524" height="500" key="extract.method.dialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592744557981" />
-    <state x="418" y="180" width="988" height="558" key="find.popup" timestamp="1592769845049">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="418" y="195" width="988" height="558" key="find.popup" timestamp="1592905421819">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
     <state x="418" y="180" width="988" height="558" key="find.popup/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592769845049" />
+    <state x="418" y="195" width="988" height="558" key="find.popup/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592905421819" />
     <state x="220" y="226" key="new project wizard" timestamp="1592730375898">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -381,37 +415,23 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="504" y="231" key="run.anything.popup/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592517084037" />
-    <state x="204" y="222" width="971" height="678" key="search.everywhere.popup" timestamp="1592783415716">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="204" y="237" width="971" height="678" key="search.everywhere.popup" timestamp="1592907426634">
+      <screen x="0" y="15" width="1680" height="1050" />
     </state>
-    <state x="204" y="222" width="971" height="678" key="search.everywhere.popup/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592783415716" />
+    <state x="204" y="222" width="971" height="678" key="search.everywhere.popup/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592828295158" />
+    <state x="204" y="237" width="971" height="678" key="search.everywhere.popup/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592907426634" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/HLParser.java</url>
-          <line>2588</line>
-          <option name="timeStamp" value="93" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage04DefinitionResolver.java</url>
-          <line>367</line>
-          <option name="timeStamp" value="96" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/HLParser.java</url>
-          <line>1097</line>
-          <option name="timeStamp" value="98" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage05CallResolver.java</url>
-          <line>212</line>
+          <line>293</line>
           <option name="timeStamp" value="100" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/invokables/HLJCompilerContext.java</url>
-          <line>1758</line>
+          <line>1755</line>
           <option name="timeStamp" value="108" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -421,7 +441,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/JTypePattern.java</url>
-          <line>116</line>
+          <line>118</line>
           <option name="timeStamp" value="117" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -434,13 +454,87 @@
           <line>642</line>
           <option name="timeStamp" value="122" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage05CallResolver.java</url>
+          <line>1323</line>
+          <option name="timeStamp" value="131" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage05CallResolver.java</url>
+          <line>1574</line>
+          <option name="timeStamp" value="132" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage04DefinitionResolver.java</url>
+          <line>198</line>
+          <option name="timeStamp" value="133" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/parser/ast/HNMap.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="134" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage04DefinitionResolver.java</url>
+          <line>527</line>
+          <option name="timeStamp" value="137" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="h.getElement()==null" language="JAVA" />
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/invokables/HLJCompilerContext.java</url>
+          <line>2789</line>
+          <option name="timeStamp" value="140" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage05CallResolver.java</url>
+          <line>595</line>
+          <option name="timeStamp" value="143" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="n==null" language="JAVA" />
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/elements/HNElementExpr.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="145" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="def==null" language="JAVA" />
+          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/JToken.java</url>
+          <line>307</line>
+          <option name="timeStamp" value="146" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="t.startLineNumber&lt;-1" language="JAVA" />
+          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/impl/tokens/JTokenizerImpl.java</url>
+          <line>248</line>
+          <option name="timeStamp" value="147" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/impl/tokens/JTokenizerImpl.java</url>
+          <line>216</line>
+          <option name="timeStamp" value="152" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="type==null" language="JAVA" />
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/elements/HNElementType.java</url>
+          <line>14</line>
+          <option name="timeStamp" value="155" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/stages/HLCStage04DefinitionResolver.java</url>
+          <line>378</line>
+          <option name="timeStamp" value="157" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/impl/types/DefaultJType.java</url>
+          <line>269</line>
+          <option name="timeStamp" value="162" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/hadra-lang/src/main/java/net/vpc/hadralang/compiler/core/invokables/HLJCompilerContext.java</url>
+          <line>3251</line>
+          <option name="timeStamp" value="163" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="tokens().config().getOperators().contains(&quot;:&quot;)" language="JAVA" />
-        <watch expression="config.getOperators().contains(&quot;:&quot;)" language="JAVA" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

@@ -27,8 +27,8 @@ public class HNCast extends HNode {
 
     public HNCast(HNode typeNode, HNode base, JToken[] separators,JToken startToken, JToken endToken) {
         this();
-        this.typeNode = typeNode;
-        this.base = base;
+        setTypeNode(typeNode);
+        setBase(base);
         setStartToken(startToken);
         setEndToken(endToken);
         setSeparators(separators);
@@ -39,7 +39,7 @@ public class HNCast extends HNode {
     }
 
     public HNCast setTypeNode(HNode typeNode) {
-        this.typeNode = typeNode;
+        this.typeNode = JNodeUtils.bind(this,typeNode,"items");
         return this;
     }
 
@@ -48,7 +48,7 @@ public class HNCast extends HNode {
     }
 
     public HNCast setBase(HNode base) {
-        this.base = base;
+        this.base = JNodeUtils.bind(this,base,"base");
         return this;
     }
 

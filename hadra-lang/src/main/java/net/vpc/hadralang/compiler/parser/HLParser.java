@@ -1,7 +1,9 @@
 package net.vpc.hadralang.compiler.parser;
 
 import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.*;
+import net.vpc.common.jeep.core.DefaultJListWithSeparators;
+import net.vpc.common.jeep.core.DefaultJParser;
+import net.vpc.common.jeep.core.JExpressionOptions;
 import net.vpc.common.jeep.core.nodes.JNodeTokens;
 import net.vpc.common.jeep.core.tokens.JTokenDef;
 import net.vpc.common.jeep.core.types.DefaultTypeName;
@@ -27,78 +29,12 @@ import java.lang.reflect.Modifier;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class HLParser extends DefaultJParser<HNode> {
-    public static final HLDeclarationOptions DECL_ANY_1 = new HLDeclarationOptions()
-            .setAcceptInValue(false)
-            .setAcceptMultiVars(true)
-            .setAcceptVarArg(false)
-            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.ERROR);
-    public static final HLDeclarationOptions DECL_ANY_2 = new HLDeclarationOptions()
-            .setAcceptInValue(false)
-            .setAcceptVarArg(false)
-            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.ERROR);
-    public static final HLDeclarationOptions DECL_ANY_3 = new HLDeclarationOptions()
-            .setAcceptInValue(false)
-            .setAcceptMultiVars(true)
-            .setAcceptVarArg(false)
-            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.ERROR);
-    public static final JTokenDef DEF_GT = new JTokenDef(HTokenId.GT, "GT", JTokenType.TT_OPERATOR, "TT_OPERATOR", ">");
-    public static final JTokenDef DEF_GT2 = new JTokenDef(HTokenId.GT2, "GT2", JTokenType.TT_OPERATOR, "TT_OPERATOR", ">>");
-    public static final JTokenDef DEF_GT3 = new JTokenDef(HTokenId.GT3, "GT3", JTokenType.TT_OPERATOR, "TT_OPERATOR", ">>>");
-    private static final HLDeclarationOptions DECLARE_CONSTR_ARG = new HLDeclarationOptions()
-            .setAcceptModifiers(false)
-            .setAcceptVar(false).setAcceptDotName(false)
-            .setAcceptFunction(false).setAcceptClass(false)
-            .setAcceptEqValue(true).setAcceptInValue(false)
-            .setAcceptVarArg(true).setAcceptMultiVars(false)
-            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.ERROR);
-    private static final HLDeclarationOptions DECLARE_DEFAULT_CONSTR_ARG = new HLDeclarationOptions()
-            .setAcceptModifiers(true)
-            .setAcceptVar(true).setAcceptDotName(false)
-            .setAcceptFunction(false).setAcceptClass(false)
-            .setAcceptEqValue(true).setAcceptInValue(false)
-            .setAcceptVarArg(true).setAcceptMultiVars(false)
-            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.TYPE);
-    private static final HLDeclarationOptions DECLARE_FUNCTION_ARG = new HLDeclarationOptions()
-            .setAcceptModifiers(true)
-            .setAcceptVar(false).setAcceptDotName(false)
-            .setAcceptFunction(false).setAcceptClass(false)
-            .setAcceptEqValue(false).setAcceptInValue(false)
-            .setAcceptVarArg(true).setAcceptMultiVars(false)
-            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.TYPE);
-    private static final HLDeclarationOptions DECLARE_LAMBDA_ARG = new HLDeclarationOptions()
-            .setAcceptModifiers(false)
-            .setAcceptVar(false).setAcceptDotName(false)
-            .setAcceptFunction(false).setAcceptClass(false)
-            .setAcceptEqValue(false).setAcceptInValue(false)
-            .setAcceptVarArg(true).setAcceptMultiVars(false)
-            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.NAME);
-    private static final HLDeclarationOptions DECLARE_ASSIGN_EQ = new HLDeclarationOptions().setAcceptClass(false).setAcceptFunction(false)
-            .setAcceptModifiers(false)
-            .setAcceptVar(true).setAcceptDotName(false)
-            .setAcceptFunction(false).setAcceptClass(false)
-            .setAcceptEqValue(true).setAcceptInValue(false)
-            .setAcceptVarArg(false).setAcceptMultiVars(false)
-            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.NAME);
-    private static final HLDeclarationOptions DECLARE_ASSIGN_COLON = new HLDeclarationOptions().setAcceptClass(false).setAcceptFunction(false)
-            .setAcceptModifiers(false)
-            .setAcceptVar(true).setAcceptDotName(false)
-            .setAcceptFunction(false).setAcceptClass(false)
-            .setAcceptEqValue(false).setAcceptInValue(true)
-            .setAcceptVarArg(false).setAcceptMultiVars(false)
-            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.NAME);
-    private static final HLDeclarationOptions DECLARE_ASSIGN_EQ_OR_COLON = new HLDeclarationOptions().setAcceptClass(false).setAcceptFunction(false)
-            .setAcceptModifiers(false)
-            .setAcceptVar(true).setAcceptDotName(false)
-            .setAcceptFunction(false).setAcceptClass(false)
-            .setAcceptEqValue(true).setAcceptInValue(true)
-            .setAcceptVarArg(false).setAcceptMultiVars(false)
-            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.NAME);
     //    private static final HashSet<String> unacceptableWordSuffixedForNumbers = new HashSet<>();
 //
 //    static {
@@ -107,56 +43,11 @@ public class HLParser extends DefaultJParser<HNode> {
 //        unacceptableWordSuffixedForNumbers.add("{");
 //    }
     private boolean metaParsingMode = false;
-    private JExpressionOptions simpleExpressionOptions;
-    private JExpressionOptions noBracesExpressionOptions;
 
     public HLParser(JTokenizer tokenizer, JCompilationUnit compilationUnit, JContext context) {
         super(tokenizer, compilationUnit, context, new HLFactory(compilationUnit, context));
 
-        {
-            JExpressionOptions o = new JExpressionOptions();
-            o.binary = new JExpressionBinaryOptions();
-            o.binary.excludedListOperator = true;
-            o.binary.excludedImplicitOperator = true;
-            o.binary.excludedBinaryOperators = null;
-
-            o.unary = new JExpressionUnaryOptions();
-            o.unary.excludedPrefixParenthesis = false;
-            o.unary.excludedPrefixBrackets = true;
-            o.unary.excludedPrefixBraces = true;
-            o.unary.excludedPostfixParenthesis = false;
-            o.unary.excludedPostfixBrackets = false;
-            o.unary.excludedPostfixBraces = true;
-            o.unary.excludedPrefixUnaryOperators = null;
-            o.unary.excludedPostfixUnaryOperators = null;
-            setDefaultExpressionOptions(o);
-        }
-
-        {
-            JExpressionOptions o = new JExpressionOptions();
-            o.binary = new JExpressionBinaryOptions();
-            o.binary.excludedListOperator = true;
-            o.binary.excludedImplicitOperator = true;
-            o.binary.excludedBinaryOperators = new HashSet<>(Arrays.asList(":", "->"));
-            o.unary = new JExpressionUnaryOptions();
-            o.unary.excludedPrefixParenthesis = true;
-            o.unary.excludedPrefixBrackets = true;
-            o.unary.excludedPrefixBraces = true;
-            o.unary.excludedPostfixParenthesis = true;
-            o.unary.excludedPostfixBrackets = true;
-            o.unary.excludedPostfixBraces = true;
-            o.unary.excludedPrefixUnaryOperators = new HashSet<>(Arrays.asList("++", "--"));
-            o.unary.excludedPostfixUnaryOperators = new HashSet<>(Arrays.asList("++", "--"));
-            simpleExpressionOptions = o;
-        }
-
-        {
-            JExpressionOptions o = getDefaultExpressionOptions().copy();
-            o.unary.excludedPrefixBraces=true;
-            o.unary.excludedPostfixBraces=true;
-            o.unary.excludedTerminalBraces=true;
-            noBracesExpressionOptions = o;
-        }
+        setDefaultExpressionOptions(HLParserOptions.hDefaultExpr);
     }
 
     protected static HNTypeToken createNullTypeToken(JToken nullToken) {
@@ -196,10 +87,10 @@ public class HLParser extends DefaultJParser<HNode> {
     protected HNode parseExpressionPars() {
         try (JTokenizerSnapshot snapshot = tokenizer().snapshot()) {
             ArrayList<JSourceMessage> silencedMessages = new ArrayList<>();
-            DefaultJMessageList err = errorList();
+            JMessageList err = errorList();
             JListWithSeparators<HNDeclareIdentifier> li = parseGroupedList("lambda expression", "lambda argument declaration",
-                    () -> parseDeclareArgument(DECLARE_LAMBDA_ARG, err), "(", ",", ")", silencedMessages);
-            if (li!=null && li.getEndToken() != null) {
+                    () -> parseDeclareArgument(HLParserOptions.DECLARE_LAMBDA_ARG, err), "(", ",", ")", silencedMessages);
+            if (li != null && li.getEndToken() != null) {
                 JToken endToken = li.getEndToken();
                 JToken op = peek();
                 if (op.id() == HTokenId.MINUS_GT) {
@@ -382,7 +273,10 @@ public class HLParser extends DefaultJParser<HNode> {
 
     @Override
     public HNode parsePostfixBracesNode(HNode middle, JToken copy) {
-        return super.parsePostfixBracesNode(middle, copy);
+        HNode p = parseBraces(false, HNBlock.BlocType.LOCAL_BLOC);
+        return getNodeFactory().createPostfixBracesNode(middle, p,
+                new JNodeTokens().setStart(middle.startToken()).setEnd(p.endToken())
+        );
     }
 
     @Override
@@ -391,8 +285,9 @@ public class HLParser extends DefaultJParser<HNode> {
     }
 
     public HNode parseBraces() {
-        return parseBraces(HNBlock.BlocType.LOCAL_BLOC);
+        return parseBraces(true,HNBlock.BlocType.LOCAL_BLOC);
     }
+
 
     protected HNode parseAndBuildExpressionBinary(JToken op, HNode o1, int opPrecedence, JExpressionOptions options) {
         JToken next = peek();
@@ -621,7 +516,7 @@ public class HLParser extends DefaultJParser<HNode> {
                 JToken next = next();
                 return new HNSuper(null, next);
             }
-            case HTokenId.TEMPORAL:{
+            case HTokenId.TEMPORAL: {
                 JToken token = next();
                 if (token.isError()) {
                     log().warn("X000", null, "token never terminated", token);
@@ -635,24 +530,24 @@ public class HLParser extends DefaultJParser<HNode> {
                 }
                 return getNodeFactory().createLiteralNode(parsed, new JNodeTokens().setStart(token).setEnd(token));
             }
-            case HTokenId.REGEX:{
+            case HTokenId.REGEX: {
                 JToken token = next();
                 if (token.isError()) {
                     log().warn("X000", null, "token never terminated", token);
                 }
                 return getNodeFactory().createLiteralNode(Pattern.compile(token.sval), new JNodeTokens().setStart(token).setEnd(token));
             }
-            case HTokenId.STRING_INTERP_START:{
+            case HTokenId.STRING_INTERP_START: {
                 return parseStringInterp();
             }
-            case HTokenId.DOUBLE_QUOTES:{
+            case HTokenId.DOUBLE_QUOTES: {
                 JToken token = next();
                 if (token.isError()) {
                     log().warn("X000", null, "token never terminated", token);
                 }
                 return getNodeFactory().createLiteralNode(token.sval, new JNodeTokens().setStart(token).setEnd(token));
             }
-            case HTokenId.SIMPLE_QUOTES:{
+            case HTokenId.SIMPLE_QUOTES: {
                 JToken token = next();
                 if (token.isError()) {
                     log().warn("X000", null, "token never terminated", token);
@@ -664,7 +559,7 @@ public class HLParser extends DefaultJParser<HNode> {
                     return getNodeFactory().createLiteralNode(token.sval, new JNodeTokens().setStart(token).setEnd(token));
                 }
             }
-            case JTokenId.ANTI_QUOTES:{//TODO FIX ME
+            case JTokenId.ANTI_QUOTES: {//TODO FIX ME
                 JToken token = next();
                 if (token.isError()) {
                     log().warn("X000", null, "token never terminated", token);
@@ -687,12 +582,17 @@ public class HLParser extends DefaultJParser<HNode> {
         return super.parseExpressionUnaryTerminal(options);
     }
 
-    public HNode parseBraces(HNBlock.BlocType type) {
+    public HNode parseBraces(boolean asExpr,HNBlock.BlocType type) {
         JToken n = peek();
         JToken endToken = n;
         if (n.id() != HTokenId.LEFT_CURLY_BRACKET) {
             pushBack(n);
             return null;
+        }
+        JNodeResult<HNMap> mo = parseMapObject(asExpr);
+        if(mo.getNode()!=null){
+            log().addAll(mo.getMessages());
+            return mo.getNode();
         }
         endToken = next();
         JListWithSeparators<HNode> elements = parseStatements();
@@ -897,7 +797,7 @@ public class HLParser extends DefaultJParser<HNode> {
                 if (peekIds(HTokenId.KEYWORD_STATIC, HTokenId.DOT) != null) {
                     return parseExpressionAsStatement();
                 }
-                return parseDeclarationAsStatement(DECL_ANY_1, err);
+                return parseDeclarationAsStatement(HLParserOptions.DECL_ANY_1, err);
             }
             case HTokenId.KEYWORD_DEF:
             case HTokenId.KEYWORD_PUBLIC:
@@ -905,7 +805,7 @@ public class HLParser extends DefaultJParser<HNode> {
             case HTokenId.KEYWORD_PROTECTED:
             case HTokenId.KEYWORD_FINAL:
             case HTokenId.KEYWORD_VAR: {
-                return parseDeclarationAsStatement(DECL_ANY_1, err);
+                return parseDeclarationAsStatement(HLParserOptions.DECL_ANY_1, err);
             }
             case HTokenId.KEYWORD_CLASS: {
                 HNode dec = null;
@@ -913,8 +813,8 @@ public class HLParser extends DefaultJParser<HNode> {
                     err.error("X113", "class declaration", "class definitions are not allowed in package declaration", p);
                     //ignore it;
                 }
-                DefaultJMessageList err2 = errorList();
-                dec = parseDeclaration(DECL_ANY_2, err2);
+                JMessageList err2 = errorList();
+                dec = parseDeclaration(HLParserOptions.DECL_ANY_2, err2);
                 if (dec instanceof HNDeclareIdentifier) {
                     ((HNDeclareIdentifier) dec).setSyntacticType(HNDeclareIdentifier.SyntacticType.FIELD);
                 }
@@ -949,14 +849,14 @@ public class HLParser extends DefaultJParser<HNode> {
                 return parseFor(false);
             }
             case HTokenId.LEFT_CURLY_BRACKET: {
-                return parseBraces(HNBlock.BlocType.LOCAL_BLOC);
+                return parseBraces(false,HNBlock.BlocType.LOCAL_BLOC);
             }
         }
 
         //boolean acceptModifiers, boolean acceptVar, boolean acceptFunction, boolean acceptClass,
         //                                    boolean requiredSemiColumnForVar, boolean acceptEqValue, boolean acceptInValue
-        DefaultJMessageList err2 = errorList();
-        HNode n = parseDeclarationAsStatement(DECL_ANY_3, err2);
+        JMessageList err2 = errorList();
+        HNode n = parseDeclarationAsStatement(HLParserOptions.DECL_ANY_3, err2);
         if (n != null) {
             err.addAll(err2);
             return n;
@@ -1029,8 +929,18 @@ public class HLParser extends DefaultJParser<HNode> {
             case H_DECLARE_TYPE:
             case H_DECLARE_META_PACKAGE:
             case H_SWITCH:
-            case H_BLOCK: {
+            case H_BLOCK:{
                 return false;
+            }
+            case H_TRY_CATCH:{
+                HNTryCatch c=(HNTryCatch) t;
+                if(c.getFinallyBranch()!=null){
+                    return isRequireSemiColumn(c.getFinallyBranch());
+                }
+                if(c.getCatches().size()>0){
+                    return isRequireSemiColumn(c.getCatches().get(c.getCatches().size()-1).getDoNode());
+                }
+                return true;
             }
         }
         return true;
@@ -1086,14 +996,14 @@ public class HLParser extends DefaultJParser<HNode> {
                         return new HNObjectNew(tt.typeToken, new HNode[]{setter}, startToken, endToken);
                     }
                 }
-            } else if(tt.inits.length==0 && peekIds(HTokenId.DOT,HTokenId.KEYWORD_CLASS)!=null){
+            } else if (tt.inits.length == 0 && peekIds(HTokenId.DOT, HTokenId.KEYWORD_CLASS) != null) {
                 JToken dotToken = next();
                 JToken classToken = next();
-                return new HNDotClass(tt.typeToken, dotToken,tt.typeToken.startToken(), classToken);
-            } else if(tt.inits.length==0 && peekIds(HTokenId.DOT,HTokenId.KEYWORD_THIS)!=null){
+                return new HNDotClass(tt.typeToken, dotToken, tt.typeToken.startToken(), classToken);
+            } else if (tt.inits.length == 0 && peekIds(HTokenId.DOT, HTokenId.KEYWORD_THIS) != null) {
                 JToken dotToken = next();
                 JToken classToken = next();
-                return new HNDotThis(tt.typeToken, dotToken,tt.typeToken.startToken(), classToken);
+                return new HNDotThis(tt.typeToken, dotToken, tt.typeToken.startToken(), classToken);
             } else {
                 snapshot.rollback();
                 return null;
@@ -1224,13 +1134,13 @@ public class HLParser extends DefaultJParser<HNode> {
                 //explode operator
                 n = next();
                 endToken = n.copy();
-                endToken.def = DEF_GT;
+                endToken.def = HLParserOptions.DEF_GT;
                 endToken.image = ">";
                 endToken.endColumnNumber--;
                 endToken.endCharacterNumber--;
                 separators.add(endToken);
 
-                n.def = DEF_GT;
+                n.def = HLParserOptions.DEF_GT;
                 n.image = ">";
                 n.sval = ">";
                 n.startColumnNumber++;
@@ -1240,13 +1150,13 @@ public class HLParser extends DefaultJParser<HNode> {
                 //explode operator
                 n = next();
                 endToken = n.copy();
-                endToken.def = DEF_GT;
+                endToken.def = HLParserOptions.DEF_GT;
                 endToken.image = ">";
                 endToken.endColumnNumber -= 2;
                 endToken.endCharacterNumber -= 2;
                 separators.add(endToken);
 
-                n.def = DEF_GT2;
+                n.def = HLParserOptions.DEF_GT2;
                 n.image = ">>";
                 n.sval = ">>";
                 n.startColumnNumber++;
@@ -1256,13 +1166,13 @@ public class HLParser extends DefaultJParser<HNode> {
                 //explode operator
                 n = next();
                 endToken = n.copy();
-                endToken.def = DEF_GT;
+                endToken.def = HLParserOptions.DEF_GT;
                 endToken.image = ">";
                 endToken.endColumnNumber -= 3;
                 endToken.endCharacterNumber -= 3;
                 separators.add(endToken);
 
-                n.def = DEF_GT3;
+                n.def = HLParserOptions.DEF_GT3;
                 n.image = ">>";
                 n.sval = ">>";
                 n.startColumnNumber++;
@@ -1728,6 +1638,10 @@ public class HLParser extends DefaultJParser<HNode> {
                     modifiers |= HUtils.READONLY;
                     break;
                 }
+                case HTokenId.KEYWORD_SYNCHRONIZED: {
+                    modifiers |= Modifier.SYNCHRONIZED;
+                    break;
+                }
                 default: {
                     accepted = false;
                 }
@@ -1771,8 +1685,8 @@ public class HLParser extends DefaultJParser<HNode> {
 //        JToken a = peek();
 //        boolean acceptColon = eqOp == null || !eqOp;
 //        boolean acceptEq = eqOp == null || eqOp;
-        HLDeclarationOptions options = eqOp == null ? DECLARE_ASSIGN_EQ_OR_COLON :
-                eqOp ? DECLARE_ASSIGN_EQ : DECLARE_ASSIGN_COLON;
+        HLDeclarationOptions options = eqOp == null ? HLParserOptions.DECLARE_ASSIGN_EQ_OR_COLON :
+                eqOp ? HLParserOptions.DECLARE_ASSIGN_EQ : HLParserOptions.DECLARE_ASSIGN_COLON;
 
 //        switch (a.id()) {
 //            case HTokenId.KEYWORD_VAL:
@@ -1832,15 +1746,15 @@ public class HLParser extends DefaultJParser<HNode> {
         return null;
     }
 
-    private DefaultJMessageList errorList() {
+    private JMessageList errorList() {
         return new DefaultJMessageList();
     }
 
     private HNode parseDeclaration(HLDeclarationOptions options, JMessageList err) {
         try (JTokenizerSnapshot snapshot = tokenizer().snapshot()) {
             int modifiers = 0;
-            JToken startToken = peek();
-            JToken endToken = startToken;
+            JTokenBoundBuilder jTokenBoundBuilder =new JTokenBoundBuilder();
+            jTokenBoundBuilder.visit(peek());
             if (options.acceptModifiers) {
                 modifiers = parseModifiers();
                 if (Modifier.isStatic(modifiers)) {
@@ -1849,12 +1763,12 @@ public class HLParser extends DefaultJParser<HNode> {
                             err.error("X116", null, "static initializer should not have modifiers", peek());
                             modifiers = Modifier.STATIC;
                         }
-                        HNode jNode = parseBraces(HNBlock.BlocType.METHOD_BODY);
+                        HNode jNode = parseBraces(false,HNBlock.BlocType.METHOD_BODY);
                         if (jNode != null) {
-                            endToken = jNode.endToken();
+                            jTokenBoundBuilder.visit(jNode);
                             HNDeclareInvokable fct = new HNDeclareInvokable(
                                     null,
-                                    jNode.startToken(), endToken);
+                                    jNode.startToken(), jTokenBoundBuilder.endToken);
                             fct.setModifiers(modifiers);
                             fct.setBody(jNode);
                             fct.setReturnTypeName(null);
@@ -1877,24 +1791,23 @@ public class HLParser extends DefaultJParser<HNode> {
                     err.error("X117", "class definition", "not allowed class definition in the current context", t);
                 }
                 skip();
-                return parseDeclareClass(modifiers, startToken);
+                return parseDeclareClass(modifiers, jTokenBoundBuilder.startToken);
             } else if (t.id() == HTokenId.KEYWORD_DEF || t.id() == HTokenId.KEYWORD_CONSTRUCTOR || t.id() == HTokenId.KEYWORD_VOID) {
                 if (!options.acceptFunction) {
                     log().error("X118", "function/method definition", "not allowed class method/function/constructor definition in the current context", t);
                 }
                 if (t.id() == HTokenId.KEYWORD_VOID) {
                     JToken voidToken = next();
-                    pushBack(JTokenUtils.createKeywordToken("def"));
+                    pushBack(HTokenUtils.createToken("def"));
                     pushBack(voidToken);
                 }
-                return parseDeclareFunction(modifiers, false, null, true, startToken);
+                return parseDeclareFunction(modifiers, false, null, true, jTokenBoundBuilder.startToken);
             }
 
             ParseDeclareIdentifierContext pdic = new ParseDeclareIdentifierContext();
             pdic.modifiers = modifiers;
             pdic.options = options;
-            pdic.startToken = startToken;
-            pdic.endToken = endToken;
+            pdic.bounds = jTokenBoundBuilder;
             HNode n = parseDeclareIdentifier(pdic, err);
             if (n == null) {
                 snapshot.rollback();
@@ -1904,31 +1817,31 @@ public class HLParser extends DefaultJParser<HNode> {
         }
     }
 
-    private HNode parseDeclareIdentifier(ParseDeclareIdentifierContext pdic, JMessageList err) {
+    private HNDeclareIdentifier parseDeclareIdentifier(ParseDeclareIdentifierContext pdic, JMessageList err) {
         String groupName = null;
         JToken t = peek();
         if (t.id() == HTokenId.KEYWORD_VAR) {
             if (pdic.options.acceptVar) {
-                next();
+                pdic.bounds.visit(next());
                 pdic.varVal = t;
             } else {
                 return null;
             }
         } else if (t.id() == HTokenId.KEYWORD_VAL) {
             if (pdic.options.acceptVar) {
-                next();
+                pdic.bounds.visit(next());
                 pdic.varVal = t;
             } else {
                 return null;
             }
         } else {
             if (pdic.options.getNoTypeNameOption() == HLDeclarationOptions.NoTypeNameOption.NAME) {
-                DefaultJMessageList err2 = errorList();
+                JMessageList err2 = errorList();
                 if (_parseDeclareIdentifierVarIds(pdic, errorList())) {
                     if (pdic.varIds != null) {
                         err.addAll(err2);
                         err2.clear();
-                        HNode hNode = _parseDeclareIdentifierInitialization(pdic, err2);
+                        HNDeclareIdentifier hNode = _parseDeclareIdentifierInitialization(pdic, err2);
                         err.addAll(err2);
                         if (hNode == null) {
                             return null;
@@ -1948,7 +1861,7 @@ public class HLParser extends DefaultJParser<HNode> {
                 }
             }
         }
-        DefaultJMessageList err2 = errorList();
+        JMessageList err2 = errorList();
         if (!_parseDeclareIdentifierVarIds(pdic, err2)) {
             err.addAll(err2);
             //there is no var, use 'value' var name (or 'exception')
@@ -1969,7 +1882,7 @@ public class HLParser extends DefaultJParser<HNode> {
             }
         }
         err2.clear();
-        HNode hNode = _parseDeclareIdentifierInitialization(pdic, err2);
+        HNDeclareIdentifier hNode = _parseDeclareIdentifierInitialization(pdic, err2);
         err.addAll(err2);
         if (hNode == null) {
             return null;
@@ -1986,10 +1899,11 @@ public class HLParser extends DefaultJParser<HNode> {
      */
     private boolean _parseDeclareIdentifierVarIds(ParseDeclareIdentifierContext pdic, JMessageList err) {
         HNDeclareToken varIds = null;
-        JToken endToken = pdic.endToken;
+        JTokenBoundBuilder se=new JTokenBoundBuilder(pdic.bounds);
         try (JTokenizerSnapshot snapshot = tokenizer().snapshot()) {
             String logGroup = "identifier definition";
             if ( /*(varVal != null) && */ peek().id() == HTokenId.LEFT_PARENTHESIS) {
+                se.visit(peek());
                 JMessageList reportedErrors = errorList();
                 HNDeclareTokenTupleItem u = parseDeclareTokenTupleItem(reportedErrors);
                 if (u != null) {
@@ -2001,6 +1915,8 @@ public class HLParser extends DefaultJParser<HNode> {
                         snapshot.rollback();
                         return false;
                     }
+                    se.visit(u);
+
                     for (JSourceMessage reportedError : reportedErrors) {
                         log().add(reportedError);
                     }
@@ -2013,6 +1929,7 @@ public class HLParser extends DefaultJParser<HNode> {
             } else {
                 JToken name = null;
                 JToken p = peek();
+                se.visit(p);
                 if (p.isIdentifier()) {
                     if (pdic.options.isAcceptDotName()) {
                         name = parseNameWithPackageSingleToken();
@@ -2029,20 +1946,20 @@ public class HLParser extends DefaultJParser<HNode> {
                     snapshot.rollback();
                     return true;
                 } else {
-                    endToken = name;
+                    se.visit(name);
                 }
                 List<HNDeclareTokenTupleItem> allVarNames = new ArrayList<>();
                 allVarNames.add(new HNDeclareTokenIdentifier(name));
                 if (pdic.options.isAcceptMultiVars()) {
-                    while (peek().id() == HTokenId.COMMA) {
+                    while (peek().id() == pdic.options.getMultiVarSeparator()) {
                         next();
                         JToken name2 = parseNameWithPackageSingleToken();
                         if (name2 == null) {
                             err.error("X120", logGroup, "expected name", peek());
                             break;
                         } else {
-                            endToken = name2.copy();
-                            allVarNames.add(new HNDeclareTokenIdentifier(endToken));
+                            se.visit(name2);
+                            allVarNames.add(new HNDeclareTokenIdentifier(name2));
                         }
                     }
                 }
@@ -2075,13 +1992,13 @@ public class HLParser extends DefaultJParser<HNode> {
                 case HTokenId.COMMA:
                 case HTokenId.RIGHT_PARENTHESIS: {
                     pdic.varIds = varIds;
-                    pdic.endToken = endToken;
+                    pdic.bounds = se;
                     return true;
                 }
                 case HTokenId.LEFT_PARENTHESIS: {
                     if (pdic.tt != null) {
                         pdic.varIds = varIds;
-                        pdic.endToken = endToken;
+                        pdic.bounds = se;
                         return true;
                     }
                     break;
@@ -2093,28 +2010,26 @@ public class HLParser extends DefaultJParser<HNode> {
         }
     }
 
-    private HNode _parseDeclareIdentifierInitialization(ParseDeclareIdentifierContext pdic, JMessageList err) {
+    private HNDeclareIdentifier _parseDeclareIdentifierInitialization(ParseDeclareIdentifierContext pdic, JMessageList err) {
         HNode val = null;
         JToken opToken = null;
         if (pdic.tt == null || pdic.tt.inits.length == 0) {
             JToken n = next();
             if (n.isOperator("=") && (pdic.varVal != null || pdic.options.acceptEqValue)) {
-                opToken = n.copy();
-                pdic.endToken = opToken;
+                opToken=n;
+                pdic.bounds.visit(opToken);
                 val = parseExpression();
+                pdic.bounds.visit(val);
                 if (val == null) {
                     err.error("X121", "identifier definition", "expected value assignment", peek());
-                } else {
-                    pdic.endToken = val.endToken();
                 }
             } else if (n.id() == HTokenId.COLON && (pdic.varVal != null || pdic.options.acceptInValue)) {
-                opToken = n.copy();
-                pdic.endToken = opToken;
+                opToken = n;
+                pdic.bounds.visit(opToken);
                 val = parseExpression();
+                pdic.bounds.visit(val);
                 if (val == null) {
                     log().error("X121", "identifier definition", "expected value assignment", peek());
-                } else {
-                    pdic.endToken = val.endToken();
                 }
             } else if (n.isImage("(")) {
                 //this is a constructor call!
@@ -2125,7 +2040,7 @@ public class HLParser extends DefaultJParser<HNode> {
                 val = new HNObjectNew(pdic.tt.typeToken, argument_declaration == null ? new HNode[0]
                         : argument_declaration.getItems().toArray(new HNode[0]), argument_declaration.getStartToken(), argument_declaration.getEndToken()
                 );
-                pdic.endToken = val.endToken();
+                pdic.bounds.visit(val);
             } else {
                 if (pdic.varVal != null) {
                     err.error("X121", "identifier definition", "expected value assignment", n);
@@ -2144,21 +2059,18 @@ public class HLParser extends DefaultJParser<HNode> {
 //                        setter = parseFunctionDeclaration(0, true, tt.typeToken, false, startToken);
 //                    } else {
                 setter = parseExpression();
-//                    }
-                if (setter != null) {
-                    pdic.endToken = setter.endToken();
-                }
+                pdic.bounds.visit(setter);
                 t2 = peek();
                 if (t2.isImage(")")) {
-                    pdic.endToken = next();
+                    pdic.bounds.visit(next());
                 } else {
                     err.error("X122", "identifier definition", "expected ')'", t2);
                 }
             }
             if (setter != null && pdic.tt.inits.length == 0) {
-                err.error("S052", null, "initialized array is missing initializer", pdic.startToken);
+                err.error("S052", null, "initialized array is missing initializer", pdic.bounds.startToken);
             }
-            val = new HNArrayNew(pdic.tt.typeToken, pdic.tt.inits, setter, pdic.startToken, pdic.endToken);
+            val = new HNArrayNew(pdic.tt.typeToken, pdic.tt.inits, setter, pdic.bounds.startToken, pdic.bounds.endToken);
             //create init!!
         }
         if (opToken == null) {
@@ -2168,9 +2080,8 @@ public class HLParser extends DefaultJParser<HNode> {
                 pdic.varIds,
                 val,
                 (pdic.tt == null) ? null : pdic.tt.typeToken,
-                opToken, pdic.startToken, pdic.endToken
+                opToken, pdic.bounds.startToken, pdic.bounds.endToken
         );
-        h.setStartToken(pdic.startToken);
         h.setModifiers(pdic.modifiers);
         h.setInitValue(val);
         if (pdic.tt == null || pdic.tt.typeToken == null) {
@@ -2240,11 +2151,11 @@ public class HLParser extends DefaultJParser<HNode> {
         return dec;
     }
 
-    public LambdaBody parseFunctionArrowBody() {
+    public LambdaBody parseFunctionArrowBody(boolean asExpr) {
         if (peek().id() == HTokenId.MINUS_GT) {
             JToken n = next();
             if (peek().id() == HTokenId.LEFT_CURLY_BRACKET) {
-                HNode b = parseBraces(HNBlock.BlocType.LOCAL_BLOC);
+                HNode b = parseBraces(asExpr,HNBlock.BlocType.LOCAL_BLOC);
                 if (b == null) {
                     log().error("X000", "lambda", "expected lambda body", peek());
                 }
@@ -2273,6 +2184,11 @@ public class HLParser extends DefaultJParser<HNode> {
         } else {
             if (peek().isImage("def")) {
                 next();
+
+                if(modifiers==0) {
+                    //check if there are modifiers after the def keyword
+                    modifiers=parseModifiers();
+                }
                 if (peek().isImage("constructor")) {
                     name = next();
                     constr = true;
@@ -2342,7 +2258,7 @@ public class HLParser extends DefaultJParser<HNode> {
         modifiers = HUtils.publifyModifiers(modifiers);
 
 
-        HLDeclarationOptions argOptions = constr ? DECLARE_CONSTR_ARG : DECLARE_FUNCTION_ARG;
+        HLDeclarationOptions argOptions = constr ? HLParserOptions.DECLARE_CONSTR_ARG : HLParserOptions.DECLARE_FUNCTION_ARG;
         JListWithSeparators<HNDeclareIdentifier> li = parseParsList("function/method declaration", "argument declaration",
                 () -> parseDeclareArgument(argOptions, log())
         );
@@ -2384,7 +2300,11 @@ public class HLParser extends DefaultJParser<HNode> {
             modifiers |= Modifier.ABSTRACT;
             f.setModifiers(modifiers);
         } else if (n.id() == HTokenId.MINUS_GT) {
-            LambdaBody lambdaBody = parseFunctionArrowBody();
+            boolean asExpr=true;
+            if(type==null || type.toString().equals("void")){
+                asExpr=false;
+            }
+            LambdaBody lambdaBody = parseFunctionArrowBody(asExpr);
             f.setEndToken(lambdaBody.op);
             f.setImmediateBody(true);
             f.setEndToken(lambdaBody.getEndToken());
@@ -2393,7 +2313,7 @@ public class HLParser extends DefaultJParser<HNode> {
                 requireSemiColumn("function/method declaration", true);
             }
         } else if (n.id() == HTokenId.LEFT_CURLY_BRACKET) {
-            f.setBody(parseBraces(HNBlock.BlocType.METHOD_BODY));
+            f.setBody(parseBraces(false,HNBlock.BlocType.METHOD_BODY));
             f.setEndToken(f.getBody().endToken());
         } else {
             log().error("X128", "function/method declaration", "expected '{' or '->'", peek());
@@ -2442,7 +2362,7 @@ public class HLParser extends DefaultJParser<HNode> {
             if (n.isImage("(")) {
                 JListWithSeparators<HNDeclareIdentifier> sli = parseParsList("class declaration", "argument", () -> {
                     return parseDeclareArgument(
-                            DECLARE_DEFAULT_CONSTR_ARG, log()
+                            HLParserOptions.DECLARE_DEFAULT_CONSTR_ARG, log()
                     );
                 });
                 classDef.setMainConstructorArgs(sli.getItems());
@@ -2467,7 +2387,7 @@ public class HLParser extends DefaultJParser<HNode> {
             if (n.id() == HTokenId.SEMICOLON) {
                 endToken = next();
             } else if (n.id() == HTokenId.LEFT_CURLY_BRACKET) {
-                classDef.setBody(parseBraces(HNBlock.BlocType.CLASS_BODY));
+                classDef.setBody(parseBraces(false,HNBlock.BlocType.CLASS_BODY));
                 if (classDef.getBody() != null) {
                     for (HNode statement : ((HNBlock) classDef.getBody()).getStatements()) {
                         bindDeclaringType(classDef, statement);
@@ -2587,13 +2507,13 @@ public class HLParser extends DefaultJParser<HNode> {
             HNode condExpr = null;
             HNIf i = new HNIf(startToken);
             endToken = (startToken);
-            condExpr = parseExpression(noBracesExpressionOptions);
+            condExpr = parseExpression(HLParserOptions.noBracesExpressionOptions);
             if (condExpr == null) {
                 log().error("X136", "if statement", "expected condition", peek());
                 i.setEndToken(endToken);
                 return i;
             }
-            HNode doExpr = parseExpressionOrStatement(asExpr,false);
+            HNode doExpr = parseExpressionOrStatement(asExpr, false);
             if (doExpr == null) {
                 log().error("X137", "if statement", "expected then statement/expression", peek());
                 if (peek().id() == HTokenId.KEYWORD_ELSE) {
@@ -2620,7 +2540,7 @@ public class HLParser extends DefaultJParser<HNode> {
                         return i;
                     }
                     endToken = (condExpr.endToken());
-                    doExpr = parseExpressionOrStatement(asExpr,false);
+                    doExpr = parseExpressionOrStatement(asExpr, false);
                     if (doExpr == null) {
                         log().error("X139", "if statement", "expected then statement/expression", peek());
                         //doExpr=HUtils.createUnknownBlocNode();
@@ -2631,7 +2551,7 @@ public class HLParser extends DefaultJParser<HNode> {
                 } else if (p2.length >= 1 && p2[0].id() == HTokenId.KEYWORD_ELSE) {
                     //skip else!
                     endToken = (next());
-                    doExpr = parseExpressionOrStatement(asExpr,false);
+                    doExpr = parseExpressionOrStatement(asExpr, false);
                     if (doExpr == null) {
                         log().error("X140", "if statement", "expected else statement/expression", peek());
                     } else {
@@ -2688,7 +2608,7 @@ public class HLParser extends DefaultJParser<HNode> {
                 //this is an empty while;
                 //block = new HNBlock();
             } else {
-                block = parseExpressionOrStatement(asExpr,false);
+                block = parseExpressionOrStatement(asExpr, false);
                 if (block == null) {
 //                    block = new HNBlock();
                     log().error("X144", "while statement", "expected while block", peek());
@@ -2830,7 +2750,7 @@ public class HLParser extends DefaultJParser<HNode> {
                                     log().error("X147", "for statement", "expected ','", peek());
                                 }
                                 wasSep = false;
-                                DefaultJMessageList err2 = errorList();
+                                JMessageList err2 = errorList();
                                 HNode e = prepareForInitNode(err2);
                                 log().addAll(err2);
                                 if (e == null) {
@@ -2926,7 +2846,7 @@ public class HLParser extends DefaultJParser<HNode> {
                 }
             }
             if (peek().id() == HTokenId.MINUS_GT) {
-                LambdaBody lambdaBody = parseFunctionArrowBody();
+                LambdaBody lambdaBody = parseFunctionArrowBody(true);
                 endToken = lambdaBody.getEndToken();
                 hf.setBody(lambdaBody.body);
                 hf.setExpressionMode(true);
@@ -2981,7 +2901,7 @@ public class HLParser extends DefaultJParser<HNode> {
                 endToken = n;
                 metaParsingMode = true;
                 try {
-                    pp.setBody((HNBlock) parseBraces(HNBlock.BlocType.PACKAGE_BODY));
+                    pp.setBody((HNBlock) parseBraces(false,HNBlock.BlocType.PACKAGE_BODY));
                     if (pp.getBody() != null) {
                         endToken = (pp.getBody().endToken());
                     }
@@ -3352,7 +3272,7 @@ public class HLParser extends DefaultJParser<HNode> {
     }
 
     protected HNode parseExpressionSimple() {
-        return parseExpression(simpleExpressionOptions);
+        return parseExpression(HLParserOptions.simpleExpressionOptions);
     }
 
     private List<HNode> splitByBinaryOperator(HNode n, String op) {
@@ -3423,7 +3343,7 @@ public class HLParser extends DefaultJParser<HNode> {
 //                stmt = parseStatement(log());
 //            }
         }
-        stmt = parseExpressionOrStatement(psc.functionalSwitch,true);
+        stmt = parseExpressionOrStatement(psc.functionalSwitch, true);
         if (stmt == null) {
             log().error("X173", "switch statement", "expected switch " + condName + " " + (psc.functionalSwitch ? "expression" : "statement"), peek());
         } else {
@@ -3432,14 +3352,14 @@ public class HLParser extends DefaultJParser<HNode> {
         return stmt;
     }
 
-    public HNode parseExpressionOrStatement(boolean asExpr,boolean alwaysTerminateWithSemicolon) {
-        if(asExpr){
+    public HNode parseExpressionOrStatement(boolean asExpr, boolean alwaysTerminateWithSemicolon) {
+        if (asExpr) {
             HNode e = parseExpression();
-            if(e!=null){
-                if(alwaysTerminateWithSemicolon) {
+            if (e != null) {
+                if (alwaysTerminateWithSemicolon) {
                     if (peek().id() == HTokenId.SEMICOLON) {
                         next();
-                    }else {
+                    } else {
                         log().error("X000", null, "expected ';'", peek());
                     }
                 }
@@ -3449,130 +3369,313 @@ public class HLParser extends DefaultJParser<HNode> {
         return parseStatement(log());
     }
 
-    protected HNode parseTryCatch(boolean asExpr) {
-        ParseTryCatchContext psc = new ParseTryCatchContext();
-        psc.startToken = peek().copy();
-        psc.endToken = psc.startToken;
-        if (psc.startToken.id() == HTokenId.KEYWORD_TRY) {
-            skip();
-            JToken p = peek();
-            if (p.isImage("(")) {
-                psc.separators.add(psc.endToken = next());
-                HNDeclareIdentifier a = (HNDeclareIdentifier) parseDeclareAssign(true, false, log());
-                psc.declaredResource = a;
-                psc.endToken = JeepUtils.coalesce(psc.endToken, a.endToken());
-                p = peek();
-                if (p.isImage(")")) {
-                    psc.separators.add(psc.endToken = next());
+    private boolean isPipeSeparatedException(HNode n) {
+        if (n instanceof HNIdentifier) {
+            return true;
+        }
+        if (n instanceof HNTypeToken) {
+            return true;
+        }
+        if (n instanceof HNOpDot) {
+            return isPipeSeparatedException(((HNOpDot) n).getLeft()) && isPipeSeparatedException(((HNOpDot) n).getRight());
+        }
+        return false;
+    }
+
+    private HNode[] _toPipeSeparatedIdsOrNull(HNode n) {
+        if (isPipeSeparatedException(n)) {
+            return new HNode[]{n};
+        }
+        if (n instanceof HNPars) {
+            return null;
+        }
+        if (n instanceof HNOpBinaryCall) {
+            HNode[] left = _toPipeSeparatedIdsOrNull(((HNOpBinaryCall) n).getLeft());
+            if (left == null) {
+                return null;
+            }
+            HNode[] right = _toPipeSeparatedIdsOrNull(((HNOpBinaryCall) n).getRight());
+            if (right == null) {
+                return null;
+            }
+            return JeepUtils.arrayConcat(HNode.class, left, right);
+        }
+        return null;
+    }
+
+    protected HNode toExpr(HNDeclareToken t) {
+        if(t instanceof HNDeclareTokenIdentifier){
+            return new HNIdentifier(((HNDeclareTokenIdentifier) t).getToken());
+        }
+        if(t instanceof HNDeclareTokenTuple){
+            List<HNode> items=new ArrayList<>();
+            for (HNDeclareTokenTupleItem item : ((HNDeclareTokenTuple) t).getItems()) {
+                items.add(toExpr(item));
+            }
+            return new HNTuple(items.toArray(new HNode[0]),t.startToken(),t.getSeparators(),t.endToken());
+        }
+        throw new IllegalArgumentException();
+    }
+
+    protected HNode parseExpressionOrDeclareIdentifier(JMessageList err) {
+        JToken p = peek();
+        if(p.id()==HTokenId.KEYWORD_VAR || p.id()==HTokenId.KEYWORD_VAL){
+            ParseDeclareIdentifierContext c = new ParseDeclareIdentifierContext();
+            c.options=HLParserOptions.DECLARE_ASSIGN_EQ;
+            return parseDeclareIdentifier(c, err);
+        }
+        try (JTokenizerSnapshot snapshot = tokenizer().snapshot()) {
+            ParseDeclareIdentifierContext c = new ParseDeclareIdentifierContext();
+            c.options=HLParserOptions.DECLARE_ASSIGN_EQ;
+            JMessageList err1 = errorList();
+            HNDeclareIdentifier id = parseDeclareIdentifier(c, err1);
+            if(id!=null){
+                err.addAll(err1);
+                if(id.getInitValue()==null){
+                    if(id.getIdentifierTypeName()==null){
+                        return toExpr(id.getIdentifierToken());
+                    }
                 }
-                //read resource
+                return id;
             }
-            if (p.id() == HTokenId.MINUS_GT) {
-                //try -> body
-                LambdaBody lambdaBody = parseFunctionArrowBody();
-                psc.endToken = lambdaBody.getEndToken();
-                psc.fct = true;
-                psc.fctOp = lambdaBody.op;
-                psc.block = lambdaBody.body;
-                //read resource
-            } else if (p.isImage("{")) {
-                psc.endToken = next();
-                psc.block = parseBraces(HNBlock.BlocType.LOCAL_BLOC);
-            } else {
-                log().error("X000", "try statement", "expected '{' or '->'", peek());
-            }
-            while (true) {
-                p = peek();
-                if (p.id() == HTokenId.KEYWORD_CATCH) {
-                    JToken catchStart = next();
-                    JToken catchEnd = catchStart;
-                    List<JToken> catchSeparators = new ArrayList<>();
-                    HNDeclareTokenIdentifier ti = null;
-                    JListWithSeparators<HNTypeToken> catchTypes = null;
-                    p = peek();
-                    if (p.id() == HTokenId.LEFT_PARENTHESIS) {
-                        catchSeparators.add(catchEnd = next());
-                        catchTypes = parseGroupedList("catch", "exception type",
-                                () -> parseTypeName(),
-                                null, "|", null, null
+            snapshot.rollback();
+        }
+        return parseExpression();
+    }
+
+    protected HNPars parseExpressionOrDeclareIdentifierInPars(JMessageList err,Predicate<HNode> endValidator) {
+        if (peek().id() == HTokenId.LEFT_PARENTHESIS) {
+            try (JTokenizerSnapshot snapshot = tokenizer().snapshot()) {
+                JTokenBoundBuilder tbb=new JTokenBoundBuilder();
+                List<JToken> seps=new ArrayList<>();
+                seps.add(tbb.visit(next()));
+                JMessageList err2 = errorList();
+                HNode id = parseExpressionOrDeclareIdentifier(err2);
+                tbb.visit(id);
+                if(id!=null){
+                    if(peek().id()==HTokenId.RIGHT_PARENTHESIS){
+                        seps.add(tbb.visit(next()));
+                        HNPars v = new HNPars(
+                                new HNode[]{
+                                        id
+                                }, tbb.startToken, seps.toArray(new JToken[0]), tbb.endToken
                         );
-                        catchSeparators.addAll(catchTypes.getSeparatorTokens());
-                        catchEnd = catchTypes.getEndToken() != null ? catchTypes.getEndToken() : catchStart;
-                        p = peek();
-                        if (p.id() == HTokenId.IDENTIFIER) {
-                            ti = new HNDeclareTokenIdentifier(next());
-                        }
-                        if (p.id() == HTokenId.RIGHT_PARENTHESIS) {
-                            catchSeparators.add(next());
-                        } else {
-                            log().error("X000", "catch", "expected ')'", peek());
+                        if(endValidator!=null && endValidator.test(v)){
+                            err.addAll(err2);
+                            return v;
                         }
                     }
-                    p = peek();
-                    HNode block = null;
-                    boolean catchExpr = false;
-                    if (p.id() == HTokenId.LEFT_CURLY_BRACKET) {
-                        if (psc.fct) {
-                            log().error("X000", "catch", "try is an expression, expected '->'", peek());
+                }
+                snapshot.rollback();
+            }
+            //return parseExpression(HLParserOptions.noBracesExpressionOptions);
+        }
+        return null;
+    }
+
+    protected HNTryCatch.CatchBranch _parseCatchDecl(boolean asExpr,JMessageList err) {
+        if (peek().id() == HTokenId.LEFT_PARENTHESIS) {
+            try (JTokenizerSnapshot snapshot = tokenizer().snapshot()) {
+                boolean hasErr=false;
+                boolean quiteSureThisIsCatchDecl=false;
+                List<JToken> separators=new ArrayList<>();
+                separators.add(next());
+                List<HNTypeToken> exceptionTypes=new ArrayList<>();
+                HNTypeToken tn = parseTypeName();
+                exceptionTypes.add(tn);
+                while(true){
+                    if(peek().id()==HTokenId.PIPE){
+                        quiteSureThisIsCatchDecl=true;
+                        separators.add(next());
+                        tn = parseTypeName();
+                        if(tn!=null){
+                            exceptionTypes.add(tn);
+                        }else{
+                            hasErr=true;
+                            err.error("X000", "try statement", "expected catch exception type", peek());
+                            break;
                         }
-                        block = parseBraces(HNBlock.BlocType.LOCAL_BLOC);
-                        if (block == null) {
-                            log().error("X000", "catch", "expected catch body", peek());
-                        }
-                    } else if (p.id() == HTokenId.MINUS_GT) {
-                        if (!psc.fct) {
-                            log().error("X000", "catch", "try is not an expression, expected '{'", peek());
-                        }
-                        catchExpr = true;
-                        catchSeparators.add(next());
-                        block = parseExpression();
-                        if (block == null) {
-                            log().error("X000", "catch", "expected catch expression", peek());
-                        }
-                    } else {
+                    }else{
                         break;
                     }
-                    HNTryCatch.CatchBranch c = new HNTryCatch.CatchBranch(
-                            catchTypes == null ? new HNTypeToken[0] : catchTypes.getItems().toArray(new HNTypeToken[0]),
-                            ti,
-                            block,
-                            catchExpr,
-                            catchStart,
-                            catchEnd,
-                            catchSeparators.toArray(new JToken[0])
+                }
+                HNDeclareTokenIdentifier id=null;
+                if(peek().isIdentifier()){
+                    id=new HNDeclareTokenIdentifier(next());
+                }
+                if(peek().id()==HTokenId.RIGHT_PARENTHESIS){
+                    separators.add(next());
+                }else{
+                    hasErr=true;
+                    err.error("X000", "try statement", "expected ')'", peek());
+                }
+                if(hasErr && !quiteSureThisIsCatchDecl){
+                    snapshot.rollback();
+                    return null;
+                }
+                return new HNTryCatch.CatchBranch(
+                        exceptionTypes.toArray(new HNTypeToken[0]),
+                        id,null,asExpr,
+                        null,null,separators.toArray(new JToken[0])
+                        );
+            }
+        }
+        return null;
+    }
+
+    protected JNodeResult<HNMap> parseMapObject(boolean acceptEmpty) {
+        if (peek().id() == HTokenId.LEFT_CURLY_BRACKET) {
+            JMessageList err = errorList();
+            JTokenBoundBuilder tbb = new JTokenBoundBuilder();
+            List<JToken> seps=new ArrayList<>();
+            if(false && acceptEmpty){
+                JToken[] emptyMapSuite = nextIds(HTokenId.LEFT_CURLY_BRACKET,HTokenId.RIGHT_CURLY_BRACKET);
+                if(emptyMapSuite!=null){
+                    for (JToken jToken : emptyMapSuite) {
+                        seps.add(tbb.visit(jToken));
+                    }
+                    return new JNodeResult<>(
+                            (HNMap) new HNMap(new HNMap.HNMapEntry[0], tbb.startToken,tbb.endToken).setSeparators(seps.toArray(new JToken[0])),
+                            err
                     );
-                    psc.catches.add(c);
+                }
+            }
+            JToken[] emptyMapSuite = nextIds(HTokenId.LEFT_CURLY_BRACKET,HTokenId.COLON, HTokenId.RIGHT_CURLY_BRACKET);
+            if(emptyMapSuite!=null){
+                for (JToken jToken : emptyMapSuite) {
+                    seps.add(tbb.visit(jToken));
+                }
+                return new JNodeResult<>(
+                        (HNMap) new HNMap(new HNMap.HNMapEntry[0], tbb.startToken,tbb.endToken).setSeparators(seps.toArray(new JToken[0])),
+                        err
+                );
+            }
+            try (JTokenizerSnapshot snapshot = tokenizer().snapshot()) {
+                seps.add(tbb.visit(next()));
+                List<HNMap.HNMapEntry> entries=new ArrayList<>();
+                HNode k = tbb.visit(parseExpression());
+                JToken op=null;
+                if(k!=null){
+                    if(peek().id()==HTokenId.COLON) {
+                        //yes this is a map!
+                        op=tbb.visit(next());
+                    }
+                }
+                if(op==null) {
+                    snapshot.rollback();
+                    //return null with no error
+                    return new JNodeResult<>(null, errorList());
+                }
+                HNode v = tbb.visit(parseExpression());
+                if(v==null){
+                    err.error("X000","map","expected value",peek());
+                }
+                entries.add(new HNMap.HNMapEntry(k,op,v,k.startToken(),tbb.endToken));
+                boolean hasNextEntry=true;
+                while(hasNextEntry){
+                    JToken p = peek();
+                    switch (p.id()){
+                        case HTokenId.RIGHT_CURLY_BRACKET:
+                        case HTokenId.EOF:{
+                            break;
+                        }
+                        case HTokenId.COMMA:{
+                            seps.add(tbb.visit(next()));
+                            k = tbb.visit(parseExpression());
+                            if(k==null){
+                                if(peek().id()==HTokenId.RIGHT_CURLY_BRACKET || peek().id()==HTokenId.EOF){
+                                    //this is a trailing comma, ignore it!
+                                }else{
+                                    err.error("X000","map","expected entry key",peek());
+                                }
+                                hasNextEntry=false;
+                            }else{
+                                if(peek().id()==HTokenId.COLON) {
+                                    //yes this is a map!
+                                    op=tbb.visit(next());
+                                }else{
+                                    err.error("X000","map","expected ':'",peek());
+                                }
+                                v = tbb.visit(parseExpression());
+                                if(v==null){
+                                    err.error("X000","map","expected value",peek());
+                                }
+                                entries.add(new HNMap.HNMapEntry(k,op,v,k.startToken(),tbb.endToken));
+                            }
+                        }
+                    }
+                }
+                return new JNodeResult<>(
+                        new HNMap(
+                                entries.toArray(new HNMap.HNMapEntry[0]),
+                                tbb.startToken,tbb.endToken
+                        ), err
+                );
+            }
+        }
+        //return null with no error
+        return new JNodeResult<>(null, errorList());
+    }
+
+    protected HNode parseTryCatch(boolean asExpr) {
+        ParseTryCatchContext psc = new ParseTryCatchContext();
+        if (peek().id() == HTokenId.KEYWORD_TRY) {
+            psc.separators.add(psc.bounds.visit(next()));
+            psc.resource = parseExpressionOrDeclareIdentifierInPars(errorList(),n->peek().id()!=HTokenId.KEYWORD_CATCH && peek().id()!=HTokenId.KEYWORD_FINALLY);
+            psc.bounds.visit(psc.resource);
+            psc.block = parseExpressionOrStatement(asExpr,false);
+            psc.bounds.visit(psc.block);
+            if (psc.block == null) {
+                log().error("X000", "try statement", "expected try block", peek());
+            }
+            while (true) {
+                JToken p = peek();
+                if (p.id() == HTokenId.KEYWORD_CATCH) {
+                    JTokenBoundBuilder cbounds=new JTokenBoundBuilder();
+                    cbounds.visit(p);
+                    psc.separators.add(psc.bounds.visit(next()));
+                    p = peek();
+                    JMessageList err = errorList();
+                    HNTryCatch.CatchBranch catchDecl = _parseCatchDecl(asExpr, err);
+                    psc.bounds.visit(catchDecl);
+                    if (catchDecl != null) {
+                        log().addAll(err);
+                    }
+                    HNode body=parseExpressionOrStatement(asExpr,false);
+                    cbounds.visit(body);
+                    if(body==null){
+                        log().error("X000", "try statement", "expected catch block", peek());
+                    }
+                    if(catchDecl==null){
+                        catchDecl=new HNTryCatch.CatchBranch(new HNTypeToken[0],null,body,asExpr,cbounds.startToken,cbounds.endToken,new JToken[0]);
+                    }else{
+                        catchDecl.setDoNode(body);
+                        catchDecl.setStartToken(cbounds.startToken);
+                        catchDecl.setEndToken(cbounds.endToken);
+                    }
+                    psc.catches.add(catchDecl);
+
+                } else if (p.id() == HTokenId.KEYWORD_FINALLY) {
+                    psc.separators.add(psc.bounds.visit(next()));
+                    psc.finallyBlock = parseExpressionOrStatement(asExpr, false);
+                    psc.bounds.visit(psc.finallyBlock);
+                    if (psc.finallyBlock == null) {
+                        log().error("X000", "try statement", "expected finally block", peek());
+                    }
+                    break;
                 } else {
                     break;
                 }
             }
-            if (p.id() == HTokenId.KEYWORD_FINALLY) {
-                psc.endToken = next();
-                p = peek();
-                if (p.id() == HTokenId.LEFT_CURLY_BRACKET) {
-                    if (psc.fct) {
-                        log().error("X000", "catch", "try is an expression, expected '->'", peek());
-                    }
-                    psc.endToken = next();
-                    psc.finallyBlock = parseBraces(HNBlock.BlocType.LOCAL_BLOC);
-                    psc.endToken = psc.finallyBlock.endToken();
-                } else if (p.id() == HTokenId.MINUS_GT) {
-                    if (!psc.fct) {
-                        log().error("X000", "catch", "try is not an expression, expected '{'", peek());
-                    }
-                    psc.endToken = next();
-                    psc.finallyBlock = parseBraces(HNBlock.BlocType.LOCAL_BLOC);
-                    psc.endToken = psc.finallyBlock.endToken();
-                } else {
-                    log().error("X000", "try statement", "expected '{'", peek());
-                }
-            }
-            HNTryCatch hnTryCatch = new HNTryCatch(psc.startToken);
-            hnTryCatch.setEndToken(psc.endToken);
+            HNTryCatch hnTryCatch = new HNTryCatch(psc.bounds.startToken);
+            hnTryCatch.setResource(psc.resource);
+            hnTryCatch.setBody(psc.block);
+            hnTryCatch.setEndToken(psc.bounds.endToken);
             hnTryCatch.setFinallyBranch(psc.finallyBlock);
             for (HNTryCatch.CatchBranch o : psc.catches) {
                 hnTryCatch.addCatch(o);
             }
+            hnTryCatch.setSeparators(psc.separators.toArray(new JToken[0]));
             return hnTryCatch;
         }
         return null;
@@ -3589,7 +3692,7 @@ public class HLParser extends DefaultJParser<HNode> {
 //                log().error("X163", "switch statement", "expected '('", peek());
 //            }
             HNSwitch jNodeHSwitch = new HNSwitch(startToken);
-            HNode expr = parseExpression(noBracesExpressionOptions);
+            HNode expr = parseExpression(HLParserOptions.noBracesExpressionOptions);
             if (expr == null) {
                 log().error("X164", "switch statement", "expected switch discriminator", peek());
                 JToken f = p.copy();
@@ -3599,7 +3702,7 @@ public class HLParser extends DefaultJParser<HNode> {
                 expr = new HNPars(new HNode[]{new HNLiteral(false, f)}, peek(), new JToken[0], peek());
                 expr.setStartToken(peek());
             } else {
-                expr=HNodeUtils.assignToDeclare(expr,true);
+                expr = HNodeUtils.assignToDeclare(expr, true);
                 psc.endToken = expr.endToken();
             }
             jNodeHSwitch.setExpr(expr);
@@ -3747,14 +3850,56 @@ public class HLParser extends DefaultJParser<HNode> {
         return null;
     }
 
+    private static class JTokenBoundBuilder {
+        JToken startToken;
+        JToken endToken;
+
+        public JTokenBoundBuilder(JToken startToken, JToken endToken) {
+            this.startToken = startToken;
+            this.endToken = endToken;
+        }
+
+
+        public JTokenBoundBuilder(JTokenBoundBuilder o) {
+            this.startToken=o.startToken;
+            this.endToken=o.endToken;
+        }
+
+        public JTokenBoundBuilder() {
+        }
+
+        public <T extends JNode> T visit(T t) {
+            if (t != null) {
+                if (startToken == null) {
+                    startToken = t.startToken();
+                    endToken = t.startToken();
+                } else {
+                    endToken = t.endToken();
+                }
+            }
+            return t;
+        }
+
+        public JToken visit(JToken t) {
+            if (t != null) {
+                if (startToken == null) {
+                    startToken = t;
+                    endToken = t;
+                } else {
+                    endToken = t;
+                }
+            }
+            return t;
+        }
+    }
+
     private static class ParseDeclareIdentifierContext {
         HNDeclareToken varIds = null;
         int modifiers;
         JTypeNameAndInit tt;
         JToken varVal;
         HLDeclarationOptions options;
-        JToken startToken;
-        JToken endToken;
+        JTokenBoundBuilder bounds =new JTokenBoundBuilder();
     }
 
     public static class LambdaBody {
@@ -3811,11 +3956,10 @@ public class HLParser extends DefaultJParser<HNode> {
         public HNode finallyBlock;
         public List<HNTryCatch.CatchBranch> catches = new ArrayList<>();
         public List<JToken> separators = new ArrayList<>();
-        public HNDeclareIdentifier declaredResource;
-        JToken startToken;
-        JToken endToken;
-        JToken fctOp;
+        HNPars resource;
         HNode block;
+        JTokenBoundBuilder bounds =new JTokenBoundBuilder();
+        JToken fctOp;
         boolean fct;
     }
 }

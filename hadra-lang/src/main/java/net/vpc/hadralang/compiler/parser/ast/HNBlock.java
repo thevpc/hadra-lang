@@ -92,6 +92,12 @@ public class HNBlock extends HNode {
     }
 
     public static String toString(HNode[] statements, boolean includeBraces) {
+        if(statements.length==0){
+            if(includeBraces){
+                return "{}";
+            }
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < statements.length; i++) {
             if (i > 0) {
