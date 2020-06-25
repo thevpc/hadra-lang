@@ -1610,7 +1610,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
 
     private boolean methodMatchesArgs(JInvokable m, JTypePattern[] args) {
         JSignature s = m.getSignature();
-        int callArgumentsCount = args.length;
+        int callArgumentsCount = args==null?0:args.length;
         if (s.argsCount() == callArgumentsCount) {
             boolean ok = true;
             for (int i = 0; i < callArgumentsCount; i++) {

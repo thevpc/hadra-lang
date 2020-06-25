@@ -28,7 +28,7 @@ public class TestHelper {
         HL hl=HL.create();
         return hl
                 .addSourceResourcesFile("net/hl/test/" + resourceFileName)
-                .generateJavaFolder("build/generated/tmp/" + resourceFileName)
+                .generateJavaFolder("target/custom-generated-test-sources/tmp/" + resourceFileName)
                 .compile();
 
     }

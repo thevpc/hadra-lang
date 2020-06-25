@@ -933,14 +933,15 @@ public class HLParser extends DefaultJParser<HNode> {
                 return false;
             }
             case H_TRY_CATCH:{
-                HNTryCatch c=(HNTryCatch) t;
-                if(c.getFinallyBranch()!=null){
-                    return isRequireSemiColumn(c.getFinallyBranch());
-                }
-                if(c.getCatches().length>0){
-                    return isRequireSemiColumn(c.getCatches()[c.getCatches().length-1].getDoNode());
-                }
-                return true;
+                return false;
+//                HNTryCatch c=(HNTryCatch) t;
+//                if(c.getFinallyBranch()!=null){
+//                    return isRequireSemiColumn(c.getFinallyBranch());
+//                }
+//                if(c.getCatches().length>0){
+//                    return isRequireSemiColumn(c.getCatches()[c.getCatches().length-1].getDoNode());
+//                }
+//                return true;
             }
         }
         return true;

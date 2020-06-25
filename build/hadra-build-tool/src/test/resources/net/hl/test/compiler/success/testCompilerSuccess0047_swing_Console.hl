@@ -1,5 +1,13 @@
+import java.io.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.text.*;
+
 fun main(String[] args){
+    Console2();
 }
+
 class Console2 : JFrame, WindowListener, Runnable {
 
   private JTextPane textArea;
@@ -41,18 +49,18 @@ class Console2 : JFrame, WindowListener, Runnable {
       PipedOutputStream stdOutPos = PipedOutputStream(this.stdOutPin);
       System.setOut(PrintStream(stdOutPos, true));
     } catch (java.io.IOException io) {
-      textArea.setText("Couldn't redirect STDOUT to this console\n" + io.getMessage());
+      textArea.setText("Couldn't redirect STDOUT to this console\n" + io.message);
     } catch (SecurityException se) {
-      textArea.setText("Couldn't redirect STDOUT to this console\n" + se.getMessage());
+      textArea.setText("Couldn't redirect STDOUT to this console\n" + se.message);
     }
 
     try {
       PipedOutputStream stdErrPos = PipedOutputStream(this.stdErrPin);
       System.setErr(PrintStream(stdErrPos, true));
     } catch (java.io.IOException io) {
-      textArea.setText("Couldn't redirect STDERR to this console\n" + io.getMessage());
+      textArea.setText("Couldn't redirect STDERR to this console\n" + io.message);
     } catch (SecurityException se) {
-      textArea.setText("Couldn't redirect STDERR to this console\n" + se.getMessage());
+      textArea.setText("Couldn't redirect STDERR to this console\n" + se.message);
     }
 
     stopThreads = false; // Will be set to true at closing time. This will stop the threads
@@ -105,21 +113,21 @@ class Console2 : JFrame, WindowListener, Runnable {
           StyleConstants.setForeground(style, Color.black);
           doc.insertString(doc.getLength(), input, style);
           // Make sure the last line is always visible
-          textArea.setCaretPosition(textArea.getDocument().getLength());
+          textArea.setCaretPosition(textArea.document.length);
         }
         if (stopThreads) {
           return;
         }
       }
 
-      while (Thread.currentThread() == stdErrReader) {
+      while (Thread.currentThread == stdErrReader) {
         try this.wait(100);
-        if (stdErrPin.available() != 0) {
+        if (stdErrPin.available != 0) {
           String input = this.readLine(stdErrPin);
           StyleConstants.setForeground(style, Color.red);
-          doc.insertString(doc.getLength(), input, style);
+          doc.insertString(doc.length, input, style);
           // Make sure the last line is always visible
-          textArea.setCaretPosition(textArea.getDocument().getLength());
+          textArea.setCaretPosition(textArea.document.length);
         }
         if (stopThreads) {
           return;
@@ -131,7 +139,7 @@ class Console2 : JFrame, WindowListener, Runnable {
     }
   }
 
-  fun private /*synchronized*/ String readLine(PipedInputStream inStream) {
+  fun private synchronized String readLine(PipedInputStream inStream) {
     String input = "";
     while(true) {
       int available = inStream.available();

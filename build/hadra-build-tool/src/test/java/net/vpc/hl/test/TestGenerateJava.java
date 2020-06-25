@@ -101,6 +101,13 @@ public class TestGenerateJava {
                         .errorCount());
     }
 
+    @Test
+    public void testCompiler0047() {
+        Assertions.assertEquals(0,
+                _compileResource("testCompilerSuccess0047_swing_Console.hl")
+                        .errorCount());
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     // HELPER METHODS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +118,7 @@ public class TestGenerateJava {
      * @return project compilation result
      */
     private HLProject _compileResource(String resourceFileName) {
-        return TestHelper.compile2JavaResource(resourceFileName);
+        return TestHelper.compile2JavaResource("compiler/success/" + resourceFileName);
     }
 
 }
