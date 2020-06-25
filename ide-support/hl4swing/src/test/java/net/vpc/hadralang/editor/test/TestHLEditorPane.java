@@ -4,10 +4,10 @@ import net.vpc.common.textsource.JTextSourceFactory;
 import net.vpc.common.jeep.editor.JEditorPaneBuilder;
 import net.vpc.common.jeep.editor.JSyntaxUtils;
 import net.vpc.common.jeep.editor.comp.JSyntaxPosLabel;
-import net.vpc.hadralang.compiler.core.DefaultHLProjectContext;
-import net.vpc.hadralang.compiler.core.HLCompletion;
-import net.vpc.hadralang.compiler.core.HadraLanguage;
-import net.vpc.hadralang.compiler.index.DefaultHLIndexer;
+import net.hl.compiler.core.DefaultHLProjectContext;
+import net.hl.compiler.core.HLCompletion;
+import net.hl.compiler.core.HadraLanguage;
+import net.hl.compiler.index.DefaultHLIndexer;
 import net.vpc.hadralang.editor.HLJSyntaxKit;
 
 import javax.swing.*;

@@ -1,5 +1,5 @@
-##HadraLang v1.0.0
-v1.0.0 focuses on the very first implementation of the language
+##HadraLang v0.1.0
+v0.1.0 focuses on the very first implementation of the language
 
 
 Here is raw examples of supported features

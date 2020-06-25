@@ -12,7 +12,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="hadra-lang" />
+    <orderEntry type="module" module-name="hadra-build-tool" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm:8.0.1" level="project" />
     <orderEntry type="library" name="Maven: net.vpc.app.nuts:nuts:0.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-util:8.0.1" level="project" />
@@ -22,7 +22,7 @@
     <orderEntry type="library" name="Maven: org.apiguardian:apiguardian-api:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.junit.platform:junit-platform-commons:1.5.0" level="project" />
-    <orderEntry type="module" module-name="hadra-lang-stdlib" />
+    <orderEntry type="module" module-name="hadra-lang" />
     <orderEntry type="module" module-name="vpc-common-jeep" />
     <orderEntry type="module" module-name="vpc-common-text-source" />
     <orderEntry type="module" module-name="vpc-common-text-source-log" />

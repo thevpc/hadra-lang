@@ -1,5 +1,5 @@
-import net.vpc.hadralang.compiler.HL;
-import net.vpc.hadralang.compiler.utils.SetLog;
+import net.hl.compiler.HL;
+import net.hl.compiler.utils.SetLog;
 
 public class TestCompile {
     public static void main(String[] args) {

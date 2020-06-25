@@ -6,10 +6,10 @@ import net.vpc.common.jeep.core.tokens.JTokenDef;
 import net.vpc.common.jeep.editor.JSyntaxKit;
 import net.vpc.common.jeep.editor.JSyntaxStyle;
 import net.vpc.common.jeep.editor.JSyntaxStyleManager;
-import net.vpc.hadralang.compiler.core.HadraLanguage;
+import net.hl.compiler.core.HadraLanguage;
 
 import java.awt.*;
-import net.vpc.hadralang.compiler.core.HTokenId;
+import net.hl.compiler.core.HTokenId;
 
 public class HLJSyntaxKit extends JSyntaxKit {
     public HLJSyntaxKit() {

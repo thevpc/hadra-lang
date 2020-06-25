@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Projects">
+        <folder name="org-netbeans-modules-maven">
+            <folder name="Lookup">
+                <file name="net-hl-editor-hl4nb-project-HLPrivilegedTemplates.instance_hidden"/>
+                <file name="net-hl-editor-hl4nb-project-HLReplaceTokenProvider.instance_hidden"/>
+                <file name="net-hl-editor-hl4nb-project-HLRootProvider.instance_hidden"/>
+                <file name="net-hl-editor-hl4nb-project-HLSourcesImpl.instance_hidden"/>
+                <file name="net-hl-editor-hl4nb-project-HLPrivilegedTemplates.instance">
+                    <attr name="class" stringvalue="net.hl.editor.hl4nb.project.HLPrivilegedTemplates"/>
+                    <attr name="instanceCreate" methodvalue="org.netbeans.modules.projectapi.LazyLookupProviders.forProjectServiceProvider"/>
+                    <attr name="service" stringvalue="org.netbeans.spi.project.ui.PrivilegedTemplates"/>
+                </file>
+                <file name="net-hl-editor-hl4nb-project-HLReplaceTokenProvider.instance">
+                    <attr name="class" stringvalue="net.hl.editor.hl4nb.project.HLReplaceTokenProvider"/>
+                    <attr name="instanceCreate" methodvalue="org.netbeans.modules.projectapi.LazyLookupProviders.forProjectServiceProvider"/>
+                    <attr name="service" stringvalue="org.netbeans.modules.maven.spi.actions.ReplaceTokenProvider,org.netbeans.modules.maven.spi.actions.ActionConvertor"/>
+                </file>
+                <file name="net-hl-editor-hl4nb-project-HLRootProvider.instance">
+                    <attr name="class" stringvalue="net.hl.editor.hl4nb.project.HLRootProvider"/>
+                    <attr name="instanceCreate" methodvalue="org.netbeans.modules.projectapi.LazyLookupProviders.forProjectServiceProvider"/>
+                    <attr name="service" stringvalue="org.netbeans.modules.maven.spi.queries.JavaLikeRootProvider"/>
+                </file>
+                <file name="net-hl-editor-hl4nb-project-HLSourcesImpl.instance">
+                    <attr name="class" stringvalue="net.hl.editor.hl4nb.project.HLSourcesImpl"/>
+                    <attr name="instanceCreate" methodvalue="org.netbeans.modules.projectapi.LazyLookupProviders.forProjectServiceProvider"/>
+                    <attr name="service" stringvalue="org.netbeans.api.project.Sources,org.netbeans.spi.project.SourceGroupModifierImplementation"/>
+                </file>
+            </folder>
+            <folder name="Nodes">
+                <file name="net-hl-editor-hl4nb-project-HLSourcesNodeFactory.instance_hidden"/>
+                <file name="net-hl-editor-hl4nb-project-HLSourcesNodeFactory.instance">
+                    <attr name="position" intvalue="139"/>
+                </file>
+            </folder>
+        </folder>
+    </folder>
+    <folder name="Templates">
+        <folder name="HadraLang">
+            <file name="HLNewClass.hl" url="HLNewClass.hl">
+                <attr name="displayName" bundlevalue="net.hl.editor.hl4nb.Bundle#Templates/Other/HLNewClass.hl"/>
+                <attr name="template" boolvalue="true"/>
+            </file>
+            <file name="HLNewScript.hl" url="HLNewScript.hl">
+                <attr name="displayName" bundlevalue="net.hl.editor.hl4nb.Bundle#Templates/Other/HLNewScript.hl"/>
+                <attr name="template" boolvalue="true"/>
+            </file>
+            <file name="HLNewPackage.hl" url="HLNewPackage.hl">
+                <attr name="displayName" bundlevalue="net.hl.editor.hl4nb.Bundle#Templates/Other/HLNewPackage.hl"/>
+                <attr name="template" boolvalue="true"/>
+            </file>
+            <file name="HLNewFile.hl" url="HLNewFile.hl">
+                <attr name="displayName" bundlevalue="net.hl.editor.hl4nb.Bundle#Templates/Other/HLNewFile.hl"/>
+                <attr name="template" boolvalue="true"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Editors">
+        <folder name="text">
+            <folder name="x-hl">
+                <file name="org-netbeans-modules-editor-NbEditorKit.instance"/>
+                <!--<file name="net-hl-editor-hl4nb-editor-parser-HLnbParserFactory.instance"/>-->
+                <!--<file name="net-hl-editor-hl4nb-editor-parser-HLnbSyntaxErrorsHighlightingTaskFactory.instance"/>-->
+                                
+<!--                <file name="language.instance">
+                    <attr name="instanceCreate" methodvalue="net.vpc.hadralang.nb.hlsupport.lexer.HLnbLanguageHierarchy.getLanguage"/>
+                    <attr name="instanceOf" stringvalue="org.netbeans.api.lexer.Language"/>
+                </file>-->
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="net.hl.editor.hl4nb.Bundle"/>
+                <folder name="FontsColors">
+                    <folder name="NetBeans">
+                        <folder name="Defaults">
+                            <file name="FontAndColors.xml" url="FontAndColors.xml">
+                                <attr name="SystemFileSystem.localizingBundle" stringvalue="net.hl.editor.hl4nb.Bundle"/>
+                            </file>
+                        </folder>
+                    </folder>
+                </folder>
+            </folder>
+        </folder>
+    </folder>
+            
+            
+    <folder name="OptionsDialog">
+        <folder name="PreviewExamples">
+            <folder name="text">
+                <file name="x-hl" url="Example.hl"/>
+            </folder>
+        </folder>
+    </folder>
+    
+    <folder name="CslPlugins">
+        <folder name="text">
+            <folder name="x-hl">
+                <file name="language.instance">
+                    <attr name="instanceClass" stringvalue="net.hl.editor.hl4nb.editor.HLnbLanguageConfig"/>
+                </file>
+                <attr intvalue="1" name="genver"/>
+                <attr boolvalue="true" name="useMultiview"/>
+            </folder>
+        </folder>
+    </folder>
+
+</filesystem>

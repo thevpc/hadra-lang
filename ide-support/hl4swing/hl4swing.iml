@@ -12,14 +12,14 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="hadra-lang" />
+    <orderEntry type="module" module-name="hadra-build-tool" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm:8.0.1" level="project" />
     <orderEntry type="library" name="Maven: net.vpc.app.nuts:nuts:0.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-util:8.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-tree:8.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-analysis:8.0.1" level="project" />
     <orderEntry type="library" name="Maven: net.vpc.common:tson:1.0.0" level="project" />
-    <orderEntry type="module" module-name="hadra-lang-stdlib" />
+    <orderEntry type="module" module-name="hadra-lang" />
     <orderEntry type="module" module-name="vpc-common-jeep" />
     <orderEntry type="module" module-name="vpc-common-text-source" />
     <orderEntry type="module" module-name="vpc-common-text-source-log" />

@@ -3,10 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.vpc.hadra-lang.editor</groupId>
+    <groupId>net.hl.editor</groupId>
     <artifactId>hl4swing</artifactId>
-    <name>net.vpc.hadra-lang.hl4swing</name>
-    <version>1.0.0</version>
+    <name>net.hl.editor.hl4swing</name>
+    <version>0.1.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -15,9 +15,9 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>net.vpc.hadra-lang</groupId>
-            <artifactId>hadra-lang</artifactId>
-            <version>1.0.0</version>
+            <groupId>net.hl</groupId>
+            <artifactId>hadra-build-tool</artifactId>
+            <version>0.1.0</version>
         </dependency>
         <dependency>
             <groupId>net.vpc.common</groupId>
