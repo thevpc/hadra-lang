@@ -1,0 +1,12 @@
+package net.vpc.hadralang.test:test07;
+/**
+ * tested :
+ *   * FIXED : while statement
+ */
+fun void main(String[] args){
+
+    int b=3;
+    while(b>0){
+        println(b--);
+    }
+}

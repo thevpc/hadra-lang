@@ -1,6 +1,0 @@
-package net.vpc.hlexamples;
-int z; 
-def main(String[] args){
-    println("hello world");
-    int a=2;
-}

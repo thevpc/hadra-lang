@@ -1,0 +1,148 @@
+package{
+    import package net.vpc.scholar.hadruwaves#3.2.0;
+}
+import net.vpc.scholar.**
+
+  // ****************
+  // Constants
+  // ****************
+  val N = 10;// number of modes TE or TM
+  val P = 3;  // number of test functions
+  val εr = 2.2;
+  val ε = ε0;
+  val μ = μ0;
+  val r = (500mm) * 2;
+  val a = 100.567mm;
+  val b = 30mm;
+  val ep = 1.59mm;
+  val ap = 50mm;
+  val bp = 5 mm;
+  val d = 2.812mm;
+  val l = 5.69mm;
+  val L = 22.760mm;
+  val W = 5.989mm;
+  val s = 0.786mm;
+  val Z0 = √(μ0 / ε0);
+  val box = [0.0 .. a, -b / 2 .. b / 2];
+  val lineDomain = [0.0 .. l, -d / 2 .. d / 2];
+  val srcDomain = [0.0 .. s, -d / 2 .. d / 2];
+  val srcexpr = normalize(s * srcDomain);
+
+  // ****************
+  // Build Constants
+  // ****************
+  val TE = 0;
+  val TM = 1;
+  val p = param();
+//  val t = param("t");
+  val m = param();
+  val n = param();
+  param p();
+
+  // ****************
+  //  Parameters
+  // ****************
+  var freq = 4.79GHZ; // 4.79 * GHZ; // to change
+  //dynamically evaluated params (functions)
+  var λ = C / freq;
+  var ω = 2π * freq;
+  var k0 = 2π / λ;
+
+
+  // ****************
+  // Build Parameters
+  // ****************
+
+  // Matrix A (Z operator), B (Source Projection)n sp (gp fn scalar product matrix)
+  ComplexMatrix A, B, sp = null;
+  // gp (test functions list), zmn (modes impedance list), fm (mode functions : Green JFunction)
+  ExprVector gp, fmn = null;
+  ComplexVector zmn =null;
+
+  //Unknown coefficients of Surface Current Density
+  var Xp = zerosMatrix(1);
+  var Zin = 0î;
+
+  // Surface Current Density projected over Test functions
+  var Jt = 0ê;
+  // Surface Current Density projected over Mode functions
+  var Jm = 0ê;
+  // Surface Electric Field projected over Mode functions
+  var Em = 0ê;
+   /**
+    * build function to evaluate unknown according to parameters
+    */
+  fun void build() {
+    Maths.Config.setCacheEnabled(false);
+    var cr = chrono();
+
+    val gpDef = ((cos((2 * p + 1) * π * X / (2 * l)))  * lineDomain).setTitle("gl${p}");
+    gp = gpDef.inflate(p.in(0,P - 1)).normalize();
+    val fmnDef = (if(p == TE) (n / b) else -m / a) * √(2 * (if(m <> 0 && n <> 0) 2 else 1) / (a * b * ((n * π / b)² + (m * π / a)²))) *
+      sin((n * π / b) * (Y - box.ymin)) * cos((m * π / a) * (X - box.xmin)) * box;
+
+//    var json=@"json":{
+//        a:"toto",
+//        b:"titi",
+//    };
+//    var tson=@"tson":{
+//        a:"toto",
+//        b:1.2f,
+//    };
+//    var xml=@"xml":{
+//        <root>
+//            <item></item>
+//        </root>
+//    };
+//    fmn = fmnDef.inflate(m.in(0,N - 1).and(n.in(0,N - 1)).and(p.in(0,1)).where((p == TE && (n <> 0)) || (p == TM && (m <> 0 && n <> 0))));
+    fmn = fmnDef * ( for (m:0..N-1, n:0..N-1, p:0..1 ; (p == TE && (n <> 0)) || (p == TM && (m <> 0 && n <> 0))) ->  (m,n,p));
+
+    zmn = columnVector(fmn.size, (i)->{
+      val mm = int(fmn[i]["m"]);
+      val nn = int(fmn[i]["n"]);
+      val t = int(fmn[i]["t"]);
+      val gammalomn = √((mm * π / a)² + (nn * π / b)² - (k0)² * 1);
+      val ylomn = if (t == TE) (gammalomn / (I * ω * U0)) else (I * ω * (ε0 * 1) / gammalomn);
+      val gammaccmn = √((mm * π / a)² + (nn * π / b)² - (k0)² * εr);
+      val yccmn = if (t == TE) (gammaccmn * cotanh(gammaccmn * ep) / (I * ω * U0)) else (I * ω * ε0 * εr) * cotanh(gammaccmn * ep) / gammaccmn;
+      val vzmn = (1 / (ylomn + yccmn));
+    });
+
+    sp = matrix(gp :** fmn);
+    A = matrix(gp.size, (i, j) -> csum(fmn.size, (nn) -> sp[i, n] * sp[j, n] * zmn[n]));
+    B = columnMatrix(gp.size, (i) -> (gp(i) ** srcexpr));
+    Xp = inv(A) * B;
+    Zin =complex(inv(tr(B) * inv(A) * B));
+    // discrete scalar product between two vectors is the sum of each primitiveElement3D's product
+    Jt= Xp ** gp ;
+    var tt=(Xp :** sp.columns);
+    Jm=(Xp :** sp.columns) ** fmn;
+    var yyy=sp.columns;
+    Em=elist(Xp :** sp.columns) ** (elist[zmn] :* fmn) ;// elist: complex to expression zmn
+  }
+
+  /**
+    * main function, wil call build
+    * @param args
+    */
+  build();
+  Plot.title("sp").asMatrix.plot(sp);
+  Plot.title("A").plot(A);
+  Plot.title("B").asMatrix.plot(B);
+  Plot.title("zmn").asTable.plot(zmn);
+  Plot.title("gp").domain(box).asCurve().plot(gp);
+  Plot.title("Xp").asMatrix.plot(Xp);
+  Plot.title("Je").domain(box).asAbs.plot(Jt);
+  Plot.title("Jm").domain(box).asAbs.plot(Jm);
+  Plot.title("Em").domain(box).asAbs.plot(Em);
+  var frequencies = 1GHZ .. 10GHZ : 1.0 / 10GHZ;
+  var zinlist = elist();
+  frequencies.foreach(fr0 -> {
+    freq = fr0;
+    build();
+    zinlist.add(Zin);
+    Plot.update("|zin|").asCurve().title("Zin (module)").xsamples(frequencies).asAbs.plot(zinlist);
+    Plot.update("real(zin)").asCurve.asReal.title("Zin (real part)").xsamples(frequencies).asReal().plot(zinlist);
+    Plot.update("image(zin)").asCurve.asReal.title("Zin (imaginary part)").xsamples(frequencies).asImag().plot(zinlist);
+  });
+

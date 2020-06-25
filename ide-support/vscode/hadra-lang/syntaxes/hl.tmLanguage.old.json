@@ -38,7 +38,7 @@
 			"patterns": [
 				{
 				"name": "keyword.control.hl",
-				"match": "\\b(def|var|val|this|super|import|package|void|int|long|byte|boolean|short|float|double|constructor|extends|break|continue|import|class|private|public|protected|static|final)\\b"
+				"match": "\\b(fun|def|var|val|this|super|import|package|void|int|long|byte|boolean|short|float|double|constructor|extends|break|continue|import|class|private|public|protected|static|final)\\b"
 			}
 			,{
 				"name": "keyword.control.conditional.hl",

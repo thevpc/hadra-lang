@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-OpenIDE-Module-Layer: net/hl/editor/hl4nb/layer.xml
-OpenIDE-Module-Localizing-Bundle: net/hl/editor/hl4nb/Bundle.properties
+OpenIDE-Module-Layer: net/hl/ide/hl4nb/layer.xml
+OpenIDE-Module-Localizing-Bundle: net/hl/ide/hl4nb/Bundle.properties
 

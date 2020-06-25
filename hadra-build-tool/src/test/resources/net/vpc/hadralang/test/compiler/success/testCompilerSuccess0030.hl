@@ -1,8 +1,0 @@
-package net.vpc.hadralang.test:test06;
-/**
- * tested :
- *   FIXED : string multiplication : (from python)
- */
-def void main(String[] args){
-    println("/\\" * 30);
-}

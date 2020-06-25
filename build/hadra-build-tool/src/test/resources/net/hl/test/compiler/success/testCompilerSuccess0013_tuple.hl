@@ -1,0 +1,41 @@
+package aa.bb:cc#1.0;
+
+fun Tuple<int,int> m() -> (1,2);
+fun Tuple<int,int> n() -> (3,4);
+fun Tuple<int,Tuple<int,int>> p() -> (1,(2,3));
+
+//global
+int a=3;
+int b,c=4;
+int d,e;
+(d,e)=m();
+var (f,g)=n();
+int h,i=a;
+var (v1,(v2,v3))=p();
+
+fun void methodExample(){
+    int a,b;
+    (a,b)=m();
+    var (c,d)=n();
+    var (a1,(a2,a3))=p();
+}
+
+
+class test.ClassExample{
+    int a=3;
+    int b,c=4;
+    int d,e;
+    (d,e)=m();
+    var (f,g)=n();
+    int h,i=a;
+    var (v1,(v2,v3))=p();
+
+    static int sa=3;
+    static int sb,sc=4;
+    static int sd,se;
+    (sd,se)=m();
+    static var (sf,sg)=n();
+    static int sh,si=sa;
+    static var (sv1,(sv2,sv3))=p();
+}
+

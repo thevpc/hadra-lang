@@ -1,5 +1,0 @@
-var h0=f(h);
-var h=m(3);
-def m(int x)-> x+1;
-def f(int x)-> x+1;
-def f(double x)-> x+1;

@@ -22,3 +22,10 @@
 /ide-support/hl4swing/target/
 /doc/ebook/hadra-lang-book.pdf
 /lsp/
+/build/hadra-build-tool/target/
+/lib/hadra-lang/target/
+/build/hadra-maven-plugin/target/
+/.idea/
+/extra/hadra-example/target/
+/extra/hadra-example/.idea/
+/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/TestExample.java

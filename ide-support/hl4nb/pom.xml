@@ -7,9 +7,9 @@
         <version>0.1.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <groupId>net.hl.editor</groupId>
+    <groupId>net.hl.ide</groupId>
     <artifactId>hl4nb</artifactId>
-    <name>net.hl.editor.hl4nb</name>
+    <name>net.hl.ide.hl4nb</name>
     <packaging>nbm</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -68,7 +68,7 @@
     <dependencies>
         <!-- editor -->
         <dependency>
-            <groupId>net.hl</groupId>
+            <groupId>net.hl.build</groupId>
             <artifactId>hadra-build-tool</artifactId>
             <version>0.1.0</version>
         </dependency>

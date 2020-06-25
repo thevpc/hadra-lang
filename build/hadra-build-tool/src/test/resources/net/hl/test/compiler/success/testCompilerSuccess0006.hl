@@ -1,0 +1,2 @@
+fun m(int x)-> x+1;
+var h=m(3);

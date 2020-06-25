@@ -1,0 +1,89 @@
+package net.vpc.hadralang.test:test09;
+
+/**
+ * testing :
+ *   * switch statement
+ */
+//java.lang.String.class;
+fun void main(String[] args){
+
+     {
+         int x=3;
+         switch(y=x*2){
+             case 2|3+1..6|10:{
+                 println("two or four to six");
+             }
+             case 3:{
+                 println("three");
+                 return;
+             }
+             default:{
+                 println(y);
+                 return;
+             }
+         }
+     }
+     {
+         double x=3.0;
+         switch(y=x*2){
+             case 2|3+1..6|10:{
+                 println("two or four to six or ten");
+             }
+             case 3.0:{
+                 println("three");
+                 return;
+             }
+             default:{
+                 println(y);
+                 return;
+             }
+         }
+     }
+
+     {
+         String x="12.3";
+         switch(x){
+             case "0"| p"[0-9]"| p"[0-9]+":{
+                 println("this is an integer");
+             }
+             case p"[0-9]+[.][0-9]+":{
+                 println("this is a float");
+             }
+             default :{
+                 println("unknown "+x);
+             }
+         }
+     }
+     {
+         Class x=ArrayList.class;
+         switch(x){
+             case List:{
+                 println("this is a list");
+             }
+             case CharSequence:{
+                 println("this is a char sequence");
+             }
+             default :{
+                 println("not a "+x);
+             }
+         }
+     }
+
+    {
+        Object x=ArrayList();
+        switch(x){
+            is null:{
+                println("this is null");
+            }
+            is List li:{
+                println("this is a list"+li.size());
+            }
+            is CharSequence:{
+                println("this is a char sequence");
+            }
+            default :{
+                println("what is this "+x);
+            }
+        }
+    }
+}

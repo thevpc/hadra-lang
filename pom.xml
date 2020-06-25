@@ -9,8 +9,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>lib/hadra-lang</module>
-        <module>hadra-build-tool</module>
-        <module>build-support/hadra-maven-plugin</module>
+        <module>build/hadra-build-tool</module>
+        <module>build/hadra-maven-plugin</module>
         <module>ide-support/hl4nb</module>
         <module>ide-support/hl4swing</module>
     </modules>

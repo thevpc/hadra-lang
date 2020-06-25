@@ -1,0 +1,2 @@
+//fun int m(int x)-> x+1;
+fun int n(int)-> value+1;

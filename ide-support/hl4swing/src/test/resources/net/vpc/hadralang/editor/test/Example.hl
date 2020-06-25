@@ -7,19 +7,19 @@ package net.vpc.hadralang.test:test09#1215 {
       import package "net.vpc.common:jeep#1.2.7" for compile;
 }
 int z;
-def main(String[] args){
+fun main(String[] args){
     this.println("hello world");
     int a=b;
 }
 
-def int sum(int e) -> xx+y+e;
+fun int sum(int e) -> xx+y+e;
 
 class MyClass(int a) : Object(){
     val a=3;
     constructor(int a){
         super();
     }
-    def void m(){
+    fun void m(){
         int a=b;
         for(x:[1..10]){
             continue;
@@ -30,7 +30,7 @@ class MyClass(int a) : Object(){
     }
 }
 
-def void main2(String[] args){
+fun void main2(String[] args){
     println("really???");
     A a();
     int v=a?b?c?five;
@@ -51,7 +51,7 @@ class test.C{
     String s=null;
 }
 
-def void main(String[] args){
+fun void main(String[] args){
 var myuplet=(1,2.0);
 println(myuplet._1,myuplet._2);
 int a;
@@ -63,7 +63,7 @@ int[10] arr2(3);
 var x=(a*2,arr1[0..3],b*2);
 (a,arr2[2..5],b)=x;
 }
-def void main(String[] args){
+fun void main(String[] args){
     int[10] arr((i)->2*i);
     println("arr=",arr);
 
@@ -97,7 +97,7 @@ def void main(String[] args){
     println(s8);
 }
 
-def void main(String[] args){
+fun void main(String[] args){
 
 //    int b=3;
 //    if(1<b<3>2){
@@ -189,7 +189,7 @@ def void main(String[] args){
  *   * switch statement
  */
 //java.lang.String.class;
-def void main(String[] args){
+fun void main(String[] args){
     int x=3;
      {
          int x=3;

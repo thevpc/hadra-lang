@@ -817,6 +817,10 @@
 					"name": "keyword.control.def.hl"
 				},
 				{
+					"match": "\\b(fun)\\b",
+					"name": "keyword.control.fun.hl"
+				},
+				{
 					"match": "\\b(constructor)\\b",
 					"name": "keyword.control.constructor.hl"
 				},

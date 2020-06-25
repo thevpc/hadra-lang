@@ -1,0 +1,2 @@
+fun m(int x)-> x+1;
+int[m(3)] h(3);

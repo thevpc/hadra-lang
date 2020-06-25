@@ -3747,6 +3747,7 @@
       <item>operator</item>
       <item>constructor</item>
       <item>def</item>
+      <item>fun</item>
       <item>var</item>
       <item>val</item>
     </list>
