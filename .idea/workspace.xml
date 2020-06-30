@@ -22,171 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f1cf708f-f133-4792-a05e-0ddd77f1da07" name="Default Changelist" comment="spec change : using fun keyword instead of def">
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNAnnotationCall.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNAnnotationList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclare.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNTypeTokenSpecialAnnotation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/types/HHostJClassType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/types/HLJTypes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/types/HType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/types/JPrimitiveModifierAnnotationInstance.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HLExpressionOptions.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples/Example0010_nuts.hl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples/Example0010_nuts.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples/Example0011_swing_Console.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples/Example0012_data.hl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples/Example0012_data.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples/Example0051_hadruwaves_mon.hl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples/README.md" afterDir="false" />
+    <list default="true" id="f1cf708f-f133-4792-a05e-0ddd77f1da07" name="Default Changelist" comment="spec change : all modifiers are annotations">
+      <change afterPath="$PROJECT_DIR$/.gitattributes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HLCompletion.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HLCompletion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HLJeepFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HLJeepFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HLProject.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HLProject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HadraLanguage.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HadraLanguage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/JLibField.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/JLibField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementBracketsVar.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementBracketsVar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementConstructor.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementConstructor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementExpr.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementExpr.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementField.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementInvokable.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementInvokable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementLocalVar.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementLocalVar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementType.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementWhenDo.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementWhenDo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/BodyJInvoke.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/BodyJInvoke.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/CompareToBaseInvokable.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/CompareToBaseInvokable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/HLJCompilerContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/HLJCompilerContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/JInvokableFromConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/JInvokableFromConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/JNodeHBlocJInvoke.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/JNodeHBlocJInvoke.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/NoTypeErrorCountVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/NoTypeErrorCountVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/SafeEqualsInvokable.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/SafeEqualsInvokable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/SafeNotEqualsInvokable.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/SafeNotEqualsInvokable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/StrictNotEqualsInvokable.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/StrictNotEqualsInvokable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/DefaultHLIndexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/DefaultHLIndexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/HLIndexedClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/HLIndexedClass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/HLIndexedConstructor.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/HLIndexedConstructor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/HLIndexedField.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/HLIndexedField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/HLIndexedMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/HLIndexedMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/HLIndexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/HLIndexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HLDeclarationOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HLDeclarationOptions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HLFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HLFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HLParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HLParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HLParserOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HLParserOptions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HNumberEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/runtime/HNumberEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/HPackageId.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/DuplicateDefChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/DuplicateDefChecker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/ElementTypeAndConstraint.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/ElementTypeAndConstraint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HLInvokableType.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HLInvokableType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNApplyCastOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNApplyCastOperator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNArrayCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNArrayCall.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNArrayNew.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNArrayNew.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNAssign.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNAssign.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNBraces.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNBraces.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNBrackets.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNBrackets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNBracketsPostfix.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNBracketsPostfix.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNBracketsPostfixLastIndex.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNBracketsPostfixLastIndex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNBreak.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNBreak.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNBreakOrContinue.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNBreakOrContinue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNCast.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNCast.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNContinue.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNContinue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclare.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareIdentifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareInvokable.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareInvokable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareMetaPackage.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareMetaPackage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareToken.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareTokenBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareTokenBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareTokenHolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareTokenHolder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareTokenIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareTokenIdentifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareTokenList.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareTokenList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareTokenTuple.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareTokenTuple.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareTokenTupleItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareTokenTupleItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareType.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDeclareTypeMetaPackage.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDeclareTypeMetaPackage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDotClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDotClass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNDotThis.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNDotThis.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNExtends.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNExtends.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNField.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNField.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNFieldUnchecked.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNFieldUnchecked.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNFor.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNFor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNIdentifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNIdentifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNIf.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNIf.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNImport.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNImport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNIs.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNIs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNLambdaExpression.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNLambdaExpression.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNLiteral.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNLiteral.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNLiteralDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNLiteralDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNMetaImportPackage.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNMetaImportPackage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNMetaPackageArtifact.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNMetaPackageArtifact.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNMetaPackageGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNMetaPackageGroup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNMetaPackageId.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNMetaPackageId.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNMetaPackageVersion.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNMetaPackageVersion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNMethodUncheckedCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNMethodUncheckedCall.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNNodeId.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNNodeId.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNObjectNew.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNObjectNew.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNOpBinaryCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNOpBinaryCall.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNOpCoalesce.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNOpCoalesce.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNOpDot.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNOpDot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNOpUnaryCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNOpUnaryCall.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNPars.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNPars.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNParsPostfix.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNParsPostfix.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNReturn.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNReturn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNSemantic.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNSemantic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNStaticEval.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNStaticEval.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNStringInterop.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNStringInterop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNSuper.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNSuper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNSwitch.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNSwitch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNThis.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNThis.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNThrow.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNThrow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNTokenSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNTokenSuite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNTryCatch.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNTryCatch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNTuple.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNTuple.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNTypeToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNTypeToken.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNUnused.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNUnused.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNWhile.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNWhile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/HNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/InitValueConstraint.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/InitValueConstraint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/JNodeHArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/JNodeHArray.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/JNodeHArraySet.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/JNodeHArraySet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/JNodeHLiteralSuperscript.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/JNodeHLiteralSuperscript.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/extra/HXInvokableCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/extra/HXInvokableCall.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/parser/ast/extra/HXNew.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/extra/HXNew.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage01Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage01Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage02Preprocessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage02Preprocessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage03Indexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage03Indexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage04DefinitionResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage04DefinitionResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage05CallResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage05CallResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage07Transform.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStage07Transform.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStageType1.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStageType1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStageType2.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HLCStageType2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HGenUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HGenUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HLCStage08JavaTransform.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HLCStage08JavaTransform.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HLCStage09JavaGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HLCStage09JavaGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HLGenCompilationUnitContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HLGenCompilationUnitContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/JavaNodes.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/JavaNodes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/runtime/HLConstantEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/runtime/HLConstantEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/runtime/HLEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/runtime/HLEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/HNodeUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/HNodeUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/HTypeUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/HTypeUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/HUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/HUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0019_nulls.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0019_nulls.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0025_for_stmt.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0025_for_stmt.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0027_switch_expr.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0027_switch_expr.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0040_hadruwaves.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples/Example0050_hadruwaves.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0041_hadruwaves_mon.hl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0042.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0042.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0043.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0043.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0044.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0044.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0045.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0045.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0047_swing_Console.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples/Example0011_swing_Console.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0048.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0048.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0049.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0049.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0050.hl" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/success/testCompilerSuccess0050.hl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/ebook/hadra-lang-book.tex" beforeDir="false" afterPath="$PROJECT_DIR$/doc/ebook/hadra-lang-book.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ide-support/hl4nb/src/main/java/net/hl/ide/hl4nb/editor/semantic/HLnbSemanticAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4nb/src/main/java/net/hl/ide/hl4nb/editor/semantic/HLnbSemanticAnalyzer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -461,7 +299,21 @@
       <option name="project" value="LOCAL" />
       <updated>1593126696068</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="spec change : all modifiers are annotations">
+      <created>1593513579209</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1593513579209</updated>
+    </task>
+    <task id="LOCAL-00013" summary="spec change : all modifiers are annotations">
+      <created>1593513710335</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1593513710335</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -484,7 +336,8 @@
     <MESSAGE value="testing try/catch constructs, introducing Map construct (a la json)" />
     <MESSAGE value="moving to more standard package &quot;net.hl&quot; instead of &quot;net.vpc.hadralang&quot;, stdlib moved to &quot;net.hl.lang&quot;" />
     <MESSAGE value="spec change : using fun keyword instead of def" />
-    <option name="LAST_COMMIT_MESSAGE" value="spec change : using fun keyword instead of def" />
+    <MESSAGE value="spec change : all modifiers are annotations" />
+    <option name="LAST_COMMIT_MESSAGE" value="spec change : all modifiers are annotations" />
   </component>
   <component name="WindowStateProjectService">
     <state x="328" y="100" width="1024" height="844" key="#Project_Structure" timestamp="1593124980372">
@@ -574,11 +427,11 @@
     </state>
     <state width="1098" height="506" key="DebuggerActiveHint/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592782082400" />
     <state width="1098" height="506" key="DebuggerActiveHint/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1592910407756" />
-    <state x="100" y="100" width="1344" height="840" maximized="true" key="DiffContextDialog" timestamp="1593511106742">
+    <state x="100" y="100" width="1344" height="840" maximized="true" key="DiffContextDialog" timestamp="1593514138257">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="100" y="100" width="1480" height="814" maximized="true" key="DiffContextDialog/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592783400265" />
-    <state x="100" y="100" width="1344" height="840" maximized="true" key="DiffContextDialog/0.0.1680.1050/1680.0.1920.1080@0.0.1680.1050" timestamp="1593511106742" />
+    <state x="100" y="100" width="1344" height="840" maximized="true" key="DiffContextDialog/0.0.1680.1050/1680.0.1920.1080@0.0.1680.1050" timestamp="1593514138257" />
     <state x="100" y="115" width="1344" height="840" key="DiffContextDialog/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1593127004339" />
     <state x="628" y="295" key="FileChooserDialogImpl" timestamp="1593124974916">
       <screen x="0" y="15" width="1680" height="1050" />
@@ -670,10 +523,11 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="692" y="422" key="VCS.ChangelistChooser/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592745432733" />
-    <state x="440" y="258" key="Vcs.Push.Dialog.v2" timestamp="1593126699058">
-      <screen x="0" y="15" width="1680" height="1050" />
+    <state x="440" y="243" key="Vcs.Push.Dialog.v2" timestamp="1593513711691">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="440" y="243" key="Vcs.Push.Dialog.v2/0.0.1680.1050/1679.0.1920.1080@0.0.1680.1050" timestamp="1592784177555" />
+    <state x="440" y="243" key="Vcs.Push.Dialog.v2/0.0.1680.1050/1680.0.1920.1080@0.0.1680.1050" timestamp="1593513711691" />
     <state x="440" y="258" key="Vcs.Push.Dialog.v2/0.15.1680.1050/1680.0.1920.1080@0.15.1680.1050" timestamp="1593126699058" />
     <state width="840" height="489" key="XDebugger.FullValuePopup" timestamp="1593110239289">
       <screen x="0" y="15" width="1680" height="1050" />
