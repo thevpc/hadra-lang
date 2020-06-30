@@ -4,7 +4,7 @@ import net.hl.lang.*;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.DefaultJTypedValue;
 import net.vpc.common.jeep.core.eval.JEvaluableValue;
-import net.vpc.common.jeep.JTypeArray;
+import net.vpc.common.jeep.JArrayType;
 import net.vpc.common.jeep.impl.types.host.HostJArray;
 import net.vpc.common.jeep.impl.types.host.HostJRawType;
 import net.vpc.common.jeep.util.JTypeUtils;
@@ -14,10 +14,10 @@ import net.hl.compiler.core.elements.HNElement;
 import net.hl.compiler.core.elements.HNElementField;
 import net.hl.compiler.core.elements.HNElementKind;
 import net.hl.compiler.core.elements.HNElementLocalVar;
-import net.hl.compiler.parser.ast.*;
+import net.hl.compiler.ast.*;
 import net.hl.compiler.core.invokables.BodyJInvoke;
 import net.hl.compiler.core.invokables.JNodeHBlocJInvoke;
-import net.hl.compiler.parser.ast.extra.HXInvokableCall;
+import net.hl.compiler.ast.extra.HXInvokableCall;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTypeUtils;
 import net.hl.compiler.utils.HUtils;
@@ -429,7 +429,7 @@ public class HLEvaluator implements JEvaluator {
                             throw new NullPointerException();
                         }
                         int index = ((Number) evaluate(a.getIndexNodes()[0], context)).intValue();
-                        JTypeArray t = (JTypeArray) context.getContext().types().typeOf(v);
+                        JArrayType t = (JArrayType) context.getContext().types().typeOf(v);
                         JArray aa = t.asArray(v);
                         aa.set(index, o);
                         return o;
@@ -439,7 +439,7 @@ public class HLEvaluator implements JEvaluator {
             }
             case H_ARRAY_NEW: {
                 HNArrayNew a = (HNArrayNew) node;
-                JTypeArray arrayType = (JTypeArray) a.getArrayType();
+                JArrayType arrayType = (JArrayType) a.getArrayType();
                 HNode[] inits = a.getInits();
                 int[] allLen = new int[arrayType.arrayDimension()];
                 for (int i = 0; i < allLen.length; i++) {
@@ -471,7 +471,7 @@ public class HLEvaluator implements JEvaluator {
                                 break;
                             }
                             case 2: {
-                                JTypeArray tt = arrayType;
+                                JArrayType tt = arrayType;
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -490,8 +490,8 @@ public class HLEvaluator implements JEvaluator {
                                 break;
                             }
                             case 3: {
-                                JTypeArray tt = arrayType;
-                                JTypeArray tt1 = (JTypeArray) arrayType.componentType();
+                                JArrayType tt = arrayType;
+                                JArrayType tt1 = (JArrayType) arrayType.componentType();
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -514,9 +514,9 @@ public class HLEvaluator implements JEvaluator {
                                 break;
                             }
                             case 4: {
-                                JTypeArray tt = arrayType;
-                                JTypeArray tt1 = (JTypeArray) arrayType.componentType();
-                                JTypeArray tt2 = (JTypeArray) tt1.componentType();
+                                JArrayType tt = arrayType;
+                                JArrayType tt1 = (JArrayType) arrayType.componentType();
+                                JArrayType tt2 = (JArrayType) tt1.componentType();
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -557,7 +557,7 @@ public class HLEvaluator implements JEvaluator {
                                 break;
                             }
                             case 2: {
-                                JTypeArray tt = arrayType;
+                                JArrayType tt = arrayType;
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -567,8 +567,8 @@ public class HLEvaluator implements JEvaluator {
                                 break;
                             }
                             case 3: {
-                                JTypeArray tt = arrayType;
-                                JTypeArray tt1 = (JTypeArray) arrayType.componentType();
+                                JArrayType tt = arrayType;
+                                JArrayType tt1 = (JArrayType) arrayType.componentType();
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -581,9 +581,9 @@ public class HLEvaluator implements JEvaluator {
                                 break;
                             }
                             case 4: {
-                                JTypeArray tt = arrayType;
-                                JTypeArray tt1 = (JTypeArray) arrayType.componentType();
-                                JTypeArray tt2 = (JTypeArray) tt1.componentType();
+                                JArrayType tt = arrayType;
+                                JArrayType tt1 = (JArrayType) arrayType.componentType();
+                                JArrayType tt2 = (JArrayType) tt1.componentType();
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -613,7 +613,7 @@ public class HLEvaluator implements JEvaluator {
                     throw new NullPointerException();
                 }
                 int index = ((Number) evaluate(n.getIndexNodes()[0], context)).intValue();
-                JTypeArray t = (JTypeArray) context.getContext().types().typeOf(v);
+                JArrayType t = (JArrayType) context.getContext().types().typeOf(v);
                 JArray a = t.asArray(v);
                 return a.get(index);
             }
@@ -761,7 +761,7 @@ public class HLEvaluator implements JEvaluator {
     private Tuple2<Object,Object> evalArrayInc(HNBracketsPostfix arg, int inc, JInvokeContext context) {
         HNBracketsPostfix a = arg;
         int index = (int) evaluate(a.getRight().get(0), context);
-        JTypeArray arrayType = (JTypeArray) a.getLeft().getElement().getType();
+        JArrayType arrayType = (JArrayType) a.getLeft().getElement().getType();
         String argTypeName = arrayType.componentType().getName();
         JArray array = arrayType.asArray(evaluate(a.getLeft(), context));
         Object oldValue0 = array.get(index);

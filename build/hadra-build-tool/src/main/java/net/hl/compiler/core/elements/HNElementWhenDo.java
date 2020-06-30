@@ -4,7 +4,7 @@ import net.vpc.common.jeep.JInvokable;
 import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypePattern;
-import net.hl.compiler.parser.ast.HNIf;
+import net.hl.compiler.ast.HNIf;
 import net.hl.compiler.utils.HUtils;
 
 public class HNElementWhenDo extends HNElement implements Cloneable{

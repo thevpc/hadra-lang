@@ -8,6 +8,7 @@ package net.hl.compiler.core;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
+import net.hl.compiler.stages.runtime.HNumberEvaluator;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.DefaultJeep;
 import net.vpc.common.jeep.core.tokens.*;
@@ -132,15 +133,15 @@ public final class HadraLanguage extends DefaultJeep {
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_6, "^", "^^");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_7, "&");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_8, "==", "!=", "===", "!==", "<>");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_9, "<", ">", "<=", ">=", "is");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_9, "<", ">", "<=", ">=", ".<", ".>", ".<=", ".>=", "is");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_10, "<<", "<<<", ">>", ">>>");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_10, "..", "<..", "..<");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_10, ":+", ":-");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_11, "+", "-");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_12, "*", "/", "%");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, "**", "***");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_11, "+", "-",".+",".-");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_12, "*", "/", "%",".*","./",".%");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, "**", "***",".**", ".***");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, ":*", ":**", ":***");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, "++", "--", "~");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, "++", "--", "~",".++", ".--", ".~");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, ":++", ":--", ":~");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_15, ".", "?", ".?", "??","::");
 

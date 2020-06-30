@@ -1,0 +1,152 @@
+import java.io.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.text.*;
+
+fun main(String[] args){
+    Console2();
+}
+
+class Console2 : JFrame, WindowListener, Runnable {
+
+  @private JTextPane textArea;
+  @private Thread stdOutReader;
+  @private Thread stdErrReader;
+  @private boolean stopThreads;
+  @private @final PipedInputStream stdOutPin();
+  @private @final PipedInputStream stdErrPin();
+  @private StyledDocument doc;
+  @private Style style;
+
+  @static fun void setFontFamily(StyledDocument this, String){
+    StyleConstants.setFontFamily(this, value);
+  }
+  @static fun void setFontSize(StyledDocument this, String){
+    StyleConstants.setFontSize(this, value);
+  }
+  @static fun void setForeground(StyledDocument this, Color){
+    StyleConstants.setForeground(this, value);
+  }
+
+  constructor() {
+
+    // The area to which the output will be send to
+    textArea = JTextPane();
+    textArea.editable=false;
+    textArea.background=WHITE;
+    doc = (StyledDocument) textArea.document;
+    style = doc.addStyle("ConsoleStyle", null).{
+        fontFamily="MonoSpaced";
+        fontSize=12;
+    };
+    title="Console";
+    Dimension screenSize = Toolkit.defaultToolkit.screenSize;
+    Dimension frameSize = Dimension((int)screenSize.width / 3, (int)screenSize.height / 4);
+    int x = (int)frameSize.width / 20;
+    int y = (int)frameSize.height / 20;
+    setBounds(x, y, (int)frameSize.width, (int)frameSize.height);
+
+    contentPane.add(JScrollPane(textArea), BorderLayout.CENTER);
+    visible=true;
+
+    addWindowListener(this);
+
+    try {
+      PipedOutputStream stdOutPos = PipedOutputStream(this.stdOutPin);
+      System.setOut(PrintStream(stdOutPos, true));
+    } catch (IOException|SecurityException io) {
+      textArea.text="Couldn't redirect STDOUT to this console\n" + io.message;
+    }
+
+    try {
+      PipedOutputStream stdErrPos = PipedOutputStream(this.stdErrPin);
+      System.setErr(PrintStream(stdErrPos, true));
+    } catch (IOException|SecurityException io) {
+      textArea.text="Couldn't redirect STDERR to this console\n" + io.message;
+    }
+    stopThreads = false;
+    stdOutReader = Thread(this).{daemon=true;start};
+    stdErrReader = Thread(this).{daemon=true;start};
+  }
+
+  @synchronized fun void windowClosed(WindowEvent evt) {
+    stopThreads = true;
+    this.notifyAll();
+
+    try {
+      stdOutReader.join(1000);
+      stdOutPin.close();
+    };
+
+    try {
+      stdErrReader.join(1000);
+      stdErrPin.close();
+    }
+  }
+
+  @synchronized fun void windowClosing(WindowEvent evt) {
+    visible=false;
+    dispose();
+  }
+
+  @synchronized fun void run() {
+    try {
+      while (Thread.currentThread() == stdOutReader) {
+        try this.wait(100);
+        if (stdOutPin.available() != 0) {
+          String input = this.readLine(stdOutPin);
+          style.foreground=black;
+          doc.insertString(doc.length, input, style);
+          textArea.caretPosition=textArea.document.length;
+        }
+        if (stopThreads) {
+          return;
+        }
+      }
+
+      while (Thread.currentThread == stdErrReader) {
+        try this.wait(100);
+        if (stdErrPin.available != 0) {
+          String input = this.readLine(stdErrPin);
+          style.foreground=red;
+          doc.insertString(doc.length, input, style);
+          textArea.caretPosition=textArea.document.length;
+        }
+        if (stopThreads) {
+          return;
+        }
+      }
+    } catch (Exception e) {
+      textArea.text="\nConsole reports an Internal error.\nThe error is: " + e);
+    }
+  }
+
+  @private @synchronized fun String readLine(PipedInputStream inStream) {
+    String input = "";
+    while(true) {
+      int available = inStream.available();
+      if (available == 0) {
+        break;
+      }
+      byte[] b = byte[available]();
+      inStream.read(b);
+      input = input+String(b, 0, b.length);
+      if(input~".*\r?\n" || stopThreads){
+        break;
+      }
+    };
+    return input;
+  }
+
+  fun void windowOpened(WindowEvent e) {}
+
+  fun void windowIconified(WindowEvent e) {}
+
+  fun void windowDeiconified(WindowEvent e) {}
+
+  fun void windowActivated(WindowEvent e) {}
+
+  fun void windowDeactivated(WindowEvent e) {}
+
+}

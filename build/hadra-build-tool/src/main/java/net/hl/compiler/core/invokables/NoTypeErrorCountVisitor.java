@@ -1,9 +1,9 @@
 package net.hl.compiler.core.invokables;
 
 import net.vpc.common.jeep.*;
-import net.hl.compiler.parser.ast.HNIdentifier;
-import net.hl.compiler.parser.ast.HNLiteral;
-import net.hl.compiler.parser.ast.HNode;
+import net.hl.compiler.ast.HNIdentifier;
+import net.hl.compiler.ast.HNLiteral;
+import net.hl.compiler.ast.HNode;
 
 public class NoTypeErrorCountVisitor implements JNodeVisitor {
     public int errors = 0;

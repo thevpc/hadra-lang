@@ -14,8 +14,8 @@ package net.vpc.hadralang.test:test09#1215 {
 fun void main(String[] args){
     println("really???");
     A a();
-    int v=a?b?c?five;
-    String s=a?b?c?s??"Hello";
+    int v=a?.b?.c?.five;
+    String s=a?.b?.c?.s??"Hello";
     println("s="+s);
 }
 

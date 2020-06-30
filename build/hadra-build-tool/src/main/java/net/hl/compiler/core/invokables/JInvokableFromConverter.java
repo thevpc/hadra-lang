@@ -5,17 +5,15 @@
  */
 package net.hl.compiler.core.invokables;
 
-import net.vpc.common.jeep.JConverter;
-import net.vpc.common.jeep.JInvokable;
-import net.vpc.common.jeep.JInvokeContext;
-import net.vpc.common.jeep.JType;
+import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.impl.functions.AbstractJInvokable;
 import net.vpc.common.jeep.impl.functions.JSignature;
 
 /**
  *
  * @author vpc
  */
-public class JInvokableFromConverter implements JInvokable {
+public class JInvokableFromConverter extends AbstractJInvokable {
     
     private final JConverter converter;
 
@@ -51,4 +49,6 @@ public class JInvokableFromConverter implements JInvokable {
     public String getSourceName() {
         return "<unknown-source>";
     }
+
+
 }

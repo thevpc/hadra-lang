@@ -2,11 +2,11 @@ package net.hl.compiler.core.elements;
 
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.util.JeepUtils;
-import net.hl.compiler.parser.ast.HNDeclareInvokable;
-import net.hl.compiler.parser.ast.HNThis;
+import net.hl.compiler.ast.HNDeclareInvokable;
+import net.hl.compiler.ast.HNThis;
 import net.hl.compiler.index.HLIndexedMethod;
 import net.vpc.common.jeep.JTypePattern;
-import net.hl.compiler.parser.ast.HNode;
+import net.hl.compiler.ast.HNode;
 import net.hl.compiler.utils.HUtils;
 
 public class HNElementMethod extends HNElementInvokable implements Cloneable{

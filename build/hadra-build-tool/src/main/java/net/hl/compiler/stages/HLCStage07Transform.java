@@ -40,7 +40,7 @@
 //                return new ElementTypeAndConstraint(valType, null);
 //            } else if (assignOperator == ':') {
 //                if (valType.isArray()) {
-//                    JTypeArray ta = (JTypeArray) valType;
+//                    JArrayType ta = (JArrayType) valType;
 //                    valType = (ta.componentType());
 //                    valCstr = InitValueConstraint.ITERABLE;
 //                } else if (types.forName("java.lang.CharSequence").isAssignableFrom(valType)) {
@@ -765,14 +765,14 @@
 //                }
 //                if (array.length > 1) {
 //                    for (JNode jNode : array) {
-//                        b = new HNArrayCall(b, new JNode[]{jNode}, bt, ((JTypeArray) bt).componentType(), jNode.startToken(), jNode.endToken());
-//                        bt = ((JTypeArray) bt).componentType();
+//                        b = new HNArrayCall(b, new JNode[]{jNode}, bt, ((JArrayType) bt).componentType(), jNode.startToken(), jNode.endToken());
+//                        bt = ((JArrayType) bt).componentType();
 //                    }
 //                    node = (HNArrayCall) b;
 //                }
 //                if (array[0].getType() != null && array[0].getType().boxed().name().equals("java.lang.Integer")) {
 //                    //this is okkay
-//                    node.setType(((JTypeArray) bt).componentType());
+//                    node.setType(((JArrayType) bt).componentType());
 //                    return node;
 //                }
 //            }
@@ -1252,18 +1252,18 @@
 //                if (array.length > 1) {
 //                    for (int i = 0; i < array.length - 1; i++) {
 //                        JNode jNode = array[i];
-//                        JTypeArray bta = ((JTypeArray) bt);
+//                        JArrayType bta = ((JArrayType) bt);
 //                        b = new HNArrayCall(b, new JNode[]{jNode}, bt, bta.componentType(), jNode.startToken(), jNode.endToken());
 //                        bt = bta.componentType();
 //                    }
-//                    b = new HNArrayCall(b, new JNode[]{array[array.length - 1]}, bt, ((JTypeArray) bt).componentType(),
+//                    b = new HNArrayCall(b, new JNode[]{array[array.length - 1]}, bt, ((JArrayType) bt).componentType(),
 //                            array[array.length - 1].startToken(), array[array.length - 1].endToken());
 //                    node.setLeft(b);
 //                    regularArrayIndexing = true;
 //                } else {
 //                    if (array[0].getType() != null && array[0].getType().boxed().name().equals("java.lang.Integer")) {
 //                        //this is okkay
-//                        node.setType(((JTypeArray) bt).componentType());
+//                        node.setType(((JArrayType) bt).componentType());
 //                        regularArrayIndexing = true;
 //                    }
 //                }

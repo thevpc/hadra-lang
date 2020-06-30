@@ -4,7 +4,7 @@ import net.vpc.common.jeep.*;
 import net.hl.compiler.core.HLOptions;
 import net.hl.compiler.core.HLProject;
 import net.hl.compiler.core.invokables.HLJCompilerContext;
-import net.hl.compiler.parser.ast.HNode;
+import net.hl.compiler.ast.HNode;
 
 import java.util.List;
 

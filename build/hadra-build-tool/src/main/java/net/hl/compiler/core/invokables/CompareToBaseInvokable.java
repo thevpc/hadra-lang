@@ -3,10 +3,11 @@ package net.hl.compiler.core.invokables;
 import net.vpc.common.jeep.JContext;
 import net.vpc.common.jeep.JInvokable;
 import net.vpc.common.jeep.JType;
+import net.vpc.common.jeep.impl.functions.AbstractJInvokable;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.util.JTypeUtils;
 
-public abstract class CompareToBaseInvokable implements JInvokable {
+public abstract class CompareToBaseInvokable extends AbstractJInvokable {
     protected final JInvokable base;
     protected final JSignature signature;
     protected final JContext context;

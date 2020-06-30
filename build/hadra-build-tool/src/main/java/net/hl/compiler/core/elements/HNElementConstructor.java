@@ -4,8 +4,8 @@ import net.vpc.common.jeep.JInvokable;
 import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypePattern;
-import net.hl.compiler.parser.ast.HNDeclareInvokable;
-import net.hl.compiler.parser.ast.HNode;
+import net.hl.compiler.ast.HNDeclareInvokable;
+import net.hl.compiler.ast.HNode;
 import net.hl.compiler.utils.HUtils;
 
 public class HNElementConstructor extends HNElementInvokable implements Cloneable{

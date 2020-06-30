@@ -16,12 +16,11 @@ import net.hl.compiler.core.elements.HNElementMetaPackageVersion;
 import net.hl.compiler.core.elements.HNElementNonExpr;
 import net.hl.compiler.core.invokables.JNodeHBlocJInvoke;
 import net.hl.compiler.index.HLIndexedProject;
-import net.hl.compiler.parser.ast.*;
+import net.hl.compiler.ast.*;
 import net.hl.compiler.stages.generators.java.HLCStage08JavaTransform;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTokenUtils;
 
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -164,7 +163,8 @@ public class HLCStage02Preprocessor implements HLCStage {
                 HNDeclareInvokable mainMethod = new HNDeclareInvokable(
                         HTokenUtils.createToken("main"),
                         block.startToken(),block.endToken()
-                        ).setModifiers(Modifier.STATIC);
+                        );
+                mainMethod.addAnnotations(HNAnnotationCall.ofModifier("static"));
                 mainMethod.setArguments(new ArrayList<>(
                         Arrays.asList(
                                 new HNDeclareIdentifier(

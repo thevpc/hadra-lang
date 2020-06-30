@@ -13,6 +13,7 @@ public class HLDeclarationOptions {
     boolean acceptEqValue = true;
     boolean acceptInValue = false;
     boolean acceptModifiers = true;
+    boolean acceptAnnotations = true;
     boolean acceptVar = true;
     boolean acceptVarArg = true;
     boolean acceptMultiVars = false;
@@ -29,6 +30,15 @@ public class HLDeclarationOptions {
 
     public HLDeclarationOptions setAcceptModifiers(boolean acceptModifiers) {
         this.acceptModifiers = acceptModifiers;
+        return this;
+    }
+
+    public boolean isAcceptAnnotations() {
+        return acceptAnnotations;
+    }
+
+    public HLDeclarationOptions setAcceptAnnotations(boolean acceptAnnotations) {
+        this.acceptAnnotations = acceptAnnotations;
         return this;
     }
 

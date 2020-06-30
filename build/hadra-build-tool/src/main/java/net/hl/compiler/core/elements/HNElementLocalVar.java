@@ -3,9 +3,9 @@ package net.hl.compiler.core.elements;
 import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JToken;
 import net.vpc.common.jeep.JType;
-import net.hl.compiler.parser.ast.HNDeclareTokenBase;
+import net.hl.compiler.ast.HNDeclareTokenBase;
 import net.vpc.common.jeep.JTypePattern;
-import net.hl.compiler.parser.ast.HNode;
+import net.hl.compiler.ast.HNode;
 import net.hl.compiler.utils.HUtils;
 
 public class HNElementLocalVar extends HNElement implements Cloneable{

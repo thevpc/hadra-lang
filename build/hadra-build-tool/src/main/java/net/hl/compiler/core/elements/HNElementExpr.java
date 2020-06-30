@@ -2,7 +2,7 @@ package net.hl.compiler.core.elements;
 
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypePattern;
-import net.hl.compiler.parser.ast.HNode;
+import net.hl.compiler.ast.HNode;
 
 public class HNElementExpr extends HNElement implements Cloneable{
     public JTypePattern type;

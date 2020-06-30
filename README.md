@@ -32,5 +32,5 @@ Here is a snippet of the one file project in hadra-lang
       fun operator double*this -> Complex(this.real*value,this.imag*value);
     }
 ```
-
+more examples under [examples folder](build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples/README.md)
 more documentation under in the [open ebook](doc/ebook/hadra-lang-book.md)

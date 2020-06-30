@@ -5,3 +5,4 @@ map+={15:"fifteen",1:"one"};
 for(e:map){
     println(e.key+","+e.value?nullable?name);
 }
+

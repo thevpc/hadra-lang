@@ -3,7 +3,7 @@ package net.hl.compiler.core;
 import net.vpc.common.jeep.JField;
 import net.vpc.common.jeep.JToken;
 import net.vpc.common.jeep.JType;
-import net.hl.compiler.parser.ast.HNDeclareTokenBase;
+import net.hl.compiler.ast.HNDeclareTokenBase;
 import net.hl.compiler.utils.HTokenUtils;
 
 public class JLibField implements HNDeclareTokenBase {

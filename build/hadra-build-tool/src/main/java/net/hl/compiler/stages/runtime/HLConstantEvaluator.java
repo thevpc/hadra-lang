@@ -4,8 +4,8 @@ import net.hl.lang.IntRange;
 import net.vpc.common.jeep.JMethod;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.impl.types.host.HostJArray;
-import net.hl.compiler.parser.ast.*;
-import net.hl.compiler.parser.ast.extra.HXInvokableCall;
+import net.hl.compiler.ast.*;
+import net.hl.compiler.ast.extra.HXInvokableCall;
 import net.hl.lang.ext.HJavaDefaultOperators;
 import net.hl.lang.ext.RangeExtensions;
 

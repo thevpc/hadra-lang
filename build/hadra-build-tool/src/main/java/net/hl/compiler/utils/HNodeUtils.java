@@ -7,7 +7,7 @@ import net.vpc.common.jeep.util.JTokenUtils;
 import net.hl.compiler.core.elements.HNElement;
 import net.hl.compiler.core.elements.HNElementKind;
 import net.hl.compiler.core.elements.HNElementMethod;
-import net.hl.compiler.parser.ast.*;
+import net.hl.compiler.ast.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

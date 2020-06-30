@@ -19,7 +19,7 @@ import net.hl.compiler.core.HMissingLinkageException;
 import net.hl.compiler.core.elements.*;
 import net.hl.compiler.index.HLIndexedClass;
 import net.hl.compiler.index.HLIndexer;
-import net.hl.compiler.parser.ast.*;
+import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.*;
 import net.hl.lang.Tuple;
 
@@ -2973,7 +2973,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 }
                 throw new JShouldNeverHappenException();
             }
-            if (Modifier.isStatic(invokable.getModifiers())) {
+            if (HNAnnotationList.isStatic(invokable.getAnnotations())) {
                 return null;
             }
             while (n != null) {
@@ -2986,7 +2986,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         }
         if (n instanceof HNDeclareIdentifier) {
             HNDeclareIdentifier invokable = (HNDeclareIdentifier) n;
-            if (Modifier.isStatic(invokable.getModifiers())) {
+            if (HNAnnotationList.isStatic(invokable.getAnnotations())) {
                 return null;
             }
             while (n != null) {
@@ -3020,20 +3020,20 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             if (invokable.isConstructor()) {
                 return false;
             }
-            return Modifier.isStatic(invokable.getModifiers());
+            return HNAnnotationList.isStatic(invokable.getAnnotations());
         }
         if (n instanceof HNDeclareIdentifier) {
             if (fullChildInfo.contains("mainConstructorArgs")) {
                 return false;
             }
             HNDeclareIdentifier invokable = (HNDeclareIdentifier) n;
-            if (Modifier.isStatic(invokable.getModifiers())) {
+            if (HNAnnotationList.isStatic(invokable.getAnnotations())) {
                 return true;
             }
         }
         if (n instanceof HNDeclareType) {
             HNDeclareType invokable = (HNDeclareType) n;
-            if (Modifier.isStatic(invokable.getModifiers())) {
+            if (HNAnnotationList.isStatic(invokable.getAnnotations())) {
                 return true;
             }
         }

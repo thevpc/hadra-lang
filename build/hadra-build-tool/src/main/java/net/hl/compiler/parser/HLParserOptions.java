@@ -81,7 +81,7 @@ public class HLParserOptions {
            .setAcceptEqValue(true).setAcceptInValue(true)
            .setAcceptVarArg(false).setAcceptMultiVars(false)
            .setNoTypeNameOption(HLDeclarationOptions.NoTypeNameOption.NAME);
-    static final JExpressionOptions hDefaultExpr = new JExpressionOptions()
+    static final HLExpressionOptions hDefaultExpr = new HLExpressionOptions()
                    .setBinary(new JExpressionBinaryOptions()
                            .setExcludedListOperator(true)
                            .setExcludedImplicitOperator(true)
@@ -95,13 +95,13 @@ public class HLParserOptions {
                            .setExcludedPostfixBraces(true)
                            .setExcludedPrefixUnaryOperators()
                            .setExcludedPostfixUnaryOperators());
-    static JExpressionOptions noBracesExpressionOptions= hDefaultExpr.copy()
+    static HLExpressionOptions noBracesExpressionOptions= hDefaultExpr.copy()
             .setUnary(hDefaultExpr.getUnary().copy()
                     .setExcludedPrefixBraces(true)
                     .setExcludedPostfixBraces(true)
                     .setExcludedTerminalBraces(true)
             );
-    static JExpressionOptions simpleExpressionOptions=new JExpressionOptions()
+    static HLExpressionOptions simpleExpressionOptions=new HLExpressionOptions()
             .setBinary(new JExpressionBinaryOptions()
                     .setExcludedListOperator(true)
                     .setExcludedImplicitOperator(true)
@@ -118,7 +118,7 @@ public class HLParserOptions {
                     .setExcludedPostfixUnaryOperators("++", "--")
             );
 
-    static JExpressionOptions tryResourceExprOptions= hDefaultExpr.copy()
+    static HLExpressionOptions tryResourceExprOptions= hDefaultExpr.copy()
             .setUnary(hDefaultExpr.getUnary().copy()
                     .setExcludedPrefixBraces(true)
                     .setExcludedPostfixBraces(true)
@@ -126,7 +126,7 @@ public class HLParserOptions {
             ).setBinary(hDefaultExpr.getBinary().copy()
                     .setExcludedBinaryOperators("catch")
             );
-    static JExpressionOptions tryBlockExprOptions= hDefaultExpr.copy()
+    static HLExpressionOptions tryBlockExprOptions= hDefaultExpr.copy()
             .setUnary(hDefaultExpr.getUnary().copy()
                     .setExcludedPrefixBraces(true)
                     .setExcludedPostfixBraces(true)
@@ -134,7 +134,7 @@ public class HLParserOptions {
             ).setBinary(hDefaultExpr.getBinary().copy()
                     .setExcludedBinaryOperators("catch")
             );
-    static JExpressionOptions tryCatchDeclExprOptions= hDefaultExpr.copy()
+    static HLExpressionOptions tryCatchDeclExprOptions= hDefaultExpr.copy()
             .setUnary(hDefaultExpr.getUnary().copy()
                     .setExcludedPrefixBraces(true)
                     .setExcludedPostfixBraces(true)
@@ -142,12 +142,16 @@ public class HLParserOptions {
             ).setBinary(hDefaultExpr.getBinary().copy()
                     .setExcludedBinaryOperators("catch")
             );
-    static JExpressionOptions tryCatchBlockExprOptions= hDefaultExpr.copy()
+    static HLExpressionOptions tryCatchBlockExprOptions= hDefaultExpr.copy()
             .setUnary(hDefaultExpr.getUnary().copy()
                     .setExcludedPrefixBraces(true)
                     .setExcludedPostfixBraces(true)
                     .setExcludedTerminalBraces(true)
             ).setBinary(hDefaultExpr.getBinary().copy()
                     .setExcludedBinaryOperators("catch")
+            );
+    static HLExpressionOptions annotationsOptions= hDefaultExpr.copy()
+            .setUnary(hDefaultExpr.getUnary().copy()
+                    .setExcludedAnnotations(true)
             );
 }

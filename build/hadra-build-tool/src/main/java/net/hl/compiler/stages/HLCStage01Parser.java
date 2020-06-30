@@ -7,7 +7,7 @@ import net.vpc.common.jeep.log.LogJTextSourceReport;
 import net.vpc.common.jeep.util.JStringUtils;
 import net.hl.compiler.core.HLOptions;
 import net.hl.compiler.core.HLProject;
-import net.hl.compiler.parser.ast.HNBlock;
+import net.hl.compiler.ast.HNBlock;
 
 public class HLCStage01Parser implements HLCStage {
     @Override

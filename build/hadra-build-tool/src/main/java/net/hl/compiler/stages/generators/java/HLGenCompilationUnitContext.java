@@ -1,9 +1,9 @@
 package net.hl.compiler.stages.generators.java;
 
+import net.vpc.common.jeep.JArrayType;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypes;
 import net.vpc.common.jeep.JParameterizedType;
-import net.vpc.common.jeep.JTypeArray;
 
 import java.util.*;
 
@@ -62,7 +62,7 @@ public class HLGenCompilationUnitContext {
 
     public String nameWithImports(JType type, boolean staticImport, boolean noPrimitive) {
             if(type.isArray()){
-                JTypeArray ta=(JTypeArray) type;
+                JArrayType ta=(JArrayType) type;
                 String s = nameWithImports(ta.rootComponentType());
                 for (int i = 0; i < ta.arrayDimension(); i++) {
                     s+="[]";

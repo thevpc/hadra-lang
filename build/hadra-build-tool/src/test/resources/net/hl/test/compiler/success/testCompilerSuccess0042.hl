@@ -1,114 +1,25 @@
-class Matrix{
-    static -> println("Matrix initialized");
-    private Complex[][] values;
-    private int rows;
-    private int cols;
-    static fun Identity(int size) -> this(
-            Matrix(Complex[rows][cols](
-            (i,j)->if(i==j) 1 else 0))
-    );
+@private class A{
+    @(private static final const)
+    int[] x=[[1,2,3],[1,2,3]];
 
-    constructor(int size) -> this(size,size);
-
-    constructor(int cols,int rows) -> this(Complex[rows][cols](Complex.ZERO));
-
-    private constructor(Complex[][] values){
-        this.values=values;
-        this.rows=values.length;
-        this.cols=values[0].length or 0;
+    fun void doit(){
+       example(x);
     }
 
-    fun void :=(Complex[][] values) {
-        if (this.values.length,this.values[0].length catch 0)==(values.length,values[0].length catch 0)
-            this.values.set((i,j)->v[i,j]);
-        else
-            this.values=copyOf(values);
+    fun void mutate(int[][] a){
+        a[0]=1;
+    }
+    fun void nomutate1(@const int[][] a){
+
     }
 
-    set cols{
-        values=int[rows][value]((i,j)-> (i>=rows) && values[i][j])
+    fun void nomutate2(int[][] a){
+        mutate3(a[0]);
     }
 
-    set rows{
-        values=int[value][cols]((i,j)-> (j>=cols) && values[i][j])
+    fun void mutate3(int[] b){
+        b[0]=4;
     }
+    Tuple<@const int[],@nonnull String>
 }
 
-const class Complex{
-    import java.lang.Math.*;
-    private static Map<(double,double),Complex> cached();
-    public  static fun Complex I(double imag)->of(0,imag);
-    public  static fun Complex polar(double r, double t)   -> of(r * cos(t), r*sin(t))
-    public  static fun Complex of(double real,double imag) -> Complex(real,imag);
-    public  static Complex ZERO=of(0,0);
-    public  static Complex î=of(0,1);
-    public  implicit static constructor (double real) -> this(real,0);
-    public  static constructor (double real,double imag) {
-        return cached[(real,imag)] else
-            if (imag==0) RealComplex(real) else DefaultComplex(real,imag);
-    }
-    abstract fun double real;
-    abstract fun double imag;
-    fun Complex operator double+this -> Complex(value+this.real,this.imag);
-    fun Complex operator this+Complex -> Complex(this.real+value.real,this.imag+value.imag);
-    fun Complex operator -Complex -> Complex(this.real-value.real,this.imag-value.imag);
-    fun Complex operator -this -> Complex(-real,-imag);
-    fun double  this! -> sqrt(real^2+imag^2);
-    fun double  operator /Complex {
-        double a = real;
-        double b = imag;
-        double c = value.real;
-        double d = value.imag;
-        double c2d2 = c * c + d * d;
-        return of(
-            (a * c + b * d) / c2d2,
-            (b * c - a * d) / c2d2
-        );
-    }
-
-    fun Tuple<Complex,Complex>  divrem(Complex) -> {
-        return (this/value,this%value)
-    }
-
-    fun boolean equals(Object){
-        return value is Complex o && (real,imag)==(o.real,o.imag);
-    }
-    fun int hashCode() -> hashCode((real,imag));
-    fun string toString() -> $"$real+i${imag}";
-}
-
-class const DefaultComplex (double real,double imag) : Complex{
-}
-
-class const RealComplex (double real) : Complex{
-    fun double imag -> 0;
-}
-
-
-import Complex.*;
-
- //this is erronous, we cant cast int[][] to double[][] or can we?
-Matrix m(4,4):=(double[][])[1, 2, 3, 4 ; 1, 2, 3, 4 ; 1, 2, 3, 4; 1, 2, 3, 4]
- //this is correct because we can convert int[][] to double[][]
-Matrix m(4,4):=double[][] ([1, 2, 3, 4 ; 1, 2, 3, 4 ; 1, 2, 3, 4; 1, 2, 3, 4])
-//change rows
-m[1..2]=m[0..1];
-//change each row rows
-for(i=0;i<m[?].length;i++){
-    m[i][1..2]=m[i][0..1];
-}
-
-//swap column 1 and 2
-m[0..?][1]<=>m[0..?][2]
-
-Complex c(3);
-c=8+3;
-c+=3*î;
-(Complex c1,Complex c2)=c.divrem(3);
-(Complex,Complex) c3=(c2,c1);
-Complex c4=z._1;
-//Reflexion
-Object o=c4;
-Object reflectedReal=o.?real;
-Object reflectedImage=o.?("imag");
-Object reflectedMethod=o.?("/"(c2));

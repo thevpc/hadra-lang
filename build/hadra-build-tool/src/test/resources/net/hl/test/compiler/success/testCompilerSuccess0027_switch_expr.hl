@@ -17,9 +17,18 @@ fun void main(String[] args){
      {
          Integer x=3;
          int result=switch x {
-             is Integer y:1;
-             is CharSequence: 2;
+             is Integer y: y*2;
+             is CharSequence c: c*3;
              default: 3;
+         };
+     }
+     {
+         int result=switch (x=Math.rand) {
+             if x <0.1 : 1;
+             if x in [0.1..<0.2] : 2;
+             if x !in [0.5<..<0.6] : 3;
+             if 0.2<x<0.3 : 4;
+             default: 4;
          };
      }
      {

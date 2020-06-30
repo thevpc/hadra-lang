@@ -13,7 +13,7 @@ import net.hl.compiler.index.HLIndexedClass;
 import net.hl.compiler.index.HLIndexedConstructor;
 import net.hl.compiler.index.HLIndexedField;
 import net.hl.compiler.index.HLIndexedMethod;
-import net.hl.compiler.parser.ast.*;
+import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HUtils;
 
@@ -414,7 +414,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
                                 .map(HNDeclareIdentifier::getIdentifierName)
                                 .toArray(String[]::new),
                         new HNDeclareTypeMainConstructor(node),
-                        Modifier.PUBLIC, false
+                        modifiers, Modifier.PUBLIC, false
                 );
                 if (indexable) {
                     compilerContext.indexer().indexConstructor(new HLIndexedConstructor(jConstructor, source));
@@ -447,7 +447,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
                 compilerContext.log().error("X000", null, "expected class body", b.startToken());
             }
         } else {
-            if (!Modifier.isAbstract(typeDec.getModifiers())) {
+            if (!HNAnnotationList.isAbstract(typeDec.getAnnotations())) {
                 compilerContext.log().error("X000", null, "expected class body", node.startToken());
             }
         }
@@ -546,7 +546,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
                             )), method.getArguments().stream()
                             .map(HNDeclareIdentifier::getIdentifierName)
                             .toArray(String[]::new), new BodyJInvoke(method),
-                            method.getModifiers(), false
+                            modifiers, method.getModifiers(), false
                     );
                     method.setInvokable(jConstructor);
                     if (indexable) {

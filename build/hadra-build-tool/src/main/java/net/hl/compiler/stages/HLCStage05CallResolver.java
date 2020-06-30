@@ -15,7 +15,7 @@ import net.hl.compiler.core.invokables.FindMatchFailInfo;
 import net.hl.compiler.core.invokables.HLJCompilerContext;
 import net.hl.compiler.index.HLIndexedField;
 import net.hl.compiler.index.HLIndexedMethod;
-import net.hl.compiler.parser.ast.*;
+import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.*;
 
 import java.util.ArrayList;
@@ -711,14 +711,14 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                         .map(x -> compilerContext.getTypePattern(showFinalErrors, x))
                         .allMatch(x -> x.isType() && x.getType().boxed().getName().equals("java.lang.Integer"))) {
                     // this is a regular array
-                    JTypeArray arrType = (JTypeArray) baseToL.getType();
+                    JArrayType arrType = (JArrayType) baseToL.getType();
                     if (arrType.arrayDimension() >= inodes.length) {
                         acceptMethodImpl = false;
                         HNElementExpr element = (HNElementExpr) node.getElement();
                         JType tt = arrType;
                         for (int i = 0; i < inodes.length; i++) {
-                            if (tt instanceof JTypeArray) {
-                                tt = ((JTypeArray) tt).componentType();
+                            if (tt instanceof JArrayType) {
+                                tt = ((JArrayType) tt).componentType();
                             } else {
                                 compilerContext.log().error("X000", null, "not an array " + tt, node.startToken());
                             }
@@ -862,7 +862,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
                                 .map(x -> compilerContext.getTypePattern(showFinalErrors, x))
                                 .allMatch(x -> x.isType() && x.getType().boxed().getName().equals("java.lang.Integer"))) {
                             // this is a regular array
-                            JTypeArray arrType = (JTypeArray) baseToL.getType();
+                            JArrayType arrType = (JArrayType) baseToL.getType();
                             if (arrType.arrayDimension() >= indicesNodes.size()) {
                                 acceptMethodImpl = false;
                                 HNElementExpr element = (HNElementExpr) left.getElement();
@@ -1010,7 +1010,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
 //                                .map(x -> compilerContext.jTypeOrLambda(showFinalErrors, x))
 //                                .allMatch(x -> x.isType() && x.getType().boxed().name().equals("java.lang.Integer"))) {
 //                            // this is a regular array
-//                            JTypeArray arrType = (JTypeArray) baseToL.getType();
+//                            JArrayType arrType = (JArrayType) baseToL.getType();
 //                            if (arrType.arrayDimension() >= indicesNodes.size()) {
 //                                acceptMethodImpl = false;
 //                                HNElementExpr element = (HNElementExpr) left.getElement();

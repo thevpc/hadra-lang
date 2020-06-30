@@ -12,7 +12,7 @@ import java.util.Set;
 
 import net.vpc.common.textsource.JTextSource;
 import net.hl.compiler.core.HLProject;
-import net.hl.compiler.parser.ast.HNDeclareType;
+import net.hl.compiler.ast.HNDeclareType;
 
 /**
  *

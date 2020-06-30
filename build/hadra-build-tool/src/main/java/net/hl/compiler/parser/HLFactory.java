@@ -3,7 +3,7 @@ package net.hl.compiler.parser;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.JParserNodeFactory;
 import net.vpc.common.jeep.core.nodes.JNodeTokens;
-import net.hl.compiler.parser.ast.*;
+import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTokenUtils;
 import net.hl.compiler.utils.HUtils;
@@ -153,7 +153,12 @@ public class HLFactory implements JParserNodeFactory<HNode> {
 //        }
     }
 
-
+    @Override
+    public HNode createAnnotatedNode(HNode node, HNode annotations, JNodeTokens nodeTokens) {
+        HNAnnotationList l=(HNAnnotationList) annotations;
+        node.setAnnotations(l.getChildren());
+        return node;
+    }
 
     @Override
     public HNode createIdentifierNode(String name, JNodeTokens nodeTokens) {

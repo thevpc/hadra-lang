@@ -1,7 +1,7 @@
 package net.hl.compiler.core.elements;
 
 import net.vpc.common.jeep.*;
-import net.hl.compiler.parser.ast.HNDeclareTokenBase;
+import net.hl.compiler.ast.HNDeclareTokenBase;
 import net.hl.compiler.index.HLIndexedField;
 import net.vpc.common.jeep.JTypePattern;
 import net.hl.compiler.utils.HUtils;
@@ -19,7 +19,7 @@ public class HNElementField extends HNElement implements Cloneable{
         super(HNElementKind.FIELD);
         this.name = field.name();
         this.field = field;
-        this.declaringType = field.declaringType();
+        this.declaringType = field.getDeclaringType();
     }
 
     public HNElementField(String name, JType declaringType, HNDeclareTokenBase declaration, JToken location) {

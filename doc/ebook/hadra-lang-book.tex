@@ -619,13 +619,17 @@ println(p?address?street?name);
             \end{lstlisting}
 
 
-            \subsection{'.?' Operator (unchecked member)}
+            \subsection{'?.' Operator (unchecked member)}
             \lstset{language=HadraLang,backgroundcolor=\color{bgHL}}
             \begin{lstlisting}
 Person p;
 Object o=p;
 println(o.?address.?street.?name);
-println(o??address??street??name);
+println(o.?address.?street.?"name");
+String attrName="name";
+println(o.?address.?street.?attrName);
+
+
             \end{lstlisting}
 
             \subsection{'()' Operator (apply)}
@@ -690,6 +694,61 @@ int[10] a;
 int[10] a(3);
 int[10] a(x->Math.random());
 int[10] a(Math::random);
+                \end{lstlisting}
+
+            \section{Type conversion and cast}
+            Hadra Language uses intensively conversions whenever possible. So type conversion is at the heart of the language.
+            Type conversion can either create a new instance or retain the same one (when downcasting/upcasting).
+            Conversion is done via one of three mechanisms :
+            down/up casting
+            constructor call
+            converter call.
+            The compiler will always check one of this three alternative in a Specific order to be defined.
+            BEsides, a type conversion can be lenient or not. when linient, failing to convert will return null, otherwise it will generate an exception at compile time.
+            
+            B b=(B)a;
+            can be achieved with
+            if(a is B b){
+              //
+            }else{
+                throw ClassCastException();
+            }
+            
+            \lstset{language=HadraLang,backgroundcolor=\color{bgHL}}
+                \begin{lstlisting}
+Fruit f;
+Apple a=(Apple)f;
+                \end{lstlisting}
+Thr compiler will 
+             \subsection{Cast First conversion}
+             Tests in the order if the cast matches, than if a factory method exists and finally if a constructor exists
+            \lstset{language=HadraLang,backgroundcolor=\color{bgHL}}
+                \begin{lstlisting}
+Fruit f;
+Apple a=(Apple)f;
+                \end{lstlisting}
+
+             \subsection{Factory First conversion}
+             Tests in the order if a factory method exists than if a constructor exists otherwise only is a cast applies
+            \lstset{language=HadraLang,backgroundcolor=\color{bgHL}}
+                \begin{lstlisting}
+Fruit f;
+Apple a=Apple(f);
+                \end{lstlisting}
+             \subsection{New First conversion}
+             Tests in the order if a constructor exists then if a factory method exists otherwise only is a cast applies
+            \lstset{language=HadraLang,backgroundcolor=\color{bgHL}}
+                \begin{lstlisting}
+Fruit f;
+Apple a=new Apple(f);
+                \end{lstlisting}
+             \subsection{Lenient conversion}
+            \lstset{language=HadraLang,backgroundcolor=\color{bgHL}}
+                \begin{lstlisting}
+Fruit f;
+Apple a=(Apple?)f;
+Apple b=Apple?(f);
+Apple c=new Apple?(f);
                 \end{lstlisting}
 
             \section{Lambda Expressions}

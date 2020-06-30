@@ -14,7 +14,7 @@ public class HLIndexedField implements HLIndexedElement {
     private String source;
 
     public HLIndexedField(JField item, String source) {
-        this.declaringType = item.declaringType().getName();
+        this.declaringType = item.getDeclaringType().getName();
         this.type = item.type()==null?"":item.type().getName();
         this.name = item.name();
         this.modifiers = item.modifiers();

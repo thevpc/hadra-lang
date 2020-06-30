@@ -4,7 +4,7 @@ import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypePattern;
 import net.vpc.common.jeep.JTypes;
 import net.vpc.common.jeep.util.JTypeUtils;
-import net.hl.compiler.parser.ast.HNode;
+import net.hl.compiler.ast.HNode;
 
 public class HNElementType extends HNElement implements Cloneable{
     JType type;

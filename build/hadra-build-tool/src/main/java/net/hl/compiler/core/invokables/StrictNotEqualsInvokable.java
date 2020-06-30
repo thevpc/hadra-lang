@@ -1,10 +1,11 @@
 package net.hl.compiler.core.invokables;
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.impl.functions.AbstractJInvokable;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.util.JTypeUtils;
 
-public class StrictNotEqualsInvokable implements JFunction {
+public class StrictNotEqualsInvokable extends AbstractJInvokable implements JFunction {
     JSignature sig;
     JType boolType;
 

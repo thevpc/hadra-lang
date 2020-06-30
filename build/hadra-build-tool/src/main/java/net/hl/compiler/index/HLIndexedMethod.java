@@ -5,8 +5,8 @@ import net.vpc.common.jeep.JMethod;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.core.index.DefaultJIndexDocument;
 import net.vpc.common.jeep.impl.functions.JNameSignature;
-import net.hl.compiler.parser.ast.HNDeclareIdentifier;
-import net.hl.compiler.parser.ast.HNDeclareInvokable;
+import net.hl.compiler.ast.HNDeclareIdentifier;
+import net.hl.compiler.ast.HNDeclareInvokable;
 import net.hl.compiler.utils.HUtils;
 
 import java.util.ArrayList;

@@ -4,7 +4,7 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.eval.JEvaluableNode;
 import net.vpc.common.jeep.impl.functions.*;
 import net.vpc.common.textsource.JTextSource;
-import net.hl.compiler.parser.ast.*;
+import net.hl.compiler.ast.*;
 
 import java.lang.reflect.Modifier;
 import java.time.LocalDate;
@@ -328,7 +328,7 @@ public class HUtils {
     public static String getStaticConstructorName(JType baseType) {
         JType jType = baseType.getRawType();
         if (jType.isArray()) {
-            JTypeArray ta = (JTypeArray) jType;
+            JArrayType ta = (JArrayType) jType;
             jType = ta.rootComponentType();
         }
         StringBuilder staticConstructorName = new StringBuilder("new");
@@ -344,7 +344,7 @@ public class HUtils {
         }
         if (baseType.isArray()) {
             staticConstructorName.append("Array");
-            JTypeArray ta = (JTypeArray) baseType;
+            JArrayType ta = (JArrayType) baseType;
             if (ta.arrayDimension() > 1) {
                 staticConstructorName.append(ta.arrayDimension());
             }

@@ -8,8 +8,8 @@ package net.hl.ide.hl4nb.editor.semantic;
 import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JNodeVisitor;
 import net.vpc.common.jeep.JToken;
-import net.hl.compiler.parser.ast.*;
-import net.hl.compiler.parser.ast.HNDeclareIdentifier;
+import net.hl.compiler.ast.*;
+import net.hl.compiler.ast.HNDeclareIdentifier;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.ide.hl4nb.editor.parser.HLnbParserResult;
 import org.netbeans.modules.csl.api.ColoringAttributes;
@@ -72,16 +72,16 @@ public class HLnbSemanticAnalyzer extends SemanticAnalyzer<HLnbParserResult> {
                                 coloringSet.add(ColoringAttributes.CLASS);
                                 coloringSet.add(ColoringAttributes.DECLARATION);
                                 HNDeclareType p = (HNDeclareType) node;
-                                if (java.lang.reflect.Modifier.isStatic(p.getModifiers())) {
+                                if (HNAnnotationList.isStatic(p.getAnnotations())) {
                                     coloringSet.add(ColoringAttributes.STATIC);
                                 }
-                                if (java.lang.reflect.Modifier.isPublic(p.getModifiers())) {
+                                if (HNAnnotationList.isPublic(p.getAnnotations())) {
                                     coloringSet.add(ColoringAttributes.PUBLIC);
                                 }
-                                if (java.lang.reflect.Modifier.isPrivate(p.getModifiers())) {
+                                if (HNAnnotationList.isPrivate(p.getAnnotations())) {
                                     coloringSet.add(ColoringAttributes.PRIVATE);
                                 }
-                                if (java.lang.reflect.Modifier.isProtected(p.getModifiers())) {
+                                if (HNAnnotationList.isProtected(p.getAnnotations())) {
                                     coloringSet.add(ColoringAttributes.PROTECTED);
                                 }
                                 JToken nameToken = p.getNameToken();

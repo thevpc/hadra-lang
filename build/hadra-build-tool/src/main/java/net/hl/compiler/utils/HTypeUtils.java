@@ -2,8 +2,8 @@ package net.hl.compiler.utils;
 
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.util.JTypeUtils;
-import net.hl.compiler.parser.ast.ElementTypeAndConstraint;
-import net.hl.compiler.parser.ast.InitValueConstraint;
+import net.hl.compiler.ast.ElementTypeAndConstraint;
+import net.hl.compiler.ast.InitValueConstraint;
 import net.hl.lang.Tuple;
 import net.hl.lang.TupleN;
 
@@ -16,11 +16,11 @@ public class HTypeUtils {
     }
 
     public static boolean isTupleType(JType t) {
-        return tupleTypeBase(t.types()).isAssignableFrom(t);
+        return tupleTypeBase(t.getTypes()).isAssignableFrom(t);
     }
 
     public static JType[] tupleArgTypes(JType t) {
-        if (!tupleTypeBase(t.types()).isAssignableFrom(t)) {
+        if (!tupleTypeBase(t.getTypes()).isAssignableFrom(t)) {
             throw new IllegalArgumentException("Expected Tuple Type : " + t.getName());
         }
         JType n = t;
@@ -43,7 +43,7 @@ public class HTypeUtils {
                 if (i <= Tuple.MAX_ELEMENTS) {
                     JType[] e = new JType[i];
                     if (t.isRawType()) {
-                        Arrays.fill(e, JTypeUtils.forObject(t.types()));
+                        Arrays.fill(e, JTypeUtils.forObject(t.getTypes()));
                         return e;
                     }
                     JParameterizedType p = (JParameterizedType) t;
@@ -96,7 +96,7 @@ public class HTypeUtils {
 
     public static ElementTypeAndConstraint resolveIterableComponentType(JType valType, JTypes types) {
         if (valType.isArray()) {
-            JTypeArray ta = (JTypeArray) valType;
+            JArrayType ta = (JArrayType) valType;
             return new ElementTypeAndConstraint(
                     (ta.componentType()),
                     InitValueConstraint.ITERABLE

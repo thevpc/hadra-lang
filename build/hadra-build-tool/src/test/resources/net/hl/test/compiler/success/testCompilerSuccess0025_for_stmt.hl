@@ -3,7 +3,7 @@ package net.vpc.hadralang.test:test08;
  * tested :
  *   * FIXED : for statement
  */
-fun void main(String[] args){
+@private fun void main(String[] args){
 
     int b=3;
     //int i=8;

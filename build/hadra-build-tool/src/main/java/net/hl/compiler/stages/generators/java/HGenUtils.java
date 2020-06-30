@@ -2,9 +2,9 @@ package net.hl.compiler.stages.generators.java;
 
 import net.vpc.common.jeep.*;
 import net.hl.compiler.core.elements.HNElementMethod;
-import net.hl.compiler.parser.ast.*;
-import net.hl.compiler.parser.ast.extra.HXInvokableCall;
-import net.hl.compiler.parser.ast.extra.HXNew;
+import net.hl.compiler.ast.*;
+import net.hl.compiler.ast.extra.HXInvokableCall;
+import net.hl.compiler.ast.extra.HXNew;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTokenUtils;
 import net.hl.lang.UncheckedCallable;
@@ -119,7 +119,7 @@ public class HGenUtils {
     }
 
     public static HNode Callable(JType resultType,HNode body) {
-        JTypes types = resultType.types();
+        JTypes types = resultType.getTypes();
         JType UncheckedCallableType = ((JRawType) types.forName(UncheckedCallable.class.getName())).parametrize(
                 resultType
         );

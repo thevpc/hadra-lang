@@ -1,0 +1,38 @@
+package{
+    import package net.vpc.scholar.hadrumaths#3.2.0;
+}
+import net.vpc.hadrumaths.**;
+val a = 100.567 MM ;
+val b = 30 MM ;
+val s = 0.786 MM;
+val d = 2.812 MM ;
+val l = 5.69 MM ;
+val L = 22.760 MM;
+val W = 5.989 MM ;
+val att = 2 * l / 1.2 ;
+val f = 4.79 GHZ ;
+val modes = 100 ;
+val substrateEpsr = 2.2;
+Domain box([0..a]×[-b / 2.. b]);
+Domain lineBox([0..l]×[(-d / 2)..d]);
+Domain patchBox([l..L]×[(-W / 2)..W]);
+Domain attachBox([(l - att / 2).. att]×[(-d / 2).. d]);
+MomStructure str(
+    boxLimits:EEEE,
+    domain:box;
+    frequency:f,
+    modes:modes,
+    bottomBounds:shortCircuit(VACUUM, 1.59 MM),
+    upperBounds:matchedLoad(VACUUM),
+    sources:PlanarSource(value:1, zin:50i, axis:X, domain:[0..s, -d / 2..d]),
+    testFunctions:TestFunctionsBuilder()
+            .addGeometry(lineBox).complexity(6).applyBoxModes() // line test functions
+            .addGeometry(patchBox).complexity(20).applyBoxModes() //patch test functions
+            .addGeometry(attachBox).complexity(1).applyBoxModes() //attach test function
+            .build()
+);
+Plot.plot(str.modeFunctions.arr);
+Plot.plot(str.testFunctions.arr);
+Plot.plot(str.testFunctions.arr[0].toDV.getComponent(X));
+Plot.plot(str.testFunctions.arr[0].toDV);
+Plot.plot(str.testFunctions.arr);

@@ -6,7 +6,7 @@ import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.util.JStringUtils;
 import net.hl.compiler.core.HLOptions;
 import net.hl.compiler.core.HLProject;
-import net.hl.compiler.parser.ast.HNLambdaExpression;
+import net.hl.compiler.ast.HNLambdaExpression;
 import net.hl.compiler.stages.generators.java.HGenUtils;
 
 import java.lang.reflect.Array;

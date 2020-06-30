@@ -13,7 +13,7 @@ import net.hl.compiler.core.HLOptions;
 import net.hl.compiler.core.HLProject;
 import net.hl.compiler.core.elements.*;
 import net.hl.compiler.core.invokables.*;
-import net.hl.compiler.parser.ast.*;
+import net.hl.compiler.ast.*;
 import net.hl.compiler.stages.HLCStage;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTokenUtils;
@@ -966,7 +966,7 @@ public class HLCStage08JavaTransform implements HLCStage {
             anExtends.addAll(interfaces);
             newType.setPackageName(newType.getFullPackage());
             newType.setMetaPackageName(null);
-            newType.setModifiers(HUtils.publifyModifiers(newType.getModifiers()));
+            newType.setAnnotations(HNAnnotationList.publify(newType.getAnnotations()));
             return newType;
         } finally {
             contextStack.pop();

@@ -7,7 +7,7 @@ import net.vpc.common.jeep.util.JStringUtils;
 import net.hl.compiler.HL;
 import net.hl.compiler.core.elements.HNElement;
 import net.hl.compiler.core.invokables.HLJCompilerContext;
-import net.hl.compiler.parser.ast.*;
+import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.HNodeUtils;
 
 import java.util.*;

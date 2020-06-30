@@ -1,9 +1,9 @@
 package net.hl.compiler.core.invokables;
 
 import net.vpc.common.jeep.*;
-import net.hl.compiler.parser.ast.HNDeclareInvokable;
-import net.hl.compiler.parser.ast.HNDeclareIdentifier;
-import net.hl.compiler.parser.ast.HNLambdaExpression;
+import net.hl.compiler.ast.HNDeclareInvokable;
+import net.hl.compiler.ast.HNDeclareIdentifier;
+import net.hl.compiler.ast.HNLambdaExpression;
 import net.hl.compiler.utils.HNodeUtils;
 
 import java.util.ArrayList;
