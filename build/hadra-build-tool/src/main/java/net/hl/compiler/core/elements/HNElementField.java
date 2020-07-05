@@ -52,7 +52,7 @@ public class HNElementField extends HNElement implements Cloneable{
         this.declaration = declaration;
         if (declaration != null) {
             JNode node = (JNode) declaration;
-            setLocation(node.startToken());
+            setLocation(node.getStartToken());
             setSource(HUtils.getSource(node));
         }
         return this;

@@ -11,7 +11,6 @@ import java.util.List;
 import net.vpc.common.jeep.JNodeCopyFactory;
 
 public class HNExtends extends HNode {
-    private int modifiers;
     private String packageName;
     private String name;
     private List<HNode> arguments = new ArrayList<>();
@@ -51,7 +50,6 @@ public class HNExtends extends HNode {
         super.copyFrom(node,copyFactory);
         if (node instanceof HNExtends) {
             HNExtends o =(HNExtends) node;
-            this.modifiers=o.modifiers;
             this.packageName =o.packageName;
             this.name =o.name;
             this.arguments= JNodeUtils.copy(o.arguments);
@@ -80,15 +78,6 @@ public class HNExtends extends HNode {
         return this;
     }
 
-    public int getModifiers() {
-        return modifiers;
-    }
-
-    public HNExtends setModifiers(int modifiers) {
-        this.modifiers = modifiers;
-        return this;
-    }
-
     public String getName() {
         return name;
     }
@@ -106,7 +95,7 @@ public class HNExtends extends HNode {
 //    @Override
     public String toString(String prefix) {
         StringBuilder sb = new StringBuilder(prefix);
-        sb.append(HUtils.modifiersToString(modifiers));
+        sb.append(HNAnnotationList.nonNull(getAnnotations()));
         if (sb.length() > 0) {
             sb.append(" ");
         }

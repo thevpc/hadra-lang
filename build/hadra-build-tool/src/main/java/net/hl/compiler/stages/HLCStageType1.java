@@ -27,7 +27,7 @@ public abstract class HLCStageType1 implements HLCStage{
 
 
     public void processAllNextCompilerStage(JCompilerContext compilerContextBase) {
-        JNode parentNode = compilerContextBase.node();
+        JNode parentNode = compilerContextBase.getNode();
         List<JNode> jNodes = parentNode.childrenNodes();
         for (JNode jNode : jNodes) {
             if(jNode!=null) {
@@ -82,7 +82,7 @@ public abstract class HLCStageType1 implements HLCStage{
     }
 
     public <T extends JNode> void processNextCompilerStage(JCompilerContext compilerContextBase,List<T> nargs) {
-        AbstractJNode parentNode=(AbstractJNode) compilerContextBase.node();
+        AbstractJNode parentNode=(AbstractJNode) compilerContextBase.getNode();
         if (nargs != null) {
             for (int i = 0; i < nargs.size(); i++) {
                 final int ii = i;
@@ -100,7 +100,7 @@ public abstract class HLCStageType1 implements HLCStage{
         }
     }
     public <T extends JNode> void processNextCompilerStage(JCompilerContext compilerContextBase,JNode[] nargs) {
-        AbstractJNode parentNode=(AbstractJNode) compilerContextBase.node();
+        AbstractJNode parentNode=(AbstractJNode) compilerContextBase.getNode();
         if (nargs != null) {
             for (int i = 0; i < nargs.length; i++) {
                 T argi = (T) nargs[i];

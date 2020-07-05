@@ -5,13 +5,12 @@
  */
 package net.hl.ide.hl4nb.editor.semantic;
 
+import net.hl.compiler.ast.*;
+import net.hl.compiler.utils.HNodeUtils;
+import net.hl.ide.hl4nb.editor.parser.HLnbParserResult;
 import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JNodeVisitor;
 import net.vpc.common.jeep.JToken;
-import net.hl.compiler.ast.*;
-import net.hl.compiler.ast.HNDeclareIdentifier;
-import net.hl.compiler.utils.HNodeUtils;
-import net.hl.ide.hl4nb.editor.parser.HLnbParserResult;
 import org.netbeans.modules.csl.api.ColoringAttributes;
 import org.netbeans.modules.csl.api.OffsetRange;
 import org.netbeans.modules.csl.api.SemanticAnalyzer;
@@ -54,7 +53,7 @@ public class HLnbSemanticAnalyzer extends SemanticAnalyzer<HLnbParserResult> {
                 return;
             }
             semanticHighlights.clear();
-            if(result.getCompilationUnit()==null){
+            if (result.getCompilationUnit() == null) {
                 return;
             }
             JNode node = result.getCompilationUnit().getAst();
@@ -85,7 +84,7 @@ public class HLnbSemanticAnalyzer extends SemanticAnalyzer<HLnbParserResult> {
                                     coloringSet.add(ColoringAttributes.PROTECTED);
                                 }
                                 JToken nameToken = p.getNameToken();
-                                if(nameToken!=null){
+                                if (nameToken != null) {
 //                                    LOG.log(Level.INFO, "## "+nameToken
 //                                            +"\n\t"+offsetFromToken(nameToken)
 //                                            +"\n\t"+coloringSet
@@ -103,20 +102,20 @@ public class HLnbSemanticAnalyzer extends SemanticAnalyzer<HLnbParserResult> {
                                 } else {
                                     coloringSet.add(ColoringAttributes.METHOD);
                                 }
-                                if (java.lang.reflect.Modifier.isStatic(p.getModifiers())) {
+                                if (HNodeUtils.isModifierAnnotation(p.getAnnotations(), "static")) {
                                     coloringSet.add(ColoringAttributes.STATIC);
                                 }
-                                if (java.lang.reflect.Modifier.isPublic(p.getModifiers())) {
+                                if (HNodeUtils.isModifierAnnotation(p.getAnnotations(), "public")) {
                                     coloringSet.add(ColoringAttributes.PUBLIC);
                                 }
-                                if (java.lang.reflect.Modifier.isPrivate(p.getModifiers())) {
+                                if (HNodeUtils.isModifierAnnotation(p.getAnnotations(), "private")) {
                                     coloringSet.add(ColoringAttributes.PRIVATE);
                                 }
-                                if (java.lang.reflect.Modifier.isProtected(p.getModifiers())) {
+                                if (HNodeUtils.isModifierAnnotation(p.getAnnotations(), "protected")) {
                                     coloringSet.add(ColoringAttributes.PROTECTED);
                                 }
                                 JToken nameToken = p.getNameToken();
-                                if(nameToken!=null){
+                                if (nameToken != null) {
 //                                    LOG.log(Level.INFO, "## "+nameToken
 //                                            +"\n\t"+offsetFromToken(nameToken)
 //                                            +"\n\t"+coloringSet
@@ -129,26 +128,26 @@ public class HLnbSemanticAnalyzer extends SemanticAnalyzer<HLnbParserResult> {
                             case "net.hl.compiler.parser.ast.HNDeclareIdentifier": {
                                 coloringSet.add(ColoringAttributes.DECLARATION);
                                 HNDeclareIdentifier p = (HNDeclareIdentifier) node;
-                                if(p.getSyntacticType()==null || p.getSyntacticType()== HNDeclareIdentifier.SyntacticType.FIELD) {
+                                if (p.getSyntacticType() == null || p.getSyntacticType() == HNDeclareIdentifier.SyntacticType.FIELD) {
                                     coloringSet.add(ColoringAttributes.FIELD);
-                                }else{
+                                } else {
                                     coloringSet.add(ColoringAttributes.LOCAL_VARIABLE_DECLARATION);
                                 }
 
-                                if (java.lang.reflect.Modifier.isStatic(p.getModifiers())) {
+                                if (HNodeUtils.isModifierAnnotation(p.getAnnotations(), "static")) {
                                     coloringSet.add(ColoringAttributes.STATIC);
                                 }
-                                if (java.lang.reflect.Modifier.isPublic(p.getModifiers())) {
+                                if (HNodeUtils.isModifierAnnotation(p.getAnnotations(), "public")) {
                                     coloringSet.add(ColoringAttributes.PUBLIC);
                                 }
-                                if (java.lang.reflect.Modifier.isPrivate(p.getModifiers())) {
+                                if (HNodeUtils.isModifierAnnotation(p.getAnnotations(), "private")) {
                                     coloringSet.add(ColoringAttributes.PRIVATE);
                                 }
-                                if (java.lang.reflect.Modifier.isProtected(p.getModifiers())) {
+                                if (HNodeUtils.isModifierAnnotation(p.getAnnotations(), "protected")) {
                                     coloringSet.add(ColoringAttributes.PROTECTED);
                                 }
                                 for (HNDeclareTokenIdentifier ii : HNodeUtils.flatten(p.getIdentifierToken())) {
-                                    JToken identifierToken=ii.getToken();
+                                    JToken identifierToken = ii.getToken();
                                     if (coloringSet.size() > 0) {
 //                                        LOG.log(Level.INFO, "## "+identifierToken
 //                                                +"\n\t"+offsetFromToken(identifierToken)
@@ -164,7 +163,7 @@ public class HLnbSemanticAnalyzer extends SemanticAnalyzer<HLnbParserResult> {
                         }
                         if (!processed) {
                             if (coloringSet.size() > 0) {
-                                semanticHighlights.put(offsetFromToken(node.startToken()),
+                                semanticHighlights.put(offsetFromToken(node.getStartToken()),
                                         coloringSet);
                             }
                         }

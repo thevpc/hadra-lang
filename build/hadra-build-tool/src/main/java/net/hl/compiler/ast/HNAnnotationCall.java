@@ -10,6 +10,7 @@ import net.vpc.common.jeep.util.JNodeUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author vpc
@@ -94,5 +95,21 @@ public class HNAnnotationCall extends HNode {
                 new HNTypeTokenSpecialAnnotation(HTokenUtils.createToken(modifierName)),
                 null, null
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HNAnnotationCall that = (HNAnnotationCall) o;
+        return Objects.equals(name, that.name) &&
+                Arrays.equals(args, that.args);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(name);
+        result = 31 * result + Arrays.hashCode(args);
+        return result;
     }
 }

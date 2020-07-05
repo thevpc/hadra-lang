@@ -19,17 +19,17 @@ class Console2 : JFrame, WindowListener, Runnable {
   @private StyledDocument doc;
   @private Style style;
 
-  @static fun void setFontFamily(StyledDocument this, String){
+  @private @static fun void setFontFamily(StyledDocument this, String){
     StyleConstants.setFontFamily(this, value);
   }
-  @static fun void setFontSize(StyledDocument this, String){
+  @private @static fun void setFontSize(StyledDocument this, String){
     StyleConstants.setFontSize(this, value);
   }
-  @static fun void setForeground(StyledDocument this, Color){
+  @private @static fun void setForeground(StyledDocument this, Color){
     StyleConstants.setForeground(this, value);
   }
 
-  constructor() {
+  init() {
 
     // The area to which the output will be send to
     textArea = JTextPane();
@@ -42,7 +42,7 @@ class Console2 : JFrame, WindowListener, Runnable {
     };
     title="Console";
     Dimension screenSize = Toolkit.defaultToolkit.screenSize;
-    Dimension frameSize = Dimension((int)screenSize.width / 3, (int)screenSize.height / 4);
+    Dimension frameSize((int)screenSize.width / 3, (int)screenSize.height / 4);
     int x = (int)frameSize.width / 20;
     int y = (int)frameSize.height / 20;
     setBounds(x, y, (int)frameSize.width, (int)frameSize.height);
@@ -118,7 +118,7 @@ class Console2 : JFrame, WindowListener, Runnable {
         }
       }
     } catch (Exception e) {
-      textArea.text="\nConsole reports an Internal error.\nThe error is: " + e);
+      textArea.text="\nConsole reports an Internal error.\nThe error is: " + e;
     }
   }
 
@@ -131,7 +131,7 @@ class Console2 : JFrame, WindowListener, Runnable {
       }
       byte[] b = byte[available]();
       inStream.read(b);
-      input = input+String(b, 0, b.length);
+      input = input+String(b);
       if(input~".*\r?\n" || stopThreads){
         break;
       }

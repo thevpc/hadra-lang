@@ -13,6 +13,7 @@ import net.hl.compiler.utils.HNodeUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -77,4 +78,16 @@ public class HNLiteralDefault extends HNode {
         return "default("+getElement().getTypePattern()+")";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HNLiteralDefault that = (HNLiteralDefault) o;
+        return Objects.equals(typeName, that.typeName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(typeName);
+    }
 }

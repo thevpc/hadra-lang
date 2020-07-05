@@ -7,7 +7,9 @@ import net.vpc.common.jeep.impl.types.DefaultJAnnotationInstanceList;
 import net.vpc.common.jeep.impl.types.DefaultJConstructor;
 import net.vpc.common.jeep.impl.types.DefaultJModifierList;
 import net.vpc.common.jeep.impl.types.DefaultJType;
+import net.vpc.common.jeep.util.JTypeUtils;
 
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
 public class HType extends DefaultJType {
@@ -21,8 +23,65 @@ public class HType extends DefaultJType {
     public static final JAnnotationInstance ENUM = new JPrimitiveModifierAnnotationInstance("enum");
     public static final JAnnotationInstance EXCEPTION = new JPrimitiveModifierAnnotationInstance("exception");
 
-    public HType(String name, JTypes types) {
-        super(name, types);
+    public HType(String name, JTypeKind kind,JTypes types) {
+        super(name, kind, types);
+        switch (kind.getValue()){
+            case JTypeKind.Ids.ANNOTATION:{
+                ((DefaultJAnnotationInstanceList)getAnnotations()).add(ANNOTATION);
+                break;
+            }
+            case JTypeKind.Ids.ENUM:{
+                ((DefaultJAnnotationInstanceList)getAnnotations()).add(ENUM);
+                break;
+            }
+            case JTypeKind.Ids.EXCEPTION:{
+                ((DefaultJAnnotationInstanceList)getAnnotations()).add(EXCEPTION);
+                break;
+            }
+            case JTypeKind.Ids.INTERFACE:{
+                ((DefaultJAnnotationInstanceList)getAnnotations()).add(INTERFACE);
+                break;
+            }
+        }
+        switch (getKind().getValue()){
+            case JTypeKind.Ids.ENUM:{
+                setSuperType(getTypes().forName(Enum.class.getName()));
+                break;
+            }
+            case JTypeKind.Ids.CLASS:{
+                setSuperType(getTypes().forName(Object.class.getName()));
+                break;
+            }
+            case JTypeKind.Ids.EXCEPTION:{
+                setSuperType(getTypes().forName(RuntimeException.class.getName()));
+                break;
+            }
+            case JTypeKind.Ids.ANNOTATION:{
+                addInterface(getTypes().forName(Annotation.class.getName()));
+                break;
+            }
+        }
+    }
+
+    public boolean isInterface() {
+        return getAnnotations().contains(INTERFACE);
+    }
+
+    @Override
+    public JType getSuperType() {
+        JType t = super.getSuperType();
+        if(t!=null){
+            return t;
+        }
+        switch (getKind().getValue()){
+            case JTypeKind.Ids.CLASS:{
+                return JTypeUtils.forObject(getTypes());
+            }
+            case JTypeKind.Ids.ENUM:{
+                return getTypes().forName(Enum.class.getName());
+            }
+        }
+        return t;
     }
 
     protected JConstructor createDefaultConstructor() {
@@ -48,19 +107,12 @@ public class HType extends DefaultJType {
         signature = signature.setName(getName());
         HConstructor m = new HConstructor();
         m.setDeclaringType(this);
-        m.setTypes(getTypes());
         ((DefaultJModifierList) m.getModifiers()).addAll(modifiers);
         m.setArgNames(Arrays.copyOf(argNames, argNames.length));
         ((DefaultJAnnotationInstanceList) m.getAnnotations()).addAll(annotations);
         m.setHandler(handler);
         m.setGenericSignature(signature);
         return m;
-    }
-
-
-    @Override
-    public boolean isInterface() {
-        return getAnnotations().contains(INTERFACE);
     }
 
 }

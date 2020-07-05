@@ -4,10 +4,7 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.JNodeFindAndReplace;
 import net.vpc.common.jeep.util.JNodeUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class HNTypeToken extends HNode {
     private JType typeVal;
@@ -131,5 +128,18 @@ public class HNTypeToken extends HNode {
         HNTypeToken c = (HNTypeToken) copy();
         c.typename=c.getTypename().componentType();
         return c;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HNTypeToken that = (HNTypeToken) o;
+        return Objects.equals(typename, that.typename);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(typename);
     }
 }

@@ -122,7 +122,7 @@ public class StringExtensions {
         return new String(array);
     }
 
-    public static String mul(String str, int count) {
+    public static String mul(CharSequence str, int count) {
         switch (str.length()) {
             case 0:
                 return "";
@@ -132,7 +132,7 @@ public class StringExtensions {
                 return new String(c);
             }
             default: {
-                char[] chars = str.toCharArray();
+                char[] chars = str.toString().toCharArray();
                 StringBuilder sb = new StringBuilder(str.length() * count);
                 for (int i = 0; i < count; i++) {
                     sb.append(chars);

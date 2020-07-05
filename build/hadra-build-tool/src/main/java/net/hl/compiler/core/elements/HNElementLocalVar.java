@@ -30,7 +30,7 @@ public class HNElementLocalVar extends HNElement implements Cloneable{
         if(declaration!=null){
             if(declaration instanceof JNode) {
                 JNode node = (JNode) declaration;
-                setLocation(node.startToken());
+                setLocation(node.getStartToken());
                 setSource(HUtils.getSource(node));
             }
         }

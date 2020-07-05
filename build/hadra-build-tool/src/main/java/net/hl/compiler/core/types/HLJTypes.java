@@ -1,10 +1,11 @@
 package net.hl.compiler.core.types;
 
-import net.vpc.common.jeep.JContext;
-import net.vpc.common.jeep.JDeclaration;
-import net.vpc.common.jeep.JParameterizedType;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.impl.types.DefaultJTypes;
+import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.types.DefaultJField;
+import net.vpc.common.jeep.impl.types.*;
+import net.vpc.common.jeep.impl.types.host.HostJAnnotationType;
+import net.vpc.common.jeep.impl.types.host.HostJClassType;
+import net.vpc.common.jeep.impl.types.host.HostJEnumType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +14,8 @@ import java.time.LocalTime;
 public class HLJTypes extends DefaultJTypes {
     public HLJTypes(JContext context, ClassLoader classLoader) {
         super(context, classLoader);
+        DefaultJAnnotationInstanceList t = (DefaultJAnnotationInstanceList) forName("null").getAnnotations();
+        t.add(JPrimitiveModifierAnnotationInstance.PUBLIC);
     }
 
     @Override
@@ -26,8 +29,18 @@ public class HLJTypes extends DefaultJTypes {
     }
 
     @Override
-    public JType createMutableType0(String name) {
-        return new HType(name, this);
+    public JType createMutableType0(String name, JTypeKind kind) {
+        switch (kind.getValue()){
+            case JTypeKind.Ids.ANNOTATION:{
+                return new HAnnotationType(name,kind,this);
+            }
+            case JTypeKind.Ids.ENUM:{
+                return new HEnumType(name,kind,this);
+            }
+            default:{
+                return new HType(name,kind,this);
+            }
+        }
     }
 
     @Override
@@ -41,81 +54,155 @@ public class HLJTypes extends DefaultJTypes {
     }
 
 
-
-    private JType forName0(Class name){
-        return new HHostJClassType(name, this);
+    protected JType createHostType0(Class name){
+        if(name.isEnum()){
+            return new HostJEnumType(name, this);
+        }
+        if(name.isAnnotation()){
+            return new HostJAnnotationType(name, this);
+        }
+        return new HostJClassType(name, this);
     }
+
 
     public JType createHostType0(String name){
         switch (name) {
             case "Object":
             case "object":
-                return forName0(Object.class);
+                return createHostType0(Object.class);
             case "Date":
-                return forName0(java.util.Date.class);
+                return createHostType0(java.util.Date.class);
             case "Character":
-                return forName0(Character.class);
+                return createHostType0(Character.class);
             case "String":
             case "string":
-                return forName0(String.class);
+                return createHostType0(String.class);
             case "stringb":
-                return forName0(StringBuilder.class);
+                return createHostType0(StringBuilder.class);
             case "Int":
             case "Integer":
-                return forName0(Integer.class);
+                return createHostType0(Integer.class);
             case "Long":
-                return forName0(Long.class);
+                return createHostType0(Long.class);
             case "Double":
-                return forName0(Double.class);
+                return createHostType0(Double.class);
             case "Float":
-                return forName0(Float.class);
+                return createHostType0(Float.class);
             case "Short":
-                return forName0(Short.class);
+                return createHostType0(Short.class);
             case "Byte":
-                return forName0(Byte.class);
+                return createHostType0(Byte.class);
             case "Boolean":
-                return forName0(Boolean.class);
+                return createHostType0(Boolean.class);
             case "Void":
-                return forName0(Void.class);
+                return createHostType0(Void.class);
 
             case "char":
-                return forName0(char.class);
+                return createHostType0(char.class);
             case "int":
-                return forName0(int.class);
+                return createHostType0(int.class);
             case "long":
-                return forName0(long.class);
+                return createHostType0(long.class);
             case "double":
-                return forName0(double.class);
+                return createHostType0(double.class);
             case "float":
-                return forName0(float.class);
+                return createHostType0(float.class);
             case "short":
-                return forName0(short.class);
+                return createHostType0(short.class);
             case "byte":
-                return forName0(byte.class);
+                return createHostType0(byte.class);
             case "bool":
             case "boolean":
-                return forName0(boolean.class);
+                return createHostType0(boolean.class);
             case "void":
-                return forName0(void.class);
+                return createHostType0(void.class);
             case "date":
-                return forName0(LocalDate.class);
+                return createHostType0(LocalDate.class);
             case "datetime":
-                return forName0(LocalDateTime.class);
+                return createHostType0(LocalDateTime.class);
             case "time":
-                return forName0(LocalTime.class);
+                return createHostType0(LocalTime.class);
         }
         ClassLoader hostClassLoader=this.hostClassLoader();
         Class<?> t = null;
         try {
             //i should replace this witch
             if (hostClassLoader == null) {
-                return forName0(Class.forName(name));
+                return createHostType0(Class.forName(name));
             } else {
-                return forName0(Class.forName(name, false, hostClassLoader));
+                return createHostType0(Class.forName(name, false, hostClassLoader));
             }
         } catch (ClassNotFoundException e) {
             //
         }
         return null;
+    }
+
+    public boolean isPublic(JAnnotationInstanceList c) {
+        if(c.contains(JPrimitiveModifierAnnotationInstance.PUBLIC)){
+            return true;
+        }
+        if(c.contains(JPrimitiveModifierAnnotationInstance.PRIVATE)){
+            return false;
+        }
+        if(c.contains(JPrimitiveModifierAnnotationInstance.PROTECTED)){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isPublicType(JType c) {
+        return isPublic(c.getAnnotations());
+    }
+
+    @Override
+    public boolean isPublicConstructor(JConstructor c) {
+        return isPublic(c.getAnnotations());
+    }
+
+    @Override
+    public boolean isPublicMethod(JMethod c) {
+        return isPublic(c.getAnnotations());
+    }
+
+    @Override
+    public boolean isSyntheticMethod(JMethod c) {
+        return super.isSyntheticMethod(c);
+    }
+
+    @Override
+    public boolean isAbstractMethod(JMethod c) {
+        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.ABSTRACT);
+    }
+
+    @Override
+    public boolean isAbstractType(JType c) {
+        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.ABSTRACT);
+    }
+
+    @Override
+    public boolean isPublicField(JField c) {
+        return isPublic(c.getAnnotations());
+    }
+
+    @Override
+    public boolean isStaticType(JType c) {
+        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.STATIC);
+    }
+
+    @Override
+    public boolean isStaticMethod(JMethod c) {
+        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.STATIC);
+    }
+
+    @Override
+    public boolean isStaticField(JField c) {
+        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.STATIC);
+    }
+
+    @Override
+    public boolean isFinalField(DefaultJField c) {
+        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.FINAL);
     }
 }

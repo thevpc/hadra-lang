@@ -12,4 +12,5 @@ public class HNTypeTokenSpecialAnnotation extends HNTypeToken {
     public HNTypeTokenSpecialAnnotation(JToken nameToken) {
         super(nameToken,DefaultTypeName.of(nameToken.image), new HNTypeToken[0],new HNTypeToken[0],new HNTypeToken[0],nameToken,nameToken);
     }
+
 }

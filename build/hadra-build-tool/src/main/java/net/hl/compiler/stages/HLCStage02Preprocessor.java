@@ -35,11 +35,11 @@ public class HLCStage02Preprocessor implements HLCStage {
         for (JCompilationUnit compilationUnit : project.getCompilationUnits()) {
             HNBlock.CompilationUnitBlock ast = (HNBlock.CompilationUnitBlock) compilationUnit.getAst();
             if (anyToken == null) {
-                anyToken = ast.startToken();
+                anyToken = ast.getStartToken();
             }
             for (HNDeclareMetaPackage metaPackage : ast.findDeclaredMetaPackages()) {
                 if (currentMetaPackage != null) {
-                    project.log().error("X400", null, "multiple package declarations detected", metaPackage.startToken());
+                    project.log().error("X400", null, "multiple package declarations detected", metaPackage.getStartToken());
                 } else {
                     currentMetaPackage = metaPackage;
                     currentMetaPackageSource = compilationUnit.getSource().name();
@@ -60,7 +60,7 @@ public class HLCStage02Preprocessor implements HLCStage {
                         currentMetaPackageSource, new String[0], new String[0]);
             } else {
                 if (JStringUtils.isBlank(JModuleId.valueOf(ip.getModuleId()).getArtifactId())) {
-                    project.log().error("X000", null, "missing artifact name", metaPackage == null ? anyToken : metaPackage.startToken());
+                    project.log().error("X000", null, "missing artifact name", metaPackage == null ? anyToken : metaPackage.getStartToken());
                 }
             }
             project.indexer().indexProject(ip);
@@ -162,7 +162,7 @@ public class HLCStage02Preprocessor implements HLCStage {
                 // no fields will be defined
                 HNDeclareInvokable mainMethod = new HNDeclareInvokable(
                         HTokenUtils.createToken("main"),
-                        block.startToken(),block.endToken()
+                        block.getStartToken(),block.getEndToken()
                         );
                 mainMethod.addAnnotations(HNAnnotationCall.ofModifier("static"));
                 mainMethod.setArguments(new ArrayList<>(
@@ -180,7 +180,7 @@ public class HLCStage02Preprocessor implements HLCStage {
                 mainMethod.setReturnTypeName(HNodeUtils.createTypeToken("void"));
                 HNBlock preprocessorRootNode=new HNBlock.CompilationUnitBlock(new HNode[]{
                         mainMethod
-                },block.startToken(),block.endToken());
+                },block.getStartToken(),block.getEndToken());
 
 //                System.out.println("### START PREPROCESSOR");
                 JContext preProcessorContext = context.newContext();
@@ -190,7 +190,7 @@ public class HLCStage02Preprocessor implements HLCStage {
                     nn = nn.parentNode();
                 }
                 if (nn == null) {
-                    project.log().error("X000", "unexpected error", "missing root CompilationUnitBlock", metaPackage.startToken());
+                    project.log().error("X000", "unexpected error", "missing root CompilationUnitBlock", metaPackage.getStartToken());
                     return null;
                 }
                 HNBlock.CompilationUnitBlock cub = (HNBlock.CompilationUnitBlock) nn;
@@ -252,7 +252,7 @@ public class HLCStage02Preprocessor implements HLCStage {
                     for (HLDependency effectiveDependency : env.dependencies()) {
                         if(!foundIds.contains(ws.id().parse(effectiveDependency.getName()).getShortName())){
                             if(!effectiveDependency.isOptional()){
-                                project.log().error("X000","pre-processor","unresolvable dependency "+effectiveDependency.getName(),block.startToken());
+                                project.log().error("X000","pre-processor","unresolvable dependency "+effectiveDependency.getName(),block.getStartToken());
                             }
                         }
                     }

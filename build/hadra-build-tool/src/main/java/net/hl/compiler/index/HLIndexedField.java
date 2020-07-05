@@ -4,31 +4,34 @@ import net.vpc.common.jeep.JField;
 import net.vpc.common.jeep.JIndexDocument;
 import net.vpc.common.jeep.core.index.DefaultJIndexDocument;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class HLIndexedField implements HLIndexedElement {
     private String declaringType;
     private String type;
     private String name;
     private String id;
     private String[] imports;
-    private int modifiers;
+    private String annotations;
     private String source;
 
     public HLIndexedField(JField item, String source) {
         this.declaringType = item.getDeclaringType().getName();
         this.type = item.type()==null?"":item.type().getName();
         this.name = item.name();
-        this.modifiers = item.modifiers();
+        this.annotations = item.getAnnotations().stream().map(Object::toString).collect(Collectors.joining(" "));
         this.imports= new String[0];
         this.source=source;
         this.id = (this.declaringType==null) ? name : (this.declaringType + "." + name);
     }
 
-    public HLIndexedField(String declaringType, String type, String name, String[] imports, int modifiers, String source) {
+    public HLIndexedField(String declaringType, String type, String name, String[] imports, String[] annotations, String source) {
         this.declaringType = declaringType;
         this.type = type;
         this.name = name;
         this.imports = imports;
-        this.modifiers = modifiers;
+        this.annotations = String.join(" ", annotations);
         this.source = source;
         this.id = (this.declaringType==null) ? name : (this.declaringType + "." + name);
     }
@@ -49,8 +52,8 @@ public class HLIndexedField implements HLIndexedElement {
         return imports;
     }
 
-    public int getModifiers() {
-        return modifiers;
+    public String getAnnotations() {
+        return annotations;
     }
 
     public String getSource() {
@@ -64,7 +67,7 @@ public class HLIndexedField implements HLIndexedElement {
         doc.add("name", name,true);
         doc.add("type", type,true);
         doc.add("declaringType", declaringType,true);
-        doc.add("modifiers", String.valueOf(modifiers),false);
+        doc.add("annotations", String.valueOf(annotations),false);
         doc.add("imports", String.join(";",imports),false);
         doc.add("source", source,false);
         return doc;

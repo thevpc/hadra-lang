@@ -1,17 +1,19 @@
 package net.hl.compiler.core.invokables;
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.AbstractJFunction;
 import net.vpc.common.jeep.impl.functions.AbstractJInvokable;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.util.JTypeUtils;
 
 import java.util.Objects;
 
-public class SafeNotEqualsInvokable extends AbstractJInvokable implements JFunction {
+public class SafeNotEqualsInvokable extends AbstractJFunction {
     JSignature sig;
     JType boolType;
 
     public SafeNotEqualsInvokable(JTypes types) {
+        super(types);
         sig=JSignature.of("safeNotEquals",
                 JTypeUtils.forObject(types),
                 JTypeUtils.forObject(types)

@@ -16,9 +16,16 @@ import net.vpc.common.jeep.impl.functions.JSignature;
 public class JInvokableFromConverter extends AbstractJInvokable {
     
     private final JConverter converter;
+    private final JTypes types;
 
-    public JInvokableFromConverter(JConverter converter) {
+    public JInvokableFromConverter(JConverter converter,JTypes types) {
         this.converter = converter;
+        this.types = types;
+    }
+
+    @Override
+    public JTypes getTypes() {
+        return types;
     }
 
     @Override

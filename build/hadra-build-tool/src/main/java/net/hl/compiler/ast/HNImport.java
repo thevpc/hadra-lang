@@ -44,7 +44,7 @@ public class HNImport extends HNode {
         return value;
     }
     public JImportInfo getJImportInfo() {
-        return new DefaultJImportInfo(value,startToken());
+        return new DefaultJImportInfo(value, getStartToken());
     }
 
     @Override

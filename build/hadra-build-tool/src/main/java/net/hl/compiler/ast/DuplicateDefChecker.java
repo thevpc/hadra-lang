@@ -100,11 +100,11 @@ public class DuplicateDefChecker {
                 sb.append("duplicate identifier definition : ").append(e.getKey());
                 for (HNDeclareIdentifier i : e.getValue()) {
                     sb.append("\n\t ")
-                            .append(String.format("[%4s,%3s]", i.startToken().startLineNumber, i.startToken().startColumnNumber))
+                            .append(String.format("[%4s,%3s]", i.getStartToken().startLineNumber, i.getStartToken().startColumnNumber))
                             .append(" ").append(JToken.escapeString(String.valueOf(i)));
                 }
                 log.error("S044", null,
-                        sb.toString(), e.getValue().get(0).startToken()
+                        sb.toString(), e.getValue().get(0).getStartToken()
                 );
             }
         }
@@ -114,11 +114,11 @@ public class DuplicateDefChecker {
                 sb.append("duplicate function/method definition : ").append(e.getValue().get(0).getName());
                 for (HNDeclareInvokable i : e.getValue()) {
                     sb.append("\n\t ")
-                            .append(String.format("[%4s,%3s]", i.startToken().startLineNumber, i.startToken().startColumnNumber))
+                            .append(String.format("[%4s,%3s]", i.getStartToken().startLineNumber, i.getStartToken().startColumnNumber))
                             .append(" ").append(i.getSignature());
                 }
                 log.error("S044", null,
-                        sb.toString(), e.getValue().get(0).startToken()
+                        sb.toString(), e.getValue().get(0).getStartToken()
                 );
             }
         }
@@ -128,11 +128,11 @@ public class DuplicateDefChecker {
                 sb.append("duplicate type definition : ").append(e.getValue().get(0).getName());
                 for (HNDeclareType i : e.getValue()) {
                     sb.append("\n\t ")
-                            .append(String.format("[%4s,%3s]", i.startToken().startLineNumber, i.startToken().startColumnNumber))
+                            .append(String.format("[%4s,%3s]", i.getStartToken().startLineNumber, i.getStartToken().startColumnNumber))
                             .append(" ").append(i.getFullName());
                 }
                 log.error("S044", null,
-                        sb.toString(), e.getValue().get(0).startToken()
+                        sb.toString(), e.getValue().get(0).getStartToken()
                 );
             }
         }

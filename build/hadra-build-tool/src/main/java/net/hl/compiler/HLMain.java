@@ -4,8 +4,6 @@ import net.vpc.app.nuts.*;
 
 public class HLMain extends NutsApplication {
     public static void main(String[] args) {
-        // just create an instance and call runAndExit in the main method
-//        System.setProperty("nuts.boot.args","-z -y");
         new HLMain().runAndExit(args);
     }
 

@@ -6,6 +6,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 class JavaMethodVisitor extends MethodVisitor {
@@ -56,7 +57,7 @@ class JavaMethodVisitor extends MethodVisitor {
 
     @Override
     public void visitEnd() {
-        int modifiers = JavaClassVisitor.parseModifiers(access);
+        String[] modifiers = JavaClassVisitor.parseModifiers(access);
         if(methodName.equals("<init>")){
             defaultHLIndexer.indexConstructor0(new HLIndexedConstructor(
                     methodName, (String[]) parameterNames.toArray(new String[0]), paramTypes, new String[0],
@@ -65,7 +66,7 @@ class JavaMethodVisitor extends MethodVisitor {
         }else {
 //            System.out.println("VISIT : "+currentFullName+"."+methodName);
             //if("println".equals(methodName)) {
-            if(!JTypeUtils.isSynthetic(modifiers)) {
+            if(Arrays.stream(modifiers).noneMatch(x->x.equals("synthetic"))) {
 //                if(methodName.contains("$")){
 //                    System.out.println(modifiers);
 //                }

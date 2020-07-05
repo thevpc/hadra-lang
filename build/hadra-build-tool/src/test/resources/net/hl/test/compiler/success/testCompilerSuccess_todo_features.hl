@@ -3,7 +3,7 @@ int i;
 i+=2;
 
 
-class DontCreateMe private constructor ();
+class DontCreateMe private init ();
 
 ///////////////////////////////////
 Object a;

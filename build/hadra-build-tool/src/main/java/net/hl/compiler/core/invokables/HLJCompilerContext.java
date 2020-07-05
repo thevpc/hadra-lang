@@ -10,6 +10,7 @@ import net.vpc.common.jeep.impl.JTypesSPI;
 import net.vpc.common.jeep.impl.compiler.DefaultJImportInfo;
 import net.vpc.common.jeep.impl.compiler.JCompilerContextImpl;
 import net.vpc.common.jeep.impl.functions.*;
+import net.vpc.common.jeep.impl.types.DefaultJAnnotationInstanceList;
 import net.vpc.common.jeep.impl.types.DefaultJType;
 import net.vpc.common.jeep.util.*;
 import net.vpc.common.textsource.JTextSourceFactory;
@@ -23,7 +24,6 @@ import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.*;
 import net.hl.lang.Tuple;
 
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -108,12 +108,12 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public JTypes types() {
-        return context().types();
+        return getContext().types();
     }
 
     private Set<String> resolveImportStatics() {
         if (_resolveImportStatics == null) {
-            _resolveImportStatics = resolveImportStatics(imports());
+            _resolveImportStatics = resolveImportStatics(getImports());
         }
         return _resolveImportStatics;
     }
@@ -162,7 +162,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         Set<String> s = cache.get(_anImport);
         if (s != null) {
             if (s instanceof _InvalidSet) {
-                log().error("X045", null, "recursive imports/exports :" + _anImport, location);
+                getLog().error("X045", null, "recursive imports/exports :" + _anImport, location);
             }
             return s;
         }
@@ -202,10 +202,10 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         (o1, o2) -> {
                             if (!o1.equals(o2)) {
                                 if (predicate == null) {
-                                    log().error("S032", null, "ambiguous class to import :"
+                                    getLog().error("S032", null, "ambiguous class to import :"
                                                     + "\n\t" + o1
                                                     + "\n\t" + o2,
-                                            node().startToken()
+                                            getNode().getStartToken()
                                     );
                                 }
                             }
@@ -228,10 +228,10 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                             (o1, o2) -> {
                                 if (!o1.equals(o2)) {
                                     if (predicate == null) {
-                                        log().error("S032", null, "ambiguous class to import :"
+                                        getLog().error("S032", null, "ambiguous class to import :"
                                                         + "\n\t" + o1
                                                         + "\n\t" + o2,
-                                                node().startToken()
+                                                getNode().getStartToken()
                                         );
                                     }
                                 }
@@ -243,7 +243,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         m.putAll(found);
                     } else {
                         if (predicate == null) {
-                            log().error("X045", null, "invalid import: " + _anImport, anImports[0].token());
+                            getLog().error("X045", null, "invalid import: " + _anImport, anImports[0].token());
                         }
                     }
                 }
@@ -263,10 +263,10 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                                 (o1, o2) -> {
                                     if (!o1.equals(o2)) {
                                         if (predicate == null) {
-                                            log().error("S032", null, "ambiguous class to import :"
+                                            getLog().error("S032", null, "ambiguous class to import :"
                                                             + "\n\t" + o1
                                                             + "\n\t" + o2,
-                                                    node().startToken()
+                                                    getNode().getStartToken()
                                             );
                                         }
                                     }
@@ -278,7 +278,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     m.putAll(found);
                 } else {
                     if (predicate == null) {
-                        log().error("X045", null, "invalid import: " + _anImport, anImports[0].token());
+                        getLog().error("X045", null, "invalid import: " + _anImport, anImports[0].token());
                     }
                 }
             } else {
@@ -295,10 +295,10 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                                 (o1, o2) -> {
                                     if (!o1.equals(o2)) {
                                         if (predicate == null) {
-                                            log().error("S032", null, "ambiguous class to import :"
+                                            getLog().error("S032", null, "ambiguous class to import :"
                                                             + "\n\t" + o1
                                                             + "\n\t" + o2,
-                                                    node().startToken()
+                                                    getNode().getStartToken()
                                             );
                                         }
                                     }
@@ -310,7 +310,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     m.putAll(found);
                 } else {
                     if (predicate == null) {
-                        log().error("X045", null, "invalid import: " + _anImport, anImports[0].token());
+                        getLog().error("X045", null, "invalid import: " + _anImport, anImports[0].token());
                     }
                 }
             }
@@ -411,7 +411,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     private String resolveTypeAccessibleName(String type, JNode location) {
         JType jType = null;
         try {
-            jType = context().types().forName(type);
+            jType = getContext().types().forName(type);
             StringBuilder sb = new StringBuilder();
             while (jType != null) {
                 if (sb.length() > 0) {
@@ -496,7 +496,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         for (String cls : classNamesToImport) {
             JType jType = null;
             try {
-                jType = context().types().forName(cls);
+                jType = getContext().types().forName(cls);
             } catch (Exception ex) {
                 //some how this not accessible... ignore it
             }
@@ -528,7 +528,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         for (String cls : classNamesToImport) {
             JType jType = null;
             try {
-                jType = context().types().forName(cls);
+                jType = getContext().types().forName(cls);
             } catch (Exception ex) {
                 //some how this not accessible... ignore it
             }
@@ -541,8 +541,8 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 );
             }
         }
-        for (JResolver resolver : context().resolvers().getResolvers()) {
-            JFunction[] jFunctions = resolver.resolveFunctionsByName(name, argsCount, context());
+        for (JResolver resolver : getContext().resolvers().getResolvers()) {
+            JFunction[] jFunctions = resolver.resolveFunctionsByName(name, argsCount, getContext());
             if (jFunctions != null) {
                 for (JFunction jFunction : jFunctions) {
                     if (jFunction != null) {
@@ -927,13 +927,13 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         switch (functionType) {
             case GET: {
                 if (argsCount != 0) {
-                    log().error("S000", null, "wrong getter arguments count " + argsCount + "!=" + 0, location);
+                    getLog().error("S000", null, "wrong getter arguments count " + argsCount + "!=" + 0, location);
                 }
                 break;
             }
             case SET: {
                 if (argsCount != 1) {
-                    log().error("S000", null, "wrong setter arguments count " + argsCount + "!=" + 1, location);
+                    getLog().error("S000", null, "wrong setter arguments count " + argsCount + "!=" + 1, location);
                 }
                 break;
             }
@@ -942,7 +942,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 .filter(x -> isVisible(x) && x.isStatic()).toArray(JMethod[]::new);
         JInvokableCost[] jInvokableCosts = filterAcceptable(new LinkedHashSet<>(Arrays.asList(possibleMethods)), args, location, true, new ArrayList<>(), failInfo);
         if (jInvokableCosts.length == 0) {
-            failInfo.fail(jOnError, log(), location);
+            failInfo.fail(jOnError, getLog(), location);
             return null;
         }
         return jInvokableCosts[0].getInvokable();
@@ -1030,17 +1030,17 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             case "==": {
                 if (binaryOp) {
                     if ("null".equals(args[0].getType().getName()) || "null".equals(args[1].getType().getName())) {
-                        return new PrimitiveEqualsInvokable(context().types());
+                        return new PrimitiveEqualsInvokable(getContext().types());
                     }
                     if (args[0].getType().isPrimitive() && args[1].getType().isPrimitive()) {
-                        return new PrimitiveEqualsInvokable(context().types());
+                        return new PrimitiveEqualsInvokable(getContext().types());
                     }
                     String[] nameAlternatives = new String[]{"==", "eq"};
                     JInvokable m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
                         return m;
                     }
-                    return new SafeEqualsInvokable(context().types());
+                    return new SafeEqualsInvokable(getContext().types());
 //                    m = findMatchOrNull0(name, args, new String[]{"compareTo"}, location, error);
 //                    if (error[0] || m != null) {
 //                        return new CompareToEqualsInvokable(m, context());
@@ -1055,29 +1055,29 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             case "===": {
                 if (binaryOp) {
                     if ("null".equals(args[0].getType().getName()) || "null".equals(args[1].getType().getName())) {
-                        return new PrimitiveEqualsInvokable(context().types());
+                        return new PrimitiveEqualsInvokable(getContext().types());
                     }
                     if (args[0].getType().isPrimitive() && args[1].getType().isPrimitive()) {
-                        return new PrimitiveEqualsInvokable(context().types());
+                        return new PrimitiveEqualsInvokable(getContext().types());
                     }
-                    return new StrictEqualsInvokable(context().types());
+                    return new StrictEqualsInvokable(getContext().types());
                 }
                 break;
             }
             case "!=": {
                 if (binaryOp) {
                     if ("null".equals(args[0].getType().getName()) || "null".equals(args[1].getType().getName())) {
-                        return new PrimitiveNotEqualsInvokable(context().types());
+                        return new PrimitiveNotEqualsInvokable(getContext().types());
                     }
                     if (args[0].getType().isPrimitive() && args[1].getType().isPrimitive()) {
-                        return new PrimitiveNotEqualsInvokable(context().types());
+                        return new PrimitiveNotEqualsInvokable(getContext().types());
                     }
                     String[] nameAlternatives = new String[]{"!=", "neq"};
                     JInvokable m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
                         return m;
                     }
-                    return new SafeNotEqualsInvokable(context().types());
+                    return new SafeNotEqualsInvokable(getContext().types());
 
 //                    nameAlternatives = new String[]{"==", "eq"};
 //
@@ -1099,24 +1099,24 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             case "!==": {
                 if (binaryOp) {
                     if ("null".equals(args[0].getType().getName()) || "null".equals(args[1].getType().getName())) {
-                        return new PrimitiveNotEqualsInvokable(context().types());
+                        return new PrimitiveNotEqualsInvokable(getContext().types());
                     }
                     if (args[0].getType().isPrimitive() && args[1].getType().isPrimitive()) {
-                        return new PrimitiveNotEqualsInvokable(context().types());
+                        return new PrimitiveNotEqualsInvokable(getContext().types());
                     }
                     String[] nameAlternatives = new String[]{"!=", "neq"};
                     JInvokable m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
                         return m;
                     }
-                    return new StrictNotEqualsInvokable(context().types());
+                    return new StrictNotEqualsInvokable(getContext().types());
                 }
                 break;
             }
             case "<=": {
                 if (binaryOp) {
                     if (args[0].getType().isPrimitive() && args[1].getType().isPrimitive()) {
-                        return new PrimitiveCompareInvokable(context().types(), name);
+                        return new PrimitiveCompareInvokable(getContext().types(), name);
                     }
                     String[] nameAlternatives = new String[]{"<=", "lte"};
                     JInvokable m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
@@ -1125,11 +1125,11 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     }
                     m = findFunctionMatchOrNull0(new String[]{"compareTo"}, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
-                        return new CompareToLessEqualsThanInvokable(m, context());
+                        return new CompareToLessEqualsThanInvokable(m, getContext());
                     }
                     m = findFunctionMatchOrNull0(new String[]{"compare"}, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
-                        return new CompareToLessEqualsThanInvokable(m, context());
+                        return new CompareToLessEqualsThanInvokable(m, getContext());
                     }
                     m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
                     if (m != null) {
@@ -1141,7 +1141,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             case ">=": {
                 if (binaryOp) {
                     if (args[0].getType().isPrimitive() && args[1].getType().isPrimitive()) {
-                        return new PrimitiveCompareInvokable(context().types(), name);
+                        return new PrimitiveCompareInvokable(getContext().types(), name);
                     }
                     String[] nameAlternatives = new String[]{">=", "gte"};
                     JInvokable m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
@@ -1150,11 +1150,11 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     }
                     m = findFunctionMatchOrNull0(new String[]{"compareTo"}, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
-                        return new CompareToGreaterEqualsThanInvokable(m, context());
+                        return new CompareToGreaterEqualsThanInvokable(m, getContext());
                     }
                     m = findFunctionMatchOrNull0(new String[]{"compare"}, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
-                        return new CompareToGreaterEqualsThanInvokable(m, context());
+                        return new CompareToGreaterEqualsThanInvokable(m, getContext());
                     }
                     m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
                     if (m != null) {
@@ -1166,7 +1166,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             case "<": {
                 if (binaryOp) {
                     if (args[0].getType().isPrimitive() && args[1].getType().isPrimitive()) {
-                        return new PrimitiveCompareInvokable(context().types(), name);
+                        return new PrimitiveCompareInvokable(getContext().types(), name);
                     }
                     String[] nameAlternatives = new String[]{"<", "lt"};
                     JInvokable m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
@@ -1175,11 +1175,11 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     }
                     m = findFunctionMatchOrNull0(new String[]{"compareTo"}, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
-                        return new CompareToLessThanInvokable(m, context());
+                        return new CompareToLessThanInvokable(m, getContext());
                     }
                     m = findFunctionMatchOrNull0(new String[]{"compare"}, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
-                        return new CompareToLessThanInvokable(m, context());
+                        return new CompareToLessThanInvokable(m, getContext());
                     }
                     m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
                     if (m != null) {
@@ -1191,7 +1191,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             case ">": {
                 if (binaryOp) {
                     if (args[0].getType().isPrimitive() && args[1].getType().isPrimitive()) {
-                        return new PrimitiveCompareInvokable(context().types(), name);
+                        return new PrimitiveCompareInvokable(getContext().types(), name);
                     }
                     String[] nameAlternatives = new String[]{">", "gt"};
                     JInvokable m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
@@ -1200,11 +1200,11 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     }
                     m = findFunctionMatchOrNull0(new String[]{"compareTo"}, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
-                        return new CompareToGreaterThanInvokable(m, context());
+                        return new CompareToGreaterThanInvokable(m, getContext());
                     }
                     m = findFunctionMatchOrNull0(new String[]{"compare"}, args, location, failInfo);
                     if (failInfo.isError() || m != null) {
-                        return new CompareToGreaterThanInvokable(m, context());
+                        return new CompareToGreaterThanInvokable(m, getContext());
                     }
                     m = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
                     if (m != null) {
@@ -1227,7 +1227,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     if (baseTypeNameSafe.endsWith("[]")) {
                         baseTypeNameSafe = "(" + baseTypeNameSafe + ")";
                     }
-                    failInfo.fail(jOnError, log(), "S044", null, "To use "
+                    failInfo.fail(jOnError, getLog(), "S044", null, "To use "
                             + baseTypeNameSafe + "[" + JTypePattern.signatureStringNoPars(oldTypes) + "] operator, you should implement either \n"
                             + "\tinstance method: " + baseType.toString() + "." + HLExtensionNames.BRACKET_GET_LONG + "" + JTypePattern.signatureString(oldTypes) + " \n"
                             + "\tor\n"
@@ -1251,7 +1251,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     if (baseTypeNameSafe.endsWith("[]")) {
                         baseTypeNameSafe = "(" + baseTypeNameSafe + ")";
                     }
-                    failInfo.fail(jOnError, log(),
+                    failInfo.fail(jOnError, getLog(),
                             "S044", null,
                             "To use "
                                     + baseTypeNameSafe + "[" + JTypePattern.signatureStringNoPars(oldTypes) + "] set operator, you should implement either \n"
@@ -1269,7 +1269,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         if (y != null) {
             return y;
         }
-        failInfo.fail(jOnError, log(), location);
+        failInfo.fail(jOnError, getLog(), location);
         return null;
     }
 
@@ -1296,7 +1296,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             for (JMethod jMethod : resolveStaticMethodsByNameFromImports(nameAlternative, callArgumentsCount)) {
                 acceptable.add(jMethod);
             }
-            for (JFunction function : context().functions().findFunctions(nameAlternative, callArgumentsCount)) {
+            for (JFunction function : getContext().functions().findFunctions(nameAlternative, callArgumentsCount)) {
                 acceptable.add(HUtils.resolveToMethod(function));
             }
         }
@@ -1305,7 +1305,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     private JInvokableCost[] fillAcceptableLocalSourceMethodMatches(String[] nameAlternatives, JTypePattern[] args, Set<JInvokable> acceptable, boolean bestOnly, List<JInvokableCost> finalResultNonBestOnly, FindMatchFailInfo failInfo) {
         int callArgumentsCount = args.length;
         boolean noLambda = this.isTypes(args);
-        for (JNode jNode : path().parent()) {
+        for (JNode jNode : getPath().parent()) {
             if (jNode instanceof HNDeclareType) {
                 JMethod[] jMethods = getOrCreateType(((HNDeclareType) jNode))
                         .getDeclaredMethods(
@@ -1327,7 +1327,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             JInvokable[] ts = acceptable.toArray(new JInvokable[0]);
             if (noLambda) {
                 //should remove this
-                JInvokable jInvokable = context().functions().resolveBestMatch(getCallerInfo(), ts, failInfo.getConversions(), args, null);
+                JInvokable jInvokable = getContext().functions().resolveBestMatch(getCallerInfo(), ts, failInfo.getConversions(), args, null);
                 if (jInvokable != null) {
                     if (bestOnly) {
                         return new JInvokableCost[]{new JInvokableCostImpl(
@@ -1367,9 +1367,9 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                             .filter(x -> isVisible(x) && !x.isStatic()).toArray(JMethod[]::new);
                     JMethod m2 = null;
                     try {
-                        m2 = (JMethod) context().functions().resolveBestMatch(getCallerInfo(), possibleMethods, failInfo.getConversions(), type2, null);
+                        m2 = (JMethod) getContext().functions().resolveBestMatch(getCallerInfo(), possibleMethods, failInfo.getConversions(), type2, null);
                     } catch (JMultipleInvokableMatchFound ex) {
-                        log().error("X057", null, ex.getMessage(), null);
+                        getLog().error("X057", null, ex.getMessage(), null);
                         failInfo.setError(true);
                         return new JInvokableCost[0];
                     }
@@ -1418,7 +1418,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         && !args[1].getType().isArray()
                         && isReversableName(nameAlternative);
                 if (binaryReversibleOperator) {
-                    String newName = "_reverse_" + nameAlternative;
+                    String newName = nameAlternative.equals("in")?"contains": "_reverse_" + nameAlternative;
                     JTypePattern[] newTypes = new JTypePattern[]{args[0]};
                     String newSig = JTypeUtils.sig(newName, newTypes, false);
 
@@ -1427,7 +1427,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
 
                     JMethod[] possibleMethods = Arrays.stream(args[1].getType().getDeclaredMethods(new String[]{newName}, 1, true))
                             .filter(x -> isVisible(x) && !x.isStatic()).toArray(JMethod[]::new);
-                    JMethod m2 = (JMethod) context().functions().resolveBestMatch(getCallerInfo(), possibleMethods, failInfo.getConversions(), newTypes, null);
+                    JMethod m2 = (JMethod) getContext().functions().resolveBestMatch(getCallerInfo(), possibleMethods, failInfo.getConversions(), newTypes, null);
                     if (m2 != null) {
                         ConvertedJMethod2 cc = new ConvertedJMethod2(
                                 m2, new JArgumentConverter[]{
@@ -1533,7 +1533,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                             failInfo.addAvailable(jMethod);
                         }
                     }
-                    for (JFunction function : context().functions().findFunctions(nn, callArgumentsCount)) {
+                    for (JFunction function : getContext().functions().findFunctions(nn, callArgumentsCount)) {
                         JMethod e = HUtils.resolveToMethod(function);
                         if(isVisible(e)) {
                             acceptable.add(e);
@@ -1555,18 +1555,18 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             JInvokable[] ts = acceptable.toArray(new JInvokable[0]);
             if (bestOnly) {
                 try {
-                    JInvokable cc = context().functions().resolveBestMatch(getCallerInfo(), ts, failInfo.getConversions(), args, null);
+                    JInvokable cc = getContext().functions().resolveBestMatch(getCallerInfo(), ts, failInfo.getConversions(), args, null);
                     if (cc != null) {
                         finalResultNonBestOnly.add(new JInvokableCostImpl(cc, 0.3));
                     }
                 } catch (JMultipleInvokableMatchFound ex) {
-                    log().error("X057", null, ex.getMessage(), location);
+                    getLog().error("X057", null, ex.getMessage(), location);
                     failInfo.setError(true);
                     return new JInvokableCost[0];
                 }
             } else {
                 finalResultNonBestOnly.addAll(
-                        Arrays.asList(context().functions().resolveMatches(false, ts, failInfo.getConversions(), args, null))
+                        Arrays.asList(getContext().functions().resolveMatches(false, ts, failInfo.getConversions(), args, null))
                 );
             }
         } else {
@@ -1705,7 +1705,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 requireStatic, lhs,
                 location, fromNode, lookupTypes, failInfo);
         if (result.isEmpty()) {
-            failInfo.fail(onError, log(), location);
+            failInfo.fail(onError, getLog(), location);
             return null;
         } else {
             List<HNElementType> countTypes = new ArrayList<>();
@@ -1741,7 +1741,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 if (countVars.size() > 1) {
                     String errorMessage = "ambiguous var access :\n\t"
                             + countVars.stream().map(HNElement::toDescString).collect(Collectors.joining("\n\t"));
-                    failInfo.fail(onError, log(), "S026", null, errorMessage, location);//always log!
+                    failInfo.fail(onError, getLog(), "S026", null, errorMessage, location);//always log!
                 }
                 return result.get(0);
             }
@@ -1758,7 +1758,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 if (countTypes.size() > 1) {
                     String errorMessage = "ambiguous type access :\n\t"
                             + countTypes.stream().map(HNElement::toDescString).collect(Collectors.joining("\n\t"));
-                    failInfo.fail(onError, log(), "S026", null, errorMessage, location);//always log!
+                    failInfo.fail(onError, getLog(), "S026", null, errorMessage, location);//always log!
                 }
                 return result.get(0);
             }
@@ -1774,7 +1774,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 }
                 JInvokable[] ts = possibleMethods.toArray(new JInvokable[0]);
                 try {
-                    JInvokable jInvokable = context().functions().resolveBestMatch(getCallerInfo(), ts, failInfo.getConversions(), args == null ? new JTypePattern[0] : args, null);
+                    JInvokable jInvokable = getContext().functions().resolveBestMatch(getCallerInfo(), ts, failInfo.getConversions(), args == null ? new JTypePattern[0] : args, null);
                     if (jInvokable instanceof JMethod) {
                         JMethod m = (JMethod) jInvokable;
                         return new HNElementMethod(m);
@@ -1788,7 +1788,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 } catch (JMultipleInvokableMatchFound m) {
                     String errorMessage = "ambiguous method access :\n\t"
                             + Arrays.stream(m.getAllPossibilities()).map(x -> toString()).collect(Collectors.joining("\n\t"));
-                    failInfo.fail(onError, log(), "S026", null, errorMessage, location);//always log!
+                    failInfo.fail(onError, getLog(), "S026", null, errorMessage, location);//always log!
                     return null;
                 }
             }
@@ -1796,7 +1796,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 if (result.size() > 1) {
                     String errorMessage = "ambiguous symbol :\n\t"
                             + result.stream().map(x -> toString()).collect(Collectors.joining("\n\t"));
-                    failInfo.fail(onError, log(), "S026", null, errorMessage, location);//always log!
+                    failInfo.fail(onError, getLog(), "S026", null, errorMessage, location);//always log!
                 }
                 return result.get(0);
             }
@@ -1815,7 +1815,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         }
         List<HNElement> result = new ArrayList<>();
         if (fromNode == null) {
-            fromNode = node();
+            fromNode = getNode();
         }
         JNode child = fromNode;
         lookupElementNoBaseFill(name, args, child/*.parentNode()*/, null/*child*/, requireStatic, result, lookupTypes);
@@ -1918,7 +1918,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     private JType lookupTypeOrVariableOrNull(JTypeNameOrVariable typeNameOrVar) {
         if (typeNameOrVar instanceof JTypeNameBounded) {
             JTypeNameBounded v = (JTypeNameBounded) typeNameOrVar;
-            JDeclaration dec = (JDeclaration) JNodeUtils.findFirstParent(node(), x -> x instanceof JDeclaration);
+            JDeclaration dec = (JDeclaration) JNodeUtils.findFirstParent(getNode(), x -> x instanceof JDeclaration);
             JTypes types = types();
             JTypesSPI typesSPI = (JTypesSPI) types;
             return typesSPI.createVarType0(
@@ -1958,12 +1958,12 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         if (name == null) {
             return null;
         }
-        JTypes types = context().types();
+        JTypes types = getContext().types();
         JType c = types.forNameOrNull(name);
         if (c != null) {
             return c;
         }
-        for (JNode o : path().parent()) {
+        for (JNode o : getPath().parent()) {
             if (o instanceof HNBlock) {
                 HNBlock h = HNBlock.get(o);
                 for (HNDeclareType statement : h.getClassDeclarations()) {
@@ -1989,7 +1989,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
 //        }
         Set<JImportInfo> validImports = new LinkedHashSet<>();
 
-        validImports.addAll(Arrays.asList(imports()));
+        validImports.addAll(Arrays.asList(getImports()));
 
         validImports.add(createJImportInfo("java.lang.*", "<default>"));
         validImports.add(createJImportInfo("java.util.*", "<default>"));
@@ -2012,7 +2012,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     public List<JType> lookupTypes(boolean importedOnly, Predicate<String> predicate) {
         Chronometer chrono = Chronometer.start("lookupTypes:" + (importedOnly ? 0 : 1));
         Map<String, JType> result = new LinkedHashMap<>();
-        JTypes types = context().types();
+        JTypes types = getContext().types();
         for (String stype : new String[]{"boolean", "char", "byte", "short",
                 "int",
                 "long",
@@ -2024,7 +2024,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             }
         }
 
-        for (JNode o : path().parent()) {
+        for (JNode o : getPath().parent()) {
             if (o instanceof HNBlock) {
                 HNBlock h = HNBlock.get(o);
                 for (HNDeclareType statement : h.getClassDeclarations()) {
@@ -2047,7 +2047,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
 //            }
             Set<JImportInfo> validImports = new LinkedHashSet<>();
 
-            validImports.addAll(Arrays.asList(imports()));
+            validImports.addAll(Arrays.asList(getImports()));
 
             validImports.add(createJImportInfo("java.lang.*", "<default>"));
             validImports.add(createJImportInfo("java.util.*", "<default>"));
@@ -2094,7 +2094,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public String nextVarName(String n) {
-        return nextVarName(n, node());
+        return nextVarName(n, getNode());
     }
 
     public String nextVarName(String n, JNode node) {
@@ -2273,7 +2273,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public HNDeclareInvokable lookupEnclosingInvokable() {
-        for (JNode jNode : path().parent()) {
+        for (JNode jNode : getPath().parent()) {
             if (jNode instanceof HNDeclareInvokable) {
                 return (HNDeclareInvokable) jNode;
             }
@@ -2463,7 +2463,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                             );
                         }
                         if(identifier.getElement()==null){
-                            identifier.setElement(new HNElementLocalVar(identifier.getToken().sval,identifier,whereToLookInto.startToken())
+                            identifier.setElement(new HNElementLocalVar(identifier.getToken().sval,identifier,whereToLookInto.getStartToken())
                             .setEffectiveType(excType)
                             );
                         }
@@ -2550,7 +2550,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 if (name.equals("$")) {
                     if (lookupTypes == null || lookupTypes.contains(LookupType.DOLLAR_VAR)) {
                         HNBracketsPostfix lop = (HNBracketsPostfix) whereToLookInto;
-                        HNElementBracketsVar u = new HNElementBracketsVar(name, lop, whereToLookInto.startToken());
+                        HNElementBracketsVar u = new HNElementBracketsVar(name, lop, whereToLookInto.getStartToken());
                         HNode a = (HNode) lop.getLeft();
                         if (a.getElement().getTypePattern() != null && a.getElement().getTypePattern().isType()) {
                             JType leftType = a.getElement().getTypePattern().getType();
@@ -2565,7 +2565,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                                 JInvokable m = lookupFunctionMatch(JOnError.TRACE, "getLength", HFunctionType.SPECIAL,
                                         new JTypePattern[]{
                                                 JTypePattern.of(leftType)
-                                        }, whereToLookInto.startToken()
+                                        }, whereToLookInto.getStartToken()
                                 );
                                 if (m != null) {
                                     u.setInvokable(m);
@@ -2762,18 +2762,18 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             return null;
         }
 
-        for (JConverter converter : context().resolvers().getConverters(JTypePattern.of(from))) {
+        for (JConverter converter : getContext().resolvers().getConverters(JTypePattern.of(from))) {
             if (to.isAssignableFrom(converter.targetType().getType())) {
                 if (to.boxed().isAssignableFrom(converter.targetType().getType().boxed())) {
                     //TODO, check if assign nullable to non nullable
-                    return new JInvokableFromConverter(converter);
+                    return new JInvokableFromConverter(converter,types());
                 }
             }
         }
 
         //may be i should include only implicit constructors
         // (by the way what is implicit constructor?)
-        return this.findConstructorMatch(jOnError, to, new JTypePattern[]{JTypePattern.of(from)}, location.startToken(), failInfo);
+        return this.findConstructorMatch(jOnError, to, new JTypePattern[]{JTypePattern.of(from)}, location.getStartToken(), failInfo);
     }
 
     public JInvokable findConstructorMatch(JOnError jOnError, JType baseType, JTypePattern[] args, JToken location, FindMatchFailInfo failInfo) {
@@ -2796,7 +2796,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             }
         }
         failInfo.addAlternative("constructor", baseType.getName() + JTypePattern.signatureString(args));
-        JInvokable cc = context().functions().resolveBestMatch(getCallerInfo(), availableConstructors, conversions, args, null);
+        JInvokable cc = getContext().functions().resolveBestMatch(getCallerInfo(), availableConstructors, conversions, args, null);
         failInfo.getSearchedConverters().addAll(conversions.searchedConverters);
         if (cc != null) {
             return cc;
@@ -2809,7 +2809,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         if (t.length > 0) {
             return t[0].getInvokable();
         }
-        failInfo.fail(jOnError, log(), location);
+        failInfo.fail(jOnError, getLog(), location);
         return null;
     }
 
@@ -2826,7 +2826,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         JTypePattern typePattern = h.getElement().getTypePattern();
         if (typePattern == null) {
             if (showError) {
-                log().error("S000", null, "unable to resolve symbol type of " + h.getClass().getSimpleName(), n.startToken());
+                getLog().error("S000", null, "unable to resolve symbol type of " + h.getClass().getSimpleName(), n.getStartToken());
             }
         }
         return typePattern;
@@ -2904,7 +2904,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         for (String cls : classNamesToImport) {
             JType jType = null;
             try {
-                jType = context().types().forName(cls);
+                jType = getContext().types().forName(cls);
             } catch (Exception ex) {
                 //some how this not accessible... ignore it
             }
@@ -2928,7 +2928,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public HNTypeToken createSpecialTypeToken(String name) {
-        return new HNTypeToken(context().types().forName(name), null);
+        return new HNTypeToken(getContext().types().forName(name), null);
     }
 
     public JSignature signature(JNameSignature sig) {
@@ -2938,11 +2938,11 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public boolean isStaticContext() {
-        return isStaticContext(node());
+        return isStaticContext(getNode());
     }
 
     public JType getThisType() {
-        return getThisType(node());
+        return getThisType(getNode());
     }
 
     public JType getThisType(HNode n) {
@@ -3083,7 +3083,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         if (failInfo == null) {
                             failInfo = new FindMatchFailInfo("symbol");
                         }
-                        failInfo.fail(onError, log(), location);
+                        failInfo.fail(onError, getLog(), location);
                         return null;
                     case TYPE:
                         HNElementType et = (HNElementType) dotBase.getElement();
@@ -3138,7 +3138,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             failInfo = new FindMatchFailInfo("symbol");
         }
         if (fromNode == null) {
-            fromNode = this.node();
+            fromNode = this.getNode();
         }
         if (requireStatic) {
             if (dotBaseType.isType()) {
@@ -3175,7 +3175,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     }
                 }
             }
-            failInfo.fail(onError, log(), location);
+            failInfo.fail(onError, getLog(), location);
             return null;
         } else {
             JInvokable ctrInvokable = this.findInstanceMatch(JOnError.NULL,
@@ -3207,7 +3207,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     return new HNElementField(jField);
                 }
             }
-            failInfo.fail(onError, log(), location);
+            failInfo.fail(onError, getLog(), location);
             return null;
         }
     }
@@ -3260,7 +3260,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             type.setInternalType(false);
         } else {
             if (!JStringUtils.isBlank(type.getPackageName())) {
-                log().error("X000", null, "internal classes cannot define package", type.startToken());
+                getLog().error("X000", null, "internal classes cannot define package", type.getStartToken());
             }
 
             JType parentName = getOrCreateType(declaringType);
@@ -3280,15 +3280,24 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         }
         JType old = types.forNameOrNull(n);
         if (old != null) {
-            this.log().error("S012", null, "type declaration : type multiple declarations : " + n, type.getNameToken());
+            this.getLog().error("S012", null, "type declaration : type multiple declarations : " + n, type.getNameToken());
             return old;
         }
         LOG.log(Level.INFO, "declare type " + type.getFullName());
-        jt = types.declareType(n, false);
+        JTypeKind jTypeKind=
+                HNodeUtils.isModifierAnnotation(type.getAnnotations(),"annotation")?JTypeKind.ANNOTATION :
+                HNodeUtils.isModifierAnnotation(type.getAnnotations(),"exception")?JTypeKind.EXCEPTION :
+                HNodeUtils.isModifierAnnotation(type.getAnnotations(),"enum")?JTypeKind.ENUM :
+                HNodeUtils.isModifierAnnotation(type.getAnnotations(),"annotation")?JTypeKind.ANNOTATION :
+                        JTypeKind.CLASS;
+
+        jt = types.declareType(n, jTypeKind, false);
+        DefaultJType djt=(DefaultJType) jt;
         type.setjType(jt);
+        ((DefaultJAnnotationInstanceList)djt.getAnnotations())
+                .addAll(HNodeUtils.toAnnotations(type.getAnnotations()));
         for (HNExtends extend : type.getExtends()) {
             JType tt = lookupType(extend.getFullName());
-            DefaultJType djt = (DefaultJType) jt;
             if (tt.isInterface()) {
                 LinkedHashSet<JType> ifs = new LinkedHashSet<>();
                 ifs.addAll(Arrays.asList(djt.getInterfaces()));
@@ -3302,7 +3311,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public void markLocalDeclared(HNElement element, JNode declaringNode, JToken location) {
-        Map<String, List<Object>> declarations = (Map<String, List<Object>>) declaringNode.userObjects().computeIfAbsent("localDeclarations", (Function<String, Object>) s -> new HashMap<String, Object>());
+        Map<String, List<Object>> declarations = (Map<String, List<Object>>) declaringNode.getUserObjects().computeIfAbsent("localDeclarations", (Function<String, Object>) s -> new HashMap<String, Object>());
         String k = null;
         String n = null;
         switch (element.getKind()) {
@@ -3311,7 +3320,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 k = element.getKind().name() + ":" + n;
                 List<Object> oldDeclarations = declarations.computeIfAbsent(k, s -> new ArrayList<>());
                 if (oldDeclarations.size() > 0) {
-                    log().error("X000", null, "multiple local variable declaration : " + n, location);
+                    getLog().error("X000", null, "multiple local variable declaration : " + n, location);
                 }
                 oldDeclarations.add(declaringNode);
                 break;
@@ -3323,15 +3332,15 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     @Override
-    public HNode node() {
-        return (HNode) super.node();
+    public HNode getNode() {
+        return (HNode) super.getNode();
     }
 
     @Override
-    public JImportInfo[] imports() {
+    public JImportInfo[] getImports() {
         LinkedHashSet<JImportInfo> ss = new LinkedHashSet<>();
-        ss.addAll(Arrays.asList(super.imports()));
-        JNode n = node();
+        ss.addAll(Arrays.asList(super.getImports()));
+        JNode n = getNode();
         while (n != null) {
             ss.addAll(((HNode) n).getImports());
             n = n.parentNode();
@@ -3352,8 +3361,8 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public JCallerInfo getCallerInfo() {
-        String n = HUtils.getSourceName(node());
-        JType y = lookupEnclosingType(node());
+        String n = HUtils.getSourceName(getNode());
+        JType y = lookupEnclosingType(getNode());
         return new HLCallerInfo(n, y);
     }
 

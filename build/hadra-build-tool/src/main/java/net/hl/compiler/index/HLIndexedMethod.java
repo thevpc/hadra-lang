@@ -12,6 +12,7 @@ import net.hl.compiler.utils.HUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HLIndexedMethod implements HLIndexedElement{
     private String name;
@@ -21,7 +22,7 @@ public class HLIndexedMethod implements HLIndexedElement{
     private String returnType;
     private String declaringType;
     private JNameSignature signature;
-    private int modifiers;
+    private String annotations;
     private String source;
     private String id;
     public HLIndexedMethod(HNDeclareInvokable m) {
@@ -32,7 +33,7 @@ public class HLIndexedMethod implements HLIndexedElement{
             returnType=m.getReturnTypeName().getTypename().fullName();
         }
         declaringType=m.getDeclaringType()==null?"":m.getDeclaringType().getFullName();
-        modifiers=m.getModifiers();
+        annotations = Arrays.stream(m.getAnnotations()).map(Object::toString).collect(Collectors.joining(" "));
         List<String> pn=new ArrayList<>();
         List<String> pt=new ArrayList<>();
         for (HNDeclareIdentifier argument : m.getArguments()) {
@@ -55,7 +56,7 @@ public class HLIndexedMethod implements HLIndexedElement{
             returnType=m.getReturnType().getName();
         }
         declaringType=m.getDeclaringType()==null?"":m.getDeclaringType().getName();
-        modifiers=m.getModifiers();
+        annotations = m.getAnnotations().stream().map(Object::toString).collect(Collectors.joining(" "));
         parameterNames=m.getArgNames();
         parameterTypes=Arrays.stream(m.getArgTypes()).map(JType::getName).toArray(String[]::new);
         imports= new String[0];
@@ -64,14 +65,14 @@ public class HLIndexedMethod implements HLIndexedElement{
         id=declaringType==null?signature.toString():(declaringType+"."+signature.toString());
     }
 
-    public HLIndexedMethod(String name, String[] parameterNames, String[] parameterTypes, String[] imports, String returnType, String declaringType, int modifiers, String source) {
+    public HLIndexedMethod(String name, String[] parameterNames, String[] parameterTypes, String[] imports, String returnType, String declaringType, String[] annotations, String source) {
         this.name = name;
         this.parameterNames = parameterNames;
         this.parameterTypes = parameterTypes;
         this.imports = imports;
         this.returnType = returnType;
         this.declaringType = declaringType;
-        this.modifiers = modifiers;
+        this.annotations = String.join(" ",annotations);
         this.source = source;
         this.signature=JNameSignature.of(name,parameterTypes);
         id=declaringType==null?signature.toString():(declaringType+"."+signature.toString());
@@ -87,7 +88,7 @@ public class HLIndexedMethod implements HLIndexedElement{
                 ", returnType='" + returnType + '\'' +
                 ", declaringType='" + declaringType + '\'' +
                 ", signature=" + signature +
-                ", modifiers=" + modifiers +
+                ", annotations=" + annotations +
                 ", source='" + source + '\'' +
                 ", id='" + id + '\'' +
                 '}';
@@ -121,8 +122,8 @@ public class HLIndexedMethod implements HLIndexedElement{
         return signature;
     }
 
-    public int getModifiers() {
-        return modifiers;
+    public String getAnnotations() {
+        return annotations;
     }
 
     public String getSource() {
@@ -137,7 +138,7 @@ public class HLIndexedMethod implements HLIndexedElement{
         doc.add("returnType",returnType,true);
         doc.add("declaringType",declaringType,true);
         doc.add("signature",signature.toString(),true);
-        doc.add("modifiers",String.valueOf(modifiers),false);
+        doc.add("annotations",String.valueOf(annotations),false);
         doc.add("source",source,false);
         doc.add("parameterNames",String.join(";",parameterNames),false);
         doc.add("parameterTypes",String.join(";",parameterTypes),false);

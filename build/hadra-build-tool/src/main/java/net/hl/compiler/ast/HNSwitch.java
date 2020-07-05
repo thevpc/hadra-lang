@@ -8,6 +8,7 @@ package net.hl.compiler.ast;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.util.JNodeUtils;
 import net.vpc.common.jeep.JNodeFindAndReplace;
+import net.vpc.common.jeep.util.ListBuilder;
 
 import java.util.*;
 
@@ -413,15 +414,11 @@ public class HNSwitch extends HNode {
 //        }
         @Override
         public List<JNode> childrenNodes() {
-            List<JNode> li = new ArrayList<>();
-            li.addAll(whenTypes);
-            if (identifierToken != null) {
-                li.add(identifierToken);
-            }
-            if (doNode != null) {
-                li.add(doNode);
-            }
-            return li;
+            return new ListBuilder<JNode>().setSkipNulls(true)
+                    .addAll(whenTypes)
+                    .add(identifierToken)
+                    .add(doNode)
+                    .toList();
         }
     }
 }

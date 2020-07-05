@@ -16,6 +16,7 @@ import net.hl.compiler.core.elements.HNElementExpr;
 import java.time.temporal.Temporal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import net.vpc.common.jeep.JNodeCopyFactory;
 
@@ -111,5 +112,18 @@ public class HNLiteral extends HNode {
     @Override
     public List<JNode> childrenNodes() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HNLiteral hnLiteral = (HNLiteral) o;
+        return Objects.equals(value, hnLiteral.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

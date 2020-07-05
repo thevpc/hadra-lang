@@ -41,7 +41,7 @@ public class HLIndexedClass implements HLIndexedElement {
         }
         packageName = type.getPackageName();
         this.source = source;
-        annotations = Arrays.stream(type.getAnnotations()).map(Object::toString).collect(Collectors.joining(" "));
+        annotations = type.getAnnotations().stream().map(Object::toString).collect(Collectors.joining(" "));
         imports = new String[0];
         List<String> superTypesList = new ArrayList<>();
         for (JType extend : type.getParents()) {

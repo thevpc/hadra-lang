@@ -14,7 +14,7 @@ public class HHostJClassType extends HostJClassType {
     }
 
     protected void applyModifiers(int modifiers) {
-        DefaultJAnnotationInstanceList modifiersList = (DefaultJAnnotationInstanceList) getModifiers();
+        DefaultJAnnotationInstanceList modifiersList = (DefaultJAnnotationInstanceList) getAnnotations();
         addJavaModifiers(modifiers, modifiersList);
     }
 
@@ -48,6 +48,18 @@ public class HHostJClassType extends HostJClassType {
             } else {
                 ///
             }
+        }
+        if(hostType().isInterface() && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.INTERFACE)){
+            modifiersList.add(JPrimitiveModifierAnnotationInstance.INTERFACE);
+        }
+        if(hostType().isEnum() && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.ENUM)){
+            modifiersList.add(JPrimitiveModifierAnnotationInstance.ENUM);
+        }
+        if(hostType().isAnnotation() && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.ANNOTATION)){
+            modifiersList.add(JPrimitiveModifierAnnotationInstance.ANNOTATION);
+        }
+        if(Throwable.class.isAssignableFrom(hostType()) && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.EXCEPTION)){
+            modifiersList.add(JPrimitiveModifierAnnotationInstance.EXCEPTION);
         }
     }
 }

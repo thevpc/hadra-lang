@@ -18,7 +18,7 @@ class Complex{
 Complex î;
 
 class Clock(int hours,int minutes){
-    constructor(String hours,String minutes){
+    init(String hours,String minutes){
         this(
                 if (p"[0-9]+".matches(hours)) int(hours) else -1,
                 if (p"[0-9]+".matches(minutes)) int(minutes) else -1
@@ -29,7 +29,7 @@ class Clock(int hours,int minutes){
 
 class RoundClock(int[] hours,int minutes) extends Clock(){
     Date extraField;
-    constructor(String hours,String minutes){
+    init(String hours,String minutes){
         super(hours,minutes);
     }
 }

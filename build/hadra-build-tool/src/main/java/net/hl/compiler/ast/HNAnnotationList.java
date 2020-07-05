@@ -5,6 +5,7 @@
  */
 package net.hl.compiler.ast;
 
+import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTokenUtils;
 import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JNodeCopyFactory;
@@ -165,5 +166,15 @@ public class HNAnnotationList extends HNode {
 
     public HNAnnotationCall[] toArray() {
         return children == null ? new HNAnnotationCall[0] : children;
+    }
+
+    public boolean containsModifier(String name){
+        for (HNAnnotationCall child : children) {
+            String c = HNodeUtils.getModifierAnnotation(child);
+            if(name.equals(c)){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -1,14 +1,16 @@
 package net.hl.compiler.core.invokables;
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.AbstractJFunction;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.util.JTypeUtils;
 
-public class StrictEqualsInvokable implements JFunction {
+public class StrictEqualsInvokable extends AbstractJFunction {
     JSignature sig;
     JType boolType;
 
     public StrictEqualsInvokable(JTypes types) {
+        super(types);
         sig=JSignature.of("strictEquals",
                 JTypeUtils.forObject(types),
                 JTypeUtils.forObject(types)

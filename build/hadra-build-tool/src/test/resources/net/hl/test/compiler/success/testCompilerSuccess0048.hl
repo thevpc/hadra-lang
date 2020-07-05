@@ -8,11 +8,11 @@ class Matrix{
             (i,j)->if(i==j) 1 else 0))
     );
 
-    constructor(int size) -> this(size,size);
+    init(int size) -> this(size,size);
 
-    constructor(int cols,int rows) -> this(Complex[rows][cols](Complex.ZERO));
+    init(int cols,int rows) -> this(Complex[rows][cols](Complex.ZERO));
 
-    private constructor(Complex[][] values){
+    private init(Complex[][] values){
         this.values=values;
         this.rows=values.length;
         this.cols=values[0].length or 0;
@@ -42,8 +42,8 @@ const class Complex{
     public  static fun Complex of(double real,double imag) -> Complex(real,imag);
     public  static Complex ZERO=of(0,0);
     public  static Complex î=of(0,1);
-    public  implicit static constructor (double real) -> this(real,0);
-    public  static constructor (double real,double imag) {
+    public  implicit static init(double real) -> this(real,0);
+    public  static init (double real,double imag) {
         return cached[(real,imag)] else
             if (imag==0) RealComplex(real) else DefaultComplex(real,imag);
     }

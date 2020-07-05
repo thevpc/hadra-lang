@@ -1,17 +1,19 @@
 package net.hl.compiler.core.invokables;
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.AbstractJFunction;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.util.JTypeUtils;
 
 import java.util.Objects;
 
-public class PrimitiveCompareInvokable implements JFunction {
+public class PrimitiveCompareInvokable extends AbstractJFunction {
 
     JSignature sig;
     JType boolType;
     String op;
     public PrimitiveCompareInvokable(JTypes types,String op) {
+        super(types);
         this.op=op;
         switch (op){
             case "<":

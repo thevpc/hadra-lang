@@ -6,6 +6,7 @@ import net.vpc.common.jeep.impl.functions.ConvertedJMethod2;
 import net.vpc.common.jeep.impl.functions.JArgumentConverterByIndex;
 import net.vpc.common.jeep.impl.functions.JInstanceArgumentResolverFromArgumentByIndex;
 import net.vpc.common.jeep.impl.functions.JNameSignature;
+import net.vpc.common.jeep.impl.types.DefaultJModifierList;
 import net.vpc.common.jeep.util.JTokenUtils;
 import net.vpc.common.jeep.util.JTypeUtils;
 import net.vpc.common.textsource.JTextSource;
@@ -21,7 +22,6 @@ import net.hl.compiler.utils.HUtils;
 import net.hl.lang.BooleanRef;
 import net.hl.lang.ext.HJavaDefaultOperators;
 
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
@@ -320,7 +320,7 @@ public class HLCStage08JavaTransform implements HLCStage {
         inMetaPackage = false;
         for (JCompilationUnit compilationUnit : project.getCompilationUnits()) {
             HLJCompilerContext compilerContextBase = project.newCompilerContext(compilationUnit);
-            HNode node = compilerContextBase.node();
+            HNode node = compilerContextBase.getNode();
             HNode node2 = processNode(node, compilerContext0 = new HLJCompilerContext2(compilerContextBase));
             //JavaNodes.of(project).getSourceNodes().add(node2);
 
@@ -452,6 +452,9 @@ public class HLCStage08JavaTransform implements HLCStage {
             case H_CATCH: {
                 return onCatch((HNTryCatch.CatchBranch) node, compilerContext);
             }
+            case H_ANNOTATION: {
+                return onAnnotation((HNAnnotationCall) node, compilerContext);
+            }
             case H_THIS:
             case H_LITERAL_DEFAULT:
             case H_TYPE_TOKEN:
@@ -467,6 +470,10 @@ public class HLCStage08JavaTransform implements HLCStage {
         //in stage 1 wont change node instance
         throw new JShouldNeverHappenException("Unsupported node class in " + getClass().getSimpleName() + ": " + node.getClass().getSimpleName());
 //        return node;
+    }
+
+    private HNode onAnnotation(HNAnnotationCall node, HLJCompilerContext2 compilerContext) {
+        return node;
     }
 
     private HNode onCatch(HNTryCatch.CatchBranch node, HLJCompilerContext2 compilerContext) {
@@ -576,7 +583,7 @@ public class HLCStage08JavaTransform implements HLCStage {
             String nextVar = compilerContext.base.nextVarName(null, newType);
             JToken nextVarToken = HTokenUtils.createToken(nextVar);
             HNDeclareTokenIdentifier hnDeclareTokenIdentifier = new HNDeclareTokenIdentifier(nextVarToken);
-            HNDeclareIdentifier newDecl = new HNDeclareIdentifier(
+            HNDeclareIdentifier newDecl = (HNDeclareIdentifier) new HNDeclareIdentifier(
                     (HNDeclareToken)
                             hnDeclareTokenIdentifier.setElement(new HNElementField(
                                     nextVarToken.image,
@@ -586,7 +593,10 @@ public class HLCStage08JavaTransform implements HLCStage {
                             ).setEffectiveType(patternType)),
                     copy0(node), HNodeUtils.createTypeToken(patternType),
                     HTokenUtils.createToken("="), null, null
-            ).setModifiers(Modifier.STATIC | Modifier.PRIVATE);
+            ).addAnnotations(
+                    HNodeUtils.createAnnotationModifierCall("private"),
+                    HNodeUtils.createAnnotationModifierCall("static")
+            );
             newDecl.setUserObject("CompilerGeneratedPattern");
             body.add(newDecl);
 
@@ -651,7 +661,9 @@ public class HLCStage08JavaTransform implements HLCStage {
                     jn.getMetaPackageSources().add(s0);
                 }
                 HNDeclareInvokable r = (HNDeclareInvokable) processNode(statement, compilerContext);
-                r.setModifiers(HUtils.publifyModifiers(r.getModifiers() | Modifier.STATIC));
+                r.addAnnotationsNoDuplicates(
+                        HNodeUtils.createAnnotationModifierCall("static")
+                );
                 HNBlock metaBody = (HNBlock) jn.getMetaPackage().getBody();
                 if (metaBody == null) {
                     metaBody = new HNBlock(HNBlock.BlocType.CLASS_BODY, new HNode[0], null, null);
@@ -833,10 +845,12 @@ public class HLCStage08JavaTransform implements HLCStage {
                         null, null
                 );
                 if (statify) {
-                    nhs1.setModifiers(nhs1.getModifiers() | Modifier.STATIC);
+                    nhs1.addAnnotationsNoDuplicates(
+                            HNodeUtils.createAnnotationModifierCall("static")
+                    );
                 }
                 if (publify) {
-                    nhs1.setModifiers(HUtils.publifyModifiers(nhs1.getModifiers()));
+                    nhs1.setAnnotations(HUtils.publifyModifiers(nhs1.getAnnotations()));
                 }
 
                 newBlock.add(nhs1);
@@ -952,6 +966,7 @@ public class HLCStage08JavaTransform implements HLCStage {
             HNDeclareType newType = new HNDeclareType();
             contextStack.push(newType);
             newType.copyFrom(node, copyFactory);
+            prepareJavaModifiers(newType);
             List<HNExtends> anExtends = newType.getExtends();
             List<HNExtends> interfaces = new ArrayList<>();
             for (Iterator<HNExtends> iterator = anExtends.iterator(); iterator.hasNext(); ) {
@@ -1161,8 +1176,27 @@ public class HLCStage08JavaTransform implements HLCStage {
 
     }
 
+    private void prepareJavaModifiers(HNode node){
+        DefaultJModifierList modifiers=new DefaultJModifierList();
+        for (HNAnnotationCall annotation : node.getAnnotations()) {
+            String modifierAnnotation = HNodeUtils.getModifierAnnotation(annotation);
+            if(modifierAnnotation!=null){
+                JPrimitiveModifier r = DefaultJModifierList.getDefault(modifierAnnotation);
+                if(r!=null){
+                    modifiers.add(r);
+                    node.removeAnnotations(annotation);
+                }
+            }
+        }
+        if(!modifiers.contains(DefaultJModifierList.PUBLIC) && !modifiers.contains(DefaultJModifierList.PROTECTED) && !modifiers.contains(DefaultJModifierList.PRIVATE)){
+            modifiers.add(DefaultJModifierList.PUBLIC);
+        }
+        node.setUserObject("JModifierList",modifiers);
+    }
+
     private HNode onDeclareInvokable(HNDeclareInvokable node, HLJCompilerContext2 compilerContext) {
         HNDeclareInvokable copy = (HNDeclareInvokable) copy0(node);
+        prepareJavaModifiers(copy);
         HNode body = copy.getBody();
         if (copy.isImmediateBody() && !JTypeUtils.isVoid(copy.getReturnType())) {
             copy.setBody(
@@ -1272,9 +1306,12 @@ public class HLCStage08JavaTransform implements HLCStage {
             ii.setElement(new HNElementMethod(null).setMethodName("runModule"));
             ii.setReturnTypeName(compilerContext.base.createSpecialTypeToken("void"));
             ii.setDeclaringType(meta);
-            ii.setBody(new HNBlock(HNBlock.BlocType.METHOD_BODY, new HNode[0], ii.startToken(), ii.endToken()));
+            ii.setBody(new HNBlock(HNBlock.BlocType.METHOD_BODY, new HNode[0], ii.getStartToken(), ii.getEndToken()));
 //            ii.buildInvokable();
-            ii.setModifiers(HUtils.STATIC | HUtils.PUBLIC);
+            ii.addAnnotationsNoDuplicates(
+                    HNodeUtils.createAnnotationModifierCall("public"),
+                    HNodeUtils.createAnnotationModifierCall("static")
+            );
             HNBlock b = (HNBlock) meta.getBody();
             b.add(ii);
 //            DefaultJType dt = (DefaultJType) compilerContext.getOrCreateType(meta);
@@ -1368,14 +1405,18 @@ public class HLCStage08JavaTransform implements HLCStage {
                                 .setElement(new HNElementLocalVar(newVarName).setEffectiveType(rightTypePattern.getType()))
                         , right,
                         new HNTypeToken(rightTypePattern.getType(), null), assignOp, null, null);
-                int modifiers = 0;
                 if (fieldTemp) {
-                    modifiers |= (isField) ? Modifier.PRIVATE : 0;
+                    if(isField) {
+                        decl.addAnnotationsNoDuplicates(
+                                HNodeUtils.createAnnotationModifierCall("private")
+                        );
+                    }
                     if (isStatic) {
-                        modifiers |= Modifier.STATIC;
+                        decl.addAnnotationsNoDuplicates(
+                                HNodeUtils.createAnnotationModifierCall("static")
+                        );
                     }
                 }
-                decl.setModifiers(modifiers);
                 valDeclContext.add(decl);
                 right = new HNIdentifier(newVarToken)
                         .setElement(
@@ -1388,14 +1429,18 @@ public class HLCStage08JavaTransform implements HLCStage {
                                 .setElement(new HNElementLocalVar(newVarName).setEffectiveType(rightTypePattern.getType()))
                         , null,
                         new HNTypeToken(rightTypePattern.getType(), null), assignOp, null, null);
-                int modifiers = 0;
                 if (fieldTemp) {
-                    modifiers |= (isField) ? Modifier.PRIVATE : 0;
+                    if(isField) {
+                        decl.addAnnotationsNoDuplicates(
+                                HNodeUtils.createAnnotationModifierCall("private")
+                        );
+                    }
                     if (isStatic) {
-                        modifiers |= Modifier.STATIC;
+                        decl.addAnnotationsNoDuplicates(
+                                HNodeUtils.createAnnotationModifierCall("static")
+                        );
                     }
                 }
-                decl.setModifiers(modifiers);
                 HNBlock body = valDeclContext;//dissociatedBlock.get();
 
                 body.add(decl);
@@ -1442,11 +1487,11 @@ public class HLCStage08JavaTransform implements HLCStage {
                         assignOp,
                         null, null
                 );
-                if (isStatic) {
-                    nhs1.setModifiers(nhs1.getModifiers() | Modifier.STATIC);
+                if(isField) {
+                    nhs1.setAnnotations(HUtils.publifyModifiers(nhs1.getAnnotations()));
                 }
-                if (isField) {
-                    nhs1.setModifiers(HUtils.publifyModifiers(nhs1.getModifiers()));
+                if (isStatic) {
+                    nhs1.setAnnotations(HUtils.statifyModifiers(nhs1.getAnnotations()));
                 }
 
                 block.add(nhs1);
@@ -1466,13 +1511,12 @@ public class HLCStage08JavaTransform implements HLCStage {
                         assignOp,
                         null, null
                 );
+                if(isField) {
+                    nhs1.setAnnotations(HUtils.publifyModifiers(nhs1.getAnnotations()));
+                }
                 if (isStatic) {
-                    nhs1.setModifiers(nhs1.getModifiers() | Modifier.STATIC);
+                    nhs1.setAnnotations(HUtils.statifyModifiers(nhs1.getAnnotations()));
                 }
-                if (isField) {
-                    nhs1.setModifiers(HUtils.publifyModifiers(nhs1.getModifiers()));
-                }
-
                 block.add(nhs1);
             }
         } else if (left instanceof HNDeclareTokenTuple) {
@@ -1496,13 +1540,12 @@ public class HLCStage08JavaTransform implements HLCStage {
                         assignOp,
                         null, null
                 );
+                if(isField) {
+                    nhs1.setAnnotations(HUtils.publifyModifiers(nhs1.getAnnotations()));
+                }
                 if (isStatic) {
-                    nhs1.setModifiers(nhs1.getModifiers() | Modifier.STATIC);
+                    nhs1.setAnnotations(HUtils.statifyModifiers(nhs1.getAnnotations()));
                 }
-                if (isField) {
-                    nhs1.setModifiers(HUtils.publifyModifiers(nhs1.getModifiers()));
-                }
-
                 block.add(nhs1);
                 if (right != null) {
                     HNode first = null;
@@ -1530,13 +1573,12 @@ public class HLCStage08JavaTransform implements HLCStage {
                         assignOp,
                         null, null
                 );
+                if(isField) {
+                    nhs1.setAnnotations(HUtils.publifyModifiers(nhs1.getAnnotations()));
+                }
                 if (isStatic) {
-                    nhs1.setModifiers(nhs1.getModifiers() | Modifier.STATIC);
+                    nhs1.setAnnotations(HUtils.statifyModifiers(nhs1.getAnnotations()));
                 }
-                if (isField) {
-                    nhs1.setModifiers(HUtils.publifyModifiers(nhs1.getModifiers()));
-                }
-
                 block.add(nhs1);
             }
         } else {

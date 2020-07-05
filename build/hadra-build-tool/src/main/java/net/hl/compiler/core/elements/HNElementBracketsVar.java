@@ -23,7 +23,7 @@ public class HNElementBracketsVar extends HNElement implements Cloneable{
     public HNElementBracketsVar setDeclaration(HNBracketsPostfix declaration) {
         this.declaration = declaration;
         if(declaration!=null){
-            setLocation(declaration.startToken());
+            setLocation(declaration.getStartToken());
             setSource(HUtils.getSource(declaration));
         }
         return this;

@@ -94,20 +94,20 @@ public class HLCompletion implements JCompletion {
             HNode jNodeLast = null;
             for (HNode jNode : jNodes) {
                 if (jNode != null) {
-                    if (jNode.startToken() == null) {
+                    if (jNode.getStartToken() == null) {
                         throw new JShouldNeverHappenException();
                     }
-                    if (jNode.endToken() == null) {
+                    if (jNode.getEndToken() == null) {
                         throw new JShouldNeverHappenException("end token is null " + jNode.getClass().getSimpleName());
                     }
-                    if (jNode.startToken().startCharacterNumber < root.startToken().startCharacterNumber) {
+                    if (jNode.getStartToken().startCharacterNumber < root.getStartToken().startCharacterNumber) {
                         throw new JShouldNeverHappenException("invalid startChar for " + jNode.getClass().getSimpleName());
                     }
-                    if (jNode.endToken().endCharacterNumber > root.endToken().endCharacterNumber) {
+                    if (jNode.getEndToken().endCharacterNumber > root.getEndToken().endCharacterNumber) {
                         throw new JShouldNeverHappenException("invalid endChar for " + jNode.getClass().getSimpleName());
                     }
                     if (jNodeLast != null) {
-                        if (jNode.startToken().startCharacterNumber < jNodeLast.endToken().endCharacterNumber) {
+                        if (jNode.getStartToken().startCharacterNumber < jNodeLast.getEndToken().endCharacterNumber) {
                             if (jNode instanceof HNArrayNew || root instanceof HNArrayNew) {
                                 //ignore for now
                                 //this is the case where array is initialized like this
@@ -127,9 +127,9 @@ public class HLCompletion implements JCompletion {
 
     private JLocationContext searchNode(HLJCompilerContext compilerContext, int caretOffset, int completeLevel, ProposalsList completionProposals) {
         JLocationContext loctx;
-        HNode root = compilerContext.node();
+        HNode root = compilerContext.getNode();
         if (root.containsCaret(caretOffset)) {
-            List<JNode> jNodes = compilerContext.node().childrenNodes();
+            List<JNode> jNodes = compilerContext.getNode().childrenNodes();
             for (JNode jNode : jNodes) {
                 if (jNode != null) {
                     JLocationContext t = searchNode((HLJCompilerContext) compilerContext.nextNode(jNode), caretOffset, completeLevel, completionProposals);
@@ -147,7 +147,7 @@ public class HLCompletion implements JCompletion {
     }
 
     private JLocationContext locate(JCompilerContext compilerContext, int caretOffset, int completeLevel, ProposalsList completionProposals) {
-        JNode node = compilerContext.path().last();
+        JNode node = compilerContext.getPath().last();
 //        System.out.println("[locate] Look into " + compilerContext.path().getPathString());
         switch (node.getClass().getSimpleName()) {
             case "HNDeclareType": {
@@ -167,16 +167,16 @@ public class HLCompletion implements JCompletion {
             case "CompilationUnitBlock": {
                 HNBlock n = HNBlock.get(node);
                 JPositionStyle y = null;
-                if (n.startToken().def.id == HTokenId.LEFT_CURLY_BRACKET) {
-                    y = n.startToken().getPosition(caretOffset);
+                if (n.getStartToken().def.id == HTokenId.LEFT_CURLY_BRACKET) {
+                    y = n.getStartToken().getPosition(caretOffset);
                     if (y != JPositionStyle.AFTER) {
-                        return new JLocationContext(compilerContext.path(), n.startToken(), y, null);
+                        return new JLocationContext(compilerContext.getPath(), n.getStartToken(), y, null);
                     }
                 }
-                if (n.endToken().isImage("}")) {
-                    y = n.endToken().getPosition(caretOffset);
+                if (n.getEndToken().isImage("}")) {
+                    y = n.getEndToken().getPosition(caretOffset);
                     if (y != JPositionStyle.BEFORE) {
-                        return new JLocationContext(compilerContext.path(), n.endToken(), y, null);
+                        return new JLocationContext(compilerContext.getPath(), n.getEndToken(), y, null);
                     }
                 }
                 if (completionProposals != null) {
@@ -192,7 +192,7 @@ public class HLCompletion implements JCompletion {
                 if (y == JPositionStyle.START) {
                     //start of the type
                     completeTypes(identifierTypeName.getNameToken().startCharacterNumber, completeLevel, x -> true, compilerContext, completionProposals);
-                    return new JLocationContext(compilerContext.path(), identifierTypeName.startToken(), y, null);
+                    return new JLocationContext(compilerContext.getPath(), identifierTypeName.getStartToken(), y, null);
                 } else if (y == JPositionStyle.MIDDLE) {
                     JPositionStyle y2 = identifierTypeName.getNameToken().getPosition(caretOffset);
                     if (y2.isInside()) {
@@ -204,13 +204,13 @@ public class HLCompletion implements JCompletion {
                         completeTypes(identifierTypeName.getNameToken().startCharacterNumber - sub.length(), completeLevel,
                                 new SubStringPredicate(sub)
                                 , compilerContext, completionProposals);
-                        return new JLocationContext(compilerContext.path(), token, y2, null);
+                        return new JLocationContext(compilerContext.getPath(), token, y2, null);
                     }
                 } else if (y == JPositionStyle.END) {
                     //end of the type
                     return new JLocationContext(
-                            compilerContext.path(),
-                            null, compilerContext.node().getPosition(caretOffset), null
+                            compilerContext.getPath(),
+                            null, compilerContext.getNode().getPosition(caretOffset), null
                     );
                 } else if (y == JPositionStyle.AFTER) {
                     y = n.getAssignOperator().getPosition(caretOffset);
@@ -275,7 +275,7 @@ public class HLCompletion implements JCompletion {
                 for (HNDeclareTokenIdentifier identifierToken : HNodeUtils.flatten(n.getIdentifierToken())) {
                     y = identifierToken.getToken().getPositionStrict(caretOffset);
                     if (y != null) {
-                        return new JLocationContext(compilerContext.path(), identifierToken.getToken(), y, null);
+                        return new JLocationContext(compilerContext.getPath(), identifierToken.getToken(), y, null);
                     }
                 }
                 JToken assignOperator = n.getAssignOperator();
@@ -284,7 +284,7 @@ public class HLCompletion implements JCompletion {
                     //after '='
                 }
                 if (y != JPositionStyle.BEFORE && y != JPositionStyle.AFTER) {
-                    return new JLocationContext(compilerContext.path(), assignOperator, y, null);
+                    return new JLocationContext(compilerContext.getPath(), assignOperator, y, null);
                 }
                 break;
             }
@@ -292,7 +292,7 @@ public class HLCompletion implements JCompletion {
 //                return JNodeHDeclareInvokable_ToString((HNDeclareInvokable) node, cuctx, path);
             case "HNLiteral": {
                 HNLiteral xnode = (HNLiteral) node;
-                JPositionStyle y = xnode.startToken().getPosition(caretOffset);
+                JPositionStyle y = xnode.getStartToken().getPosition(caretOffset);
                 if (y == JPositionStyle.START) {
                     completeExpr(caretOffset, completeLevel, x -> true, compilerContext, completionProposals);
                 }
@@ -300,7 +300,7 @@ public class HLCompletion implements JCompletion {
             }
             case "HNLiteralDefault": {
                 HNLiteralDefault xnode = (HNLiteralDefault) node;
-                JPositionStyle y = xnode.startToken().getPosition(caretOffset);
+                JPositionStyle y = xnode.getStartToken().getPosition(caretOffset);
                 if (y == JPositionStyle.START) {
                     completeExpr(caretOffset, completeLevel, x -> true, compilerContext, completionProposals);
                 } else if (y == JPositionStyle.AFTER) {
@@ -314,7 +314,7 @@ public class HLCompletion implements JCompletion {
                 JPositionStyle y = t.getPositionStrict(caretOffset);
                 if (y != null) {
                     return new JLocationContext(
-                            compilerContext.path(),
+                            compilerContext.getPath(),
                             t,
                             y,
                             null
@@ -324,11 +324,11 @@ public class HLCompletion implements JCompletion {
             }
             case "HNThis": {
                 HNThis n = (HNThis) node;
-                JToken t = n.startToken();
+                JToken t = n.getStartToken();
                 JPositionStyle y = t.getPositionStrict(caretOffset);
                 if (y != null) {
                     return new JLocationContext(
-                            compilerContext.path(),
+                            compilerContext.getPath(),
                             t,
                             y,
                             null
@@ -338,11 +338,11 @@ public class HLCompletion implements JCompletion {
             }
             case "HNSuper": {
                 HNSuper n = (HNSuper) node;
-                JToken t = n.startToken();
+                JToken t = n.getStartToken();
                 JPositionStyle y = t.getPositionStrict(caretOffset);
                 if (y != null) {
                     return new JLocationContext(
-                            compilerContext.path(),
+                            compilerContext.getPath(),
                             t,
                             y,
                             null
@@ -382,14 +382,14 @@ public class HLCompletion implements JCompletion {
             case "HNPars": {
                 HNPars n = (HNPars) node;
                 boolean completed = false;
-                JPositionStyle y = n.startToken().getPosition(caretOffset);
+                JPositionStyle y = n.getStartToken().getPosition(caretOffset);
                 if (y == JPositionStyle.END) {
                     //after binary operator
                     completeExpr(caretOffset, completeLevel, s -> true, compilerContext, completionProposals);
                     completed = true;
                 }
                 if (!completed) {
-                    y = n.endToken().getPosition(caretOffset);
+                    y = n.getEndToken().getPosition(caretOffset);
                     if (y == JPositionStyle.START) {
                         //after binary operator
                         completeExpr(caretOffset, completeLevel, s -> true, compilerContext, completionProposals);
@@ -401,7 +401,7 @@ public class HLCompletion implements JCompletion {
             case "HNExtends": {
                 HNExtends n = (HNExtends) node;
                 boolean completed = false;
-                JPositionStyle y = n.startToken().getPosition(caretOffset);
+                JPositionStyle y = n.getStartToken().getPosition(caretOffset);
                 if (y == JPositionStyle.START) {
                     completeTypes(caretOffset, completeLevel, s -> true, compilerContext, completionProposals);
                     completed = true;
@@ -433,7 +433,7 @@ public class HLCompletion implements JCompletion {
             case "HNBreak":
             case "HNContinue": {
                 HNBreakOrContinue n = (HNBreakOrContinue) node;
-                JPositionStyle posForReturn = n.startToken().getPosition(caretOffset);
+                JPositionStyle posForReturn = n.getStartToken().getPosition(caretOffset);
                 JToken expr = n.getLeaps();
                 if (posForReturn == JPositionStyle.START) {
                     completeStatement(caretOffset, completeLevel, x -> true, compilerContext, completionProposals);
@@ -441,14 +441,14 @@ public class HLCompletion implements JCompletion {
                 if (posForReturn == JPositionStyle.AFTER && expr != null) {
                     if (expr.containsCaret(caretOffset)) {
                         return new JLocationContext(
-                                compilerContext.path(),
-                                null, compilerContext.node().getPosition(caretOffset), null
+                                compilerContext.getPath(),
+                                null, compilerContext.getNode().getPosition(caretOffset), null
                         );
                     }
                 }
                 return new JLocationContext(
-                        compilerContext.path(),
-                        n.startToken(),
+                        compilerContext.getPath(),
+                        n.getStartToken(),
                         posForReturn,
                         null
                 );
@@ -473,7 +473,7 @@ public class HLCompletion implements JCompletion {
             }
             case "HNReturn": {
                 HNReturn n = (HNReturn) node;
-                JPositionStyle posForReturn = n.startToken().getPosition(caretOffset);
+                JPositionStyle posForReturn = n.getStartToken().getPosition(caretOffset);
                 JNode expr = n.getExpr();
                 if (posForReturn == JPositionStyle.START) {
                     completeStatement(caretOffset, completeLevel, x -> true, compilerContext, completionProposals);
@@ -482,14 +482,14 @@ public class HLCompletion implements JCompletion {
                     if (expr.containsCaret(caretOffset)) {
                         //will be processed later;
                         return new JLocationContext(
-                                compilerContext.path(),
-                                null, compilerContext.node().getPosition(caretOffset), null
+                                compilerContext.getPath(),
+                                null, compilerContext.getNode().getPosition(caretOffset), null
                         );
                     }
                 }
                 return new JLocationContext(
-                        compilerContext.path(),
-                        n.startToken(),
+                        compilerContext.getPath(),
+                        n.getStartToken(),
                         posForReturn,
                         null
                 );
@@ -548,7 +548,7 @@ public class HLCompletion implements JCompletion {
                         }
                     }
                     return new JLocationContext(
-                            compilerContext.path(),
+                            compilerContext.getPath(),
                             n.getNameToken(),
                             y,
                             null
@@ -584,8 +584,8 @@ public class HLCompletion implements JCompletion {
         }
         System.err.println("Not yet supported " + node.getClass().getSimpleName());
         return new JLocationContext(
-                compilerContext.path(),
-                null, compilerContext.node().getPosition(caretOffset), null
+                compilerContext.getPath(),
+                null, compilerContext.getNode().getPosition(caretOffset), null
         );
     }
 
@@ -593,9 +593,9 @@ public class HLCompletion implements JCompletion {
         if (completionProposals != null) {
             System.err.println("completeStatement");
 
-            completeBlocVarsAndMethods(caretOffset, completeLevel, prefix, compilerContext.node(), compilerContext, completionProposals);
+            completeBlocVarsAndMethods(caretOffset, completeLevel, prefix, compilerContext.getNode(), compilerContext, completionProposals);
             completeTypes(caretOffset, completeLevel, prefix, compilerContext, completionProposals);
-            JNode firstDeclaringParent = compilerContext.node();
+            JNode firstDeclaringParent = compilerContext.getNode();
             while (firstDeclaringParent != null &&
                     !(
                             (firstDeclaringParent instanceof HNBlock && ((HNBlock) firstDeclaringParent).getBlocType() != HNBlock.BlocType.IMPORT_BLOC)
@@ -627,14 +627,14 @@ public class HLCompletion implements JCompletion {
                 }
             }
             if (_cls) {
-                for (String kw : new String[]{"constructor", "operator"}) {
+                for (String kw : new String[]{"init", "operator"}) {
                     if (prefix.test(kw)) {
                         completionProposals.add(HCompletionProposals.proposeKeyword(caretOffset, kw));
                     }
                 }
             }
             completeTypes(caretOffset, completeLevel, prefix, compilerContext, completionProposals);
-            completeBlocVarsAndMethods(caretOffset, completeLevel, prefix, compilerContext.node(), compilerContext, completionProposals);
+            completeBlocVarsAndMethods(caretOffset, completeLevel, prefix, compilerContext.getNode(), compilerContext, completionProposals);
             completeTypes(caretOffset, completeLevel, prefix, compilerContext, completionProposals);
 
             for (String kw : new String[]{"fun", "var", "val", "class"}) {
@@ -648,7 +648,7 @@ public class HLCompletion implements JCompletion {
 //            }
 //        }
 //        if(n.getBlocType()== HNBlock.BlocType.CLASS_BODY){
-//            completionProposals.add(HCompletionProposals.proposeKeyword(caretOffset, "constructor"));
+//            completionProposals.add(HCompletionProposals.proposeKeyword(caretOffset, "init"));
 //            completionProposals.add(HCompletionProposals.proposeKeyword(caretOffset, "operator"));
 //        }
             completeTypes(caretOffset, completeLevel, prefix, compilerContext, completionProposals);
@@ -663,7 +663,7 @@ public class HLCompletion implements JCompletion {
                     completionProposals.add(HCompletionProposals.proposeKeyword(caretOffset, kw));
                 }
             }
-            completeBlocVarsAndMethods(caretOffset, completeLevel, prefix, compilerContext.node(), compilerContext, completionProposals);
+            completeBlocVarsAndMethods(caretOffset, completeLevel, prefix, compilerContext.getNode(), compilerContext, completionProposals);
         }
     }
 

@@ -12,7 +12,7 @@ public class CompareToDifferentInvokable extends CompareToBaseInvokable {
 
     @Override
     public Object invoke(JInvokeContext context) {
-        int v = (int) base.invoke(context);
+        int v = (int) getBase().invoke(context);
         return v != 0;
     }
 }

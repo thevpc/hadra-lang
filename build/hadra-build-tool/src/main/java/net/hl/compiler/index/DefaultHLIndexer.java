@@ -364,7 +364,8 @@ public class DefaultHLIndexer implements HLIndexer {
                 while (!typesToCheck.isEmpty()) {
                     String t = typesToCheck.pop();
                     for (HLIndexedField f2 : store.<HLIndexedField>searchElements(t, "Field", query)) {
-                        if (!Modifier.isPrivate(f2.getModifiers())) {
+                        //TODO fix me
+                        if (!f2.getAnnotations().contains("private")) {
                             all.add(f2);
                         }
                     }
@@ -399,7 +400,8 @@ public class DefaultHLIndexer implements HLIndexer {
                 while (!typesToCheck.isEmpty()) {
                     String t = typesToCheck.pop();
                     for (HLIndexedMethod f2 : store.<HLIndexedMethod>searchElements(t, "Method", query)) {
-                        if (!Modifier.isPrivate(f2.getModifiers())) {
+                        //TODO fix me
+                        if (!f2.getAnnotations().contains("private")) {
                             all.add(f2);
                         }
                     }

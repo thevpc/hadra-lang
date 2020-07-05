@@ -28,7 +28,7 @@ public class HNBrackets extends HNode {
         this();
         setItems(items);
         if(startToken==null && items.length>0){
-            startToken=items[0].startToken();
+            startToken=items[0].getStartToken();
         }
         setStartToken(startToken);
         setEndToken(endToken);
@@ -74,5 +74,18 @@ public class HNBrackets extends HNode {
     @Override
     public List<JNode> childrenNodes() {
         return Arrays.asList(items);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HNBrackets that = (HNBrackets) o;
+        return Arrays.equals(items, that.items);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(items);
     }
 }

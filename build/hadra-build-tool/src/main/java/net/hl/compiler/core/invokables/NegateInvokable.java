@@ -2,15 +2,14 @@ package net.hl.compiler.core.invokables;
 
 import net.vpc.common.jeep.JContext;
 import net.vpc.common.jeep.JInvokable;
+import net.vpc.common.jeep.JInvokeContext;
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypes;
-import net.vpc.common.jeep.impl.functions.AbstractJInvokable;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.util.JTypeUtils;
 
-public abstract class CompareToBaseInvokable extends AbstractJInvokableAdapterSpecial {
+public class NegateInvokable extends AbstractJInvokableAdapterSpecial {
 
-    public CompareToBaseInvokable(JInvokable base, JSignature signature, JContext context) {
+    public NegateInvokable(JInvokable base, JSignature signature, JContext context) {
         super(base,signature,context);
     }
 
@@ -18,4 +17,9 @@ public abstract class CompareToBaseInvokable extends AbstractJInvokableAdapterSp
         return JTypeUtils.forBoolean(context().types());
     }
 
+    @Override
+    public Object invoke(JInvokeContext context) {
+        boolean v = (boolean) getBase().invoke(context);
+        return !v;
+    }
 }

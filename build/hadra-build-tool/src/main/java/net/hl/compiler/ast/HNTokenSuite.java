@@ -22,7 +22,7 @@ public abstract class HNTokenSuite extends HNode {
     }
 
     public void addToken(JToken token){
-        if(startToken()==null){
+        if(getStartToken()==null){
             setStartToken(token);
         }
         setEndToken(token);

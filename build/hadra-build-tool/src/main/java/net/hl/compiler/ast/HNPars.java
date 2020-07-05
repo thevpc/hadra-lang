@@ -28,7 +28,7 @@ public class HNPars extends HNode {
         this();
         setItems(items);
         if (startToken == null && items.length > 0) {
-            startToken = items[0].startToken();
+            startToken = items[0].getStartToken();
         }
         setSeparators(separators);
         setStartToken(startToken);

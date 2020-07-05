@@ -74,7 +74,7 @@ public final class HadraLanguage extends DefaultJeep {
         config.addPatterns(new SeparatorsPattern("Separators3", HTokenIdOffsets.OFFSET_COMMA,
                 JTokenPatternOrder.valueOf(JTokenPatternOrder.ORDER_OPERATOR.getValue()-1,"BEFORE_OPERATOR"), //to force handling of '->' separator before '-' operator
                 JTokenType.Enums.TT_SEPARATOR,
-                ",", ";",":","->")
+                ",", ";",":","->","@")
         );
 
         //superscript powers
@@ -103,7 +103,7 @@ public final class HadraLanguage extends DefaultJeep {
                  "date","time","datetime",
                 "int8","int16","int32","int64","int128",
                 "uint8","uint16","uint32","uint64","uint128",
-                "uint","ulong","ref","unsafe","init"
+                "uint","ulong","ref","ptr","unsafe","init"
                 ); //"set", "get"
 //        this.tokens().config().addKeywords();
         config.setCStyleComments();
@@ -133,9 +133,10 @@ public final class HadraLanguage extends DefaultJeep {
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_6, "^", "^^");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_7, "&");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_8, "==", "!=", "===", "!==", "<>");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_9, "<", ">", "<=", ">=", ".<", ".>", ".<=", ".>=", "is");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_9, "<", ">", "<=", ">=", ".<", ".>", ".<=", ".>=");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_9, "is","in", "!is","!in");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_10, "<<", "<<<", ">>", ">>>");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_10, "..", "<..", "..<");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_10, "..", "<..", "..<","<..<");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_10, ":+", ":-");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_11, "+", "-",".+",".-");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_12, "*", "/", "%",".*","./",".%");
@@ -143,7 +144,7 @@ public final class HadraLanguage extends DefaultJeep {
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, ":*", ":**", ":***");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, "++", "--", "~",".++", ".--", ".~");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, ":++", ":--", ":~");
-        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_15, ".", "?", ".?", "??","::");
+        this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_15, ".", "?", "??","::","?.", ".?", "?.?");
 
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, "∘", "±", "∓", "∔", "∴", "∵", "∷");
         this.operators().declareBinaryOperators(JOperatorPrecedences.PRECEDENCE_13, "×", "÷");

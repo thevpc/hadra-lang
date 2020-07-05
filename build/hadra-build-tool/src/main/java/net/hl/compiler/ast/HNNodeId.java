@@ -69,6 +69,7 @@ public enum HNNodeId {
     H_STRING_INTEROP,
     H_MAP,
     H_MAP_ENTRY,
+    H_NAMED,
 
 
     X_INVOKABLE_CALL,

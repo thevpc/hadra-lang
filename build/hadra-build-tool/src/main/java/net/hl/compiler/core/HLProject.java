@@ -9,7 +9,6 @@ import net.hl.compiler.index.HLIndexer;
 import net.hl.compiler.core.invokables.HLJCompilerContext;
 import net.hl.compiler.core.invokables.JNodeHBlocJInvoke;
 import net.hl.compiler.utils.HNodeUtils;
-import net.hl.compiler.utils.HUtils;
 
 import java.util.*;
 
@@ -68,11 +67,10 @@ public class HLProject implements HLProjectContext{
     public void addCompilationUnit(JCompilationUnit c) {
         compilationUnits.add(c);
         JNode n = c.getAst();
-        if(metaPackageType.startToken()==null){
-            metaPackageType.setStartToken(n.startToken());
+        if(metaPackageType.getStartToken()==null){
+            metaPackageType.setStartToken(n.getStartToken());
         }
-        metaPackageType.setBody(new HNBlock(HNBlock.BlocType.GLOBAL_BODY, new HNode[0],metaPackageType.startToken(),metaPackageType.endToken()));
-        metaPackageType.setModifiers(HUtils.PUBLIC);
+        metaPackageType.setBody(new HNBlock(HNBlock.BlocType.GLOBAL_BODY, new HNode[0],metaPackageType.getStartToken(),metaPackageType.getEndToken()));
     }
 
 

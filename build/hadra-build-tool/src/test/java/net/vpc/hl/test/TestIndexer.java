@@ -27,13 +27,13 @@ public class TestIndexer {
                 new String[]{"a"},
                 new String[0],
                 "r",
-                "cls", 0, "test"
+                "cls", new String[0], "test"
         );
         HLIndexedMethod m2 = new HLIndexedMethod("m2", new String[0],
                 new String[]{"a"},
                 new String[0],
                 "r",
-                "cls", 0, "test"
+                "cls", new String[0], "test"
         );
         store.index("test", "Method", m1, true);
         store.index("test", "Method", m2, true);

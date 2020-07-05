@@ -1,7 +1,9 @@
 @data @const @final class Address(String street,String city);
-@enum class Gender{ MALE,FEMALE}
-@data @final class Person(String firstName=null,String lastName=null,Person father=null,Person mother=null,Date birthDate=null,Gender gender=MALE,Address address=Address("No","Where")){
-    constructor(){}
+@enum class Gender{MALE,FEMALE}
+@data @final class Person(
+    String firstName=null,String lastName=null,Person father=null,Person mother=null,
+    Date birthDate=null,Gender gender=MALE,Address address=Address("No","Where")){
+    init(){}
 }
 Person samy().{firstName="samy";gender=MALE};
 Person samy(firstName:"samy",gender:MALE);

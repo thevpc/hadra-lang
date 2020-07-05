@@ -124,7 +124,7 @@ public class TestTokenizer {
     public void testInterpolation1() {
         HL c = new HL();
         JTokenizer tokens = c.languageContext().tokens().of(
-                getClass().getResource("/net/vpc/hl/test/tokenizer/interpolation1.hl"), false, false);
+                getClass().getResource("/net/hl/test/tokenizer/interpolation1.hl"), false, false);
         for (JToken token : tokens) {
             System.out.println(token.sval + " :: " + token);
             if (token.pushState > 0) {
@@ -139,7 +139,7 @@ public class TestTokenizer {
     public void testInterpolation2() {
         HL c = new HL();
         JTokenizer tokens = c.languageContext().tokens().of(
-                getClass().getResource("/net/vpc/hl/test/tokenizer/interpolation2.hl"), false, false);
+                getClass().getResource("/net/hl/test/tokenizer/interpolation2.hl"), false, false);
         for (JToken token : tokens) {
             System.out.println(
                     token.def.ttype + ":" + token.def.id + ":" + token.sval + " :: " + token);
@@ -262,6 +262,16 @@ public class TestTokenizer {
         }
     }
 
+    @Test
+    public void testTokenizer07() {
+        HL hl = new HL();
+        JTokenizer tokens = _tokenizeResource("testTokenizer07.hl", hl, true);
+        String[] a = tokenizerSig(tokens);
+        for (String s : a) {
+            System.out.println(s);
+        }
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////
     // Helpers
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -275,12 +285,12 @@ public class TestTokenizer {
     }
 
     private String _stringResource(String resourceName) {
-        return JTextSourceFactory.fromURL(getClass().getResource("/net/vpc/hl/test/tokenizer/" + resourceName)).text();
+        return JTextSourceFactory.fromURL(getClass().getResource("/net/hl/test/tokenizer/" + resourceName)).text();
     }
 
     private JTokenizer _tokenizeResource(String resourceName, HL hl) {
         return hl.languageContext().tokens().of(
-                getClass().getResource("/net/vpc/hl/test/tokenizer/" + resourceName), false, false);
+                getClass().getResource("/net/hl/test/tokenizer/" + resourceName), false, false);
     }
 
     private void dump(JTokenizer tokens) {

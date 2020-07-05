@@ -159,8 +159,8 @@ public class HNIf extends HNode {
             this.type = type;
             this.placement = placement;
             this.castExpr = new HNCast(
-                    new HNTypeToken(type, expr.startToken()),
-                    expr, null,expr.startToken(), expr.endToken()
+                    new HNTypeToken(type, expr.getStartToken()),
+                    expr, null,expr.getStartToken(), expr.getEndToken()
             );
         }
 
@@ -215,11 +215,11 @@ public class HNIf extends HNode {
             this.whenNode=JNodeUtils.bind(this,whenNode,"when");
             this.doNode=JNodeUtils.bind(this,doNode,"do");
             this.impl = impl;
-            setStartToken(whenNode.startToken());
+            setStartToken(whenNode.getStartToken());
             if(doNode==null /*.startToken().startCharacterNumber<0*/){
-                setEndToken(whenNode.endToken());
+                setEndToken(whenNode.getEndToken());
             }else {
-                setEndToken(doNode.endToken());
+                setEndToken(doNode.getEndToken());
             }
         }
 

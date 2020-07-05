@@ -17,133 +17,160 @@ import java.util.List;
 
 public class HUtils {
 
-    public static final int READONLY = 0x00400000;
-    public static final int PACKAGE = 0x00800000;
-    public static final int CONST = 0x01000000;
-    public static final int STATIC = Modifier.STATIC;
-    public static final int PUBLIC = Modifier.PUBLIC;
+//    public static final int READONLY = 0x00400000;
+//    public static final int PACKAGE = 0x00800000;
+//    public static final int CONST = 0x01000000;
+//    public static final int STATIC = Modifier.STATIC;
+//    public static final int PUBLIC = Modifier.PUBLIC;
 
-    public static boolean isPackageProtected(int mod) {
-        return (mod & PACKAGE) != 0;
-    }
+//    public static boolean isPackageProtected(int mod) {
+//        return (mod & PACKAGE) != 0;
+//    }
 
-    public static boolean isReadOnly(int mod) {
-        return (mod & READONLY) != 0;
-    }
+//    public static boolean isReadOnly(int mod) {
+//        return (mod & READONLY) != 0;
+//    }
+//
+//    public static boolean isStatic(int modifiers) {
+//        return Modifier.isStatic(modifiers);
+//    }
+//
+//    public static boolean isPublic(int modifiers) {
+//        return Modifier.isPublic(modifiers);
+//    }
+////
+//    public static boolean isPrivate(int modifiers) {
+//        return Modifier.isPrivate(modifiers);
+//    }
 
-    public static boolean isStatic(int modifiers) {
-        return Modifier.isStatic(modifiers);
-    }
+//    public static boolean isProtected(int modifiers) {
+//        return Modifier.isProtected(modifiers);
+//    }
 
-    public static boolean isPublic(int modifiers) {
-        return Modifier.isPublic(modifiers);
-    }
+//    public static final String modifiersToString(int modifiers) {
+//        List<String> sb = new ArrayList<>();
+//        if (Modifier.isPublic(modifiers)) {
+//            sb.add("public");
+//        } else if (Modifier.isProtected(modifiers)) {
+//            sb.add("protected");
+//        } else if (Modifier.isPrivate(modifiers)) {
+//            sb.add("private");
+//        } else if ((modifiers & PACKAGE) != 0) {
+//            sb.add("package");
+//        }
+////        else{
+////            sb.add("public");
+////        }
+//        if (Modifier.isStatic(modifiers)) {
+//            sb.add("static");
+//        }
+//        if (Modifier.isAbstract(modifiers)) {
+//            sb.add("abstract");
+//        }
+//        if (Modifier.isFinal(modifiers)) {
+//            sb.add("final");
+//        }
+//        if (Modifier.isTransient(modifiers)) {
+//            sb.add("transient");
+//        }
+//        if (Modifier.isVolatile(modifiers)) {
+//            sb.add("volatile");
+//        }
+//        if (Modifier.isNative(modifiers)) {
+//            sb.add("native");
+//        }
+//        if (Modifier.isStrict(modifiers)) {
+//            sb.add("strict");
+//        }
+//        if ((modifiers & READONLY) != 0) {
+//            sb.add("readonly");
+//        }
+//        return String.join(" ", sb);
+//    }
 
-    public static boolean isPrivate(int modifiers) {
-        return Modifier.isPrivate(modifiers);
-    }
-
-    public static boolean isProtected(int modifiers) {
-        return Modifier.isProtected(modifiers);
-    }
-
-    public static final String modifiersToString(int modifiers) {
-        List<String> sb = new ArrayList<>();
-        if (Modifier.isPublic(modifiers)) {
-            sb.add("public");
-        } else if (Modifier.isProtected(modifiers)) {
-            sb.add("protected");
-        } else if (Modifier.isPrivate(modifiers)) {
-            sb.add("private");
-        } else if ((modifiers & PACKAGE) != 0) {
-            sb.add("package");
-        }
-//        else{
+//    public static final String modifiersToString0(int modifiers) {
+//        List<String> sb = new ArrayList<>();
+//        if (Modifier.isPublic(modifiers)) {
 //            sb.add("public");
 //        }
-        if (Modifier.isStatic(modifiers)) {
-            sb.add("static");
-        }
-        if (Modifier.isAbstract(modifiers)) {
-            sb.add("abstract");
-        }
-        if (Modifier.isFinal(modifiers)) {
-            sb.add("final");
-        }
-        if (Modifier.isTransient(modifiers)) {
-            sb.add("transient");
-        }
-        if (Modifier.isVolatile(modifiers)) {
-            sb.add("volatile");
-        }
-        if (Modifier.isNative(modifiers)) {
-            sb.add("native");
-        }
-        if (Modifier.isStrict(modifiers)) {
-            sb.add("strict");
-        }
-        if ((modifiers & READONLY) != 0) {
-            sb.add("readonly");
-        }
-        return String.join(" ", sb);
-    }
-
-    public static final String modifiersToString0(int modifiers) {
-        List<String> sb = new ArrayList<>();
-        if (Modifier.isPublic(modifiers)) {
-            sb.add("public");
-        }
-        if (Modifier.isProtected(modifiers)) {
-            sb.add("protected");
-        }
-        if (Modifier.isPrivate(modifiers)) {
-            sb.add("private");
-        }
-        if ((modifiers & PACKAGE) != 0) {
-            sb.add("package");
-        }
-//        else{
-//            sb.add("public");
+//        if (Modifier.isProtected(modifiers)) {
+//            sb.add("protected");
 //        }
-        if (Modifier.isStatic(modifiers)) {
-            sb.add("static");
-        }
-        if (Modifier.isAbstract(modifiers)) {
-            sb.add("abstract");
-        }
-        if (Modifier.isFinal(modifiers)) {
-            sb.add("final");
-        }
-        if (Modifier.isTransient(modifiers)) {
-            sb.add("transient");
-        }
-        if (Modifier.isVolatile(modifiers)) {
-            sb.add("volatile");
-        }
-        if (Modifier.isNative(modifiers)) {
-            sb.add("native");
-        }
-        if (Modifier.isStrict(modifiers)) {
-            sb.add("strict");
-        }
-        if ((modifiers & READONLY) != 0) {
-            sb.add("readonly");
-        }
-        return String.join(" ", sb);
-    }
+//        if (Modifier.isPrivate(modifiers)) {
+//            sb.add("private");
+//        }
+//        if ((modifiers & PACKAGE) != 0) {
+//            sb.add("package");
+//        }
+////        else{
+////            sb.add("public");
+////        }
+//        if (Modifier.isStatic(modifiers)) {
+//            sb.add("static");
+//        }
+//        if (Modifier.isAbstract(modifiers)) {
+//            sb.add("abstract");
+//        }
+//        if (Modifier.isFinal(modifiers)) {
+//            sb.add("final");
+//        }
+//        if (Modifier.isTransient(modifiers)) {
+//            sb.add("transient");
+//        }
+//        if (Modifier.isVolatile(modifiers)) {
+//            sb.add("volatile");
+//        }
+//        if (Modifier.isNative(modifiers)) {
+//            sb.add("native");
+//        }
+//        if (Modifier.isStrict(modifiers)) {
+//            sb.add("strict");
+//        }
+//        if ((modifiers & READONLY) != 0) {
+//            sb.add("readonly");
+//        }
+//        return String.join(" ", sb);
+//    }
 
-    public static int publifyModifiers(int modifiers) {
-        if (!Modifier.isPrivate(modifiers)
-                && !Modifier.isProtected(modifiers)
-                && !HUtils.isPackageProtected(modifiers)) {
-            //default is public!
-            modifiers |= Modifier.PUBLIC;
+//    public static int publifyModifiers(int modifiers) {
+//        if (!Modifier.isPrivate(modifiers)
+//                && !Modifier.isProtected(modifiers)
+//                && !HUtils.isPackageProtected(modifiers)) {
+//            //default is public!
+//            modifiers |= Modifier.PUBLIC;
+//        }
+//        return modifiers;
+//    }
+
+    public static HNAnnotationCall[] publifyModifiers(HNAnnotationCall[] calls) {
+        HNAnnotationList li=new HNAnnotationList(
+                calls,null,null,null
+        );
+        li=publifyModifiers(li);
+        return li.getChildren();
+    }
+    public static HNAnnotationList publifyModifiers(HNAnnotationList modifiers) {
+        if(
+                !modifiers.containsModifier("private")
+                && !modifiers.containsModifier("protected")
+                && !modifiers.containsModifier("public")
+        ){
+            modifiers=modifiers.addModifier("public");
         }
         return modifiers;
     }
 
-    public static int statifyModifiers(int modifiers) {
-        modifiers |= Modifier.STATIC;
+    public static HNAnnotationCall[] statifyModifiers(HNAnnotationCall[] calls) {
+        HNAnnotationList li=new HNAnnotationList(
+                calls,null,null,null
+        );
+        li=statifyModifiers(li);
+        return li.getChildren();
+    }
+    public static HNAnnotationList statifyModifiers(HNAnnotationList modifiers) {
+        if(!modifiers.containsModifier("static")){
+            modifiers=modifiers.addModifier("static");
+        }
         return modifiers;
     }
 
@@ -264,7 +291,7 @@ public class HUtils {
     }
     public static JTextSource getSource(JNode node) {
         while (node != null) {
-            Object ss = node.userObjects().get(JTextSource.class.getName());
+            Object ss = node.getUserObjects().get(JTextSource.class.getName());
             if(ss instanceof JTextSource){
                 return (JTextSource)ss;
             }

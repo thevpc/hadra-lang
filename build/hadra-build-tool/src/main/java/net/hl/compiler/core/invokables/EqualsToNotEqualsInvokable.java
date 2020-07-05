@@ -12,7 +12,7 @@ public class EqualsToNotEqualsInvokable extends CompareToBaseInvokable {
 
     @Override
     public Object invoke(JInvokeContext context) {
-        boolean v = (boolean) base.invoke(context);
+        boolean v = (boolean) getBase().invoke(context);
         return !v;
     }
 }

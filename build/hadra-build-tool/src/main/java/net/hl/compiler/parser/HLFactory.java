@@ -1,12 +1,12 @@
 package net.hl.compiler.parser;
 
+import net.hl.compiler.core.HTokenId;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.JParserNodeFactory;
 import net.vpc.common.jeep.core.nodes.JNodeTokens;
 import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTokenUtils;
-import net.hl.compiler.utils.HUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,7 +76,7 @@ public class HLFactory implements JParserNodeFactory<HNode> {
         HNBrackets p=(HNBrackets) indices;
         return new HNParsPostfix(o, Arrays.asList(p.getItems()),
                 nodeTokens.getStart(),
-                p.startToken(),
+                p.getStartToken(),
                 Arrays.asList(p.getSeparators()),
                 nodeTokens.getEnd());
 
@@ -96,7 +96,7 @@ public class HLFactory implements JParserNodeFactory<HNode> {
         HNPars p=(HNPars) indices;
         return new HNParsPostfix(o, Arrays.asList(p.getItems()),
                 nodeTokens.getStart(),
-                p.startToken(),
+                p.getStartToken(),
                 Arrays.asList(p.getSeparators()),
                 nodeTokens.getEnd());
     }
@@ -180,59 +180,51 @@ public class HLFactory implements JParserNodeFactory<HNode> {
     }
 
     public HNode createBinaryOperatorNode(JToken op, HNode o1, HNode o2, JNodeTokens nodeTokens) {
-        switch (op.image) {
-            case "=": {
+        switch (op.id()) {
+            case HTokenId.EQ: {
                 return new HNAssign(o1, op, o2, nodeTokens.getStart(),nodeTokens.getEnd());
             }
-            case "->": {
+            case HTokenId.SEQ_MINUS_EQ: {
                 return createLambdaExpression(o1, op, o2, nodeTokens);
             }
-            case "??": {
+            case HTokenId.QUESTION2: {
                 return new HNOpCoalesce(o1, op, o2, nodeTokens.getStart(),nodeTokens.getEnd());
             }
-            case "?": {
+            case HTokenId.QUESTION: {
                 return createNonNullExpr(o1, op, o2, nodeTokens);
             }
-            case ".": {
-                return createDotCheckedMember(o1, op, o2, nodeTokens);
+            case HTokenId.DOT: {
+                return createDotMember(o1, op, o2, false,false,nodeTokens);
             }
-            case ".?": {
-                return createApplyUncheckedMember(o1, op, o2, nodeTokens);
+            case HTokenId.SEQ_QUESTION_DOT: {
+                return createDotMember(o1, op, o2, false,true,nodeTokens);
+            }
+            case HTokenId.SEQ_DOT_QUESTION: {
+                return createDotMember(o1, op, o2, true,false,nodeTokens);
+            }
+            case HTokenId.SEQ_QUESTION_DOT_QUESTION: {
+                return createDotMember(o1, op, o2, true,true,nodeTokens);
             }
         }
         return new HNOpBinaryCall(op, o1, o2, nodeTokens.getStart(),nodeTokens.getEnd());
     }
 
-    public HNode createApplyUncheckedMember(HNode o1, JToken op, HNode o2, JNodeTokens nodeTokens) {
-        return new HNOpDot(o1, op, o2,
-                nodeTokens.getStart(),nodeTokens.getEnd()
-        ).setUncheckedMember(true);
-//        return new HNFieldUnchecked(o1, op,
-//                o2,
-//                startToken,o2.endToken());
-//        if (o2 instanceof HNIdentifier) {
-//            return new HNFieldUnchecked(o1, op,
-//                    o2,
-//                    startToken,o2.endToken());
-//        } else if (o2 instanceof HXInvokableCall) {
-//            throw new JFixMeLaterException();
-////                    return new HNMethodUncheckedCall(
-////                            ((HXInvokableCall) node.getArg2()).getName(),
-////                            ((HXInvokableCall) node.getArg2()).getArgs(),
-////                            new JNodeHApplyUncheckedOperator(node.getArg1(), node.token()),
-////                            node.getArg2().token()
-////                    ).setUnchecked(true);
-//        } else {
-//            log().error("S046", "cannot call '.?' operator (UncheckedMember) on " + o2.getClass().getSimpleName(),
-//                    o2.startToken());
-//            return new HNOpBinaryCall(op, o1, o2, startToken, endToken);
-//        }
-    }
+//    public HNode createApplyUncheckedMember(HNode o1, JToken op, HNode o2, JNodeTokens nodeTokens) {
+//        return new HNOpDot(o1, op, o2,
+//                nodeTokens.getStart(),nodeTokens.getEnd()
+//        ).setUncheckedMember(true);
+//    }
+//
+//    public HNode createDotCheckedMember(HNode o1, JToken op, HNode o2, JNodeTokens nodeTokens) {
+//        return new HNOpDot(o1, op, o2,
+//                nodeTokens.getStart(),nodeTokens.getEnd()
+//        );
+//    }
 
-    public HNode createDotCheckedMember(HNode o1, JToken op, HNode o2, JNodeTokens nodeTokens) {
+    public HNode createDotMember(HNode o1, JToken op, HNode o2, boolean unchecked,boolean nullable,JNodeTokens nodeTokens) {
         return new HNOpDot(o1, op, o2,
                 nodeTokens.getStart(),nodeTokens.getEnd()
-        );
+        ).setNullableInstance(nullable).setUncheckedMember(unchecked);
     }
 
     public HNode createNonNullExpr(HNode o1, JToken op, HNode o2,JNodeTokens nodeTokens) {
@@ -243,7 +235,7 @@ public class HLFactory implements JParserNodeFactory<HNode> {
 
     @Override
     public HNode createImplicitOperatorNode(HNode o1, HNode o2, JNodeTokens nodeTokens) {
-        log().error("X300", null, "Implicit operator not allowed", o1.startToken());
+        log().error("X300", null, "Implicit operator not allowed", o1.getStartToken());
         return new HNTuple(new HNode[]{o1, o2}, nodeTokens.getStart(),new JToken[0], nodeTokens.getEnd());
     }
 
@@ -258,25 +250,26 @@ public class HLFactory implements JParserNodeFactory<HNode> {
                                     HNodeUtils.toDeclareTokenIdentifier((HNIdentifier) item),
                                     null,
                                     (HNTypeToken) null,
-                                    HTokenUtils.createToken("="), item.startToken(),
-                                    item.endToken()
+                                    HTokenUtils.createToken("="), item.getStartToken(),
+                                    item.getEndToken()
                             )
                     );
                 } else if (item instanceof HNDeclareIdentifier) {
                     HNDeclareIdentifier a1 = (HNDeclareIdentifier) item;
                     if (a1.getInitValue() != null) {
-                        log().error("X301", "lambda expression", "unexpected default value for lambda expression parameter", a1.startToken());
+                        log().error("X301", "lambda expression", "unexpected default value for lambda expression parameter", a1.getStartToken());
                         a1.setInitValue(null);
                     }
-                    if (a1.getModifiers() != 0) {
-                        log().error("X302", "lambda expression", "lambda expression: unexpected modifiers " + HUtils.modifiersToString0(a1.getModifiers()), a1.startToken());
-                        a1.setModifiers(0);
+                    List<String> unacceptableCalls = HNodeUtils.filterModifierAnnotations(a1.getAnnotations(),"private", "protected", "public", "static", "final", "const");
+                    if (!unacceptableCalls.isEmpty()) {
+                        log().error("X302", "lambda expression", "lambda expression: unexpected modifiers " + String.join(",",unacceptableCalls)
+                                , a1.getStartToken());
                     }
                     lex.addArgument(a1);
                 } else {
                     log().error("X303", "lambda expression", "unexpected expression of type " +
                                     item.getClass().getSimpleName() + ". Was expecting identifier or declared identifier"
-                            , decl.startToken());
+                            , decl.getStartToken());
                 }
             }
         } else if (decl instanceof HNIdentifier) {
@@ -285,25 +278,25 @@ public class HLFactory implements JParserNodeFactory<HNode> {
                             HNodeUtils.toDeclareTokenIdentifier((HNIdentifier) decl),
                             null,
                             (HNTypeToken) null,
-                            HTokenUtils.createToken("="), decl.startToken(),
-                            decl.endToken()
+                            HTokenUtils.createToken("="), decl.getStartToken(),
+                            decl.getEndToken()
                     )
             );
         } else if (decl instanceof HNDeclareIdentifier) {
             HNDeclareIdentifier a1 = (HNDeclareIdentifier) decl;
             if (a1.getInitValue() != null) {
-                log().error("X304", "lambda expression", "unexpected default value for lambda expression parameter", a1.startToken());
+                log().error("X304", "lambda expression", "unexpected default value for lambda expression parameter", a1.getStartToken());
                 a1.setInitValue(null);
             }
-            if (a1.getModifiers() != 0) {
-                log().error("X305", "lambda expression", "unexpected modifiers " + HUtils.modifiersToString0(a1.getModifiers()), a1.startToken());
-                a1.setModifiers(0);
+            List<String> unacceptableCalls = HNodeUtils.filterModifierAnnotations(a1.getAnnotations(),"private", "protected", "public", "static", "final", "const");
+            if (!unacceptableCalls.isEmpty()) {
+                log().error("X305", "lambda expression", "unexpected modifiers " + String.join(",",unacceptableCalls), a1.getStartToken());
             }
             lex.addArgument(a1);
         } else {
             log().error("X306", "lambda expression", "unexpected expression of type " +
                             decl.getClass().getSimpleName() + ". Was expecting identifier or declared identifier"
-                    , decl.startToken());
+                    , decl.getStartToken());
         }
         lex.setBody(body);
         if (body instanceof HNBlock) {

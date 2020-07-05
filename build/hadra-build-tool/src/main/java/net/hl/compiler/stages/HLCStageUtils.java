@@ -9,18 +9,18 @@ import java.util.List;
 
 public class HLCStageUtils {
     public static List<JField> getNoTypeFields(HLJCompilerContext compilerContext) {
-        List<JField> list = (List<JField>) compilerContext.metaPackageType().userObjects().get("NoTypeFields");
+        List<JField> list = (List<JField>) compilerContext.metaPackageType().getUserObjects().get("NoTypeFields");
         if(list==null){
             list=new ArrayList<>();
-            compilerContext.metaPackageType().userObjects().put("NoTypeFields",list);
+            compilerContext.metaPackageType().getUserObjects().put("NoTypeFields",list);
         }
         return list;
     }
     public static List<JMethod> getNoTypeMethods(HLJCompilerContext compilerContext) {
-        List<JMethod> list = (List<JMethod>) compilerContext.metaPackageType().userObjects().get("NoTypeMethods");
+        List<JMethod> list = (List<JMethod>) compilerContext.metaPackageType().getUserObjects().get("NoTypeMethods");
         if(list==null){
             list=new ArrayList<>();
-            compilerContext.metaPackageType().userObjects().put("NoTypeMethods",list);
+            compilerContext.metaPackageType().getUserObjects().put("NoTypeMethods",list);
         }
         return list;
     }

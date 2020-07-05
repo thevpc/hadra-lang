@@ -196,7 +196,7 @@ public class HNTryCatch extends HNode {
 
         public JToken getOp() {
             for (JToken separator : getSeparators()) {
-                if(separator.id()== HTokenId.MINUS_GT){
+                if(separator.id()== HTokenId.SEQ_MINUS_GT){
                     return separator;
                 }
             }
@@ -204,7 +204,7 @@ public class HNTryCatch extends HNode {
         }
 
         public JToken getCatchToken() {
-            return startToken();
+            return getStartToken();
         }
 
         public HNode getDoNode() {

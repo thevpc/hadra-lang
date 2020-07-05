@@ -171,11 +171,77 @@ class JavaClassVisitor extends ClassVisitor {
         return cn;
     }
 
-    static int parseModifiers(int access){
-//        int modifiers = 0;
-//        if ((access & Opcodes.ACC_ABSTRACT) != 0) {
-//            modifiers |= Modifier.ABSTRACT;
-//        }
+    static String[] parseModifiers(int access){
+        List<String> mods=new ArrayList<>();
+        if ((access & Opcodes.ACC_ABSTRACT) != 0) {
+            mods.add("abstract");
+        }
+        if ((access & Opcodes.ACC_PRIVATE) != 0) {
+            mods.add("private");
+        }
+        if ((access & Opcodes.ACC_PROTECTED) != 0) {
+            mods.add("protected");
+        }
+        if ((access & Opcodes.ACC_ANNOTATION) != 0) {
+            mods.add("annotation");
+        }
+        if ((access & Opcodes.ACC_BRIDGE) != 0) {
+            mods.add("bridge");
+        }
+        if ((access & Opcodes.ACC_DEPRECATED) != 0) {
+            mods.add("deprecated");
+        }
+        if ((access & Opcodes.ACC_ENUM) != 0) {
+            mods.add("enum");
+        }
+        if ((access & Opcodes.ACC_FINAL) != 0) {
+            mods.add("final");
+        }
+        if ((access & Opcodes.ACC_INTERFACE) != 0) {
+            mods.add("interface");
+        }
+        if ((access & Opcodes.ACC_TRANSIENT) != 0) {
+            mods.add("transient");
+        }
+        if ((access & Opcodes.ACC_NATIVE) != 0) {
+            mods.add("native");
+        }
+        if ((access & Opcodes.ACC_VOLATILE) != 0) {
+            mods.add("volatile");
+        }
+        if ((access & Opcodes.ACC_SYNCHRONIZED) != 0) {
+            mods.add("synchronized");
+        }
+        if ((access & Opcodes.ACC_STATIC) != 0) {
+            mods.add("static");
+        }
+        if ((access & Opcodes.ACC_STRICT) != 0) {
+            mods.add("strictfp");
+        }
+        if ((access & Opcodes.ACC_SYNTHETIC) != 0) {
+            mods.add("synthetic");
+        }
+        if ((access & Opcodes.ACC_MANDATED) != 0) {
+            mods.add("mandated");
+        }
+        if ((access & Opcodes.ACC_MODULE) != 0) {
+            mods.add("module");
+        }
+        if ((access & Opcodes.ACC_SUPER) != 0) {
+            mods.add("super");
+        }
+        if ((access & Opcodes.ACC_TRANSITIVE) != 0) {
+            mods.add("transitive");
+        }
+        if ((access & Opcodes.ACC_OPEN) != 0) {
+            mods.add("open");
+        }
+        if ((access & Opcodes.ACC_RECORD) != 0) {
+            mods.add("record");
+        }
+        if ((access & Opcodes.ACC_STATIC_PHASE) != 0) {
+            mods.add("staticphase");
+        }
 //        if ((access & Opcodes.ACC_PUBLIC) != 0) {
 //            modifiers |= Modifier.PUBLIC;
 //        }
@@ -188,7 +254,7 @@ class JavaClassVisitor extends ClassVisitor {
 //        if ((access & Opcodes.ACC_PRIVATE) != 0) {
 //            modifiers |= Modifier.PRIVATE;
 //        }
-        return access;//modifiers;
+        return mods.toArray(new String[0]);//modifiers;
     }
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
@@ -221,8 +287,8 @@ class JavaClassVisitor extends ClassVisitor {
 
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        int modifiers = parseModifiers(access);
-        if(!JTypeUtils.isSynthetic(modifiers)) {
+        if(!JTypeUtils.isSynthetic(access)) {
+            String[] modifiers = parseModifiers(access);
             defaultHLIndexer.indexField0(new HLIndexedField(
                     currentFullName, parseFullName2(desc), name, new String[0], modifiers,
                     source

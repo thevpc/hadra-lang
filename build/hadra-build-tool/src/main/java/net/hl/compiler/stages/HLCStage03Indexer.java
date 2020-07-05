@@ -30,7 +30,7 @@ public class HLCStage03Indexer implements HLCStage{
                 Set<HLIndexedProject> hlIndexedProjects = indexer.searchProjects();
                 if (hlIndexedProjects.isEmpty()) {
                     if (project.getCompilationUnits().length > 0) {
-                        project.log().error("X404", null, "unable to resolve project", project.getCompilationUnits()[0].getAst().startToken());
+                        project.log().error("X404", null, "unable to resolve project", project.getCompilationUnits()[0].getAst().getStartToken());
                     } else {
                         project.log().error("X404", null, "unable to resolve project", null);
                     }

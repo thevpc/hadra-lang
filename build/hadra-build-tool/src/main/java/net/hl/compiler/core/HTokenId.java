@@ -887,9 +887,23 @@ public final class HTokenId {
     public static final int KEYWORD_PROTECTED = 551;
 
     /**
-     * Token Id for KEYWORD_PUBLIC
+     * Token Id for KEYWORD_PTR
      * <pre>
      * ID         : 552
+     * ID_NAME    : KEYWORD_PTR
+     * TYPE_ID    : -12
+     * TYPE_NAME  : TT_KEYWORD
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : ptr
+     * </pre>
+     */
+    public static final int KEYWORD_PTR = 552;
+
+    /**
+     * Token Id for KEYWORD_PUBLIC
+     * <pre>
+     * ID         : 553
      * ID_NAME    : KEYWORD_PUBLIC
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -898,12 +912,12 @@ public final class HTokenId {
      * LAYOUT     : public
      * </pre>
      */
-    public static final int KEYWORD_PUBLIC = 552;
+    public static final int KEYWORD_PUBLIC = 553;
 
     /**
      * Token Id for KEYWORD_READONLY
      * <pre>
-     * ID         : 553
+     * ID         : 554
      * ID_NAME    : KEYWORD_READONLY
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -912,12 +926,12 @@ public final class HTokenId {
      * LAYOUT     : readonly
      * </pre>
      */
-    public static final int KEYWORD_READONLY = 553;
+    public static final int KEYWORD_READONLY = 554;
 
     /**
      * Token Id for KEYWORD_RECORD
      * <pre>
-     * ID         : 554
+     * ID         : 555
      * ID_NAME    : KEYWORD_RECORD
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -926,12 +940,12 @@ public final class HTokenId {
      * LAYOUT     : record
      * </pre>
      */
-    public static final int KEYWORD_RECORD = 554;
+    public static final int KEYWORD_RECORD = 555;
 
     /**
      * Token Id for KEYWORD_REF
      * <pre>
-     * ID         : 555
+     * ID         : 556
      * ID_NAME    : KEYWORD_REF
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -940,12 +954,12 @@ public final class HTokenId {
      * LAYOUT     : ref
      * </pre>
      */
-    public static final int KEYWORD_REF = 555;
+    public static final int KEYWORD_REF = 556;
 
     /**
      * Token Id for KEYWORD_RETURN
      * <pre>
-     * ID         : 556
+     * ID         : 557
      * ID_NAME    : KEYWORD_RETURN
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -954,12 +968,12 @@ public final class HTokenId {
      * LAYOUT     : return
      * </pre>
      */
-    public static final int KEYWORD_RETURN = 556;
+    public static final int KEYWORD_RETURN = 557;
 
     /**
      * Token Id for KEYWORD_SHORT
      * <pre>
-     * ID         : 557
+     * ID         : 558
      * ID_NAME    : KEYWORD_SHORT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -968,12 +982,12 @@ public final class HTokenId {
      * LAYOUT     : short
      * </pre>
      */
-    public static final int KEYWORD_SHORT = 557;
+    public static final int KEYWORD_SHORT = 558;
 
     /**
      * Token Id for KEYWORD_STATIC
      * <pre>
-     * ID         : 558
+     * ID         : 559
      * ID_NAME    : KEYWORD_STATIC
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -982,12 +996,12 @@ public final class HTokenId {
      * LAYOUT     : static
      * </pre>
      */
-    public static final int KEYWORD_STATIC = 558;
+    public static final int KEYWORD_STATIC = 559;
 
     /**
      * Token Id for KEYWORD_STRICTFP
      * <pre>
-     * ID         : 559
+     * ID         : 560
      * ID_NAME    : KEYWORD_STRICTFP
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -996,12 +1010,12 @@ public final class HTokenId {
      * LAYOUT     : strictfp
      * </pre>
      */
-    public static final int KEYWORD_STRICTFP = 559;
+    public static final int KEYWORD_STRICTFP = 560;
 
     /**
      * Token Id for KEYWORD_STRING
      * <pre>
-     * ID         : 560
+     * ID         : 561
      * ID_NAME    : KEYWORD_STRING
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1010,12 +1024,12 @@ public final class HTokenId {
      * LAYOUT     : string
      * </pre>
      */
-    public static final int KEYWORD_STRING = 560;
+    public static final int KEYWORD_STRING = 561;
 
     /**
      * Token Id for KEYWORD_STRUCT
      * <pre>
-     * ID         : 561
+     * ID         : 562
      * ID_NAME    : KEYWORD_STRUCT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1024,12 +1038,12 @@ public final class HTokenId {
      * LAYOUT     : struct
      * </pre>
      */
-    public static final int KEYWORD_STRUCT = 561;
+    public static final int KEYWORD_STRUCT = 562;
 
     /**
      * Token Id for KEYWORD_SUPER
      * <pre>
-     * ID         : 562
+     * ID         : 563
      * ID_NAME    : KEYWORD_SUPER
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1038,12 +1052,12 @@ public final class HTokenId {
      * LAYOUT     : super
      * </pre>
      */
-    public static final int KEYWORD_SUPER = 562;
+    public static final int KEYWORD_SUPER = 563;
 
     /**
      * Token Id for KEYWORD_SWITCH
      * <pre>
-     * ID         : 563
+     * ID         : 564
      * ID_NAME    : KEYWORD_SWITCH
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1052,12 +1066,12 @@ public final class HTokenId {
      * LAYOUT     : switch
      * </pre>
      */
-    public static final int KEYWORD_SWITCH = 563;
+    public static final int KEYWORD_SWITCH = 564;
 
     /**
      * Token Id for KEYWORD_SYNCHRONIZED
      * <pre>
-     * ID         : 564
+     * ID         : 565
      * ID_NAME    : KEYWORD_SYNCHRONIZED
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1066,12 +1080,12 @@ public final class HTokenId {
      * LAYOUT     : synchronized
      * </pre>
      */
-    public static final int KEYWORD_SYNCHRONIZED = 564;
+    public static final int KEYWORD_SYNCHRONIZED = 565;
 
     /**
      * Token Id for KEYWORD_THIS
      * <pre>
-     * ID         : 565
+     * ID         : 566
      * ID_NAME    : KEYWORD_THIS
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1080,12 +1094,12 @@ public final class HTokenId {
      * LAYOUT     : this
      * </pre>
      */
-    public static final int KEYWORD_THIS = 565;
+    public static final int KEYWORD_THIS = 566;
 
     /**
      * Token Id for KEYWORD_TIME
      * <pre>
-     * ID         : 566
+     * ID         : 567
      * ID_NAME    : KEYWORD_TIME
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1094,12 +1108,12 @@ public final class HTokenId {
      * LAYOUT     : time
      * </pre>
      */
-    public static final int KEYWORD_TIME = 566;
+    public static final int KEYWORD_TIME = 567;
 
     /**
      * Token Id for KEYWORD_TRANSIENT
      * <pre>
-     * ID         : 567
+     * ID         : 568
      * ID_NAME    : KEYWORD_TRANSIENT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1108,12 +1122,12 @@ public final class HTokenId {
      * LAYOUT     : transient
      * </pre>
      */
-    public static final int KEYWORD_TRANSIENT = 567;
+    public static final int KEYWORD_TRANSIENT = 568;
 
     /**
      * Token Id for KEYWORD_TRUE
      * <pre>
-     * ID         : 568
+     * ID         : 569
      * ID_NAME    : KEYWORD_TRUE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1122,12 +1136,12 @@ public final class HTokenId {
      * LAYOUT     : true
      * </pre>
      */
-    public static final int KEYWORD_TRUE = 568;
+    public static final int KEYWORD_TRUE = 569;
 
     /**
      * Token Id for KEYWORD_TRY
      * <pre>
-     * ID         : 569
+     * ID         : 570
      * ID_NAME    : KEYWORD_TRY
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1136,12 +1150,12 @@ public final class HTokenId {
      * LAYOUT     : try
      * </pre>
      */
-    public static final int KEYWORD_TRY = 569;
+    public static final int KEYWORD_TRY = 570;
 
     /**
      * Token Id for KEYWORD_UINT
      * <pre>
-     * ID         : 570
+     * ID         : 571
      * ID_NAME    : KEYWORD_UINT
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1150,12 +1164,12 @@ public final class HTokenId {
      * LAYOUT     : uint
      * </pre>
      */
-    public static final int KEYWORD_UINT = 570;
+    public static final int KEYWORD_UINT = 571;
 
     /**
      * Token Id for KEYWORD_UINT128
      * <pre>
-     * ID         : 571
+     * ID         : 572
      * ID_NAME    : KEYWORD_UINT128
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1164,12 +1178,12 @@ public final class HTokenId {
      * LAYOUT     : uint128
      * </pre>
      */
-    public static final int KEYWORD_UINT128 = 571;
+    public static final int KEYWORD_UINT128 = 572;
 
     /**
      * Token Id for KEYWORD_UINT16
      * <pre>
-     * ID         : 572
+     * ID         : 573
      * ID_NAME    : KEYWORD_UINT16
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1178,12 +1192,12 @@ public final class HTokenId {
      * LAYOUT     : uint16
      * </pre>
      */
-    public static final int KEYWORD_UINT16 = 572;
+    public static final int KEYWORD_UINT16 = 573;
 
     /**
      * Token Id for KEYWORD_UINT32
      * <pre>
-     * ID         : 573
+     * ID         : 574
      * ID_NAME    : KEYWORD_UINT32
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1192,12 +1206,12 @@ public final class HTokenId {
      * LAYOUT     : uint32
      * </pre>
      */
-    public static final int KEYWORD_UINT32 = 573;
+    public static final int KEYWORD_UINT32 = 574;
 
     /**
      * Token Id for KEYWORD_UINT64
      * <pre>
-     * ID         : 574
+     * ID         : 575
      * ID_NAME    : KEYWORD_UINT64
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1206,12 +1220,12 @@ public final class HTokenId {
      * LAYOUT     : uint64
      * </pre>
      */
-    public static final int KEYWORD_UINT64 = 574;
+    public static final int KEYWORD_UINT64 = 575;
 
     /**
      * Token Id for KEYWORD_UINT8
      * <pre>
-     * ID         : 575
+     * ID         : 576
      * ID_NAME    : KEYWORD_UINT8
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1220,12 +1234,12 @@ public final class HTokenId {
      * LAYOUT     : uint8
      * </pre>
      */
-    public static final int KEYWORD_UINT8 = 575;
+    public static final int KEYWORD_UINT8 = 576;
 
     /**
      * Token Id for KEYWORD_ULONG
      * <pre>
-     * ID         : 576
+     * ID         : 577
      * ID_NAME    : KEYWORD_ULONG
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1234,12 +1248,12 @@ public final class HTokenId {
      * LAYOUT     : ulong
      * </pre>
      */
-    public static final int KEYWORD_ULONG = 576;
+    public static final int KEYWORD_ULONG = 577;
 
     /**
      * Token Id for KEYWORD_UNSAFE
      * <pre>
-     * ID         : 577
+     * ID         : 578
      * ID_NAME    : KEYWORD_UNSAFE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1248,12 +1262,12 @@ public final class HTokenId {
      * LAYOUT     : unsafe
      * </pre>
      */
-    public static final int KEYWORD_UNSAFE = 577;
+    public static final int KEYWORD_UNSAFE = 578;
 
     /**
      * Token Id for KEYWORD_VAL
      * <pre>
-     * ID         : 578
+     * ID         : 579
      * ID_NAME    : KEYWORD_VAL
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1262,12 +1276,12 @@ public final class HTokenId {
      * LAYOUT     : val
      * </pre>
      */
-    public static final int KEYWORD_VAL = 578;
+    public static final int KEYWORD_VAL = 579;
 
     /**
      * Token Id for KEYWORD_VAR
      * <pre>
-     * ID         : 579
+     * ID         : 580
      * ID_NAME    : KEYWORD_VAR
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1276,12 +1290,12 @@ public final class HTokenId {
      * LAYOUT     : var
      * </pre>
      */
-    public static final int KEYWORD_VAR = 579;
+    public static final int KEYWORD_VAR = 580;
 
     /**
      * Token Id for KEYWORD_VOID
      * <pre>
-     * ID         : 580
+     * ID         : 581
      * ID_NAME    : KEYWORD_VOID
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1290,12 +1304,12 @@ public final class HTokenId {
      * LAYOUT     : void
      * </pre>
      */
-    public static final int KEYWORD_VOID = 580;
+    public static final int KEYWORD_VOID = 581;
 
     /**
      * Token Id for KEYWORD_VOLATILE
      * <pre>
-     * ID         : 581
+     * ID         : 582
      * ID_NAME    : KEYWORD_VOLATILE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1304,12 +1318,12 @@ public final class HTokenId {
      * LAYOUT     : volatile
      * </pre>
      */
-    public static final int KEYWORD_VOLATILE = 581;
+    public static final int KEYWORD_VOLATILE = 582;
 
     /**
      * Token Id for KEYWORD_WHILE
      * <pre>
-     * ID         : 582
+     * ID         : 583
      * ID_NAME    : KEYWORD_WHILE
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1318,12 +1332,12 @@ public final class HTokenId {
      * LAYOUT     : while
      * </pre>
      */
-    public static final int KEYWORD_WHILE = 582;
+    public static final int KEYWORD_WHILE = 583;
 
     /**
      * Token Id for KEYWORD_YIELD
      * <pre>
-     * ID         : 583
+     * ID         : 584
      * ID_NAME    : KEYWORD_YIELD
      * TYPE_ID    : -12
      * TYPE_NAME  : TT_KEYWORD
@@ -1332,7 +1346,7 @@ public final class HTokenId {
      * LAYOUT     : yield
      * </pre>
      */
-    public static final int KEYWORD_YIELD = 583;
+    public static final int KEYWORD_YIELD = 584;
 
     /**
      * Token Id for COMMA
@@ -1349,10 +1363,10 @@ public final class HTokenId {
     public static final int COMMA = 90;
 
     /**
-     * Token Id for MINUS_GT
+     * Token Id for SEQ_MINUS_GT
      * <pre>
      * ID         : 91
-     * ID_NAME    : MINUS_GT
+     * ID_NAME    : SEQ_MINUS_GT
      * TYPE_ID    : -13
      * TYPE_NAME  : TT_SEPARATOR
      * STATE_ID   : 4
@@ -1360,7 +1374,7 @@ public final class HTokenId {
      * LAYOUT     : ->
      * </pre>
      */
-    public static final int MINUS_GT = 91;
+    public static final int SEQ_MINUS_GT = 91;
 
     /**
      * Token Id for COLON
@@ -1391,10 +1405,24 @@ public final class HTokenId {
     public static final int SEMICOLON = 93;
 
     /**
-     * Token Id for EXCLAMATION
+     * Token Id for COMMERCIAL_AT
+     * <pre>
+     * ID         : 94
+     * ID_NAME    : COMMERCIAL_AT
+     * TYPE_ID    : -13
+     * TYPE_NAME  : TT_SEPARATOR
+     * STATE_ID   : 4
+     * STATE_NAME : STATE_STRING_INTERP_CODE
+     * LAYOUT     : @
+     * </pre>
+     */
+    public static final int COMMERCIAL_AT = 94;
+
+    /**
+     * Token Id for NOT
      * <pre>
      * ID         : 100
-     * ID_NAME    : EXCLAMATION
+     * ID_NAME    : NOT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1402,13 +1430,13 @@ public final class HTokenId {
      * LAYOUT     : !
      * </pre>
      */
-    public static final int EXCLAMATION = 100;
+    public static final int NOT = 100;
 
     /**
-     * Token Id for EXCLAMATION_EQ
+     * Token Id for NOT_EQ
      * <pre>
      * ID         : 101
-     * ID_NAME    : EXCLAMATION_EQ
+     * ID_NAME    : NOT_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1416,13 +1444,13 @@ public final class HTokenId {
      * LAYOUT     : !=
      * </pre>
      */
-    public static final int EXCLAMATION_EQ = 101;
+    public static final int NOT_EQ = 101;
 
     /**
-     * Token Id for EXCLAMATION_EQ2
+     * Token Id for NOT_EQ2
      * <pre>
      * ID         : 102
-     * ID_NAME    : EXCLAMATION_EQ2
+     * ID_NAME    : NOT_EQ2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1430,12 +1458,40 @@ public final class HTokenId {
      * LAYOUT     : !==
      * </pre>
      */
-    public static final int EXCLAMATION_EQ2 = 102;
+    public static final int NOT_EQ2 = 102;
+
+    /**
+     * Token Id for NOT_IN
+     * <pre>
+     * ID         : 103
+     * ID_NAME    : NOT_IN
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : !in
+     * </pre>
+     */
+    public static final int NOT_IN = 103;
+
+    /**
+     * Token Id for NOT_IS
+     * <pre>
+     * ID         : 104
+     * ID_NAME    : NOT_IS
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : !is
+     * </pre>
+     */
+    public static final int NOT_IS = 104;
 
     /**
      * Token Id for PERCENT
      * <pre>
-     * ID         : 103
+     * ID         : 105
      * ID_NAME    : PERCENT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1444,13 +1500,13 @@ public final class HTokenId {
      * LAYOUT     : %
      * </pre>
      */
-    public static final int PERCENT = 103;
+    public static final int PERCENT = 105;
 
     /**
-     * Token Id for PERCENT_EQ
+     * Token Id for SEQ_PERCENT_EQ
      * <pre>
-     * ID         : 104
-     * ID_NAME    : PERCENT_EQ
+     * ID         : 106
+     * ID_NAME    : SEQ_PERCENT_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1458,12 +1514,12 @@ public final class HTokenId {
      * LAYOUT     : %=
      * </pre>
      */
-    public static final int PERCENT_EQ = 104;
+    public static final int SEQ_PERCENT_EQ = 106;
 
     /**
      * Token Id for AMPERSAND
      * <pre>
-     * ID         : 105
+     * ID         : 107
      * ID_NAME    : AMPERSAND
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1472,12 +1528,12 @@ public final class HTokenId {
      * LAYOUT     : &
      * </pre>
      */
-    public static final int AMPERSAND = 105;
+    public static final int AMPERSAND = 107;
 
     /**
      * Token Id for AMPERSAND2
      * <pre>
-     * ID         : 106
+     * ID         : 108
      * ID_NAME    : AMPERSAND2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1486,13 +1542,13 @@ public final class HTokenId {
      * LAYOUT     : &&
      * </pre>
      */
-    public static final int AMPERSAND2 = 106;
+    public static final int AMPERSAND2 = 108;
 
     /**
-     * Token Id for AMPERSAND_EQ
+     * Token Id for SEQ_AMPERSAND_EQ
      * <pre>
-     * ID         : 107
-     * ID_NAME    : AMPERSAND_EQ
+     * ID         : 109
+     * ID_NAME    : SEQ_AMPERSAND_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1500,12 +1556,12 @@ public final class HTokenId {
      * LAYOUT     : &=
      * </pre>
      */
-    public static final int AMPERSAND_EQ = 107;
+    public static final int SEQ_AMPERSAND_EQ = 109;
 
     /**
      * Token Id for ASTERISK
      * <pre>
-     * ID         : 108
+     * ID         : 110
      * ID_NAME    : ASTERISK
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1514,12 +1570,12 @@ public final class HTokenId {
      * LAYOUT     : *
      * </pre>
      */
-    public static final int ASTERISK = 108;
+    public static final int ASTERISK = 110;
 
     /**
      * Token Id for ASTERISK2
      * <pre>
-     * ID         : 109
+     * ID         : 111
      * ID_NAME    : ASTERISK2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1528,12 +1584,12 @@ public final class HTokenId {
      * LAYOUT     : **
      * </pre>
      */
-    public static final int ASTERISK2 = 109;
+    public static final int ASTERISK2 = 111;
 
     /**
      * Token Id for ASTERISK3
      * <pre>
-     * ID         : 110
+     * ID         : 112
      * ID_NAME    : ASTERISK3
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1542,13 +1598,13 @@ public final class HTokenId {
      * LAYOUT     : ***
      * </pre>
      */
-    public static final int ASTERISK3 = 110;
+    public static final int ASTERISK3 = 112;
 
     /**
-     * Token Id for ASTERISK_EQ
+     * Token Id for SEQ_ASTERISK_EQ
      * <pre>
-     * ID         : 111
-     * ID_NAME    : ASTERISK_EQ
+     * ID         : 113
+     * ID_NAME    : SEQ_ASTERISK_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1556,12 +1612,12 @@ public final class HTokenId {
      * LAYOUT     : *=
      * </pre>
      */
-    public static final int ASTERISK_EQ = 111;
+    public static final int SEQ_ASTERISK_EQ = 113;
 
     /**
      * Token Id for PLUS
      * <pre>
-     * ID         : 112
+     * ID         : 114
      * ID_NAME    : PLUS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1570,12 +1626,12 @@ public final class HTokenId {
      * LAYOUT     : +
      * </pre>
      */
-    public static final int PLUS = 112;
+    public static final int PLUS = 114;
 
     /**
      * Token Id for PLUS2
      * <pre>
-     * ID         : 113
+     * ID         : 115
      * ID_NAME    : PLUS2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1584,13 +1640,13 @@ public final class HTokenId {
      * LAYOUT     : ++
      * </pre>
      */
-    public static final int PLUS2 = 113;
+    public static final int PLUS2 = 115;
 
     /**
-     * Token Id for PLUS_EQ
+     * Token Id for SEQ_PLUS_EQ
      * <pre>
-     * ID         : 114
-     * ID_NAME    : PLUS_EQ
+     * ID         : 116
+     * ID_NAME    : SEQ_PLUS_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1598,12 +1654,12 @@ public final class HTokenId {
      * LAYOUT     : +=
      * </pre>
      */
-    public static final int PLUS_EQ = 114;
+    public static final int SEQ_PLUS_EQ = 116;
 
     /**
      * Token Id for MINUS
      * <pre>
-     * ID         : 115
+     * ID         : 117
      * ID_NAME    : MINUS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1612,12 +1668,12 @@ public final class HTokenId {
      * LAYOUT     : -
      * </pre>
      */
-    public static final int MINUS = 115;
+    public static final int MINUS = 117;
 
     /**
      * Token Id for MINUS2
      * <pre>
-     * ID         : 116
+     * ID         : 118
      * ID_NAME    : MINUS2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1626,13 +1682,13 @@ public final class HTokenId {
      * LAYOUT     : --
      * </pre>
      */
-    public static final int MINUS2 = 116;
+    public static final int MINUS2 = 118;
 
     /**
-     * Token Id for MINUS_EQ
+     * Token Id for SEQ_MINUS_EQ
      * <pre>
-     * ID         : 117
-     * ID_NAME    : MINUS_EQ
+     * ID         : 119
+     * ID_NAME    : SEQ_MINUS_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1640,12 +1696,12 @@ public final class HTokenId {
      * LAYOUT     : -=
      * </pre>
      */
-    public static final int MINUS_EQ = 117;
+    public static final int SEQ_MINUS_EQ = 119;
 
     /**
      * Token Id for DOT
      * <pre>
-     * ID         : 118
+     * ID         : 120
      * ID_NAME    : DOT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1654,12 +1710,124 @@ public final class HTokenId {
      * LAYOUT     : .
      * </pre>
      */
-    public static final int DOT = 118;
+    public static final int DOT = 120;
+
+    /**
+     * Token Id for SEQ_DOT_PERCENT
+     * <pre>
+     * ID         : 121
+     * ID_NAME    : SEQ_DOT_PERCENT
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .%
+     * </pre>
+     */
+    public static final int SEQ_DOT_PERCENT = 121;
+
+    /**
+     * Token Id for SEQ_DOT_ASTERISK
+     * <pre>
+     * ID         : 122
+     * ID_NAME    : SEQ_DOT_ASTERISK
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .*
+     * </pre>
+     */
+    public static final int SEQ_DOT_ASTERISK = 122;
+
+    /**
+     * Token Id for DOT_ASTERISK2
+     * <pre>
+     * ID         : 123
+     * ID_NAME    : DOT_ASTERISK2
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .**
+     * </pre>
+     */
+    public static final int DOT_ASTERISK2 = 123;
+
+    /**
+     * Token Id for DOT_ASTERISK3
+     * <pre>
+     * ID         : 124
+     * ID_NAME    : DOT_ASTERISK3
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .***
+     * </pre>
+     */
+    public static final int DOT_ASTERISK3 = 124;
+
+    /**
+     * Token Id for SEQ_DOT_PLUS
+     * <pre>
+     * ID         : 125
+     * ID_NAME    : SEQ_DOT_PLUS
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .+
+     * </pre>
+     */
+    public static final int SEQ_DOT_PLUS = 125;
+
+    /**
+     * Token Id for DOT_PLUS2
+     * <pre>
+     * ID         : 126
+     * ID_NAME    : DOT_PLUS2
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .++
+     * </pre>
+     */
+    public static final int DOT_PLUS2 = 126;
+
+    /**
+     * Token Id for SEQ_DOT_MINUS
+     * <pre>
+     * ID         : 127
+     * ID_NAME    : SEQ_DOT_MINUS
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .-
+     * </pre>
+     */
+    public static final int SEQ_DOT_MINUS = 127;
+
+    /**
+     * Token Id for DOT_MINUS2
+     * <pre>
+     * ID         : 128
+     * ID_NAME    : DOT_MINUS2
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .--
+     * </pre>
+     */
+    public static final int DOT_MINUS2 = 128;
 
     /**
      * Token Id for DOT2
      * <pre>
-     * ID         : 119
+     * ID         : 129
      * ID_NAME    : DOT2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1668,12 +1836,12 @@ public final class HTokenId {
      * LAYOUT     : ..
      * </pre>
      */
-    public static final int DOT2 = 119;
+    public static final int DOT2 = 129;
 
     /**
      * Token Id for DOT3
      * <pre>
-     * ID         : 120
+     * ID         : 130
      * ID_NAME    : DOT3
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1682,12 +1850,12 @@ public final class HTokenId {
      * LAYOUT     : ...
      * </pre>
      */
-    public static final int DOT3 = 120;
+    public static final int DOT3 = 130;
 
     /**
      * Token Id for DOT2_LT
      * <pre>
-     * ID         : 121
+     * ID         : 131
      * ID_NAME    : DOT2_LT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1696,13 +1864,83 @@ public final class HTokenId {
      * LAYOUT     : ..<
      * </pre>
      */
-    public static final int DOT2_LT = 121;
+    public static final int DOT2_LT = 131;
 
     /**
-     * Token Id for DOT_QUESTION
+     * Token Id for SEQ_DOT_SOLIDUS
      * <pre>
-     * ID         : 122
-     * ID_NAME    : DOT_QUESTION
+     * ID         : 132
+     * ID_NAME    : SEQ_DOT_SOLIDUS
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : ./
+     * </pre>
+     */
+    public static final int SEQ_DOT_SOLIDUS = 132;
+
+    /**
+     * Token Id for SEQ_DOT_LT
+     * <pre>
+     * ID         : 133
+     * ID_NAME    : SEQ_DOT_LT
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .<
+     * </pre>
+     */
+    public static final int SEQ_DOT_LT = 133;
+
+    /**
+     * Token Id for SEQ_DOT_LT_EQ
+     * <pre>
+     * ID         : 134
+     * ID_NAME    : SEQ_DOT_LT_EQ
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .<=
+     * </pre>
+     */
+    public static final int SEQ_DOT_LT_EQ = 134;
+
+    /**
+     * Token Id for SEQ_DOT_GT
+     * <pre>
+     * ID         : 135
+     * ID_NAME    : SEQ_DOT_GT
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .>
+     * </pre>
+     */
+    public static final int SEQ_DOT_GT = 135;
+
+    /**
+     * Token Id for SEQ_DOT_GT_EQ
+     * <pre>
+     * ID         : 136
+     * ID_NAME    : SEQ_DOT_GT_EQ
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .>=
+     * </pre>
+     */
+    public static final int SEQ_DOT_GT_EQ = 136;
+
+    /**
+     * Token Id for SEQ_DOT_QUESTION
+     * <pre>
+     * ID         : 137
+     * ID_NAME    : SEQ_DOT_QUESTION
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1710,12 +1948,26 @@ public final class HTokenId {
      * LAYOUT     : .?
      * </pre>
      */
-    public static final int DOT_QUESTION = 122;
+    public static final int SEQ_DOT_QUESTION = 137;
+
+    /**
+     * Token Id for SEQ_DOT_TILDE
+     * <pre>
+     * ID         : 138
+     * ID_NAME    : SEQ_DOT_TILDE
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : .~
+     * </pre>
+     */
+    public static final int SEQ_DOT_TILDE = 138;
 
     /**
      * Token Id for SOLIDUS
      * <pre>
-     * ID         : 123
+     * ID         : 139
      * ID_NAME    : SOLIDUS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1724,13 +1976,13 @@ public final class HTokenId {
      * LAYOUT     : /
      * </pre>
      */
-    public static final int SOLIDUS = 123;
+    public static final int SOLIDUS = 139;
 
     /**
-     * Token Id for COLON_ASTERISK
+     * Token Id for SEQ_COLON_ASTERISK
      * <pre>
-     * ID         : 124
-     * ID_NAME    : COLON_ASTERISK
+     * ID         : 140
+     * ID_NAME    : SEQ_COLON_ASTERISK
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1738,12 +1990,12 @@ public final class HTokenId {
      * LAYOUT     : :*
      * </pre>
      */
-    public static final int COLON_ASTERISK = 124;
+    public static final int SEQ_COLON_ASTERISK = 140;
 
     /**
      * Token Id for COLON_ASTERISK2
      * <pre>
-     * ID         : 125
+     * ID         : 141
      * ID_NAME    : COLON_ASTERISK2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1752,12 +2004,12 @@ public final class HTokenId {
      * LAYOUT     : :**
      * </pre>
      */
-    public static final int COLON_ASTERISK2 = 125;
+    public static final int COLON_ASTERISK2 = 141;
 
     /**
      * Token Id for COLON_ASTERISK3
      * <pre>
-     * ID         : 126
+     * ID         : 142
      * ID_NAME    : COLON_ASTERISK3
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1766,13 +2018,13 @@ public final class HTokenId {
      * LAYOUT     : :***
      * </pre>
      */
-    public static final int COLON_ASTERISK3 = 126;
+    public static final int COLON_ASTERISK3 = 142;
 
     /**
-     * Token Id for COLON_PLUS
+     * Token Id for SEQ_COLON_PLUS
      * <pre>
-     * ID         : 127
-     * ID_NAME    : COLON_PLUS
+     * ID         : 143
+     * ID_NAME    : SEQ_COLON_PLUS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1780,12 +2032,12 @@ public final class HTokenId {
      * LAYOUT     : :+
      * </pre>
      */
-    public static final int COLON_PLUS = 127;
+    public static final int SEQ_COLON_PLUS = 143;
 
     /**
      * Token Id for COLON_PLUS2
      * <pre>
-     * ID         : 128
+     * ID         : 144
      * ID_NAME    : COLON_PLUS2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1794,13 +2046,13 @@ public final class HTokenId {
      * LAYOUT     : :++
      * </pre>
      */
-    public static final int COLON_PLUS2 = 128;
+    public static final int COLON_PLUS2 = 144;
 
     /**
-     * Token Id for COLON_MINUS
+     * Token Id for SEQ_COLON_MINUS
      * <pre>
-     * ID         : 129
-     * ID_NAME    : COLON_MINUS
+     * ID         : 145
+     * ID_NAME    : SEQ_COLON_MINUS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1808,12 +2060,12 @@ public final class HTokenId {
      * LAYOUT     : :-
      * </pre>
      */
-    public static final int COLON_MINUS = 129;
+    public static final int SEQ_COLON_MINUS = 145;
 
     /**
      * Token Id for COLON_MINUS2
      * <pre>
-     * ID         : 130
+     * ID         : 146
      * ID_NAME    : COLON_MINUS2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1822,12 +2074,12 @@ public final class HTokenId {
      * LAYOUT     : :--
      * </pre>
      */
-    public static final int COLON_MINUS2 = 130;
+    public static final int COLON_MINUS2 = 146;
 
     /**
      * Token Id for COLON2
      * <pre>
-     * ID         : 131
+     * ID         : 147
      * ID_NAME    : COLON2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1836,13 +2088,13 @@ public final class HTokenId {
      * LAYOUT     : ::
      * </pre>
      */
-    public static final int COLON2 = 131;
+    public static final int COLON2 = 147;
 
     /**
-     * Token Id for COLON_EQ
+     * Token Id for SEQ_COLON_EQ
      * <pre>
-     * ID         : 132
-     * ID_NAME    : COLON_EQ
+     * ID         : 148
+     * ID_NAME    : SEQ_COLON_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1850,13 +2102,13 @@ public final class HTokenId {
      * LAYOUT     : :=
      * </pre>
      */
-    public static final int COLON_EQ = 132;
+    public static final int SEQ_COLON_EQ = 148;
 
     /**
-     * Token Id for COLON_TILDE
+     * Token Id for SEQ_COLON_TILDE
      * <pre>
-     * ID         : 133
-     * ID_NAME    : COLON_TILDE
+     * ID         : 149
+     * ID_NAME    : SEQ_COLON_TILDE
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1864,12 +2116,12 @@ public final class HTokenId {
      * LAYOUT     : :~
      * </pre>
      */
-    public static final int COLON_TILDE = 133;
+    public static final int SEQ_COLON_TILDE = 149;
 
     /**
      * Token Id for LT
      * <pre>
-     * ID         : 134
+     * ID         : 150
      * ID_NAME    : LT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1878,13 +2130,13 @@ public final class HTokenId {
      * LAYOUT     : <
      * </pre>
      */
-    public static final int LT = 134;
+    public static final int LT = 150;
 
     /**
-     * Token Id for LT_MINUS
+     * Token Id for SEQ_LT_MINUS
      * <pre>
-     * ID         : 135
-     * ID_NAME    : LT_MINUS
+     * ID         : 151
+     * ID_NAME    : SEQ_LT_MINUS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1892,12 +2144,12 @@ public final class HTokenId {
      * LAYOUT     : <-
      * </pre>
      */
-    public static final int LT_MINUS = 135;
+    public static final int SEQ_LT_MINUS = 151;
 
     /**
      * Token Id for LT_DOT2
      * <pre>
-     * ID         : 136
+     * ID         : 152
      * ID_NAME    : LT_DOT2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1906,12 +2158,26 @@ public final class HTokenId {
      * LAYOUT     : <..
      * </pre>
      */
-    public static final int LT_DOT2 = 136;
+    public static final int LT_DOT2 = 152;
+
+    /**
+     * Token Id for LT_DOT2_LT
+     * <pre>
+     * ID         : 153
+     * ID_NAME    : LT_DOT2_LT
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : <..<
+     * </pre>
+     */
+    public static final int LT_DOT2_LT = 153;
 
     /**
      * Token Id for LT2
      * <pre>
-     * ID         : 137
+     * ID         : 154
      * ID_NAME    : LT2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1920,12 +2186,12 @@ public final class HTokenId {
      * LAYOUT     : <<
      * </pre>
      */
-    public static final int LT2 = 137;
+    public static final int LT2 = 154;
 
     /**
      * Token Id for LT3
      * <pre>
-     * ID         : 138
+     * ID         : 155
      * ID_NAME    : LT3
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1934,13 +2200,13 @@ public final class HTokenId {
      * LAYOUT     : <<<
      * </pre>
      */
-    public static final int LT3 = 138;
+    public static final int LT3 = 155;
 
     /**
-     * Token Id for LT_EQ
+     * Token Id for SEQ_LT_EQ
      * <pre>
-     * ID         : 139
-     * ID_NAME    : LT_EQ
+     * ID         : 156
+     * ID_NAME    : SEQ_LT_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1948,13 +2214,13 @@ public final class HTokenId {
      * LAYOUT     : <=
      * </pre>
      */
-    public static final int LT_EQ = 139;
+    public static final int SEQ_LT_EQ = 156;
 
     /**
-     * Token Id for LT_GT
+     * Token Id for SEQ_LT_GT
      * <pre>
-     * ID         : 140
-     * ID_NAME    : LT_GT
+     * ID         : 157
+     * ID_NAME    : SEQ_LT_GT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1962,12 +2228,12 @@ public final class HTokenId {
      * LAYOUT     : <>
      * </pre>
      */
-    public static final int LT_GT = 140;
+    public static final int SEQ_LT_GT = 157;
 
     /**
      * Token Id for EQ
      * <pre>
-     * ID         : 141
+     * ID         : 158
      * ID_NAME    : EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -1976,13 +2242,13 @@ public final class HTokenId {
      * LAYOUT     : =
      * </pre>
      */
-    public static final int EQ = 141;
+    public static final int EQ = 158;
 
     /**
-     * Token Id for EQ_LT
+     * Token Id for SEQ_EQ_LT
      * <pre>
-     * ID         : 142
-     * ID_NAME    : EQ_LT
+     * ID         : 159
+     * ID_NAME    : SEQ_EQ_LT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -1990,12 +2256,12 @@ public final class HTokenId {
      * LAYOUT     : =<
      * </pre>
      */
-    public static final int EQ_LT = 142;
+    public static final int SEQ_EQ_LT = 159;
 
     /**
      * Token Id for EQ2
      * <pre>
-     * ID         : 143
+     * ID         : 160
      * ID_NAME    : EQ2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2004,12 +2270,12 @@ public final class HTokenId {
      * LAYOUT     : ==
      * </pre>
      */
-    public static final int EQ2 = 143;
+    public static final int EQ2 = 160;
 
     /**
      * Token Id for EQ3
      * <pre>
-     * ID         : 144
+     * ID         : 161
      * ID_NAME    : EQ3
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2018,13 +2284,13 @@ public final class HTokenId {
      * LAYOUT     : ===
      * </pre>
      */
-    public static final int EQ3 = 144;
+    public static final int EQ3 = 161;
 
     /**
-     * Token Id for EQ_GT
+     * Token Id for SEQ_EQ_GT
      * <pre>
-     * ID         : 145
-     * ID_NAME    : EQ_GT
+     * ID         : 162
+     * ID_NAME    : SEQ_EQ_GT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -2032,12 +2298,12 @@ public final class HTokenId {
      * LAYOUT     : =>
      * </pre>
      */
-    public static final int EQ_GT = 145;
+    public static final int SEQ_EQ_GT = 162;
 
     /**
      * Token Id for GT
      * <pre>
-     * ID         : 146
+     * ID         : 163
      * ID_NAME    : GT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2046,13 +2312,13 @@ public final class HTokenId {
      * LAYOUT     : >
      * </pre>
      */
-    public static final int GT = 146;
+    public static final int GT = 163;
 
     /**
-     * Token Id for GT_EQ
+     * Token Id for SEQ_GT_EQ
      * <pre>
-     * ID         : 147
-     * ID_NAME    : GT_EQ
+     * ID         : 164
+     * ID_NAME    : SEQ_GT_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -2060,12 +2326,12 @@ public final class HTokenId {
      * LAYOUT     : >=
      * </pre>
      */
-    public static final int GT_EQ = 147;
+    public static final int SEQ_GT_EQ = 164;
 
     /**
      * Token Id for GT2
      * <pre>
-     * ID         : 148
+     * ID         : 165
      * ID_NAME    : GT2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2074,12 +2340,12 @@ public final class HTokenId {
      * LAYOUT     : >>
      * </pre>
      */
-    public static final int GT2 = 148;
+    public static final int GT2 = 165;
 
     /**
      * Token Id for GT3
      * <pre>
-     * ID         : 149
+     * ID         : 166
      * ID_NAME    : GT3
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2088,12 +2354,12 @@ public final class HTokenId {
      * LAYOUT     : >>>
      * </pre>
      */
-    public static final int GT3 = 149;
+    public static final int GT3 = 166;
 
     /**
      * Token Id for QUESTION
      * <pre>
-     * ID         : 150
+     * ID         : 167
      * ID_NAME    : QUESTION
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2102,12 +2368,40 @@ public final class HTokenId {
      * LAYOUT     : ?
      * </pre>
      */
-    public static final int QUESTION = 150;
+    public static final int QUESTION = 167;
+
+    /**
+     * Token Id for SEQ_QUESTION_DOT
+     * <pre>
+     * ID         : 168
+     * ID_NAME    : SEQ_QUESTION_DOT
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : ?.
+     * </pre>
+     */
+    public static final int SEQ_QUESTION_DOT = 168;
+
+    /**
+     * Token Id for SEQ_QUESTION_DOT_QUESTION
+     * <pre>
+     * ID         : 169
+     * ID_NAME    : SEQ_QUESTION_DOT_QUESTION
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : ?.?
+     * </pre>
+     */
+    public static final int SEQ_QUESTION_DOT_QUESTION = 169;
 
     /**
      * Token Id for QUESTION2
      * <pre>
-     * ID         : 151
+     * ID         : 170
      * ID_NAME    : QUESTION2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2116,12 +2410,12 @@ public final class HTokenId {
      * LAYOUT     : ??
      * </pre>
      */
-    public static final int QUESTION2 = 151;
+    public static final int QUESTION2 = 170;
 
     /**
      * Token Id for QUESTION2_EQ
      * <pre>
-     * ID         : 152
+     * ID         : 171
      * ID_NAME    : QUESTION2_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2130,12 +2424,12 @@ public final class HTokenId {
      * LAYOUT     : ??=
      * </pre>
      */
-    public static final int QUESTION2_EQ = 152;
+    public static final int QUESTION2_EQ = 171;
 
     /**
      * Token Id for CIRCUMFLEX
      * <pre>
-     * ID         : 153
+     * ID         : 172
      * ID_NAME    : CIRCUMFLEX
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2144,13 +2438,13 @@ public final class HTokenId {
      * LAYOUT     : ^
      * </pre>
      */
-    public static final int CIRCUMFLEX = 153;
+    public static final int CIRCUMFLEX = 172;
 
     /**
-     * Token Id for CIRCUMFLEX_EQ
+     * Token Id for SEQ_CIRCUMFLEX_EQ
      * <pre>
-     * ID         : 154
-     * ID_NAME    : CIRCUMFLEX_EQ
+     * ID         : 173
+     * ID_NAME    : SEQ_CIRCUMFLEX_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -2158,12 +2452,12 @@ public final class HTokenId {
      * LAYOUT     : ^=
      * </pre>
      */
-    public static final int CIRCUMFLEX_EQ = 154;
+    public static final int SEQ_CIRCUMFLEX_EQ = 173;
 
     /**
      * Token Id for CIRCUMFLEX2
      * <pre>
-     * ID         : 155
+     * ID         : 174
      * ID_NAME    : CIRCUMFLEX2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2172,13 +2466,27 @@ public final class HTokenId {
      * LAYOUT     : ^^
      * </pre>
      */
-    public static final int CIRCUMFLEX2 = 155;
+    public static final int CIRCUMFLEX2 = 174;
 
     /**
-     * Token Id for IS
+     * Token Id for SEQ_IN
      * <pre>
-     * ID         : 156
-     * ID_NAME    : IS
+     * ID         : 175
+     * ID_NAME    : SEQ_IN
+     * TYPE_ID    : -11
+     * TYPE_NAME  : TT_OPERATOR
+     * STATE_ID   : [1, 4]
+     * STATE_NAME : [STATE_DEFAULT, STATE_STRING_INTERP_CODE]
+     * LAYOUT     : in
+     * </pre>
+     */
+    public static final int SEQ_IN = 175;
+
+    /**
+     * Token Id for SEQ_IS
+     * <pre>
+     * ID         : 176
+     * ID_NAME    : SEQ_IS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -2186,12 +2494,12 @@ public final class HTokenId {
      * LAYOUT     : is
      * </pre>
      */
-    public static final int IS = 156;
+    public static final int SEQ_IS = 176;
 
     /**
      * Token Id for PIPE
      * <pre>
-     * ID         : 157
+     * ID         : 177
      * ID_NAME    : PIPE
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2200,13 +2508,13 @@ public final class HTokenId {
      * LAYOUT     : |
      * </pre>
      */
-    public static final int PIPE = 157;
+    public static final int PIPE = 177;
 
     /**
-     * Token Id for PIPE_EQ
+     * Token Id for SEQ_PIPE_EQ
      * <pre>
-     * ID         : 158
-     * ID_NAME    : PIPE_EQ
+     * ID         : 178
+     * ID_NAME    : SEQ_PIPE_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -2214,12 +2522,12 @@ public final class HTokenId {
      * LAYOUT     : |=
      * </pre>
      */
-    public static final int PIPE_EQ = 158;
+    public static final int SEQ_PIPE_EQ = 178;
 
     /**
      * Token Id for PIPE2
      * <pre>
-     * ID         : 159
+     * ID         : 179
      * ID_NAME    : PIPE2
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2228,12 +2536,12 @@ public final class HTokenId {
      * LAYOUT     : ||
      * </pre>
      */
-    public static final int PIPE2 = 159;
+    public static final int PIPE2 = 179;
 
     /**
      * Token Id for TILDE
      * <pre>
-     * ID         : 160
+     * ID         : 180
      * ID_NAME    : TILDE
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2242,13 +2550,13 @@ public final class HTokenId {
      * LAYOUT     : ~
      * </pre>
      */
-    public static final int TILDE = 160;
+    public static final int TILDE = 180;
 
     /**
-     * Token Id for TILDE_EQ
+     * Token Id for SEQ_TILDE_EQ
      * <pre>
-     * ID         : 161
-     * ID_NAME    : TILDE_EQ
+     * ID         : 181
+     * ID_NAME    : SEQ_TILDE_EQ
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
      * STATE_ID   : [1, 4]
@@ -2256,12 +2564,12 @@ public final class HTokenId {
      * LAYOUT     : ~=
      * </pre>
      */
-    public static final int TILDE_EQ = 161;
+    public static final int SEQ_TILDE_EQ = 181;
 
     /**
      * Token Id for PLUS_MINUS_SIGN
      * <pre>
-     * ID         : 162
+     * ID         : 182
      * ID_NAME    : PLUS_MINUS_SIGN
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2270,12 +2578,12 @@ public final class HTokenId {
      * LAYOUT     : ±
      * </pre>
      */
-    public static final int PLUS_MINUS_SIGN = 162;
+    public static final int PLUS_MINUS_SIGN = 182;
 
     /**
      * Token Id for MULTIPLICATION_SIGN
      * <pre>
-     * ID         : 163
+     * ID         : 183
      * ID_NAME    : MULTIPLICATION_SIGN
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2284,12 +2592,12 @@ public final class HTokenId {
      * LAYOUT     : ×
      * </pre>
      */
-    public static final int MULTIPLICATION_SIGN = 163;
+    public static final int MULTIPLICATION_SIGN = 183;
 
     /**
      * Token Id for DIVISION_SIGN
      * <pre>
-     * ID         : 164
+     * ID         : 184
      * ID_NAME    : DIVISION_SIGN
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2298,12 +2606,12 @@ public final class HTokenId {
      * LAYOUT     : ÷
      * </pre>
      */
-    public static final int DIVISION_SIGN = 164;
+    public static final int DIVISION_SIGN = 184;
 
     /**
      * Token Id for FOR_ALL
      * <pre>
-     * ID         : 165
+     * ID         : 185
      * ID_NAME    : FOR_ALL
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2312,12 +2620,12 @@ public final class HTokenId {
      * LAYOUT     : ∀
      * </pre>
      */
-    public static final int FOR_ALL = 165;
+    public static final int FOR_ALL = 185;
 
     /**
      * Token Id for PARTIAL_DIFFERENTIAL
      * <pre>
-     * ID         : 166
+     * ID         : 186
      * ID_NAME    : PARTIAL_DIFFERENTIAL
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2326,12 +2634,12 @@ public final class HTokenId {
      * LAYOUT     : ∂
      * </pre>
      */
-    public static final int PARTIAL_DIFFERENTIAL = 166;
+    public static final int PARTIAL_DIFFERENTIAL = 186;
 
     /**
      * Token Id for THERE_EXISTS
      * <pre>
-     * ID         : 167
+     * ID         : 187
      * ID_NAME    : THERE_EXISTS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2340,12 +2648,12 @@ public final class HTokenId {
      * LAYOUT     : ∃
      * </pre>
      */
-    public static final int THERE_EXISTS = 167;
+    public static final int THERE_EXISTS = 187;
 
     /**
      * Token Id for THERE_DOES_NOT_EXIST
      * <pre>
-     * ID         : 168
+     * ID         : 188
      * ID_NAME    : THERE_DOES_NOT_EXIST
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2354,12 +2662,12 @@ public final class HTokenId {
      * LAYOUT     : ∄
      * </pre>
      */
-    public static final int THERE_DOES_NOT_EXIST = 168;
+    public static final int THERE_DOES_NOT_EXIST = 188;
 
     /**
      * Token Id for INCREMENT
      * <pre>
-     * ID         : 169
+     * ID         : 189
      * ID_NAME    : INCREMENT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2368,12 +2676,12 @@ public final class HTokenId {
      * LAYOUT     : ∆
      * </pre>
      */
-    public static final int INCREMENT = 169;
+    public static final int INCREMENT = 189;
 
     /**
      * Token Id for NABLA
      * <pre>
-     * ID         : 170
+     * ID         : 190
      * ID_NAME    : NABLA
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2382,12 +2690,12 @@ public final class HTokenId {
      * LAYOUT     : ∇
      * </pre>
      */
-    public static final int NABLA = 170;
+    public static final int NABLA = 190;
 
     /**
      * Token Id for ELEMENT_OF
      * <pre>
-     * ID         : 171
+     * ID         : 191
      * ID_NAME    : ELEMENT_OF
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2396,12 +2704,12 @@ public final class HTokenId {
      * LAYOUT     : ∈
      * </pre>
      */
-    public static final int ELEMENT_OF = 171;
+    public static final int ELEMENT_OF = 191;
 
     /**
      * Token Id for NOT_AN_ELEMENT_OF
      * <pre>
-     * ID         : 172
+     * ID         : 192
      * ID_NAME    : NOT_AN_ELEMENT_OF
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2410,12 +2718,12 @@ public final class HTokenId {
      * LAYOUT     : ∉
      * </pre>
      */
-    public static final int NOT_AN_ELEMENT_OF = 172;
+    public static final int NOT_AN_ELEMENT_OF = 192;
 
     /**
      * Token Id for SMALL_ELEMENT_OF
      * <pre>
-     * ID         : 173
+     * ID         : 193
      * ID_NAME    : SMALL_ELEMENT_OF
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2424,12 +2732,12 @@ public final class HTokenId {
      * LAYOUT     : ∊
      * </pre>
      */
-    public static final int SMALL_ELEMENT_OF = 173;
+    public static final int SMALL_ELEMENT_OF = 193;
 
     /**
      * Token Id for CONTAINS_AS_MEMBER
      * <pre>
-     * ID         : 174
+     * ID         : 194
      * ID_NAME    : CONTAINS_AS_MEMBER
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2438,12 +2746,12 @@ public final class HTokenId {
      * LAYOUT     : ∋
      * </pre>
      */
-    public static final int CONTAINS_AS_MEMBER = 174;
+    public static final int CONTAINS_AS_MEMBER = 194;
 
     /**
      * Token Id for DOES_NOT_CONTAIN_AS_MEMBER
      * <pre>
-     * ID         : 175
+     * ID         : 195
      * ID_NAME    : DOES_NOT_CONTAIN_AS_MEMBER
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2452,12 +2760,12 @@ public final class HTokenId {
      * LAYOUT     : ∌
      * </pre>
      */
-    public static final int DOES_NOT_CONTAIN_AS_MEMBER = 175;
+    public static final int DOES_NOT_CONTAIN_AS_MEMBER = 195;
 
     /**
      * Token Id for SMALL_CONTAINS_AS_MEMBER
      * <pre>
-     * ID         : 176
+     * ID         : 196
      * ID_NAME    : SMALL_CONTAINS_AS_MEMBER
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2466,12 +2774,12 @@ public final class HTokenId {
      * LAYOUT     : ∍
      * </pre>
      */
-    public static final int SMALL_CONTAINS_AS_MEMBER = 176;
+    public static final int SMALL_CONTAINS_AS_MEMBER = 196;
 
     /**
      * Token Id for END_OF_PROOF
      * <pre>
-     * ID         : 177
+     * ID         : 197
      * ID_NAME    : END_OF_PROOF
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2480,12 +2788,12 @@ public final class HTokenId {
      * LAYOUT     : ∎
      * </pre>
      */
-    public static final int END_OF_PROOF = 177;
+    public static final int END_OF_PROOF = 197;
 
     /**
      * Token Id for N_ARY_PRODUCT
      * <pre>
-     * ID         : 178
+     * ID         : 198
      * ID_NAME    : N_ARY_PRODUCT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2494,12 +2802,12 @@ public final class HTokenId {
      * LAYOUT     : ∏
      * </pre>
      */
-    public static final int N_ARY_PRODUCT = 178;
+    public static final int N_ARY_PRODUCT = 198;
 
     /**
      * Token Id for N_ARY_COPRODUCT
      * <pre>
-     * ID         : 179
+     * ID         : 199
      * ID_NAME    : N_ARY_COPRODUCT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2508,12 +2816,12 @@ public final class HTokenId {
      * LAYOUT     : ∐
      * </pre>
      */
-    public static final int N_ARY_COPRODUCT = 179;
+    public static final int N_ARY_COPRODUCT = 199;
 
     /**
      * Token Id for N_ARY_SUMMATION
      * <pre>
-     * ID         : 180
+     * ID         : 200
      * ID_NAME    : N_ARY_SUMMATION
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2522,12 +2830,12 @@ public final class HTokenId {
      * LAYOUT     : ∑
      * </pre>
      */
-    public static final int N_ARY_SUMMATION = 180;
+    public static final int N_ARY_SUMMATION = 200;
 
     /**
      * Token Id for MINUS_OR_PLUS_SIGN
      * <pre>
-     * ID         : 181
+     * ID         : 201
      * ID_NAME    : MINUS_OR_PLUS_SIGN
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2536,12 +2844,12 @@ public final class HTokenId {
      * LAYOUT     : ∓
      * </pre>
      */
-    public static final int MINUS_OR_PLUS_SIGN = 181;
+    public static final int MINUS_OR_PLUS_SIGN = 201;
 
     /**
      * Token Id for DOT_PLUS
      * <pre>
-     * ID         : 182
+     * ID         : 202
      * ID_NAME    : DOT_PLUS
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2550,12 +2858,12 @@ public final class HTokenId {
      * LAYOUT     : ∔
      * </pre>
      */
-    public static final int DOT_PLUS = 182;
+    public static final int DOT_PLUS = 202;
 
     /**
      * Token Id for RING_OPERATOR
      * <pre>
-     * ID         : 183
+     * ID         : 203
      * ID_NAME    : RING_OPERATOR
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2564,12 +2872,12 @@ public final class HTokenId {
      * LAYOUT     : ∘
      * </pre>
      */
-    public static final int RING_OPERATOR = 183;
+    public static final int RING_OPERATOR = 203;
 
     /**
      * Token Id for SQUARE_ROOT
      * <pre>
-     * ID         : 184
+     * ID         : 204
      * ID_NAME    : SQUARE_ROOT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2578,12 +2886,12 @@ public final class HTokenId {
      * LAYOUT     : √
      * </pre>
      */
-    public static final int SQUARE_ROOT = 184;
+    public static final int SQUARE_ROOT = 204;
 
     /**
      * Token Id for CUBE_ROOT
      * <pre>
-     * ID         : 185
+     * ID         : 205
      * ID_NAME    : CUBE_ROOT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2592,12 +2900,12 @@ public final class HTokenId {
      * LAYOUT     : ∛
      * </pre>
      */
-    public static final int CUBE_ROOT = 185;
+    public static final int CUBE_ROOT = 205;
 
     /**
      * Token Id for FOURTH_ROOT
      * <pre>
-     * ID         : 186
+     * ID         : 206
      * ID_NAME    : FOURTH_ROOT
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2606,12 +2914,12 @@ public final class HTokenId {
      * LAYOUT     : ∜
      * </pre>
      */
-    public static final int FOURTH_ROOT = 186;
+    public static final int FOURTH_ROOT = 206;
 
     /**
      * Token Id for THEREFORE
      * <pre>
-     * ID         : 187
+     * ID         : 207
      * ID_NAME    : THEREFORE
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2620,12 +2928,12 @@ public final class HTokenId {
      * LAYOUT     : ∴
      * </pre>
      */
-    public static final int THEREFORE = 187;
+    public static final int THEREFORE = 207;
 
     /**
      * Token Id for BECAUSE
      * <pre>
-     * ID         : 188
+     * ID         : 208
      * ID_NAME    : BECAUSE
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2634,12 +2942,12 @@ public final class HTokenId {
      * LAYOUT     : ∵
      * </pre>
      */
-    public static final int BECAUSE = 188;
+    public static final int BECAUSE = 208;
 
     /**
      * Token Id for PROPORTION
      * <pre>
-     * ID         : 189
+     * ID         : 209
      * ID_NAME    : PROPORTION
      * TYPE_ID    : -11
      * TYPE_NAME  : TT_OPERATOR
@@ -2648,7 +2956,7 @@ public final class HTokenId {
      * LAYOUT     : ∷
      * </pre>
      */
-    public static final int PROPORTION = 189;
+    public static final int PROPORTION = 209;
 
     /**
      * Token Id for LEFT_PARENTHESIS
@@ -2819,10 +3127,10 @@ public final class HTokenId {
     public static final int STRING_INTERP_DOLLAR_START = 10039;
 
     /**
-     * Token Id for REVERSE_SOLIDUS_RIGHT_CURLY_BRACKET
+     * Token Id for SEQ_REVERSE_SOLIDUS_RIGHT_CURLY_BRACKET
      * <pre>
      * ID         : 89
-     * ID_NAME    : REVERSE_SOLIDUS_RIGHT_CURLY_BRACKET
+     * ID_NAME    : SEQ_REVERSE_SOLIDUS_RIGHT_CURLY_BRACKET
      * TYPE_ID    : -14
      * TYPE_NAME  : TT_GROUP_SEPARATOR
      * STATE_ID   : 4
@@ -2830,7 +3138,7 @@ public final class HTokenId {
      * LAYOUT     : \}
      * </pre>
      */
-    public static final int REVERSE_SOLIDUS_RIGHT_CURLY_BRACKET = 89;
+    public static final int SEQ_REVERSE_SOLIDUS_RIGHT_CURLY_BRACKET = 89;
 
     /**
      * Token Id for STRING_INTERP_DOLLAR_END

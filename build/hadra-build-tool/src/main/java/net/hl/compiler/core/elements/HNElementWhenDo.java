@@ -23,7 +23,7 @@ public class HNElementWhenDo extends HNElement implements Cloneable{
         this.branches = branches;
         this.elseNode = elseNode;
         this.resultType = resultType;
-        setLocation(branches[0].startToken());
+        setLocation(branches[0].getStartToken());
         setSource(HUtils.getSource(branches[0]));
     }
 

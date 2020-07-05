@@ -27,7 +27,7 @@ public class HNTuple extends HNode {
         this();
         setItems(items);
         if(startToken==null && items.length>0){
-            startToken=items[0].startToken();
+            startToken=items[0].getStartToken();
         }
         setSeparators(separators);
         setStartToken(startToken);
@@ -76,4 +76,16 @@ public class HNTuple extends HNode {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HNTuple hnTuple = (HNTuple) o;
+        return Arrays.equals(items, hnTuple.items);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(items);
+    }
 }

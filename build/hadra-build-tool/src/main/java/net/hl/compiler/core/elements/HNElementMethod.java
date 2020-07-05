@@ -62,7 +62,7 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
         this.declaration = declaration;
         if(declaration!=null){
             JNode node = (JNode) declaration;
-            setLocation(node.startToken());
+            setLocation(node.getStartToken());
             setSource(HUtils.getSource(node));
         }
         return this;

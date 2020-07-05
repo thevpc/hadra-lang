@@ -84,7 +84,7 @@ public class HTypeUtils {
         if (jMethods.length > 1) {
             jMethods = Arrays.stream(type.getDeclaredMethods()).filter(x -> !x.isDefault()
                     && x.isPublic()
-                    && !JTypeUtils.isSynthetic(x.getModifiers())
+                    && !x.isSynthetic()
             ).toArray(JMethod[]::new);
         }
         if (jMethods.length == 1) {

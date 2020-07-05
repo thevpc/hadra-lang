@@ -19,8 +19,10 @@ public class JPrimitiveModifierAnnotationInstance implements JAnnotationInstance
     public static final JPrimitiveModifierAnnotationInstance FINAL = new JPrimitiveModifierAnnotationInstance("final");
     public static final JPrimitiveModifierAnnotationInstance ABSTRACT = new JPrimitiveModifierAnnotationInstance("abstract");
     public static final JPrimitiveModifierAnnotationInstance ENUM = new JPrimitiveModifierAnnotationInstance("enum");
+    public static final JPrimitiveModifierAnnotationInstance ANNOTATION = new JPrimitiveModifierAnnotationInstance("annotation");
     public static final JPrimitiveModifierAnnotationInstance EXCEPTION = new JPrimitiveModifierAnnotationInstance("exception");
     public static final JPrimitiveModifierAnnotationInstance CONST = new JPrimitiveModifierAnnotationInstance("const");
+    public static final JPrimitiveModifierAnnotationInstance SPECIAL_DEFAULT_CONSTRUCTOR = new JPrimitiveModifierAnnotationInstance("default-constructor");
     private String name;
     public JPrimitiveModifierAnnotationInstance(String name) {
         this.name = name;
@@ -51,5 +53,10 @@ public class JPrimitiveModifierAnnotationInstance implements JAnnotationInstance
     @Override
     public JAnnotationInstanceField[] getFields() {
         return new JAnnotationInstanceField[0];
+    }
+
+    @Override
+    public Object getObject() {
+        return this;
     }
 }
