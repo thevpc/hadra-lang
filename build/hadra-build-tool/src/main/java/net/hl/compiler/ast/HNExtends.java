@@ -42,7 +42,7 @@ public class HNExtends extends HNode {
 
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         return (List) this.arguments;
     }
 

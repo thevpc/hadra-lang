@@ -308,7 +308,7 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li = new ArrayList<>();
         li.add(returnTypeName);
         li.addAll(Arrays.asList(genericVariables));

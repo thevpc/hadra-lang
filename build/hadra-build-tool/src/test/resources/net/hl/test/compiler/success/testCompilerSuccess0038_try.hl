@@ -21,7 +21,7 @@ fun void myMethod(){
     FileInputStream connexion;
 
     int x1=try int("one");
-    int x1=try int("one") catch 1;
+    int x1b=try int("one") catch 1;
     int x2=try(c=connexion) int("one") catch 1;
     
     
@@ -30,7 +30,7 @@ fun void myMethod(){
         catch(RuntimeException) 3;
 
     // Exceptions need no more in the catch clause to be suffixed with Exception
-    // This makes code more consise
+    // This makes code more concise
     int x4=try(c=connexion) int("one")
         catch(IO|IllegalArgument x) 2
         catch(Runtime) 3;

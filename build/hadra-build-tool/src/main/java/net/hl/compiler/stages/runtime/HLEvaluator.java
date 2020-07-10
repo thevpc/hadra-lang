@@ -389,7 +389,7 @@ public class HLEvaluator implements JEvaluator {
                         if(f.isStatic()){
                             return f.get(null);
                         }else{
-                            HNode p = a.parentNode();
+                            HNode p = a.getParentNode();
                             if(p.id()==HNNodeId.H_OP_DOT){
                                 HNOpDot d=(HNOpDot) p;
                                 return f.get(evaluate(d.getLeft(),context));
@@ -747,7 +747,7 @@ public class HLEvaluator implements JEvaluator {
         Object base=null;
         if(field.isStatic()) {
         }else{
-            HNode n=arg.parentNode();
+            HNode n=arg.getParentNode();
             if(n instanceof HNOpDot){
                 base=((HNOpDot) n).getLeft();
             }

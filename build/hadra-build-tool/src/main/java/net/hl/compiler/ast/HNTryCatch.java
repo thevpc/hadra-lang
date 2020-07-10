@@ -114,7 +114,7 @@ public class HNTryCatch extends HNode {
 
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li = new ArrayList<>();
         li.add(resource);
         li.add(body);
@@ -228,7 +228,7 @@ public class HNTryCatch extends HNode {
         }
 
         @Override
-        public List<JNode> childrenNodes() {
+        public List<JNode> getChildrenNodes() {
             List<JNode> list=new ArrayList<>();
             list.addAll(exceptionTypes==null? Collections.emptyList() : Arrays.asList(exceptionTypes));
             list.add(identifier);

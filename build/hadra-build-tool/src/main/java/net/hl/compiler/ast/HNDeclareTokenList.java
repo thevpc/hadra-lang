@@ -66,7 +66,7 @@ public class HNDeclareTokenList extends HNDeclareToken implements HNDeclare {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li=new ArrayList<>();
         li.addAll(Arrays.asList(this.items));
         return li;

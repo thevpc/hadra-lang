@@ -29,7 +29,9 @@ String currentClassName=static.class.getName();
 Logger LOG=Logger.getLogger(this:className);
 
 fun void myMethod(){
-    Method method=static.method;
+    Method method=static.method;//MyClass.getDeclaredMethod("myMEthod");
+    Object a="Hello";
+    car c=a.?charAt(5);
     String methodName=static.methodName;
     String filePath=static.filePath;
     String fileName=static.fileName;

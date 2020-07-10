@@ -70,7 +70,7 @@ public class HNDeclareMetaPackage extends HNode {
 //    }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         return Arrays.asList(moduleId, body);
     }
 

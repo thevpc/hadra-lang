@@ -420,7 +420,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
     }
 
     private HNode lookupDeclarationStatement(HNDeclareTokenIdentifier node, HLJCompilerContext compilerContext) {
-        HNode n = node.parentNode();
+        HNode n = node.getParentNode();
         while (true) {
             if (n instanceof HNIs) {
                 return n;
@@ -429,9 +429,9 @@ public class HLCStage05CallResolver extends HLCStageType2 {
             } else if (n instanceof HNSwitch.SwitchIs) {
                 return n;
             } else if (n instanceof HNDeclareTokenList) {
-                n = n.parentNode();
+                n = n.getParentNode();
             } else if (n instanceof HNDeclareTokenTuple) {
-                n = n.parentNode();
+                n = n.getParentNode();
             } else {
                 throw new JShouldNeverHappenException();
             }
@@ -796,8 +796,8 @@ public class HLCStage05CallResolver extends HLCStageType2 {
         if (hnode.fullChildInfo().equals("HNAssign:left")) {
             return true;
         }
-        if (node.parentNode() instanceof HNTuple) {
-            return onAssign_isLeft(node.parentNode());
+        if (node.getParentNode() instanceof HNTuple) {
+            return onAssign_isLeft(node.getParentNode());
         }
         return false;
     }
@@ -1149,7 +1149,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
 
     private boolean onDeclareIdentifier(HNDeclareIdentifier node, HLJCompilerContext compilerContext) {
         HNode initValue = node.getInitValue();
-        boolean parentIsLambda = node.parentNode() instanceof HNLambdaExpression;
+        boolean parentIsLambda = node.getParentNode() instanceof HNLambdaExpression;
         if (parentIsLambda) {
             return true;
         }
@@ -1268,8 +1268,8 @@ public class HLCStage05CallResolver extends HLCStageType2 {
         switch (left.id()) {
             case H_IDENTIFIER: {
                 HNIdentifier ident = (HNIdentifier) left;
-                if (node.parentNode() instanceof HNOpDot) {
-                    HNOpDot d = (HNOpDot) node.parentNode();
+                if (node.getParentNode() instanceof HNOpDot) {
+                    HNOpDot d = (HNOpDot) node.getParentNode();
                     if (d.getRight() == node) {
                         return onIdentifierWithPars(ident, node, d.getLeft(), argumentsArr, compilerContext);
                     }
@@ -1595,7 +1595,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
             }
         }
         HNElement ee = compilerContext.lookupElement(JOnError.TRACE, childNodeIdent.getName(), dotBase, arguments, lhs, childNodeIdent.getStartToken(),
-                childNodeIdent.parentNode(), null);
+                childNodeIdent.getParentNode(), null);
         if (ee != null) {
             setElement(childNodeIdent, ee);
             setElement(parentNodeParsPostfix, childNodeIdent.getElement());
@@ -1618,7 +1618,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
             }
         }
         HNElement e = compilerContext.lookupElement(JOnError.TRACE, node.getName(), dotBase, null, lhs, node.getStartToken(),
-                node.parentNode(), null);
+                node.getParentNode(), null);
         if (e != null) {
             setElement(node, e);
         }
@@ -1654,7 +1654,7 @@ public class HLCStage05CallResolver extends HLCStageType2 {
     protected boolean onIdentifier(HNIdentifier node, HLJCompilerContext compilerContext) {
         switch (node.fullChildInfo()) {
             case "HNOpDot:right": {
-                HNode dotBase = (HNode) ((HNOpDot) node.parentNode()).getLeft();
+                HNode dotBase = (HNode) ((HNOpDot) node.getParentNode()).getLeft();
                 return onIdentifierWithoutPars(node, dotBase, compilerContext);
             }
             case "HNParsPostfix:left": {

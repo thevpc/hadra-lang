@@ -22,5 +22,5 @@ fun main(String[] args){
     URL(jarLocation).write(nj);
     ProcessBuilder proc("java","-jar",nj.toString,"--gui");
     proc.inheritIO.start.waitFor;
-    ptr<var1<ptr<var2>>> var3;
+    ///ptr<var1<ptr<var2>>> var3;
 }

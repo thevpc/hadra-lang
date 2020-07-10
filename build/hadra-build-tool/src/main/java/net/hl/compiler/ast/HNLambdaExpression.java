@@ -165,7 +165,7 @@ public class HNLambdaExpression extends HNode {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li = new ArrayList<>();
         li.addAll(arguments);
         li.add(body);

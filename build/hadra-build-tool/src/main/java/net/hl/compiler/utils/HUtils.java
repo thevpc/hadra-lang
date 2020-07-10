@@ -281,7 +281,7 @@ public class HUtils {
                     }
                 }
             }
-            node = node.parentNode();
+            node = node.getParentNode();
         }
         return imports.toArray(new String[0]);
     }
@@ -304,7 +304,7 @@ public class HUtils {
                     }
                 }
             }
-            node = node.parentNode();
+            node = node.getParentNode();
         }
         return null;
     }
@@ -322,7 +322,7 @@ public class HUtils {
             if (node instanceof HNBlock.CompilationUnitBlock) {
                 return ((HNBlock.CompilationUnitBlock) node).getCompilationUnit();
             }
-            node = node.parentNode();
+            node = node.getParentNode();
         }
         return null;
     }

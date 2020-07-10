@@ -83,7 +83,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
     }
 
     protected void processCompilationUnit(HNBlock compilationUnitNode, File folder, String[] sources, GenGlobalContext globalContext, HLProject project, boolean metaPackageType) {
-        for (JNode childrenNode : compilationUnitNode.childrenNodes()) {
+        for (JNode childrenNode : compilationUnitNode.getChildrenNodes()) {
             if (childrenNode != null) {
                 if (childrenNode instanceof HNDeclareType) {
                     generateClassFile((HNDeclareType) childrenNode, folder,
@@ -1820,7 +1820,7 @@ public class HLCStage09JavaGenerator implements HLCStage {
         }
 
         @Override
-        public List<JNode> childrenNodes() {
+        public List<JNode> getChildrenNodes() {
             return Collections.emptyList();
         }
 

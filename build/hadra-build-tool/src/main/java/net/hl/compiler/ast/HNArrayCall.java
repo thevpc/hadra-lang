@@ -100,7 +100,7 @@ public class HNArrayCall extends HNode {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> list=new ArrayList<>();
         list.addAll(Arrays.asList(indexNodes));
         list.add(arrayInstanceNode);

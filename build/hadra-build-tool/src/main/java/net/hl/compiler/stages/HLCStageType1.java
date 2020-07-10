@@ -1,6 +1,7 @@
 package net.hl.compiler.stages;
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.JChildInfo;
 import net.vpc.common.jeep.core.nodes.AbstractJNode;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.util.JStringUtils;
@@ -8,6 +9,7 @@ import net.hl.compiler.core.HLOptions;
 import net.hl.compiler.core.HLProject;
 import net.hl.compiler.ast.HNLambdaExpression;
 import net.hl.compiler.stages.generators.java.HGenUtils;
+import net.vpc.common.jeep.util.JeepUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -28,23 +30,22 @@ public abstract class HLCStageType1 implements HLCStage{
 
     public void processAllNextCompilerStage(JCompilerContext compilerContextBase) {
         JNode parentNode = compilerContextBase.getNode();
-        List<JNode> jNodes = parentNode.childrenNodes();
+        List<JNode> jNodes = parentNode.getChildrenNodes();
         for (JNode jNode : jNodes) {
             if(jNode!=null) {
                 JNode arg1b = processCompilerStage(compilerContextBase.nextNode(jNode));
                 if (arg1b != jNode) {
-                    String s = (String) jNode.childInfo();
-                    int brackets = s.indexOf('[');
-                    if(brackets>0){
-                        String r=s.substring(0, brackets);
-                        int index=Integer.parseInt(r.substring(brackets+1,r.length()-1));
-                        String setterName="get"+ JStringUtils.capitalize(s);
+                    JChildInfo s = jNode.getChildInfo();
+                    if(s.isIndexed()){
+                        String r=s.getName();
+                        int index=Integer.parseInt(s.getIndex());
+                        String setterName= JeepUtils.propertyToGetter(r,false);
                         Method m = null;
                         try {
                             m = jNode.getClass().getDeclaredMethod(setterName);
                             Object e = m.invoke(parentNode);
                             ((AbstractJNode) arg1b).parentNode(parentNode);
-                            arg1b.childInfo(arg1b.childInfo());
+                            arg1b.setChildInfo(arg1b.getChildInfo());
                             if(e.getClass().isArray()){
                                 Array.set(e,index,arg1b);
                             }else if(e instanceof List){
@@ -56,7 +57,7 @@ public abstract class HLCStageType1 implements HLCStage{
                             throw new JShouldNeverHappenException(e);
                         }
                     }else{
-                        String setterName="set"+JStringUtils.capitalize(s);
+                        String setterName=JeepUtils.propertyToSetter(s.getName());
                         Method m = null;
                         try {
                             m = jNode.getClass().getDeclaredMethod(setterName);
@@ -92,7 +93,7 @@ public abstract class HLCStageType1 implements HLCStage{
                     if(argib!=argi){
                         //copy bind info!
                         ((AbstractJNode) argib).parentNode(parentNode);
-                        argib.childInfo(argi.childInfo());
+                        argib.setChildInfo(argi.getChildInfo());
                         nargs.set(i, argib);
                     }
                 }
@@ -109,7 +110,7 @@ public abstract class HLCStageType1 implements HLCStage{
                     if(argib!=argi){
                         //copy bind info!
                         ((AbstractJNode) argib).parentNode(parentNode);
-                        argib.childInfo(argi.childInfo());
+                        argib.setChildInfo(argi.getChildInfo());
                         nargs[i]=argib;
                     }
                 }

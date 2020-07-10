@@ -36,7 +36,7 @@ public class HNArrayNew extends HNode {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li = new ArrayList<>();
         li.add(arrayTypeName);
         li.addAll(Arrays.asList(inits));

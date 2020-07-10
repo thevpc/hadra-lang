@@ -1,22 +1,24 @@
 package net.hl.compiler.stages;
 
+import net.hl.compiler.ast.*;
+import net.hl.compiler.core.elements.*;
+import net.hl.compiler.core.invokables.BodyJInvoke;
+import net.hl.compiler.core.invokables.HLJCompilerContext;
 import net.hl.compiler.core.types.JPrimitiveModifierAnnotationInstance;
+import net.hl.compiler.index.HLIndexedClass;
+import net.hl.compiler.index.HLIndexedConstructor;
+import net.hl.compiler.index.HLIndexedField;
+import net.hl.compiler.index.HLIndexedMethod;
+import net.hl.compiler.utils.HNodeUtils;
+import net.hl.compiler.utils.HUtils;
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.JChildInfo;
+import net.vpc.common.jeep.core.types.DefaultTypeName;
 import net.vpc.common.jeep.impl.functions.JNameSignature;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.impl.types.DefaultJRawMethod;
 import net.vpc.common.jeep.impl.types.DefaultJType;
 import net.vpc.common.jeep.util.JTypeUtils;
-import net.hl.compiler.core.elements.*;
-import net.hl.compiler.core.invokables.BodyJInvoke;
-import net.hl.compiler.core.invokables.HLJCompilerContext;
-import net.hl.compiler.index.HLIndexedClass;
-import net.hl.compiler.index.HLIndexedConstructor;
-import net.hl.compiler.index.HLIndexedField;
-import net.hl.compiler.index.HLIndexedMethod;
-import net.hl.compiler.ast.*;
-import net.hl.compiler.utils.HNodeUtils;
-import net.hl.compiler.utils.HUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -351,7 +353,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
     private boolean onObjectNew(HNObjectNew node, HLJCompilerContext compilerContext) {
         node.setElement(new HNElementConstructor(
                 node.getObjectTypeName().getTypeVal(),
-                null,node.getInits()
+                null, node.getInits()
         ));
         return true;
     }
@@ -380,10 +382,39 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
             return true;
         }
         if (type == null) {
+            if (node.getChildInfo().getName().endsWith("exceptionTypes") &&
+                    !node.getTypename().name().endsWith("Exception")) {
+                //this is an exception in the catch clause
+                JTypeName typename = node.getTypename();
+                JTypeName typename2 = new DefaultTypeName(typename.name() + "Exception", typename.vars(), typename.arrayDimension(), typename.isVarArg());
+                try {
+                    type = compilerContext.lookupType(typename2);
+                } catch (Exception ex) {
+                    compilerContext.getLog().error("S000", null, "invalid type :" + node.getTypename() + " : " + ex.toString(), node.getStartToken());
+                    return true;
+                }
+            }
+        } else if (node.getChildInfo().getName().endsWith("exceptionTypes") &&
+                !node.getTypename().name().endsWith("Exception") &&
+                !JTypeUtils.forThrowable(compilerContext.types()).isAssignableFrom(type)) {
+
+            //this is an exception in the catch clause
+            JTypeName typename = node.getTypename();
+            JTypeName typename2 = new DefaultTypeName(typename.name() + "Exception", typename.vars(), typename.arrayDimension(), typename.isVarArg());
+            try {
+                JType type1 = compilerContext.lookupType(typename2);
+                if (type1 != null) {
+                    type = type1;
+                }
+            } catch (Exception ex) {
+                //
+            }
+        }
+        if (type == null) {
             compilerContext.getLog().error("S000", null, "cannot resolve type symbol " + node.getTypename(), node.getStartToken());
         }
         node.setTypeVal(type);
-        node.setElement(new HNElementType(type,compilerContext.types()));
+        node.setElement(new HNElementType(type, compilerContext.types()));
         return true;
     }
 
@@ -414,7 +445,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
                                 .map(HNDeclareIdentifier::getIdentifierName)
                                 .toArray(String[]::new),
                         new HNDeclareTypeMainConstructor(node),
-                        new JModifier[0],new JAnnotationInstance[]{
+                        new JModifier[0], new JAnnotationInstance[]{
                                 JPrimitiveModifierAnnotationInstance.SPECIAL_DEFAULT_CONSTRUCTOR
                         }, false
                 );
@@ -506,7 +537,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
 //            identifier.setFields(fields);
         } else {
             for (HNDeclareTokenIdentifier identifierToken : HNodeUtils.flatten(identifier.getIdentifierToken())) {
-                checkAlreadyDeclaredLocalVar(identifierToken, identifier.parentNode(), idec, compilerContext);
+                checkAlreadyDeclaredLocalVar(identifierToken, identifier.getParentNode(), idec, compilerContext);
             }
             identifier.setSyntacticType(HNDeclareIdentifier.SyntacticType.LOCAL);
         }
@@ -523,10 +554,10 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
         compilerContext.markLocalDeclared(element, idec, location);
         HNElementLocalVar[] t
                 = Arrays.stream(
-                        compilerContext.lookupLocalVarDeclarations(identifierToken.getName(), location,
-                                from, null)
-                ).filter(x -> x.getDeclaration() != identifierToken)
-                        .toArray(HNElementLocalVar[]::new);
+                compilerContext.lookupLocalVarDeclarations(identifierToken.getName(), location,
+                        from, null)
+        ).filter(x -> x.getDeclaration() != identifierToken)
+                .toArray(HNElementLocalVar[]::new);
         if (t.length > 0) {
             compilerContext.getLog().error("X000", null, "multiple local variable declaration : " + identifierToken.getName(), location);
         }
@@ -547,11 +578,11 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
                                             .map(x -> x.getIdentifierTypeNode().getTypename())
                                             .toArray(JTypeName[]::new)
                             )), method.getArguments().stream()
-                            .map(HNDeclareIdentifier::getIdentifierName)
-                            .toArray(String[]::new), new BodyJInvoke(method),
+                                    .map(HNDeclareIdentifier::getIdentifierName)
+                                    .toArray(String[]::new), new BodyJInvoke(method),
                             new JModifier[0],
                             HNodeUtils.toAnnotations(method.getAnnotations()),
-                             false
+                            false
                     );
                     method.setInvokable(jConstructor);
                     if (indexable) {
@@ -561,7 +592,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
                 } else {
                     HNTypeToken returnTypeName = method.getReturnTypeName();
                     JType returnType = returnTypeName == null ? null : returnTypeName.getTypeVal();
-                    DefaultJRawMethod jMethod =(DefaultJRawMethod) jType.addMethod(
+                    DefaultJRawMethod jMethod = (DefaultJRawMethod) jType.addMethod(
                             compilerContext.signature(JSignature.of(
                                     method.getNameToken().sval,
                                     method.getArguments().stream()
@@ -575,14 +606,14 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
                             new BodyJInvoke(method),
                             new JModifier[0],
                             HNodeUtils.toAnnotations(method.getAnnotations()),
-                             false
+                            false
                     );
                     jMethod.setSourceName(HUtils.getSourceName(method));
                     method.setInvokable(jMethod);
                     if (returnType == null) {
                         List<JMethod> noTypeMethods = HLCStageUtils.getNoTypeMethods(compilerContext);
                         noTypeMethods.add(jMethod);
-                    }else{
+                    } else {
                         method.setEffectiveReturnType(returnType);
                     }
                     if (indexable) {
@@ -700,15 +731,16 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
 //        return true;
 //    }
 
-    private boolean onAssign_isValidLeft(HNode left){
+    private boolean onAssign_isValidLeft(HNode left) {
         if (left instanceof HNTuple || left instanceof HNBracketsPostfix || left instanceof HNIdentifier) {
             return true;
         }
-        if(left instanceof HNOpDot){
-            return onAssign_isValidLeft(((HNOpDot)left).getRight());
+        if (left instanceof HNOpDot) {
+            return onAssign_isValidLeft(((HNOpDot) left).getRight());
         }
         return false;
     }
+
     private boolean onAssign(HNAssign node, HLJCompilerContext compilerContext) {
         HNode left = node.getLeft();
         HNode right = node.getLeft();
@@ -743,7 +775,7 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
 
     private boolean isLHS(HNode node) {
         return node.fullChildInfo().equals("HNAssign:left")
-                || node.parentNode() instanceof HNTuple && isLHS((HNode) node.parentNode());
+                || node.getParentNode() instanceof HNTuple && isLHS((HNode) node.getParentNode());
     }
 
     protected boolean onLiteral(HNLiteral node, HLJCompilerContext compilerContext) {
@@ -770,29 +802,6 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
         return true;
     }
 
-    public static class HNDeclareTypeMainConstructor implements JInvoke {
-
-        private HNDeclareType node;
-
-        public HNDeclareTypeMainConstructor(HNDeclareType node) {
-            this.node = node;
-        }
-
-        @Override
-        public Object invoke(JInvokeContext context) {
-            throw new JFixMeLaterException();
-        }
-
-    }
-
-    protected boolean processCompilerStageCurrentCheck(HNode node, HLJCompilerContext compilerContext) {
-        String simpleName = node.getClass().getSimpleName();
-        if (node.getElement() == null) {
-            compilerContext.getLog().error("X000", null, "node.getElement()==null for " + simpleName, node.getStartToken());
-        }
-        return true;
-    }
-
     public boolean processCompilerStage(JCompilerContext compilerContextBase) {
         HNode node = (HNode) compilerContextBase.getNode();
         HLJCompilerContext compilerContext = (HLJCompilerContext) compilerContextBase;
@@ -807,6 +816,29 @@ public class HLCStage04DefinitionResolver extends HLCStageType2 {
 //                + " : " + ((HNode) node).getElement()
 //                + " : " + JToken.escapeString(compilerContext.node().toString()));
         return succeed;
+    }
+
+    protected boolean processCompilerStageCurrentCheck(HNode node, HLJCompilerContext compilerContext) {
+        String simpleName = node.getClass().getSimpleName();
+        if (node.getElement() == null) {
+            compilerContext.getLog().error("X000", null, "node.getElement()==null for " + simpleName, node.getStartToken());
+        }
+        return true;
+    }
+
+    public static class HNDeclareTypeMainConstructor implements JInvoke {
+
+        private HNDeclareType node;
+
+        public HNDeclareTypeMainConstructor(HNDeclareType node) {
+            this.node = node;
+        }
+
+        @Override
+        public Object invoke(JInvokeContext context) {
+            throw new JFixMeLaterException();
+        }
+
     }
 
 }

@@ -565,12 +565,13 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     private String[] namesWithAliases(String name, HFunctionType opType) {
         if (opType == HFunctionType.GET) {
             return new String[]{
-                    "get" + JStringUtils.capitalize(name),
-                    "is" + JStringUtils.capitalize(name),};
+                    JeepUtils.propertyToGetter(name,false),
+                    JeepUtils.propertyToGetter(name,true)
+            };
         }
         if (opType == HFunctionType.SET) {
             return new String[]{
-                    "set" + JStringUtils.capitalize(name)
+                    JeepUtils.propertyToSetter(name)
             };
         }
         Set<String> all = new HashSet<>();
@@ -2191,7 +2192,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     public HNode lookupEnclosingDeclaration(JNode node, boolean returnMetaPackage) {
         HNode n = (HNode) node;
         while (n != null) {
-            HNode p = n.parentNode();
+            HNode p = n.getParentNode();
             if (p == null) {
                 break;
             }
@@ -2229,7 +2230,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     public HNDeclareType lookupEnclosingDeclareType(JNode node) {
         HNode n = (HNode) node;
         while (n != null) {
-            HNode p = n.parentNode();
+            HNode p = n.getParentNode();
             if (p == null) {
                 break;
             }
@@ -2244,7 +2245,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     public HNDeclareIdentifier lookupEnclosingDeclareIdentifier(HNDeclareToken node) {
         HNode n = (HNode) node;
         while (n != null) {
-            HNode p = (HNode) n.parentNode();
+            HNode p = (HNode) n.getParentNode();
             if (p == null) {
                 break;
             }
@@ -2300,7 +2301,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         fillVars(name, result, argument, lookupTypes);
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_LAMBDA_EXPR: {
@@ -2311,7 +2312,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         fillVars(name, result, argument, lookupTypes);
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_DECLARE_TYPE: {
@@ -2329,7 +2330,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 }
 //                lookupElementNoBaseFill(name, args, d.getBody(), null, requireStatic, result);
 
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_BLOCK: {
@@ -2348,7 +2349,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                                     break;
                                 }
                                 case CLASS_BODY: {
-                                    JType dt = getOrCreateType(((HNDeclareType) skipImports.parentNode()));
+                                    JType dt = getOrCreateType(((HNDeclareType) skipImports.getParentNode()));
                                     if (lookupTypes == null || lookupTypes.contains(LookupType.FIELD)) {
                                         fillFields(name, dt, result, argument);
                                     }
@@ -2382,7 +2383,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                                 case CLASS_BODY: {
                                     HNElementMethod f = new HNElementMethod(argument.getInvokable());
                                     f.setDeclaringType(
-                                            getOrCreateType(((HNDeclareType) skipImports.parentNode()))
+                                            getOrCreateType(((HNDeclareType) skipImports.getParentNode()))
                                     );
                                     f.setDeclaration(argument);
                                     result.add(f);
@@ -2394,7 +2395,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         }
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_FOR: {
@@ -2408,7 +2409,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         }
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
 
@@ -2423,7 +2424,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         }
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_TRY_CATCH: {
@@ -2437,7 +2438,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         }
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_CATCH: {
@@ -2472,14 +2473,14 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         }
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_SWITCH_CASE: {
                 if (noArguments) {
                     HNSwitch.SwitchCase d = (HNSwitch.SwitchCase) whereToLookInto;
                     if (lookupTypes == null || lookupTypes.contains(LookupType.STATIC_FIELD)) {
-                        HNSwitch parentNode = (HNSwitch) d.parentNode();
+                        HNSwitch parentNode = (HNSwitch) d.getParentNode();
                         HNode switchExpr = HUtils.skipFirstPar(parentNode.getExpr());
                         JTypePattern u = null;
                         if (switchExpr instanceof HNDeclareIdentifier) {
@@ -2498,7 +2499,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         }
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_IF_WHEN_DO: {
@@ -2509,7 +2510,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         result.add(r);
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_OP_BINARY: {
@@ -2528,7 +2529,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         }
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_SWITCH_IS:
@@ -2541,7 +2542,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         fillVars(name, result, argument, lookupTypes);
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             case H_BRACKETS_POSTFIX: {
@@ -2576,11 +2577,11 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         result.add(u);
                     }
                 }
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
                 break;
             }
             default: {
-                lookupElementNoBaseFill(name, args, whereToLookInto.parentNode(), child, requireStatic, result, lookupTypes);
+                lookupElementNoBaseFill(name, args, whereToLookInto.getParentNode(), child, requireStatic, result, lookupTypes);
             }
         }
     }
@@ -2958,7 +2959,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 if (n instanceof HNDeclareType) {
                     return getOrCreateType(((HNDeclareType) n));
                 }
-                n = n.parentNode();
+                n = n.getParentNode();
             }
             throw new JShouldNeverHappenException();
         }
@@ -2969,7 +2970,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     if (n instanceof HNDeclareType) {
                         return getOrCreateType(((HNDeclareType) n));
                     }
-                    n = n.parentNode();
+                    n = n.getParentNode();
                 }
                 throw new JShouldNeverHappenException();
             }
@@ -2980,7 +2981,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 if (n instanceof HNDeclareType) {
                     return getOrCreateType(((HNDeclareType) n));
                 }
-                n = n.parentNode();
+                n = n.getParentNode();
             }
             return null;
         }
@@ -2993,7 +2994,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 if (n instanceof HNDeclareType) {
                     return getOrCreateType(((HNDeclareType) n));
                 }
-                n = n.parentNode();
+                n = n.getParentNode();
             }
             return null;
         }
@@ -3001,7 +3002,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             HNDeclareType dtype = (HNDeclareType) n;
             return getOrCreateType(dtype);
         }
-        return getThisType(n.parentNode());
+        return getThisType(n.getParentNode());
     }
 
     public boolean isStaticContext(JNode n) {
@@ -3037,7 +3038,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 return true;
             }
         }
-        return isStaticContext(n.parentNode());
+        return isStaticContext(n.getParentNode());
     }
 
     public HNElement lookupElement(JOnError onError, String name, HNode dotBase, HNode[] arguments, boolean lhs, JToken location, JNode fromNode, FindMatchFailInfo failInfo) {
@@ -3229,7 +3230,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             return jt;
         }
         String n = type.getName();
-        JNode pn = type.parentNode();
+        JNode pn = type.getParentNode();
         HNBlock immediateParent = null;
         JTypes types = types();
         HNDeclareType declaringType = null;
@@ -3245,7 +3246,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     }
                 }
             }
-            pn = pn.parentNode();
+            pn = pn.getParentNode();
         }
         if (immediateParent != null) {
             declaringType = metaPackageType();
@@ -3343,7 +3344,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         JNode n = getNode();
         while (n != null) {
             ss.addAll(((HNode) n).getImports());
-            n = n.parentNode();
+            n = n.getParentNode();
         }
         return ss.toArray(new JImportInfo[0]);
     }

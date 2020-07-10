@@ -28,7 +28,7 @@ public class NoTypeErrorCountVisitor implements JNodeVisitor {
             if(log) {
                 System.err.println("Node " + node.getClass().getSimpleName()
                         + " has no type :: " + JToken.escapeString(node.toString())
-                        + "  __PARENT__ " + node.parentNode()
+                        + "  __PARENT__ " + node.getParentNode()
                 );
             }
             if(logger!=null){

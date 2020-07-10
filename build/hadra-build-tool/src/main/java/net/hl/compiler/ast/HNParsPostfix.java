@@ -51,7 +51,7 @@ public class HNParsPostfix extends HNode {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li=new ArrayList<>();
         li.add(left);
         li.addAll(right);

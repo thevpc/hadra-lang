@@ -30,7 +30,7 @@ public class HXNew extends HNode {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         return new ListBuilder<>().add(base).addAll(args).toList();
     }
 

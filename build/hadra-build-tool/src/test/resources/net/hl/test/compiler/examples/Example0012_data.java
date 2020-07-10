@@ -48,7 +48,8 @@ class Person(){
     private Person father=null;
     private Person mother=null;
     private Date birthDate=null;
-    private Gender gender=MALEprivate Address address=null;
+    private Gender gender=MALE;
+    private Address address=null;
 
     public Person(String firstName, String lastName, Person father, Person mother, Date birthDate, Gender gender, Address address) {
         this.firstName = firstName;
@@ -134,9 +135,9 @@ class Person(){
 }
 public class ModuleClass {
     public static void main(String[]) {
-        Person samy = new Person();
-        samy.firstName = "samy";
-        samy.gender = MALE
+        //Person samy = new Person();
+        //samy.firstName = "samy";
+        //samy.gender = MALE
         Person samy = new Person("samy", null,null,null,null,Gender.MALE,new Address("No","Where"));
         Person monia =new Person("monia", null,null,null,null,Gender.FEMALE,new Address("No","Where"));
         Person salim = new Person("salim", "kilani", samy, monia, t "2000-01-01", Gender.MALE, Address("Arafet St", "Sousse"));

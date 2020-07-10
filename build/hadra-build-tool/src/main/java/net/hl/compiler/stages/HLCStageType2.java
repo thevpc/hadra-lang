@@ -40,7 +40,7 @@ public abstract class HLCStageType2 implements HLCStage {
 
     public boolean processAllNextCompilerStage(JCompilerContext compilerContextBase) {
         JNode parentNode = compilerContextBase.getNode();
-        List<JNode> jNodes = parentNode.childrenNodes();
+        List<JNode> jNodes = parentNode.getChildrenNodes();
         boolean succeeded = true;
         for (JNode jNode : jNodes) {
             if (jNode != null) {
@@ -61,7 +61,7 @@ public abstract class HLCStageType2 implements HLCStage {
 
     protected boolean processAllNextCompilerStageCheck(JCompilerContext compilerContextBase) {
         JNode parentNode = compilerContextBase.getNode();
-        List<JNode> jNodes = parentNode.childrenNodes();
+        List<JNode> jNodes = parentNode.getChildrenNodes();
         boolean succeeded = true;
         for (JNode jNode : jNodes) {
             if (jNode != null) {

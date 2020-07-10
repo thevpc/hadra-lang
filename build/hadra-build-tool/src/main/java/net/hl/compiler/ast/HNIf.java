@@ -120,7 +120,7 @@ public class HNIf extends HNode {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li=new ArrayList<>();
         li.addAll(branches);
         li.add(elseNode);
@@ -277,7 +277,7 @@ public class HNIf extends HNode {
 
 
         @Override
-        public List<JNode> childrenNodes() {
+        public List<JNode> getChildrenNodes() {
             List<JNode> li=new ArrayList<>();
             li.add(whenNode);
             li.addAll(idDeclarations);

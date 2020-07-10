@@ -53,7 +53,8 @@ class Console2 : JFrame, WindowListener, Runnable {
     addWindowListener(this);
 
     try {
-      PipedOutputStream stdOutPos = PipedOutputStream(this.stdOutPin);
+      //PipedOutputStream stdOutPos = PipedOutputStream(this.stdOutPin);
+      PipedOutputStream stdOutPos(this.stdOutPin);
       System.setOut(PrintStream(stdOutPos, true));
     } catch (IOException|SecurityException io) {
       textArea.text="Couldn't redirect STDOUT to this console\n" + io.message;

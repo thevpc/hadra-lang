@@ -131,7 +131,7 @@ public class HNSwitch extends HNode {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li = new ArrayList<>();
         li.add(expr);
         li.addAll(cases);
@@ -264,7 +264,7 @@ public class HNSwitch extends HNode {
         }
 
         @Override
-        public List<JNode> childrenNodes() {
+        public List<JNode> getChildrenNodes() {
             List<JNode> li = new ArrayList<>();
             li.addAll(whenNodes);
             li.add(doNode);
@@ -314,7 +314,7 @@ public class HNSwitch extends HNode {
         }
 
         @Override
-        public List<JNode> childrenNodes() {
+        public List<JNode> getChildrenNodes() {
             List<JNode> li = new ArrayList<>();
             li.add(whenNode);
             li.add(doNode);
@@ -413,7 +413,7 @@ public class HNSwitch extends HNode {
 //            return whenIdentifierType;
 //        }
         @Override
-        public List<JNode> childrenNodes() {
+        public List<JNode> getChildrenNodes() {
             return new ListBuilder<JNode>().setSkipNulls(true)
                     .addAll(whenTypes)
                     .add(identifierToken)

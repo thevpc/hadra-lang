@@ -3,3 +3,5 @@
  */
 //println("Hello world");
 int i=1;
+
+//exec("fun int fact(int x)->if x<=0 1 x*fact(x-1); println(fact(3)");

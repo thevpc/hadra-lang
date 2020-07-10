@@ -262,8 +262,8 @@ public class HLCStage08JavaTransform implements HLCStage {
         if (ei != null) {
             //sometimes the element is copied from child, so process this
             eArgs = ei.getArgNodes();
-            List<JNode> oldNodes = oldNode.childrenNodes();
-            List<JNode> newNodes = newNode.childrenNodes();
+            List<JNode> oldNodes = oldNode.getChildrenNodes();
+            List<JNode> newNodes = newNode.getChildrenNodes();
             boolean processedFromChild = false;
             for (int i = 0; i < oldNodes.size(); i++) {
                 if (((HNode) newNodes.get(i)).getElement() != null && ((HNode) oldNode).getElement() == ((HNode) oldNodes.get(i)).getElement()) {

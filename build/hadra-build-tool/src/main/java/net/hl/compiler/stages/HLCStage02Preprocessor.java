@@ -187,7 +187,7 @@ public class HLCStage02Preprocessor implements HLCStage {
                 preProcessorContext.log(context.log());//inherit logger
                 JNode nn = metaPackage;
                 while (nn != null && !(nn instanceof HNBlock.CompilationUnitBlock)) {
-                    nn = nn.parentNode();
+                    nn = nn.getParentNode();
                 }
                 if (nn == null) {
                     project.log().error("X000", "unexpected error", "missing root CompilationUnitBlock", metaPackage.getStartToken());

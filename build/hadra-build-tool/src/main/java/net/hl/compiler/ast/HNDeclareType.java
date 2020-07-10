@@ -265,7 +265,7 @@ public class HNDeclareType extends HNode implements HNDeclare {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li = new ArrayList<>();
         if (this.mainConstructorArgs != null) {
             li.addAll(this.mainConstructorArgs);

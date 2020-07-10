@@ -4,7 +4,6 @@ import net.hl.compiler.core.elements.HNElement;
 import net.vpc.common.jeep.JImportInfo;
 import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JNodeCopyFactory;
-import net.vpc.common.jeep.JToken;
 import net.vpc.common.jeep.core.nodes.AbstractJNode;
 import net.vpc.common.jeep.util.JNodeUtils;
 import net.vpc.common.jeep.util.JeepUtils;
@@ -69,7 +68,7 @@ public abstract class HNode extends AbstractJNode {
 
     public Set<JImportInfo> getEffectiveImports() {
         Set<JImportInfo> s = new LinkedHashSet<>();
-        s.addAll(parentNode().getEffectiveImports());
+        s.addAll(getParentNode().getEffectiveImports());
         Set<JImportInfo> i = getImports();
         if (i != null) {
             for (JImportInfo jImportInfo : i) {
@@ -100,16 +99,16 @@ public abstract class HNode extends AbstractJNode {
     }
 
     public String fullChildInfo() {
-        JNode pn = parentNode();
+        JNode pn = getParentNode();
         if (pn == null) {
-            return String.valueOf(childInfo());
+            return String.valueOf(getChildInfo());
         }
-        return pn.getClass().getSimpleName() + ":" + childInfo();
+        return pn.getClass().getSimpleName() + ":" + getChildInfo();
     }
 
     @Override
-    public HNode parentNode() {
-        return (HNode) super.parentNode();
+    public HNode getParentNode() {
+        return (HNode) super.getParentNode();
     }
 
     public void copyFrom(JNode other, JNodeCopyFactory copyFactory) {

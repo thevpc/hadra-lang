@@ -59,7 +59,7 @@ public class HNDeclareTokenTuple extends HNDeclareTokenTupleItem implements HNDe
 
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li=new ArrayList<>();
         li.addAll(Arrays.asList(this.items));
         return li;

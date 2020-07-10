@@ -158,7 +158,7 @@ public class HNFor extends HNode {
 
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li=new ArrayList<>();
         li.addAll(initExprs);
         li.add(this.filter);

@@ -119,7 +119,7 @@ public class HNAssign extends HNode {
         visitor.endVisit(this);
     }
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         return Arrays.asList(left, right);
     }
     public HNode[] getTupleSubAssignments() {

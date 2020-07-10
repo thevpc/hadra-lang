@@ -92,7 +92,7 @@ public class HNTypeToken extends HNode {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> list=new ArrayList<>();
         list.addAll(vars);
         list.addAll(lowerBounds);
@@ -116,7 +116,7 @@ public class HNTypeToken extends HNode {
     @Override
     public void visit(JNodeVisitor visitor) {
         visitor.startVisit(this);
-        visitNext(visitor, childrenNodes());
+        visitNext(visitor, getChildrenNodes());
         visitor.endVisit(this);
     }
 

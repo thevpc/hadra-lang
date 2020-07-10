@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class HNodeUtils {
 
     public static HNode declaringStatement(HNDeclareToken item) {
-        return declaringStatement0(item, item.parentNode());
+        return declaringStatement0(item, item.getParentNode());
     }
 
     private static HNode declaringStatement0(HNDeclareToken item, JNode lookInto) {
@@ -29,7 +29,7 @@ public class HNodeUtils {
         if (lookInto instanceof HNIs) {
             return (HNode) lookInto;
         }
-        return declaringStatement0(item, lookInto.parentNode());
+        return declaringStatement0(item, lookInto.getParentNode());
     }
 
     public static String[] flattenNames(HNDeclareToken item) {
@@ -163,12 +163,12 @@ public class HNodeUtils {
     }
 
     public static HNDeclareType lookupEnclosingType(JNode node) {
-        JNode h = node == null ? null : node.parentNode();
+        JNode h = node == null ? null : node.getParentNode();
         while (h != null) {
             if (h instanceof HNDeclareType) {
                 return (HNDeclareType) h;
             }
-            h = h.parentNode();
+            h = h.getParentNode();
         }
         return null;
     }
@@ -259,13 +259,13 @@ public class HNodeUtils {
 
     public static JNode skipImportBlock(JNode v) {
         while (v instanceof HNBlock && HNBlock.get(v).getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
-            v = v.parentNode();
+            v = v.getParentNode();
         }
         return v;
     }
 
     public static JNode findImmediateParent(JNode v) {
-        JNode n = v.parentNode();
+        JNode n = v.getParentNode();
         if (v instanceof HNBlock) {
             if ((HNBlock.get(v)).getBlocType() == HNBlock.BlocType.IMPORT_BLOC) {
                 return findImmediateParent(v);

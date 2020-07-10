@@ -53,7 +53,7 @@ public class HNBracketsPostfix extends HNode {
 
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> list=new ArrayList<>();
         list.add(left);
         list.addAll(right);

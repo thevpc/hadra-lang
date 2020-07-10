@@ -3,13 +3,13 @@
 @data @final class Person(
     String firstName=null,String lastName=null,Person father=null,Person mother=null,
     Date birthDate=null,Gender gender=MALE,Address address=Address("No","Where")){
-    init(){}
+        init(){}
 }
 Person samy().{firstName="samy";gender=MALE};
 Person samy(firstName:"samy",gender:MALE);
-Person monia={"firstName":"monia";gender=FEMALE};
+Person monia={"firstName":"monia";gender:FEMALE};
 Person salim("salim","kilani",samy,monia,t"2000-01-01",MALE,Address("Arafet St","Sousse"));
 Person sarra=salim.copy(Person::[lastName,father,mother,birthDate]).{firstName="sarra";gender=FEMALE};
-Person leila=salim.copy(Person::[^firstName,gender]).{firstName="sarra";gender=FEMALE};
+Person leila=salim.copy(Person::[^firstName,gender,father]).{firstName="sarra";gender=FEMALE};
 Person amani=salim.copy(firstName:"amani",gender:FEMALE);
 

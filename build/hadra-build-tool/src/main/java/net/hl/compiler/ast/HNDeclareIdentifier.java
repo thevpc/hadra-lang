@@ -208,7 +208,7 @@ public class HNDeclareIdentifier extends HNode implements HNDeclare,HNDeclareTok
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         return Arrays.asList(identifierTypeNode, identifierToken, initializer,initValue);
     }
 

@@ -88,7 +88,7 @@ public class HLCompletion implements JCompletion {
 
     private void debug(HNode root) {
 
-        List<HNode> jNodes = (List) root.childrenNodes();
+        List<HNode> jNodes = (List) root.getChildrenNodes();
         //DEBUG... some check
         {
             HNode jNodeLast = null;
@@ -129,7 +129,7 @@ public class HLCompletion implements JCompletion {
         JLocationContext loctx;
         HNode root = compilerContext.getNode();
         if (root.containsCaret(caretOffset)) {
-            List<JNode> jNodes = compilerContext.getNode().childrenNodes();
+            List<JNode> jNodes = compilerContext.getNode().getChildrenNodes();
             for (JNode jNode : jNodes) {
                 if (jNode != null) {
                     JLocationContext t = searchNode((HLJCompilerContext) compilerContext.nextNode(jNode), caretOffset, completeLevel, completionProposals);
@@ -522,13 +522,13 @@ public class HLCompletion implements JCompletion {
 //                return JNodeHSwitch_ToString((HNSwitch) node, cuctx, path);
             case "HNIdentifier": {
                 HNIdentifier n = (HNIdentifier) node;
-                if (isExprNode(n.parentNode())) {
+                if (isExprNode(n.getParentNode())) {
                     JToken token = n.getNameToken();
                     String image = token.image;
                     String sub = image.substring(0, caretOffset - token.startCharacterNumber);
                     completeExpr(token.startCharacterNumber, completeLevel, new SubStringPredicate(sub)
                             , compilerContext, completionProposals);
-                } else if (isStatementNode(n.parentNode())) {
+                } else if (isStatementNode(n.getParentNode())) {
                     JToken token = n.getNameToken();
                     String image = token.image;
                     String sub = image.substring(0, caretOffset - token.startCharacterNumber);
@@ -603,7 +603,7 @@ public class HLCompletion implements JCompletion {
                                     || (firstDeclaringParent instanceof HNDeclareType)
                                     || (firstDeclaringParent instanceof HNDeclareMetaPackage)
                     )) {
-                firstDeclaringParent = firstDeclaringParent.parentNode();
+                firstDeclaringParent = firstDeclaringParent.getParentNode();
             }
             for (String kw : new String[]{"fun", "var", "val", "class"}) {
                 completionProposals.add(HCompletionProposals.proposeKeyword(caretOffset, kw));
@@ -676,7 +676,7 @@ public class HLCompletion implements JCompletion {
             while (n0 != null) {
                 if (!_breakOrContinue) {
                     if (n0 instanceof HNIf) {
-                        JNode n1 = n0.parentNode();
+                        JNode n1 = n0.getParentNode();
                         boolean inWhileOrFor = false;
                         while (n1 != null) {
                             if (n1 instanceof HNWhile || n1 instanceof HNFor) {
@@ -756,7 +756,7 @@ public class HLCompletion implements JCompletion {
                         }
                     }
                 }
-                n0 = n0.parentNode();
+                n0 = n0.getParentNode();
             }
         }
     }
@@ -790,7 +790,7 @@ public class HLCompletion implements JCompletion {
     }
 
     private boolean isStatementNode(JNode n) {
-        return n.parentNode() instanceof HNBlock;
+        return n.getParentNode() instanceof HNBlock;
     }
 
     private static class ProposalsList {

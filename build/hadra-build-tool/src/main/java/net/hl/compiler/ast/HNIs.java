@@ -26,7 +26,6 @@ public class HNIs extends HNode implements HNDeclare,HNDeclareTokenHolder {
         super(HNNodeId.H_IS);
         setIdentifierTypeName(identifierTypeName);
         setBase(base);
-        this.identifierToken = identifierToken;
         setIdentifierToken(identifierToken);
         setStartToken(startToken);
         setEndToken(endToken);
@@ -61,7 +60,7 @@ public class HNIs extends HNode implements HNDeclare,HNDeclareTokenHolder {
     }
 
     public HNIs setIdentifierTypeName(HNTypeToken identifierTypeName) {
-        this.identifierTypeName = identifierTypeName;
+        this.identifierTypeName = JNodeUtils.bind(this,identifierTypeName,"identifierTypeName");
         return this;
     }
 
@@ -93,7 +92,7 @@ public class HNIs extends HNode implements HNDeclare,HNDeclareTokenHolder {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         return Arrays.asList(base,identifierTypeName,identifierToken);
     }
 

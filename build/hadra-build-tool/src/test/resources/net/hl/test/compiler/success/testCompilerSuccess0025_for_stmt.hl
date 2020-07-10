@@ -11,7 +11,7 @@ package net.vpc.hadralang.test:test08;
         println(i);
         //yield x+2;
     }
-    for(i:1..2,j:4..3){
+    for(i:1..2,j:4..3; i<j){
         println(i+",",j);
     }
 //

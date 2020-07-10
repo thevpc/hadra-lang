@@ -80,7 +80,7 @@ public class HNOpDot extends HNode {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         return Arrays.asList(left, right);
     }
 
