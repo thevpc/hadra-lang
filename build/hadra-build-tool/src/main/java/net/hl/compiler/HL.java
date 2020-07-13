@@ -35,10 +35,10 @@ public class HL extends HOptions<HL> {
 
     public HL(JContext language, HIndexer indexer) {
         this(new DefaultHLProjectContext(
-                        language == null ? new HadraLanguage() : language,
-                        indexer == null ? new HIndexerImpl() : indexer,
-                        null
-                )
+                language == null ? new HadraLanguage() : language,
+                indexer == null ? new HIndexerImpl() : indexer,
+                null
+        )
         );
     }
 
@@ -91,6 +91,8 @@ public class HL extends HOptions<HL> {
                         if (!project.isSuccessful()) {
                             break;
                         }
+                    } else {
+                        stage.isEnabled(project, options);
                     }
                 }
                 if (toProcessTargets.size() > 0) {

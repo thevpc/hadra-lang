@@ -42,7 +42,7 @@ public class HStage10JavaCompiler extends AbstractHStage {
 
     @Override
     public HTarget[] getTargets() {
-        return new HTarget[]{HTarget.CLASS};
+        return new HTarget[]{HTarget.CLASS,HTarget.JAR};
     }
 
     @Override

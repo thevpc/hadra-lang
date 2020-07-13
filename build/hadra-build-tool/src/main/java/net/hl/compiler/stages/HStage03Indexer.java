@@ -18,8 +18,9 @@ import net.hl.compiler.HL;
 import net.hl.compiler.core.HTarget;
 import net.hl.compiler.index.HIndexer;
 
-public class HStage03Indexer extends AbstractHStage{
-    private static String LIB_HL_LANG_PREFIX="hadra-lang";
+public class HStage03Indexer extends AbstractHStage {
+
+    private static String LIB_HL_LANG_PREFIX = "hadra-lang";
 
     @Override
     public HTarget[] getTargets() {
@@ -31,7 +32,7 @@ public class HStage03Indexer extends AbstractHStage{
         boolean incremental = options.isIncremental();
         HIndexer indexer = project.indexer();
 
-        if(incremental && project.getResolvedMetaPackage() == null) {
+        if (incremental && project.getResolvedMetaPackage() == null) {
             if (project.getCompilationUnits().length == 1 && project.rootId().equals(project.getCompilationUnits()[0].getSource().name())) {
                 //this is a single file project
             } else {
@@ -51,8 +52,8 @@ public class HStage03Indexer extends AbstractHStage{
         Set<HIndexedProject> hlIndexedProjects = indexer.searchProjects();
         try {
             indexer.indexSDK(null, !incremental);
-        }catch (Exception ex){
-            project.log().error("X000", null,"unresolvable SDK : "+ex.toString(),null);
+        } catch (Exception ex) {
+            project.log().error("X000", null, "unresolvable SDK : " + ex.toString(), null);
         }
         for (HIndexedProject iproject : hlIndexedProjects) {
             for (String dependencyFile : iproject.getDependencyFiles()) {
@@ -62,54 +63,8 @@ public class HStage03Indexer extends AbstractHStage{
         // check if stdlib is included in the dependencies
         // if not, use compiler's classpath stdlib
         HIndexedClass tupleType = indexer.searchType("net.hl.lang.Tuple");
-        URL stdlibUrl=null;
-        if(tupleType==null){
-            ClassLoader cl = getClass().getClassLoader();
-            if(cl instanceof URLClassLoader){
-                URLClassLoader ucl=(URLClassLoader)cl;
-                for (URL url : ucl.getURLs()) {
-                    String s=url.toString();
-                    if(s.endsWith("/"+LIB_HL_LANG_PREFIX+"/target/classes/") || s.endsWith("/"+LIB_HL_LANG_PREFIX+"/target/classes")) {
-                        //this is dev stdlib, include it
-                        stdlibUrl = url;
-                        break;
-                    }else if(s.matches(".*/"+LIB_HL_LANG_PREFIX+"-.*[.]jar")){
-                        stdlibUrl = url;
-                        break;
-                    }
-                }
-            }
-            if(stdlibUrl==null){
-                //this happens when using sunfire under netbeans!
-                String cp = System.getProperty("java.class.path");
-                if(cp!=null){
-                    for (String s : cp.split(File.pathSeparator)) {
-                        if(s.endsWith("/"+LIB_HL_LANG_PREFIX+"/target/classes/") || s.endsWith("/"+LIB_HL_LANG_PREFIX+"/target/classes")) {
-                            try {
-                                //this is dev stdlib, include it
-                                stdlibUrl = Paths.get(s).toUri().toURL();
-                            } catch (MalformedURLException ex) {
-                                //
-                            }
-                            break;
-                        }else if(s.matches(".*/"+LIB_HL_LANG_PREFIX+"-.*[.]jar")){
-                            try {
-                                stdlibUrl = Paths.get(s).toUri().toURL();
-                            } catch (MalformedURLException ex) {
-                                //
-                            }
-                            break;
-                        }
-                    }
-                }
-                
-            }
-            if(stdlibUrl==null){
-                project.log().error("X000", null,"unresolvable stdlib",null);
-            }else{
-                project.log().warn("W000", null,"using default stdlib at "+stdlibUrl,null);
-                indexer.indexLibrary(stdlibUrl,false);
-            }
+        if (tupleType == null) {
+            project.log().error("X000", null, "unresolvable hadra-lang library : unable to load classes", null);
         }
         for (JCompilationUnit compilationUnit : project.getCompilationUnits()) {
             HNBlock ast = (HNBlock) compilationUnit.getAst();
@@ -118,6 +73,6 @@ public class HStage03Indexer extends AbstractHStage{
             }
             indexer.indexSource(compilationUnit);
         }
-        indexer.indexDeclareType(project.rootId(),project.getMetaPackageType());
+        indexer.indexDeclareType(project.rootId(), project.getMetaPackageType());
     }
 }

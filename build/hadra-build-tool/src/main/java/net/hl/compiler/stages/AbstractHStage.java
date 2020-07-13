@@ -17,7 +17,7 @@ import net.hl.compiler.core.HTarget;
 public abstract class AbstractHStage implements HStage{
     @Override
     public boolean isEnabled(HProject project, HL options) {
-        Set<HTarget> a = HTarget.expandDependencies(getTargets());
+        Set<HTarget> a = HTarget.expandReverseDependencies(getTargets());
         for (HTarget target : options.getTargets()) {
             if(a.contains(target)){
                 return true;

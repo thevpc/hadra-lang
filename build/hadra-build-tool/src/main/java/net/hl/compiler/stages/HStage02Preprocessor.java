@@ -1,5 +1,10 @@
 package net.hl.compiler.stages;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Paths;
 import net.vpc.app.nuts.Nuts;
 import net.vpc.app.nuts.NutsDefinition;
 import net.vpc.app.nuts.NutsSearchCommand;
@@ -70,6 +75,20 @@ public class HStage02Preprocessor extends AbstractHStage {
                     project.log().error("X000", null, "missing artifact name", metaPackage == null ? anyToken : metaPackage.getStartToken());
                 }
             }
+
+            String[] u = HStageUtils.resolveLangPaths(ip.getDependencyFiles(), false, false, true);
+            if (u.length == 0) {
+                u = HStageUtils.resolveLangPaths(null, true, true, true);
+                if (u.length > 0) {
+                    List<String> depIds = new ArrayList<>(Arrays.asList(ip.getDependencyIds()));
+                    List<String> depFiles = new ArrayList<>(Arrays.asList(ip.getDependencyFiles()));
+                    depFiles.add(u[0]);
+                    ip = new HIndexedProject(ip.getId(), ip.getModuleId(), ip.getSource(), depIds.toArray(new String[0]), depFiles.toArray(new String[0]));
+                } else {
+                    project.log().error("X000", null, "unresolvable hadra-lang library", null);
+                }
+            }
+
             project.indexer().indexProject(ip);
         } else {
             ip = project.indexer().searchProject(projectRoot);
@@ -78,14 +97,12 @@ public class HStage02Preprocessor extends AbstractHStage {
             }
         }
         if (ip == null) {
-            ip = new HIndexedProject(projectRoot, "NoName", currentMetaPackageSource, new String[0], new String[0]);
+            ip = new HIndexedProject(projectRoot, JModuleId.DEFAULT_MODULE_ID.toString(), currentMetaPackageSource, new String[0], new String[0]);
         }
+
         project.setIndexedProject(ip);
         HNDeclareType mpt = project.getMetaPackageType();
-        JModuleId jModuleId = JModuleId.valueOf(ip.getModuleId());
-        if (JStringUtils.isBlank(jModuleId.getArtifactId())) {
-            jModuleId = new JModuleId(jModuleId.getGroupId(), "NoName", jModuleId.getVersion());
-        }
+        JModuleId jModuleId = JModuleId.replaceBlanks(JModuleId.valueOf(ip.getModuleId()), JModuleId.DEFAULT_MODULE_ID);
         mpt.setMetaPackageName(resolvePackageName(jModuleId.getGroupId()));
         mpt.setPackageName(null);
         mpt.setNameToken(HTokenUtils.createToken(resolveClassName(jModuleId.getArtifactId())));
@@ -93,6 +110,7 @@ public class HStage02Preprocessor extends AbstractHStage {
 
     protected String resolvePackageName(String groupId) {
         StringBuilder sb = new StringBuilder(groupId.toLowerCase());
+        //TODO
         return sb.toString();
     }
 
@@ -202,11 +220,11 @@ public class HStage02Preprocessor extends AbstractHStage {
                 HNBlock.CompilationUnitBlock cub = (HNBlock.CompilationUnitBlock) nn;
                 HProject preProcessorProgram = new HProject(preProcessorContext, project.indexer());
                 preProcessorProgram.setIndexedProject(new HIndexedProject(projectId,
-                                "HLPreprocessor#0.1.0",
-                                currentMetaPackageSource,
-                                new String[0],
-                                new String[0]
-                        )
+                        "HLPreprocessor#0.1.0",
+                        currentMetaPackageSource,
+                        new String[0],
+                        new String[0]
+                )
                 );
                 preProcessorProgram.getMetaPackageType().setNameToken(HTokenUtils.createToken("HLPreprocessor"));
                 LOG.log(Level.INFO, "Running Preprocessor with code \n" + preprocessorRootNode);
@@ -262,6 +280,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                         }
                     }
                 }
+                //TODO!!
                 HIndexedProject ip = new HIndexedProject(
                         projectId, moduleId.toString(), currentMetaPackageSource,
                         classPath.toArray(new String[0]),

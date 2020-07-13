@@ -767,13 +767,10 @@ public class HCompletion implements JCompletion {
             return;
         }
         HLJCompilerContext hCompilerContext = (HLJCompilerContext) compilerContext;
-        for (JType jtype : hCompilerContext.lookupTypes(completeLevel <= 0 ? true : false, new Predicate<String>() {
-            @Override
-            public boolean test(String fullName) {
-                int d = fullName.lastIndexOf('.');
-                String name = d < 0 ? fullName : fullName.substring(d + 1);
-                return prefix.test(name);
-            }
+        for (JType jtype : hCompilerContext.lookupTypes(completeLevel <= 0, (String fullName) -> {
+            int d = fullName.lastIndexOf('.');
+            String name = d < 0 ? fullName : fullName.substring(d + 1);
+            return prefix.test(name);
         })) {
             completionProposals.add(HCompletionProposals.proposeType(offset, jtype));
         }

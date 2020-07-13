@@ -86,13 +86,7 @@ public class HType extends DefaultJType {
 
     protected JConstructor createDefaultConstructor() {
         DefaultJConstructor constructor = (DefaultJConstructor) createConstructor(JSignature.of(getName(), new JType[0]),
-                new String[0],
-                new JInvoke() {
-                    @Override
-                    public Object invoke(JInvokeContext context) {
-                        return new DefaultJObject(HType.this);
-                    }
-                }, new JModifier[]{
+                new String[0], (JInvokeContext context) -> new DefaultJObject(HType.this), new JModifier[]{
                         DefaultJModifierList.PUBLIC
                 }, new JAnnotationInstance[]{
                         JPrimitiveModifierAnnotationInstance.PUBLIC

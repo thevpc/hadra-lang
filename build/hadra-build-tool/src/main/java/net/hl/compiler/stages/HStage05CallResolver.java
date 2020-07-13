@@ -45,11 +45,6 @@ public class HStage05CallResolver extends HStageType2 {
         return new HTarget[]{HTarget.RESOLVED_AST};
     }
 
-    @Override
-    public boolean isEnabled(HProject project, HL options) {
-        return options.isTarget(HTarget.RESOLVED_AST);
-    }
-
     public boolean processCompilerStageCurrent(HNode node, HLJCompilerContext compilerContext) {
         switch (node.id()) {
             case H_IDENTIFIER: {

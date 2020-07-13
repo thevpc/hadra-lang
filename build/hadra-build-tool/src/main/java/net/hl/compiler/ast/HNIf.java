@@ -303,22 +303,12 @@ public class HNIf extends HNode {
 
         @Override
         public Supplier condition() {
-            return new Supplier() {
-                @Override
-                public Object get() {
-                    return context.evaluate(node.whenNode);
-                }
-            };
+            return (Supplier) () -> context.evaluate(node.whenNode);
         }
 
         @Override
         public Supplier result() {
-            return new Supplier() {
-                @Override
-                public Object get() {
-                    return context.evaluate(node.doNode);
-                }
-            };
+            return (Supplier) () -> context.evaluate(node.doNode);
         }
     }
 
