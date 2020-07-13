@@ -73,6 +73,11 @@ public class IntExtensions {
         }
         return array;
     }
+    
+    public static int[] newPrimitiveIntArray(IntRange range){
+        return range.toIntArray();
+    }
+    
     public static int[] newPrimitiveIntArray(int size, IntToIntFunction filler){
         int[] v = new int[size];
         for (int i = 0; i < size; i++) {

@@ -1,7 +1,7 @@
 package net.hl.build.mvnplugin;
 
 import net.hl.compiler.HL;
-import net.hl.compiler.core.HLProject;
+import net.hl.compiler.core.HProject;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
@@ -104,9 +104,9 @@ public class HLMvnPlugin extends AbstractMojo {
             }
         }
         hl.addSourceFile(getSourceDirectory())
-                .generateJavaFolder(getOutputDirectory());
+                .setJavaFolder(getOutputDirectory());
 
-        HLProject project = hl.compile();
+        HProject project = hl.compile();
         if (!project.isSuccessful()) {
             throw new MojoExecutionException(
                     "compilation failed with " + project.errorCount() + " errors.");

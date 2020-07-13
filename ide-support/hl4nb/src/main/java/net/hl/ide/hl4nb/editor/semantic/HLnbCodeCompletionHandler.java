@@ -2,7 +2,7 @@ package net.hl.ide.hl4nb.editor.semantic;
 
 import net.vpc.common.jeep.JCompletionProposal;
 import net.vpc.common.jeep.JIndexStoreMemory;
-import net.hl.compiler.core.HLCompletion;
+import net.hl.compiler.core.HCompletion;
 import net.hl.ide.hl4nb.HadraLanguageSingleton;
 import net.hl.ide.hl4nb.editor.parser.HLnbParserResult;
 import org.netbeans.api.java.platform.JavaPlatform;
@@ -72,14 +72,14 @@ public class HLnbCodeCompletionHandler implements CodeCompletionHandler {
             ArrayList<CompletionProposal> list = new ArrayList<>();
             try {
                 Project owner = FileOwnerQuery.getOwner(fileSource.getFileObject());
-                HLCompletion completion=null;
+                HCompletion completion=null;
                 if(owner!=null){
-                    completion=new HLCompletion(new LHnbProjectContext(
+                    completion=new HCompletion(new LHnbProjectContext(
                             HadraLanguageSingleton.getIndexStoreByProject(owner),
                             owner.getProjectDirectory().getPath()
                             ));
                 }else{
-                    completion=new HLCompletion(new LHnbProjectContext(new JIndexStoreMemory(),fileSource.getFileObject().getPath()));
+                    completion=new HCompletion(new LHnbProjectContext(new JIndexStoreMemory(),fileSource.getFileObject().getPath()));
                 }
                 completion.setCompilationUnit(parserResult.getCompilationUnit());
                 for (JCompletionProposal proposal : completion.findProposals(completionContext.getCaretOffset(), 0)) {

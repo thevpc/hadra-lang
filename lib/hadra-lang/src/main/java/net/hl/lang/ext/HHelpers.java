@@ -1,5 +1,7 @@
 package net.hl.lang.ext;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import net.hl.lang.*;
 
 import java.util.*;
@@ -11,34 +13,34 @@ import java.util.regex.Pattern;
 public class HHelpers {
 
     public static String[] resolveInstanceClassWithParentNames(Object cls) {
-        if(cls==null){
+        if (cls == null) {
             return new String[]{"null"};
         }
         return resolveClassWithParentNames(cls.getClass());
     }
 
     public static String[] resolveClassWithParentNames(Class cls) {
-        return Arrays.stream(resolveClassWithParents(cls)).map(x->x.getName()).toArray(String[]::new);
+        return Arrays.stream(resolveClassWithParents(cls)).map(x -> x.getName()).toArray(String[]::new);
     }
 
     public static Class[] resolveClassWithParents(Class cls) {
         //may be should add cache. But what about class loading???
         //i can still hope that hierarchy do not change across class loaders
         //of if classes are reloaded...
-        Set<Class> visited=new LinkedHashSet<>();
-        Stack<Class> stack=new Stack<>();
+        Set<Class> visited = new LinkedHashSet<>();
+        Stack<Class> stack = new Stack<>();
         stack.push(cls);
         visited.add(cls);
-        while(!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             Class n = stack.pop();
             Class s = n.getSuperclass();
-            if(s!=null){
-                if(visited.add(s)){
+            if (s != null) {
+                if (visited.add(s)) {
                     stack.push(s);
                 }
             }
             for (Class ii : n.getInterfaces()) {
-                if(visited.add(ii)){
+                if (visited.add(ii)) {
                     stack.push(ii);
                 }
             }
@@ -70,6 +72,66 @@ public class HHelpers {
 
     public static <T, V> V applyOrDefault(T a, Function<T, V> s) {
         return a != null ? s.apply(a) : null;
+    }
+
+    public static <T> T rtInstanceCall(Object base, String method, Supplier<Object[]> s, Class<T> resultType, boolean skipNull) {
+        if (base == null) {
+            if (skipNull) {
+                return null;
+            }
+            throw new NullPointerException("null base");
+        }
+        return rtCall(base, base.getClass(), method, s, resultType);
+    }
+
+    public static <T> T rtStaticCall(Class baseType, String method, Supplier<Object[]> s, Class<T> resultType) {
+        return rtCall(null, baseType, method, s, resultType);
+    }
+
+    public static <T> T rtCall(Object base, Class baseType, String method, Supplier<Object[]> s, Class<T> resultType) {
+        Object[] parameters = s.get();
+        //we should check best match here!
+        Class[] types = new Class[parameters.length];
+        boolean checkDirect = true;
+        StringBuilder argsSig = new StringBuilder();
+        for (int i = 0; i < types.length; i++) {
+            if (i > 0) {
+                argsSig.append(",");
+            }
+            if (parameters[i] == null) {
+                parameters[i] = false;
+                argsSig.append("null");
+            } else {
+                types[i] = parameters[i] == null ? null : parameters[i].getClass();
+                argsSig.append(types[i].getName());
+            }
+        }
+        Method mm = null;
+        if (checkDirect) {
+            try {
+                mm = baseType.getDeclaredMethod(method, types);
+            } catch (NoSuchMethodException | SecurityException ex) {
+                //ignore
+            }
+        }
+        if (mm == null) {
+            //should do some extra reflection matching...
+        }
+        if (mm == null) {
+            throw new IllegalArgumentException("Method not found " + baseType + "." + method + "(" + argsSig + ")");
+        }
+        mm.setAccessible(true);
+        try {
+            return (T) mm.invoke(base, parameters);
+        } catch (IllegalAccessException | IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Unable to call " + baseType + "." + method + "(" + argsSig + ")", ex);
+        } catch (InvocationTargetException ex) {
+            Throwable te = ex.getTargetException();
+            if (te instanceof RuntimeException) {
+                throw (RuntimeException) te;
+            }
+            throw new RuntimeException(ex);
+        }
     }
 
     public static <T> T arrayGet(T[] a, IntToIntFunction arrayLenFunction) {
@@ -301,5 +363,4 @@ public class HHelpers {
     //endregion arrays of double
 
 //    public static <C,R> R If(Branch<C,R>[] branches,Supplier<R> defaultBranch)
-
 }

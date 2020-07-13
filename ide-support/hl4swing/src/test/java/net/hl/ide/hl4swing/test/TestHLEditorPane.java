@@ -5,9 +5,9 @@ import net.vpc.common.jeep.editor.JEditorPaneBuilder;
 import net.vpc.common.jeep.editor.JSyntaxUtils;
 import net.vpc.common.jeep.editor.comp.JSyntaxPosLabel;
 import net.hl.compiler.core.DefaultHLProjectContext;
-import net.hl.compiler.core.HLCompletion;
+import net.hl.compiler.core.HCompletion;
 import net.hl.compiler.core.HadraLanguage;
-import net.hl.compiler.index.DefaultHLIndexer;
+import net.hl.compiler.index.HIndexerImpl;
 import net.hl.ide.hl4swing.HLJSyntaxKit;
 
 import javax.swing.*;
@@ -21,9 +21,9 @@ public class TestHLEditorPane {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JEditorPaneBuilder editorBuilder = new JEditorPaneBuilder();
         HadraLanguage jContext = new HadraLanguage();
-        DefaultHLProjectContext projectContext = new DefaultHLProjectContext(jContext, new DefaultHLIndexer(),null);
+        DefaultHLProjectContext projectContext = new DefaultHLProjectContext(jContext, new HIndexerImpl(),null);
 
-        HLCompletion completion = new HLCompletion(projectContext);
+        HCompletion completion = new HCompletion(projectContext);
         JEditorPane e = editorBuilder.editor();
         JComponent editor = editorBuilder
                 .addAutoComplete(completion)
