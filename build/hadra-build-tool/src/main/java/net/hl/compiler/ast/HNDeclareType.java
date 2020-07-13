@@ -4,11 +4,11 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.util.JNodeUtils;
 import net.vpc.common.jeep.util.JStringUtils;
 import net.vpc.common.jeep.util.JeepUtils;
-import net.hl.compiler.utils.HUtils;
 
 import java.util.*;
 
 public class HNDeclareType extends HNode implements HNDeclare {
+
     private List<HNExtends> extendsList = new ArrayList<>();
     private JToken extendsSepToken;
     private List<HNDeclareIdentifier> mainConstructorArgs;
@@ -23,6 +23,11 @@ public class HNDeclareType extends HNode implements HNDeclare {
     private String globalName;
     private String metaPackageName;
 
+    /**
+     * generated type like class, enum, @interface etc
+     */
+    private String genType;
+
     public HNDeclareType() {
         super(HNNodeId.H_DECLARE_TYPE);
     }
@@ -32,6 +37,13 @@ public class HNDeclareType extends HNode implements HNDeclare {
         setStartToken(token);
     }
 
+    public String getGenType() {
+        return genType;
+    }
+
+    public void setGenType(String genType) {
+        this.genType = genType;
+    }
 
     public JToken getExtendsSepToken() {
         return extendsSepToken;
@@ -42,9 +54,8 @@ public class HNDeclareType extends HNode implements HNDeclare {
         return this;
     }
 
-
     public HNDeclareType setExtendsList(List<HNExtends> extendsList) {
-        this.extendsList = JNodeUtils.bind(this,extendsList, "extendsList");
+        this.extendsList = JNodeUtils.bind(this, extendsList, "extendsList");
         return this;
     }
 
@@ -89,7 +100,7 @@ public class HNDeclareType extends HNode implements HNDeclare {
     }
 
     public HNDeclareType setMainConstructorArgs(List<HNDeclareIdentifier> mainConstructorArgs) {
-        this.mainConstructorArgs = JNodeUtils.bind(this,mainConstructorArgs, "mainConstructorArgs");
+        this.mainConstructorArgs = JNodeUtils.bind(this, mainConstructorArgs, "mainConstructorArgs");
         return this;
     }
 
@@ -98,7 +109,7 @@ public class HNDeclareType extends HNode implements HNDeclare {
     }
 
     public HNDeclareType setExtends(List<HNExtends> arguments) {
-        this.extendsList = JNodeUtils.bind(this,arguments, "arguments");
+        this.extendsList = JNodeUtils.bind(this, arguments, "arguments");
         return this;
     }
 
@@ -112,7 +123,7 @@ public class HNDeclareType extends HNode implements HNDeclare {
         }
         String packageName = getPackageName();
         if (!JStringUtils.isBlank(packageName)) {
-            if(sb.length()>0) {
+            if (sb.length() > 0) {
                 sb.append(".");
             }
             sb.append(packageName);
@@ -130,12 +141,12 @@ public class HNDeclareType extends HNode implements HNDeclare {
         }
         String packageName = getPackageName();
         if (!JStringUtils.isBlank(packageName)) {
-            if (sb.length()>0) {
+            if (sb.length() > 0) {
                 sb.append(".");
             }
             sb.append(packageName);
         }
-        if (sb.length()>0) {
+        if (sb.length() > 0) {
             sb.append(".");
         }
         sb.append(getName());
@@ -169,7 +180,7 @@ public class HNDeclareType extends HNode implements HNDeclare {
     }
 
     public HNDeclareType setBody(HNode body) {
-        this.body=JNodeUtils.bind(this,body, "body");
+        this.body = JNodeUtils.bind(this, body, "body");
         return this;
     }
 
@@ -244,9 +255,8 @@ public class HNDeclareType extends HNode implements HNDeclare {
         return sb.toString();
     }
 
-
-    public void copyFrom(JNode node,JNodeCopyFactory copyFactory) {
-        super.copyFrom(node,copyFactory);
+    public void copyFrom(JNode node, JNodeCopyFactory copyFactory) {
+        super.copyFrom(node, copyFactory);
         if (node instanceof HNDeclareType) {
             HNDeclareType o = (HNDeclareType) node;
             this.extendsList = JNodeUtils.bindCopy(this, copyFactory, o.extendsList);

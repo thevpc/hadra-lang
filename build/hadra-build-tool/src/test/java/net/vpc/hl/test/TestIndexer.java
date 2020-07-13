@@ -2,9 +2,9 @@ package net.vpc.hl.test;
 
 import net.vpc.common.jeep.JIndexStoreMemory;
 import net.vpc.common.jeep.core.JIndexQuery;
-import net.hl.compiler.index.DefaultHLIndexer;
-import net.hl.compiler.index.HLIndexedClass;
-import net.hl.compiler.index.HLIndexedMethod;
+import net.hl.compiler.index.HIndexerImpl;
+import net.hl.compiler.index.HIndexedClass;
+import net.hl.compiler.index.HIndexedMethod;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ public class TestIndexer {
 
     @Test
     public void testJarIndexer() {
-        DefaultHLIndexer mem=new DefaultHLIndexer(null);
+        HIndexerImpl mem=new HIndexerImpl(null);
         mem.indexLibrary(new File("/data/public/git/vpc-common/vpc-common-jeep/target/vpc-common-jeep-1.2.7.jar"),true);
         System.out.println("");
     }
@@ -22,14 +22,14 @@ public class TestIndexer {
     @Test
     public void testJIndexStoreMemory() {
         JIndexStoreMemory store = new JIndexStoreMemory();
-        DefaultHLIndexer ii = new DefaultHLIndexer(store);
-        HLIndexedMethod m1 = new HLIndexedMethod("m1", new String[0],
+        HIndexerImpl ii = new HIndexerImpl(store);
+        HIndexedMethod m1 = new HIndexedMethod("m1", new String[0],
                 new String[]{"a"},
                 new String[0],
                 "r",
                 "cls", new String[0], "test"
         );
-        HLIndexedMethod m2 = new HLIndexedMethod("m2", new String[0],
+        HIndexedMethod m2 = new HIndexedMethod("m2", new String[0],
                 new String[]{"a"},
                 new String[0],
                 "r",
@@ -38,7 +38,7 @@ public class TestIndexer {
         store.index("test", "Method", m1, true);
         store.index("test", "Method", m2, true);
         store.index("test", "Method", m2, true);
-        for (HLIndexedMethod cls : ii.searchMethods("cls", null, true)) {
+        for (HIndexedMethod cls : ii.searchMethods("cls", null, true)) {
             System.out.println(cls);
         }
         Assertions.assertEquals(2, ii.searchMethods("cls", null, true).size());
@@ -47,7 +47,7 @@ public class TestIndexer {
     @Test
     public void testJIndexStoreMemory2() {
         JIndexStoreMemory store = new JIndexStoreMemory();
-        DefaultHLIndexer ii = new DefaultHLIndexer(store);
+        HIndexerImpl ii = new HIndexerImpl(store);
         ii.indexSDK(null, true);
         System.out.println(ii.searchPackage("java"));
         Assertions.assertNotNull(ii.searchPackage("java"));
@@ -55,7 +55,7 @@ public class TestIndexer {
 
         int countOk = 0;
         int countAll = 0;
-        for (HLIndexedClass cls : ii.searchTypes(new JIndexQuery().whereEq("packages", "java"))) {
+        for (HIndexedClass cls : ii.searchTypes(new JIndexQuery().whereEq("packages", "java"))) {
             if (cls.getFullName().equals("java.lang.Number")) {
                 countOk++;
             }

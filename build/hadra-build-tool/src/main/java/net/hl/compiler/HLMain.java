@@ -1,5 +1,6 @@
 package net.hl.compiler;
 
+import net.hl.compiler.core.HTarget;
 import net.vpc.app.nuts.*;
 
 public class HLMain extends NutsApplication {
@@ -30,6 +31,54 @@ public class HLMain extends NutsApplication {
                     case "-r":
                     case "--root":{
                         hl.setProjectRoot(cmdLine.nextString().getStringValue());
+                        return true;
+                    }
+                    case "--parse":{
+                        hl.addTarget(HTarget.AST);
+                        return true;
+                    }
+                    case "--resolve":{
+                        hl.addTarget(HTarget.RESOLVED_AST);
+                        return true;
+                    }
+                    case "--java":{
+                        hl.addTarget(HTarget.JAVA);
+                        return true;
+                    }
+                    case "--c":{
+                        hl.addTarget(HTarget.C);
+                        return true;
+                    }
+                    case "--c++":{
+                        hl.addTarget(HTarget.CPP);
+                        return true;
+                    }
+                    case "--c#":{
+                        hl.addTarget(HTarget.CS);
+                        return true;
+                    }
+                    case "--bin-c":{
+                        hl.addTarget(HTarget.BIN_C);
+                        return true;
+                    }
+                    case "--bin-c++":{
+                        hl.addTarget(HTarget.BIN_CPP);
+                        return true;
+                    }
+                    case "--bin-c#":{
+                        hl.addTarget(HTarget.BIN_CS);
+                        return true;
+                    }
+                    case "--java-classes":{
+                        hl.addTarget(HTarget.CLASS);
+                        return true;
+                    }
+                    case "--jar":{
+                        hl.addTarget(HTarget.JAR);
+                        return true;
+                    }
+                    case "--run":{
+                        hl.addTarget(HTarget.RUN);
                         return true;
                     }
                 }

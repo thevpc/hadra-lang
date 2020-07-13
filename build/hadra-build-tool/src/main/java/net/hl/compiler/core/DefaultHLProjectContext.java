@@ -1,14 +1,14 @@
 package net.hl.compiler.core;
 
 import net.vpc.common.jeep.JContext;
-import net.hl.compiler.index.HLIndexer;
+import net.hl.compiler.index.HIndexer;
 
-public class DefaultHLProjectContext implements HLProjectContext{
+public class DefaultHLProjectContext implements HProjectContext{
     JContext languageContext;
-    HLIndexer indexer;
+    HIndexer indexer;
     String rootId;
 
-    public DefaultHLProjectContext(JContext languageContext, HLIndexer indexer,String rootId) {
+    public DefaultHLProjectContext(JContext languageContext, HIndexer indexer,String rootId) {
         this.languageContext = languageContext;
         this.indexer = indexer;
         this.rootId = rootId;
@@ -22,7 +22,7 @@ public class DefaultHLProjectContext implements HLProjectContext{
         return languageContext;
     }
 
-    public HLIndexer indexer() {
+    public HIndexer indexer() {
         return indexer;
     }
 }

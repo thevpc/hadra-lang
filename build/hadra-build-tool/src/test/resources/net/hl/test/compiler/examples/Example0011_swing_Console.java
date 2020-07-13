@@ -1,3 +1,4 @@
+package net.hl.test.compiler.examples;
 import java.io.*;
 /**
  * this is a sample java code from
@@ -11,7 +12,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-public class Console2 extends JFrame implements WindowListener, Runnable {
+public class Example0011_swing_Console extends JFrame implements WindowListener, Runnable {
 
 
     private JTextPane textArea;
@@ -24,13 +25,13 @@ public class Console2 extends JFrame implements WindowListener, Runnable {
     private Style style;
 
     public static void main(String[] args) {
-        new Console2();
+        new Example0011_swing_Console();
         System.out.println("Example message");
         System.err.println("Example error message");
     }
 
     /** Initializes a new console */
-    public Console2() {
+    public Example0011_swing_Console() {
 
         // The area to which the output will be send to
         textArea = new JTextPane();
@@ -97,7 +98,7 @@ public class Console2 extends JFrame implements WindowListener, Runnable {
             stdOutReader.join(1000);
             stdOutPin.close();
         } catch (Exception e) {
-        }.windowOpened(WindowEvent)
+        }
         try {
             stdErrReader.join(1000);
             stdErrPin.close();

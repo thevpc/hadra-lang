@@ -15,11 +15,10 @@ import net.vpc.common.jeep.impl.types.DefaultJType;
 import net.vpc.common.jeep.util.*;
 import net.vpc.common.textsource.JTextSourceFactory;
 import net.hl.compiler.core.HFunctionType;
-import net.hl.compiler.core.HLProject;
+import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.HMissingLinkageException;
 import net.hl.compiler.core.elements.*;
-import net.hl.compiler.index.HLIndexedClass;
-import net.hl.compiler.index.HLIndexer;
+import net.hl.compiler.index.HIndexedClass;
 import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.*;
 import net.hl.lang.Tuple;
@@ -31,11 +30,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.hl.compiler.index.HIndexer;
 
 public class HLJCompilerContext extends JCompilerContextImpl {
 
     private static final Logger LOG = Logger.getLogger(HLJCompilerContext.class.getName());
-    private HLProject project;
+    private HProject project;
     //    private Function<JType, JConverter1[]> contextConverterSupplier = new Function<JType, JConverter1[]>() {
 //        @Override
 //        public JConverter1[] apply(JType from) {
@@ -69,15 +69,15 @@ public class HLJCompilerContext extends JCompilerContextImpl {
 //    };
     private Set<String> _resolveImportStatics = null;
 
-    public HLJCompilerContext(HLProject project) {
+    public HLJCompilerContext(HProject project) {
         this(0, 0, new JNodePath(), new JImportInfo[0], project.languageContext(), null, project.log(), project, null, null);
     }
 
-    public HLJCompilerContext(HLProject project, JCompilationUnit compilationUnit) {
+    public HLJCompilerContext(HProject project, JCompilationUnit compilationUnit) {
         this(0, 0, new JNodePath(compilationUnit.getAst()), new JImportInfo[0], project.languageContext(), null, project.log(), project, compilationUnit, null);
     }
 
-    public HLJCompilerContext(int iteration, int pass, JNodePath path, JImportInfo[] imports, JContext context, String packageName, JCompilerLog log, HLProject project, JCompilationUnit compilationUnit, HLJCompilerContext parent) {
+    public HLJCompilerContext(int iteration, int pass, JNodePath path, JImportInfo[] imports, JContext context, String packageName, JCompilerLog log, HProject project, JCompilationUnit compilationUnit, HLJCompilerContext parent) {
         super(iteration, pass, path, imports, context, packageName, log == null ? context.log() : log, compilationUnit, parent);
         this.project = project;
     }
@@ -99,11 +99,11 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         return true;
     }
 
-    public HLIndexer indexer() {
+    public HIndexer indexer() {
         return project.indexer();
     }
 
-    public HLProject project() {
+    public HProject project() {
         return project;
     }
 
@@ -170,7 +170,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         if (_anImport.endsWith(".**")) {
             String ns = _anImport.substring(0, _anImport.length() - 3);
             LinkedHashSet<String> all = new LinkedHashSet<>();
-            for (HLIndexedClass cls : project.indexer().searchTypes(new JIndexQuery().whereEq("fullName", ns))) {
+            for (HIndexedClass cls : project.indexer().searchTypes(new JIndexQuery().whereEq("fullName", ns))) {
                 all.add(cls.getFullName());
                 all.add(cls.getFullName() + ".*");
                 for (String export : cls.getExports()) {
@@ -191,7 +191,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         for (String _anImport : expandImports(anImports)) {
             if (_anImport.endsWith(".*")) {
                 String ns = _anImport.substring(0, _anImport.length() - 2);
-                Stream<HLIndexedClass> s1 = project.indexer().searchTypes(new JIndexQuery().whereEq("fullName", ns))
+                Stream<HIndexedClass> s1 = project.indexer().searchTypes(new JIndexQuery().whereEq("fullName", ns))
                         .stream();
                 if (predicate != null) {
                     s1 = s1.filter(x -> predicate.test(x.getFullName()));
@@ -251,7 +251,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 String ns = _anImport.substring(0, _anImport.length() - 3);
                 //this must be a package because type @export expansion is already processed
                 //check packages (not package)
-                Stream<HLIndexedClass> s1 = project.indexer().searchTypes(new JIndexQuery().whereEq("packages", ns))
+                Stream<HIndexedClass> s1 = project.indexer().searchTypes(new JIndexQuery().whereEq("packages", ns))
                         .stream();
                 if (predicate != null) {
                     s1 = s1.filter(x -> predicate.test(x.getFullName()));
@@ -283,7 +283,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 }
             } else {
                 //this should be a valid class; import static is not supported
-                Stream<HLIndexedClass> s1 = project.indexer().searchTypes(new JIndexQuery().whereEq("fullName", _anImport))
+                Stream<HIndexedClass> s1 = project.indexer().searchTypes(new JIndexQuery().whereEq("fullName", _anImport))
                         .stream();
                 if (predicate != null) {
                     s1 = s1.filter(x -> predicate.test(x.getFullName()));
@@ -559,7 +559,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             JNode root = compilationUnit.getAst();
             root.visit(visitor);
         }
-        metaPackageType().visit(visitor);
+        getMetaPackageType().visit(visitor);
     }
 
     private String[] namesWithAliases(String name, HFunctionType opType) {
@@ -579,8 +579,8 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         switch (name) {
             case "+":
             case "plus": {
-                all.add(HLExtensionNames.PLUS_SHORT);
-                all.add(HLExtensionNames.PLUS_LONG);
+                all.add(HExtensionNames.PLUS_SHORT);
+                all.add(HExtensionNames.PLUS_LONG);
                 break;
             }
             case "-":
@@ -746,28 +746,28 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 all.add("postfix_dec");
                 break;
             }
-            case HLExtensionNames.NEW_RANGE_II_SHORT:
-            case HLExtensionNames.NEW_RANGE_II_LONG: {
-                all.add(HLExtensionNames.NEW_RANGE_II_SHORT);
-                all.add(HLExtensionNames.NEW_RANGE_II_LONG);
+            case HExtensionNames.NEW_RANGE_II_SHORT:
+            case HExtensionNames.NEW_RANGE_II_LONG: {
+                all.add(HExtensionNames.NEW_RANGE_II_SHORT);
+                all.add(HExtensionNames.NEW_RANGE_II_LONG);
                 break;
             }
-            case HLExtensionNames.NEW_RANGE_EI_SHORT:
-            case HLExtensionNames.NEW_RANGE_EI_LONG: {
-                all.add(HLExtensionNames.NEW_RANGE_EI_SHORT);
-                all.add(HLExtensionNames.NEW_RANGE_EI_LONG);
+            case HExtensionNames.NEW_RANGE_EI_SHORT:
+            case HExtensionNames.NEW_RANGE_EI_LONG: {
+                all.add(HExtensionNames.NEW_RANGE_EI_SHORT);
+                all.add(HExtensionNames.NEW_RANGE_EI_LONG);
                 break;
             }
-            case HLExtensionNames.NEW_RANGE_IE_SHORT:
-            case HLExtensionNames.NEW_RANGE_IE_LONG: {
-                all.add(HLExtensionNames.NEW_RANGE_IE_SHORT);
-                all.add(HLExtensionNames.NEW_RANGE_IE_LONG);
+            case HExtensionNames.NEW_RANGE_IE_SHORT:
+            case HExtensionNames.NEW_RANGE_IE_LONG: {
+                all.add(HExtensionNames.NEW_RANGE_IE_SHORT);
+                all.add(HExtensionNames.NEW_RANGE_IE_LONG);
                 break;
             }
-            case HLExtensionNames.NEW_RANGE_EE_SHORT:
-            case HLExtensionNames.NEW_RANGE_EE_LONG: {
-                all.add(HLExtensionNames.NEW_RANGE_EE_SHORT);
-                all.add(HLExtensionNames.NEW_RANGE_EE_LONG);
+            case HExtensionNames.NEW_RANGE_EE_SHORT:
+            case HExtensionNames.NEW_RANGE_EE_LONG: {
+                all.add(HExtensionNames.NEW_RANGE_EE_SHORT);
+                all.add(HExtensionNames.NEW_RANGE_EE_LONG);
                 break;
             }
             default: {
@@ -1214,10 +1214,10 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 }
                 break;
             }
-            case HLExtensionNames.BRACKET_GET_SHORT:
-            case HLExtensionNames.BRACKET_GET_LONG: {
+            case HExtensionNames.BRACKET_GET_SHORT:
+            case HExtensionNames.BRACKET_GET_LONG: {
                 if (binaryOp) {
-                    String[] nameAlternatives = namesWithAliases(HLExtensionNames.BRACKET_GET_LONG, HFunctionType.SPECIAL);
+                    String[] nameAlternatives = namesWithAliases(HExtensionNames.BRACKET_GET_LONG, HFunctionType.SPECIAL);
                     JInvokable y = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
                     if (y != null) {
                         return y;
@@ -1230,18 +1230,18 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     }
                     failInfo.fail(jOnError, getLog(), "S044", null, "To use "
                             + baseTypeNameSafe + "[" + JTypePattern.signatureStringNoPars(oldTypes) + "] operator, you should implement either \n"
-                            + "\tinstance method: " + baseType.toString() + "." + HLExtensionNames.BRACKET_GET_LONG + "" + JTypePattern.signatureString(oldTypes) + " \n"
+                            + "\tinstance method: " + baseType.toString() + "." + HExtensionNames.BRACKET_GET_LONG + "" + JTypePattern.signatureString(oldTypes) + " \n"
                             + "\tor\n"
-                            + "\tstatic method  : " + HLExtensionNames.BRACKET_GET_LONG + "" + JTypePattern.signatureString(args) + " \n", location);
+                            + "\tstatic method  : " + HExtensionNames.BRACKET_GET_LONG + "" + JTypePattern.signatureString(args) + " \n", location);
                     return null;
                 }
                 break;
             }
-            case HLExtensionNames.BRACKET_SET_SHORT:
-            case HLExtensionNames.BRACKET_SET_LONG: {
+            case HExtensionNames.BRACKET_SET_SHORT:
+            case HExtensionNames.BRACKET_SET_LONG: {
                 if (argsCount >= 3) {
                     ///arg0[arg1,...argn]=lastArg
-                    String[] nameAlternatives = namesWithAliases(HLExtensionNames.BRACKET_SET_LONG, HFunctionType.SPECIAL);
+                    String[] nameAlternatives = namesWithAliases(HExtensionNames.BRACKET_SET_LONG, HFunctionType.SPECIAL);
                     JInvokable y = findFunctionMatchOrNull0(nameAlternatives, args, location, failInfo);
                     if (y != null) {
                         return y;
@@ -1256,9 +1256,9 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                             "S044", null,
                             "To use "
                                     + baseTypeNameSafe + "[" + JTypePattern.signatureStringNoPars(oldTypes) + "] set operator, you should implement either \n"
-                                    + "\tinstance method: " + baseType.toString() + "." + HLExtensionNames.BRACKET_SET_LONG + "" + JTypePattern.signatureString(oldTypes) + " \n"
+                                    + "\tinstance method: " + baseType.toString() + "." + HExtensionNames.BRACKET_SET_LONG + "" + JTypePattern.signatureString(oldTypes) + " \n"
                                     + "\tor\n"
-                                    + "\tstatic method  : " + HLExtensionNames.BRACKET_SET_LONG + "" + JTypePattern.signatureString(args) + " \n", location
+                                    + "\tstatic method  : " + HExtensionNames.BRACKET_SET_LONG + "" + JTypePattern.signatureString(args) + " \n", location
                     );
                     return null;
                 }
@@ -2116,7 +2116,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     public HNDeclareType lookupEnclosingDeclareTypeImmediate(JNode node) {
         HNode d = lookupEnclosingDeclaration(node);
         if (d == null) {
-            return metaPackageType();
+            return getMetaPackageType();
         }
         if (d instanceof HNDeclareType) {
             return (HNDeclareType) d;
@@ -2222,7 +2222,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             n = p;
         }
         if (returnMetaPackage) {
-            return metaPackageType();
+            return getMetaPackageType();
         }
         return null;
     }
@@ -2239,7 +2239,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             }
             n = p;
         }
-        return metaPackageType();
+        return getMetaPackageType();
     }
 
     public HNDeclareIdentifier lookupEnclosingDeclareIdentifier(HNDeclareToken node) {
@@ -2342,7 +2342,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                             HNBlock skipImports = (HNBlock) HNodeUtils.skipImportBlock(d);
                             switch (skipImports.getBlocType()) {
                                 case GLOBAL_BODY: {
-                                    JType dt = getOrCreateType(metaPackageType());
+                                    JType dt = getOrCreateType(getMetaPackageType());
                                     if (lookupTypes == null || lookupTypes.contains(LookupType.FIELD)) {
                                         fillFields(name, dt, result, argument);
                                     }
@@ -2375,7 +2375,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                             switch (skipImports.getBlocType()) {
                                 case GLOBAL_BODY: {
                                     HNElementMethod f = new HNElementMethod(argument.getInvokable());
-                                    f.setDeclaringType(getOrCreateType(metaPackageType()));
+                                    f.setDeclaringType(getOrCreateType(getMetaPackageType()));
                                     f.setDeclaration(argument);
                                     result.add(f);
                                     break;
@@ -2715,7 +2715,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         return null;
     }
 
-    public HNDeclareType metaPackageType() {
+    public HNDeclareType getMetaPackageType() {
         return project.getMetaPackageType();
     }
 //
@@ -3249,7 +3249,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             pn = pn.getParentNode();
         }
         if (immediateParent != null) {
-            declaringType = metaPackageType();
+            declaringType = getMetaPackageType();
         }
         if (declaringType == null) {
             if (!JStringUtils.isBlank(type.getPackageName())) {
@@ -3364,7 +3364,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     public JCallerInfo getCallerInfo() {
         String n = HUtils.getSourceName(getNode());
         JType y = lookupEnclosingType(getNode());
-        return new HLCallerInfo(n, y);
+        return new HCallerInfo(n, y);
     }
 
     public enum LookupType {

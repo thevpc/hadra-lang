@@ -417,6 +417,10 @@ public class HNodeUtils {
         return false;
     }
 
+    public static boolean isModifierAnnotation(HNAnnotationCall call){
+        return call.getName() instanceof HNTypeTokenSpecialAnnotation;
+    }
+    
     public static boolean isModifierAnnotation(HNAnnotationCall call,String ... any){
         return call.getName() instanceof HNTypeTokenSpecialAnnotation
                 && Arrays.asList(any).contains(((HNTypeTokenSpecialAnnotation)call.getName()).getTypename().name());

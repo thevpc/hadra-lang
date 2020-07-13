@@ -1,3 +1,7 @@
+package net.hl.test.compiler.examples;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Objects;
 
 class Address{
@@ -42,13 +46,13 @@ class Address{
 enum Gender{
     MALE,FEMALE
 }
-class Person(){
+class Person{
     private String firstName=null;
     private String lastName=null;
     private Person father=null;
     private Person mother=null;
     private Date birthDate=null;
-    private Gender gender=MALE;
+    private Gender gender=Gender.MALE;
     private Address address=null;
 
     public Person(String firstName, String lastName, Person father, Person mother, Date birthDate, Gender gender, Address address) {
@@ -67,7 +71,7 @@ class Person(){
         father=null;
         mother=null;
         birthDate=null;
-        gender=MALE;
+        gender=Gender.MALE;
     }
 
     public String getFirstName() {
@@ -133,17 +137,19 @@ class Person(){
         return this;
     }
 }
-public class ModuleClass {
-    public static void main(String[]) {
+public class Example0012_data {
+    public static void main(String[] args) {
         //Person samy = new Person();
         //samy.firstName = "samy";
         //samy.gender = MALE
         Person samy = new Person("samy", null,null,null,null,Gender.MALE,new Address("No","Where"));
         Person monia =new Person("monia", null,null,null,null,Gender.FEMALE,new Address("No","Where"));
-        Person salim = new Person("salim", "kilani", samy, monia, t "2000-01-01", Gender.MALE, Address("Arafet St", "Sousse"));
+        Person salim = new Person("salim", "kilani", samy, monia, Date.from(
+                LocalDate.parse("2000-01-01").atStartOfDay(ZoneId.systemDefault()).toInstant()
+        ), Gender.MALE, new Address("Arafet St", "Sousse"));
         Person leila =new Person(null,salim.getLastName(),salim.getFather(),salim.getMother(),salim.getBirthDate(),Gender.MALE, new Address("No","Where"));
-        leila.firstName = "sarra";
-        leila.gender = FEMALE
-        Person leila =new Person("amani",salim.getLastName(),salim.getFather(),salim.getMother(),salim.getBirthDate(),Gender.FEMALE,salim.getAddress());
+        leila.setFirstName("sarra");
+        leila.setGender(Gender.FEMALE);
+        Person leila2 =new Person("amani",salim.getLastName(),salim.getFather(),salim.getMother(),salim.getBirthDate(),Gender.FEMALE,salim.getAddress());
     }
 }

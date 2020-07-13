@@ -11,12 +11,12 @@ import java.io.StringReader;
 import java.util.*;
 
 class JavaClassVisitor extends ClassVisitor {
-    private final DefaultHLIndexer defaultHLIndexer;
+    private final HIndexerImpl defaultHLIndexer;
     private String source;
     private String currentFullName;
     private Set<String> visitedMethods=new LinkedHashSet<>();
 
-    public JavaClassVisitor(DefaultHLIndexer defaultHLIndexer, String source) {
+    public JavaClassVisitor(HIndexerImpl defaultHLIndexer, String source) {
         super(Opcodes.ASM8);
         this.defaultHLIndexer = defaultHLIndexer;
         this.source = source;
@@ -269,7 +269,7 @@ class JavaClassVisitor extends ClassVisitor {
         }
         JavaClassNames currentFullName = parseFullName(name);
         this.currentFullName = currentFullName.fullName;
-        defaultHLIndexer.indexType0(new HLIndexedClass(
+        defaultHLIndexer.indexType0(new HIndexedClass(
                 currentFullName.simpleName,
                 currentFullName.simpleName2,
                 this.currentFullName, currentFullName.declaringName==null?"":currentFullName.declaringName,
@@ -289,7 +289,7 @@ class JavaClassVisitor extends ClassVisitor {
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         if(!JTypeUtils.isSynthetic(access)) {
             String[] modifiers = parseModifiers(access);
-            defaultHLIndexer.indexField0(new HLIndexedField(
+            defaultHLIndexer.indexField0(new HIndexedField(
                     currentFullName, parseFullName2(desc), name, new String[0], modifiers,
                     source
             ));

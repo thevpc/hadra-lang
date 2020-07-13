@@ -14,11 +14,11 @@ import net.vpc.common.jeep.core.DefaultJeep;
 import net.vpc.common.jeep.core.tokens.*;
 import net.vpc.common.jeep.impl.tokens.JTokenizerImpl;
 import net.hl.compiler.parser.*;
-import net.hl.compiler.tokenizer.HLSuperscriptPattern;
-import net.hl.compiler.tokenizer.InterpolatedStringPartPattern;
-import net.hl.compiler.tokenizer.InterpolatedStringStartPattern;
-import net.hl.compiler.tokenizer.InterpolatedStringVarPattern;
-import net.hl.compiler.stages.runtime.HLEvaluator;
+import net.hl.compiler.tokenizer.HSuperscriptPattern;
+import net.hl.compiler.tokenizer.HInterpolatedStringPartPattern;
+import net.hl.compiler.tokenizer.HInterpolatedStringStartPattern;
+import net.hl.compiler.tokenizer.HInterpolatedStringVarPattern;
+import net.hl.compiler.stages.runtime.HEvaluator;
 import net.hl.lang.HDefaults;
 import net.hl.lang.JExports;
 import net.hl.lang.JSignature;
@@ -45,7 +45,7 @@ public final class HadraLanguage extends DefaultJeep {
     }
 
     public HadraLanguage(ClassLoader classLoader) {
-        super(new HLJeepFactory(), classLoader);
+        super(new HJeepFactory(), classLoader);
         prepare();
     }
 
@@ -78,7 +78,7 @@ public final class HadraLanguage extends DefaultJeep {
         );
 
         //superscript powers
-        config.addPattern(new HLSuperscriptPattern());
+        config.addPattern(new HSuperscriptPattern());
 
         //numbers
         config.setNumberEvaluator(HNumberEvaluator.H_NUMBER);
@@ -165,19 +165,19 @@ public final class HadraLanguage extends DefaultJeep {
          */
         JTokenConfigBuilder config_DEFAULT = new JTokenConfigBuilder(tokens().config());
         //interpolated string
-        config_DEFAULT.addPattern(new InterpolatedStringStartPattern());
+        config_DEFAULT.addPattern(new HInterpolatedStringStartPattern());
 
         /*
          * this is the state of expressions in a interpolated string
          */
         JTokenConfigBuilder config_INTERP_STRING = new JTokenConfigBuilder().unsetAll();
-        config_INTERP_STRING.addPattern(new InterpolatedStringPartPattern());
+        config_INTERP_STRING.addPattern(new HInterpolatedStringPartPattern());
 
         /*
          * this is the state of $var an interpolated strng
          */
         JTokenConfigBuilder config_INTERP_VAR = new JTokenConfigBuilder().unsetAll();
-        config_INTERP_VAR.addPattern(new InterpolatedStringVarPattern());
+        config_INTERP_VAR.addPattern(new HInterpolatedStringVarPattern());
 
         /*
          * this is the state of ${expressions} in an interpolated string
@@ -210,7 +210,7 @@ public final class HadraLanguage extends DefaultJeep {
         /*
          * Syntactic/Semantic Parsing...
          */
-        this.parsers().setFactory(HLParser::new);
+        this.parsers().setFactory(HParser::new);
 
         /**
          * Java binding... to help overloading of methods with erasure
@@ -249,7 +249,7 @@ public final class HadraLanguage extends DefaultJeep {
         /*
          * Evaluation
          */
-        this.evaluators().setFactory(context -> HLEvaluator.INSTANCE);
+        this.evaluators().setFactory(context -> HEvaluator.INSTANCE);
         this.resolvers().importType(HJavaDefaultOperators.class);
         this.resolvers().importType(ArrayExtensions.class);
         this.resolvers().importType(BigDecimalExtensions.class);

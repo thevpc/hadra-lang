@@ -3,14 +3,9 @@ package net.hl.compiler.ast;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.impl.functions.JFunctionLocal;
 import net.vpc.common.jeep.impl.functions.JNameSignature;
-import net.vpc.common.jeep.impl.types.DefaultJConstructor;
-import net.vpc.common.jeep.impl.types.DefaultJRawMethod;
 import net.vpc.common.jeep.util.JNodeUtils;
 import net.hl.compiler.core.invokables.BodyJInvoke;
 import net.hl.compiler.utils.HNodeUtils;
-import net.hl.compiler.utils.HUtils;
-
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +14,7 @@ import java.util.List;
  * Methods, Constructors and Functions are depicted by this node type
  */
 public class HNDeclareInvokable extends HNode implements HNDeclare {
+
     private List<HNDeclareIdentifier> arguments = new ArrayList<>();
     private HNTypeToken[] genericVariables = new HNTypeToken[0];
     private HNode body;
@@ -31,6 +27,8 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
     private JInvokable invokable;
     private HNDeclareType declaringType;
     private HLInvokableType invokableType;
+    private String genType;
+    private boolean initBlock;
 
     private HNDeclareInvokable() {
         super(HNNodeId.H_DECLARE_INVOKABLE);
@@ -41,6 +39,22 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
         this.nameToken = nameToken;
         this.setStartToken(startToken);
         this.setEndToken(endToken);
+    }
+
+    public boolean isInitBlock() {
+        return initBlock;
+    }
+
+    public void setInitBlock(boolean initBlock) {
+        this.initBlock = initBlock;
+    }
+
+    public String getGenType() {
+        return genType;
+    }
+
+    public void setGenType(String genType) {
+        this.genType = genType;
     }
 
     public boolean isConstr() {
@@ -83,13 +97,12 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
         return this;
     }
 
-
     public List<HNDeclareIdentifier> getArguments() {
         return arguments;
     }
 
     public HNDeclareInvokable setArguments(List<HNDeclareIdentifier> arguments) {
-        this.arguments = JNodeUtils.bind(this,arguments,"arguments");
+        this.arguments = JNodeUtils.bind(this, arguments, "arguments");
         return this;
     }
 
@@ -123,13 +136,12 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
 //        }
 //        return this;
 //    }
-
     public HNode getBody() {
         return body;
     }
 
     public HNDeclareInvokable setBody(HNode body) {
-        this.body=JNodeUtils.bind(this,body, "body");
+        this.body = JNodeUtils.bind(this, body, "body");
         return this;
     }
 
@@ -148,7 +160,7 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
         boolean anonymous = getName() == null || getName().equals("");
         if (!anonymous) {
             sb.append(HNAnnotationList.nonNull(getAnnotations()));
-            if(sb.length()>0) {
+            if (sb.length() > 0) {
                 sb.append(" ");
             }
             if (returnTypeName != null) {
@@ -207,10 +219,10 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
     }
 
     public JType getReturnType() {
-        if(effectiveReturnType!=null){
+        if (effectiveReturnType != null) {
             return effectiveReturnType;
         }
-        if(returnTypeName!=null){
+        if (returnTypeName != null) {
             return returnTypeName.getTypeVal();
         }
         return null;
@@ -221,7 +233,7 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
     }
 
     public HNDeclareInvokable setReturnTypeName(HNTypeToken returnTypeName) {
-        this.returnTypeName=JNodeUtils.bind(this,returnTypeName, "returnTypeName");
+        this.returnTypeName = JNodeUtils.bind(this, returnTypeName, "returnTypeName");
         return this;
     }
 
@@ -236,7 +248,6 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
     public boolean isFunction() {
         return invokable instanceof JFunction;
     }
-
 
 //    public JType[] getArgTypes() {
 //        return argTypes;
@@ -263,7 +274,6 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
 //    public void setSignature(JSignature sig) {
 //        this.signature = sig;
 //    }
-
     public boolean isMethod() {
         return invokable instanceof JMethod;
     }
@@ -288,14 +298,13 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
         return this;
     }
 
-
-    public void copyFrom(JNode node,JNodeCopyFactory copyFactory) {
-        super.copyFrom(node,copyFactory);
+    public void copyFrom(JNode node, JNodeCopyFactory copyFactory) {
+        super.copyFrom(node, copyFactory);
         if (node instanceof HNDeclareInvokable) {
             HNDeclareInvokable o = (HNDeclareInvokable) node;
             this.arguments = JNodeUtils.bindCopy(this, copyFactory, o.arguments);
             this.body = JNodeUtils.bindCopy(this, copyFactory, o.body);
-            this.genericVariables = JNodeUtils.bindCopy(this, copyFactory, o.genericVariables,HNTypeToken.class);
+            this.genericVariables = JNodeUtils.bindCopy(this, copyFactory, o.genericVariables, HNTypeToken.class);
             this.nameToken = o.nameToken;
             this.immediateBody = o.immediateBody;
             this.declaringType = o.declaringType;
@@ -304,6 +313,8 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
             this.invokableType = o.invokableType;
             this.returnTypeName = JNodeUtils.bindCopy(this, copyFactory, o.returnTypeName);
             this.effectiveReturnType = o.effectiveReturnType;
+            this.initBlock = o.initBlock;
+            this.genType = o.genType;
         }
     }
 

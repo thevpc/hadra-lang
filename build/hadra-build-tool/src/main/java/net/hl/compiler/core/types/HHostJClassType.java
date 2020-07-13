@@ -49,16 +49,16 @@ public class HHostJClassType extends HostJClassType {
                 ///
             }
         }
-        if(hostType().isInterface() && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.INTERFACE)){
+        if(getHostType().isInterface() && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.INTERFACE)){
             modifiersList.add(JPrimitiveModifierAnnotationInstance.INTERFACE);
         }
-        if(hostType().isEnum() && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.ENUM)){
+        if(getHostType().isEnum() && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.ENUM)){
             modifiersList.add(JPrimitiveModifierAnnotationInstance.ENUM);
         }
-        if(hostType().isAnnotation() && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.ANNOTATION)){
+        if(getHostType().isAnnotation() && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.ANNOTATION)){
             modifiersList.add(JPrimitiveModifierAnnotationInstance.ANNOTATION);
         }
-        if(Throwable.class.isAssignableFrom(hostType()) && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.EXCEPTION)){
+        if(Throwable.class.isAssignableFrom(getHostType()) && !modifiersList.contains(JPrimitiveModifierAnnotationInstance.EXCEPTION)){
             modifiersList.add(JPrimitiveModifierAnnotationInstance.EXCEPTION);
         }
     }

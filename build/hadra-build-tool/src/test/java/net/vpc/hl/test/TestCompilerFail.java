@@ -1,6 +1,6 @@
 package net.vpc.hl.test;
 
-import net.hl.compiler.core.HLProject;
+import net.hl.compiler.core.HProject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -107,7 +107,7 @@ public class TestCompilerFail {
      * @param resourceFileName resourceFileName to compile
      * @return project compilation result
      */
-    private HLProject _compileResource(String resourceFileName) {
+    private HProject _compileResource(String resourceFileName) {
         return TestHelper.compileOnlyResource("compiler/fail/" + resourceFileName);
     }
 

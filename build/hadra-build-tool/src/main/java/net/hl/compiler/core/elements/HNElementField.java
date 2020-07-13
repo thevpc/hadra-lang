@@ -2,7 +2,7 @@ package net.hl.compiler.core.elements;
 
 import net.vpc.common.jeep.*;
 import net.hl.compiler.ast.HNDeclareTokenBase;
-import net.hl.compiler.index.HLIndexedField;
+import net.hl.compiler.index.HIndexedField;
 import net.vpc.common.jeep.JTypePattern;
 import net.hl.compiler.utils.HUtils;
 
@@ -10,7 +10,7 @@ public class HNElementField extends HNElement implements Cloneable{
 
     public JType declaringType;
     public String name;
-    public HLIndexedField indexedField;
+    public HIndexedField indexedField;
     public JField field;
     private HNDeclareTokenBase declaration;
     private JType effectiveType;
@@ -110,11 +110,11 @@ public class HNElementField extends HNElement implements Cloneable{
         return this;
     }
 
-    public HLIndexedField getIndexedField() {
+    public HIndexedField getIndexedField() {
         return indexedField;
     }
 
-    public HNElementField setIndexedField(HLIndexedField indexedField) {
+    public HNElementField setIndexedField(HIndexedField indexedField) {
         this.indexedField = indexedField;
         return this;
     }

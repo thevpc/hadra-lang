@@ -65,6 +65,7 @@ public class HLJTypes extends DefaultJTypes {
     }
 
 
+    @Override
     public JType createHostType0(String name){
         switch (name) {
             case "Object":

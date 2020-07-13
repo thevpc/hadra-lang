@@ -1,6 +1,5 @@
 package net.hl.compiler.index;
 
-import net.vpc.common.jeep.util.JTypeUtils;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -16,12 +15,12 @@ class JavaMethodVisitor extends MethodVisitor {
     private final String returnType;
     private List<String> parameterNames;
     private boolean staticMethod;
-    private DefaultHLIndexer defaultHLIndexer;
+    private HIndexerImpl defaultHLIndexer;
     private String source;
     private String currentFullName;
 
 
-    public JavaMethodVisitor(DefaultHLIndexer defaultHLIndexer,
+    public JavaMethodVisitor(HIndexerImpl defaultHLIndexer,
                              String source,
                              String currentFullName,
                              String methodName, String[] paramTypes, int access, String returnType) {
@@ -59,7 +58,7 @@ class JavaMethodVisitor extends MethodVisitor {
     public void visitEnd() {
         String[] modifiers = JavaClassVisitor.parseModifiers(access);
         if(methodName.equals("<init>")){
-            defaultHLIndexer.indexConstructor0(new HLIndexedConstructor(
+            defaultHLIndexer.indexConstructor0(new HIndexedConstructor(
                     methodName, (String[]) parameterNames.toArray(new String[0]), paramTypes, new String[0],
                     currentFullName, modifiers, source
             ));
@@ -70,7 +69,7 @@ class JavaMethodVisitor extends MethodVisitor {
 //                if(methodName.contains("$")){
 //                    System.out.println(modifiers);
 //                }
-                defaultHLIndexer.indexMethod0(new HLIndexedMethod(
+                defaultHLIndexer.indexMethod0(new HIndexedMethod(
                         methodName, (String[]) parameterNames.toArray(new String[0]), paramTypes, new String[0],
                         returnType, currentFullName, modifiers, source
                 ));

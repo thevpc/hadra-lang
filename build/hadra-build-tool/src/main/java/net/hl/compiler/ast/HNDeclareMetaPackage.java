@@ -4,7 +4,7 @@ import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JToken;
 import net.vpc.common.jeep.util.JNodeUtils;
 import net.vpc.common.jeep.JNodeFindAndReplace;
-import net.hl.compiler.index.HLIndexedProject;
+import net.hl.compiler.index.HIndexedProject;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +17,7 @@ public class HNDeclareMetaPackage extends HNode {
 //    private List<HLDependency> effectiveDependencies;
 //    private Set<String> effectiveDependencyFiles;
     private HNBlock body;
-    private HLIndexedProject index;
+    private HIndexedProject index;
 
     public HNDeclareMetaPackage() {
         super(HNNodeId.H_DECLARE_META_PACKAGE);
@@ -28,11 +28,11 @@ public class HNDeclareMetaPackage extends HNode {
         setStartToken(token);
     }
 
-    public HLIndexedProject getIndex() {
+    public HIndexedProject getIndex() {
         return index;
     }
 
-    public HNDeclareMetaPackage setIndex(HLIndexedProject index) {
+    public HNDeclareMetaPackage setIndex(HIndexedProject index) {
         this.index = index;
         return this;
     }

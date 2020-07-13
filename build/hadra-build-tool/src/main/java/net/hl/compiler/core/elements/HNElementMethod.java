@@ -4,16 +4,15 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.util.JeepUtils;
 import net.hl.compiler.ast.HNDeclareInvokable;
 import net.hl.compiler.ast.HNThis;
-import net.hl.compiler.index.HLIndexedMethod;
+import net.hl.compiler.index.HIndexedMethod;
 import net.vpc.common.jeep.JTypePattern;
 import net.hl.compiler.ast.HNode;
 import net.hl.compiler.utils.HUtils;
 
 public class HNElementMethod extends HNElementInvokable implements Cloneable{
-    public String methodName;
     public JType declaringType;
     public JInvokable invokable;
-    public HLIndexedMethod indexedMethod;
+    public HIndexedMethod indexedMethod;
     public HNDeclareInvokable declaration;
     public HNode[] argNodes;
     public JTypePattern[] argTypes;
@@ -23,7 +22,6 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
 
     public HNElementMethod(JInvokable invokable) {
         super(HNElementKind.METHOD);
-        this.methodName = invokable.getName();
         this.invokable = invokable;
     }
 
@@ -32,7 +30,7 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
 //        this.methodName = methodName;
 //    }
 
-    public HLIndexedMethod getIndexedMethod() {
+    public HIndexedMethod getIndexedMethod() {
         return indexedMethod;
     }
 
@@ -84,10 +82,6 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
         return null;
     }
 
-    public HNElementMethod setMethodName(String methodName) {
-        this.methodName = methodName;
-        return this;
-    }
 
     @Override
     public JTypePattern getTypePattern() {
@@ -106,10 +100,6 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
         return this;
     }
 
-    public String getMethodName() {
-        return methodName;
-    }
-
     public JType getDeclaringType() {
         return declaringType;
     }
@@ -125,7 +115,7 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
     @Override
     public String toString() {
         return "Method{" +
-                methodName+
+                getInvokable().getName()+
                 '}';
     }
 

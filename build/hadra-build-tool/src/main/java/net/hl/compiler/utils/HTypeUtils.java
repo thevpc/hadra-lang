@@ -47,7 +47,7 @@ public class HTypeUtils {
                         return e;
                     }
                     JParameterizedType p = (JParameterizedType) t;
-                    return p.actualTypeArguments();
+                    return p.getActualTypeArguments();
                 }
             }
             n = n.getSuperType();
@@ -113,7 +113,7 @@ public class HTypeUtils {
             );
         } else if (types.forName("java.util.Iterable").isAssignableFrom(valType)) {
             if (types.forName("java.util.Iterable").equals(valType.getRawType())) {
-                JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).actualTypeArguments() : new JType[0];
+                JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).getActualTypeArguments() : new JType[0];
                 if (a.length == 0) {
                     valType = (JTypeUtils.forObject(types));
                 } else {
@@ -128,7 +128,7 @@ public class HTypeUtils {
             );
         } else if (types.forName("java.util.Iterator").isAssignableFrom(valType)) {
             if (types.forName("java.util.Iterator").equals(valType.getRawType())) {
-                JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).actualTypeArguments() : new JType[0];
+                JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).getActualTypeArguments() : new JType[0];
                 if (a.length == 0) {
                     valType = (JTypeUtils.forObject(types));
                 } else {
@@ -144,7 +144,7 @@ public class HTypeUtils {
         } else if (types.forName("java.util.stream.BaseStream").isAssignableFrom(valType)) {
             if (types.forName("java.util.stream.Stream").isAssignableFrom(valType)) {
                 if (types.forName("java.util.stream.Stream").equals(valType.getRawType())) {
-                    JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).actualTypeArguments() : new JType[0];
+                    JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).getActualTypeArguments() : new JType[0];
                     if (a.length == 0) {
                         valType = (JTypeUtils.forObject(types));
                     } else {

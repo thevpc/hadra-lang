@@ -6,7 +6,8 @@
 package net.vpc.hl.test.util;
 
 import net.hl.compiler.HL;
-import net.hl.compiler.core.HLProject;
+import net.hl.compiler.core.HProject;
+import net.hl.compiler.core.HTarget;
 import net.hl.compiler.utils.SetLog;
 
 /**
@@ -22,23 +23,23 @@ public class TestHelper {
         System.out.println("*******************************************************");
     }
 
-    public static HLProject compile2JavaResource(String resourceFileName) {
+    public static HProject compile2JavaResource(String resourceFileName) {
         SetLog.prepare();
         printHeader(resourceFileName);
-        HL hl=HL.create();
-        return hl
+        return HL.create()
                 .addSourceResourcesFile("net/hl/test/" + resourceFileName)
-                .generateJavaFolder("target/custom-generated-test-sources/tmp/" + resourceFileName)
+                .setJavaFolder("target/custom-generated-test-sources/tmp/" + resourceFileName)
+                .addTarget(HTarget.JAVA)
                 .compile();
 
     }
 
-    public static HLProject compileOnlyResource(String resourceFileName) {
+    public static HProject compileOnlyResource(String resourceFileName) {
         SetLog.prepare();
         printHeader(resourceFileName);
-        HL hl=HL.create();
-        return hl
+        return HL.create()
                 .addSourceResourcesFile("net/hl/test/" + resourceFileName)
+                .addTarget(HTarget.RESOLVED_AST)
                 .compile();
 
     }
@@ -49,21 +50,23 @@ public class TestHelper {
      * @param text text to compile
      * @return project compilation result
      */
-    public static HLProject compileOnlyText(String id, String text) {
+    public static HProject compileOnlyText(String id, String text) {
         SetLog.prepare();
         printHeader(id);
         HL hl=HL.create();
         return hl
                 .addSourceText(text, "<user-text>")
+                .addTarget(HTarget.RESOLVED_AST)
                 .compile();
     }
-    public static HLProject parseOnlyText(String id, String text) {
+    
+    public static HProject parseOnlyText(String id, String text) {
         SetLog.prepare();
         printHeader(id);
-        HL hl=HL.create();
-        return hl
+        return HL.create()
                 .addSourceText(text, "<user-text>")
-                .parse();
+                .addTarget(HTarget.AST)
+                .compile();
     }
 
 }

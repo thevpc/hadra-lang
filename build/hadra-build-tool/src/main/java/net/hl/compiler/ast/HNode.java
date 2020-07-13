@@ -12,6 +12,11 @@ import java.util.*;
 
 public abstract class HNode extends AbstractJNode {
     private HNAnnotationCall[] annotations = new HNAnnotationCall[0];
+    
+    /**
+     * used by generators/transpillers for languages that support modifiers (such as java and C#)
+     */
+    private Set<String> modifierKeys = new LinkedHashSet<>();
     /**
      * relevant when this expression is passed as a named argument.
      * defaults to null
@@ -27,6 +32,11 @@ public abstract class HNode extends AbstractJNode {
     public final HNNodeId id() {
         return id;
     }
+
+    public Set<String> getModifierKeys() {
+        return modifierKeys;
+    }
+    
 
     public HNAnnotationCall[] getAnnotations() {
         return annotations;
@@ -53,6 +63,11 @@ public abstract class HNode extends AbstractJNode {
         return addAnnotations(annotation);
     }
 
+    public HNode addModifierKeys(String ... mod) {
+        getModifierKeys().addAll(Arrays.asList(mod));
+        return this;
+    }
+    
     public HNode addAnnotations(HNAnnotationCall ... annotations) {
         return setAnnotations(JeepUtils.arrayConcatNonNull(HNAnnotationCall.class, this.annotations, annotations));
     }

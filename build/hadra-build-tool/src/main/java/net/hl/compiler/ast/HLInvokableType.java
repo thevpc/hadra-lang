@@ -5,4 +5,6 @@ public enum HLInvokableType {
     CONSTRUCTOR,
     METHOD,
     FUNCTION,
+    INSTANCE_INIT,
+    CLASS_INIT,
 }
