@@ -1,8 +1,8 @@
 package net.hl.compiler.core;
 
-import net.vpc.common.jeep.core.JTokenState;
-import net.vpc.common.jeep.impl.JEnumDefinition;
-import net.vpc.common.jeep.impl.JEnumTypeRegistry;
+import net.thevpc.jeep.core.JTokenState;
+import net.thevpc.jeep.impl.JEnumDefinition;
+import net.thevpc.jeep.impl.JEnumTypeRegistry;
 
 public class HTokenState extends JTokenState {
 

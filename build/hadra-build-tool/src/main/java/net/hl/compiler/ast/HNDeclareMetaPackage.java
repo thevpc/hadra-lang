@@ -1,15 +1,15 @@
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JToken;
-import net.vpc.common.jeep.util.JNodeUtils;
-import net.vpc.common.jeep.JNodeFindAndReplace;
+import net.thevpc.jeep.JNode;
+import net.thevpc.jeep.JToken;
+import net.thevpc.jeep.util.JNodeUtils;
+import net.thevpc.jeep.JNodeFindAndReplace;
 import net.hl.compiler.index.HIndexedProject;
 
 import java.util.Arrays;
 import java.util.List;
 
-import net.vpc.common.jeep.JNodeCopyFactory;
+import net.thevpc.jeep.JNodeCopyFactory;
 
 public class HNDeclareMetaPackage extends HNode {
     private HNMetaPackageId moduleId;

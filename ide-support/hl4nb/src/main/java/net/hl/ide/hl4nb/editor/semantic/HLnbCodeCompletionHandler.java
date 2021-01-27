@@ -1,7 +1,7 @@
 package net.hl.ide.hl4nb.editor.semantic;
 
-import net.vpc.common.jeep.JCompletionProposal;
-import net.vpc.common.jeep.JIndexStoreMemory;
+import net.thevpc.jeep.JCompletionProposal;
+import net.thevpc.jeep.JIndexStoreMemory;
 import net.hl.compiler.core.HCompletion;
 import net.hl.ide.hl4nb.HadraLanguageSingleton;
 import net.hl.ide.hl4nb.editor.parser.HLnbParserResult;

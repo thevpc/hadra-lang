@@ -1,7 +1,7 @@
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.nodes.AbstractJNode;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.nodes.AbstractJNode;
 import net.hl.compiler.core.elements.HNElement;
 
 import java.util.Collections;

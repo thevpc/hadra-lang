@@ -3,9 +3,9 @@ package net.hl.compiler.index;
 import net.hl.compiler.ast.HNDeclareType;
 import net.hl.compiler.ast.HNExtends;
 import net.hl.compiler.utils.HUtils;
-import net.vpc.common.jeep.JIndexDocument;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.core.index.DefaultJIndexDocument;
+import net.thevpc.jeep.JIndexDocument;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.core.index.DefaultJIndexDocument;
 
 import java.util.ArrayList;
 import java.util.Arrays;

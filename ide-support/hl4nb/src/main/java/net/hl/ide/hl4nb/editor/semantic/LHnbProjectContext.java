@@ -1,7 +1,7 @@
 package net.hl.ide.hl4nb.editor.semantic;
 
-import net.vpc.common.jeep.JContext;
-import net.vpc.common.jeep.JIndexStore;
+import net.thevpc.jeep.JContext;
+import net.thevpc.jeep.JIndexStore;
 import net.hl.compiler.index.HIndexerImpl;
 import net.hl.ide.hl4nb.HadraLanguageSingleton;
 import net.hl.compiler.core.HProjectContext;

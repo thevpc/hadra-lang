@@ -1,11 +1,11 @@
-package net.vpc.hl.test;
+package net.thevpc.hl.test;
 
 import net.hl.compiler.core.HProject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
-import net.vpc.hl.test.util.TestHelper;
+import net.thevpc.hl.test.util.TestHelper;
 
 public class TestGenerateJava {
 

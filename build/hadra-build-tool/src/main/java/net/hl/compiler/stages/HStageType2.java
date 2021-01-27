@@ -1,6 +1,6 @@
 package net.hl.compiler.stages;
 
-import net.vpc.common.jeep.*;
+import net.thevpc.jeep.*;
 import net.hl.compiler.core.HOptions;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.invokables.HLJCompilerContext;

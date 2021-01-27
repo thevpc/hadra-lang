@@ -1,9 +1,9 @@
 package net.hl.compiler.utils;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.eval.JEvaluableNode;
-import net.vpc.common.jeep.impl.functions.*;
-import net.vpc.common.textsource.JTextSource;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.eval.JEvaluableNode;
+import net.thevpc.jeep.impl.functions.*;
+import net.thevpc.common.textsource.JTextSource;
 import net.hl.compiler.ast.*;
 
 import java.lang.reflect.Modifier;

@@ -1,7 +1,7 @@
-package net.vpc.hl.test;
+package net.thevpc.hl.test;
 
-import net.vpc.common.jeep.JIndexStoreMemory;
-import net.vpc.common.jeep.core.JIndexQuery;
+import net.thevpc.jeep.JIndexStoreMemory;
+import net.thevpc.jeep.core.JIndexQuery;
 import net.hl.compiler.index.HIndexerImpl;
 import net.hl.compiler.index.HIndexedClass;
 import net.hl.compiler.index.HIndexedMethod;

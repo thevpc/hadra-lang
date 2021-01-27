@@ -1,14 +1,14 @@
 package net.hl.compiler.stages;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.JChildInfo;
-import net.vpc.common.jeep.core.nodes.AbstractJNode;
-import net.vpc.common.jeep.impl.functions.JSignature;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.JChildInfo;
+import net.thevpc.jeep.core.nodes.AbstractJNode;
+import net.thevpc.jeep.impl.functions.JSignature;
 import net.hl.compiler.core.HOptions;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.ast.HNLambdaExpression;
 import net.hl.compiler.stages.generators.java.HJavaGenUtils;
-import net.vpc.common.jeep.util.JeepUtils;
+import net.thevpc.jeep.util.JeepUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;

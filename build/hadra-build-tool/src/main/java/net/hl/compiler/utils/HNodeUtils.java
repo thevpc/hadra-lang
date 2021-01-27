@@ -1,10 +1,10 @@
 package net.hl.compiler.utils;
 
 import net.hl.compiler.core.types.JPrimitiveModifierAnnotationInstance;
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.types.JTypeNameParser;
-import net.vpc.common.jeep.util.JNodeUtils;
-import net.vpc.common.jeep.util.JTokenUtils;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.types.JTypeNameParser;
+import net.thevpc.jeep.util.JNodeUtils;
+import net.thevpc.jeep.util.JTokenUtils;
 import net.hl.compiler.core.elements.HNElement;
 import net.hl.compiler.core.elements.HNElementKind;
 import net.hl.compiler.core.elements.HNElementMethod;

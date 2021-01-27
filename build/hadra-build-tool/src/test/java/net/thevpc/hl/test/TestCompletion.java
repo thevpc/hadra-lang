@@ -1,4 +1,4 @@
-package net.vpc.hl.test;
+package net.thevpc.hl.test;
 
 import net.hl.compiler.core.DefaultHLProjectContext;
 import net.hl.compiler.core.HCompletion;

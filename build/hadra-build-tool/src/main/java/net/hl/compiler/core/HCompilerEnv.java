@@ -1,6 +1,6 @@
 package net.hl.compiler.core;
 
-import net.vpc.common.jeep.JContext;
+import net.thevpc.jeep.JContext;
 
 import java.util.*;
 

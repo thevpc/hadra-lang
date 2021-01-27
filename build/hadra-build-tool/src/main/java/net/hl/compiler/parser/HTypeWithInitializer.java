@@ -1,7 +1,7 @@
 package net.hl.compiler.parser;
 
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JTypeName;
+import net.thevpc.jeep.JNode;
+import net.thevpc.jeep.JTypeName;
 
 public class HTypeWithInitializer {
     boolean varArgs;

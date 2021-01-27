@@ -1,10 +1,10 @@
 package net.hl.compiler.core.types;
 
-import net.vpc.common.jeep.JTypeKind;
-import net.vpc.common.jeep.JTypes;
-import net.vpc.common.jeep.impl.types.DefaultJAnnotationInstanceList;
-import net.vpc.common.jeep.impl.types.DefaultJAnnotationType;
-import net.vpc.common.jeep.impl.types.DefaultJEnumType;
+import net.thevpc.jeep.JTypeKind;
+import net.thevpc.jeep.JTypes;
+import net.thevpc.jeep.impl.types.DefaultJAnnotationInstanceList;
+import net.thevpc.jeep.impl.types.DefaultJAnnotationType;
+import net.thevpc.jeep.impl.types.DefaultJEnumType;
 
 import java.lang.annotation.Annotation;
 

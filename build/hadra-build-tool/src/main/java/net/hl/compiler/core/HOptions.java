@@ -4,8 +4,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import net.vpc.common.textsource.JTextSourceFactory;
-import net.vpc.common.textsource.JTextSourceRoot;
+import net.thevpc.common.textsource.JTextSourceFactory;
+import net.thevpc.common.textsource.JTextSourceRoot;
 
 public abstract class HOptions<T extends HOptions> {
 

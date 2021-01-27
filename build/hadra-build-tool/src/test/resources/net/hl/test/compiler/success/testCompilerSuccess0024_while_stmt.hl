@@ -1,4 +1,4 @@
-package net.vpc.hadralang.test:test07;
+package net.thevpc.hadralang.test:test07;
 /**
  * tested :
  *   * FIXED : while statement

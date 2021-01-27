@@ -1,8 +1,8 @@
 package net.hl.compiler.utils;
 
-import net.vpc.common.jeep.JToken;
-import net.vpc.common.jeep.core.tokens.JTokenDef;
-import net.vpc.common.jeep.util.JTokenUtils;
+import net.thevpc.jeep.JToken;
+import net.thevpc.jeep.core.tokens.JTokenDef;
+import net.thevpc.jeep.util.JTokenUtils;
 import net.hl.compiler.core.HadraLanguage;
 
 import java.util.HashMap;

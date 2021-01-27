@@ -1,6 +1,6 @@
 package net.hl.compiler.core.types;
 
-import net.vpc.common.jeep.impl.types.DefaultJConstructor;
+import net.thevpc.jeep.impl.types.DefaultJConstructor;
 
 public class HConstructor extends DefaultJConstructor {
     public HConstructor() {

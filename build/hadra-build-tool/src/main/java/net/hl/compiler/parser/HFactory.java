@@ -1,9 +1,9 @@
 package net.hl.compiler.parser;
 
 import net.hl.compiler.core.HTokenId;
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.JParserNodeFactory;
-import net.vpc.common.jeep.core.nodes.JNodeTokens;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.JParserNodeFactory;
+import net.thevpc.jeep.core.nodes.JNodeTokens;
 import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTokenUtils;

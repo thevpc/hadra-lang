@@ -1,14 +1,14 @@
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JToken;
+import net.thevpc.jeep.JNode;
+import net.thevpc.jeep.JToken;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import net.vpc.common.jeep.JNodeCopyFactory;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.util.JNodeUtils;
+import net.thevpc.jeep.JNodeCopyFactory;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.util.JNodeUtils;
 
 public class HNDeclareTokenList extends HNDeclareToken implements HNDeclare {
     private HNDeclareTokenIdentifier[] items;

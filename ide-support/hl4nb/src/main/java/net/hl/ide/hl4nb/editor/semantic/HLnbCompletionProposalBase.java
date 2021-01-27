@@ -1,8 +1,8 @@
 package net.hl.ide.hl4nb.editor.semantic;
 
-import net.vpc.common.jeep.JCompletionProposal;
-import net.vpc.common.jeep.JToken;
-import net.vpc.common.jeep.JTokensString;
+import net.thevpc.jeep.JCompletionProposal;
+import net.thevpc.jeep.JToken;
+import net.thevpc.jeep.JTokensString;
 import net.hl.compiler.core.HCompletionProposals;
 import org.netbeans.modules.csl.api.ElementHandle;
 import org.netbeans.modules.csl.api.ElementKind;

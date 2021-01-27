@@ -1,14 +1,14 @@
 package net.hl.compiler.stages.generators.java;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.impl.CastJConverter;
-import net.vpc.common.jeep.impl.functions.ConvertedJMethod2;
-import net.vpc.common.jeep.impl.functions.JArgumentConverterByIndex;
-import net.vpc.common.jeep.impl.functions.JInstanceArgumentResolverFromArgumentByIndex;
-import net.vpc.common.jeep.impl.functions.JNameSignature;
-import net.vpc.common.jeep.util.JTokenUtils;
-import net.vpc.common.jeep.util.JTypeUtils;
-import net.vpc.common.textsource.JTextSource;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.impl.CastJConverter;
+import net.thevpc.jeep.impl.functions.ConvertedJMethod2;
+import net.thevpc.jeep.impl.functions.JArgumentConverterByIndex;
+import net.thevpc.jeep.impl.functions.JInstanceArgumentResolverFromArgumentByIndex;
+import net.thevpc.jeep.impl.functions.JNameSignature;
+import net.thevpc.jeep.util.JTokenUtils;
+import net.thevpc.jeep.util.JTypeUtils;
+import net.thevpc.common.textsource.JTextSource;
 import net.hl.compiler.core.HOptions;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.elements.*;
@@ -29,8 +29,8 @@ import net.hl.compiler.core.HTarget;
 import net.hl.compiler.core.types.JPrimitiveModifierAnnotationInstance;
 import net.hl.compiler.stages.AbstractHStage;
 import net.hl.lang.ext.HHelpers;
-import net.vpc.common.jeep.impl.functions.JSignature;
-import net.vpc.common.jeep.impl.types.DefaultJType;
+import net.thevpc.jeep.impl.functions.JSignature;
+import net.thevpc.jeep.impl.types.DefaultJType;
 
 public class HStage08JavaTransform extends AbstractHStage {
 

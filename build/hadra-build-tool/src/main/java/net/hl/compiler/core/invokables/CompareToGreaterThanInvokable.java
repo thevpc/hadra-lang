@@ -1,8 +1,8 @@
 package net.hl.compiler.core.invokables;
 
-import net.vpc.common.jeep.JContext;
-import net.vpc.common.jeep.JInvokable;
-import net.vpc.common.jeep.JInvokeContext;
+import net.thevpc.jeep.JContext;
+import net.thevpc.jeep.JInvokable;
+import net.thevpc.jeep.JInvokeContext;
 
 public class CompareToGreaterThanInvokable extends CompareToBaseInvokable {
 

@@ -5,9 +5,9 @@
  */
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.util.JNodeUtils;
-import net.vpc.common.jeep.JNodeFindAndReplace;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.util.JNodeUtils;
+import net.thevpc.jeep.JNodeFindAndReplace;
 import net.hl.compiler.core.elements.HNElement;
 import net.hl.compiler.core.elements.HNElementField;
 

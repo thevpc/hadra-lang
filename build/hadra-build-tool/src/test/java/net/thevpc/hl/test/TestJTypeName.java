@@ -1,7 +1,7 @@
-package net.vpc.hl.test;
+package net.thevpc.hl.test;
 
-import net.vpc.common.jeep.JTypeName;
-import net.vpc.common.jeep.core.types.DefaultTypeName;
+import net.thevpc.jeep.JTypeName;
+import net.thevpc.jeep.core.types.DefaultTypeName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

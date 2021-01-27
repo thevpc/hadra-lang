@@ -1,6 +1,6 @@
 package net.hl.compiler.core;
 
-import net.vpc.common.jeep.impl.tokens.JTokenId;
+import net.thevpc.jeep.impl.tokens.JTokenId;
 
 public class HTokenIdOffsets {
 

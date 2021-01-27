@@ -19,7 +19,7 @@ val olderJack = jack.copy(age = 2)
 
 ///////////////////////////////////
 
-package net.vpc.hadralang.test:test05;
+package net.thevpc.hadralang.test:test05;
 /**
  * tested :
  *   test precompiler expressions (this:varName,this:lineNumber,...)
@@ -39,7 +39,7 @@ fun void myMethod(){
 }
 
 ///////////////////////////////////
-package net.vpc.hadralang.test:test05;
+package net.thevpc.hadralang.test:test05;
 /**
  * tested :
  *   * Logging framework

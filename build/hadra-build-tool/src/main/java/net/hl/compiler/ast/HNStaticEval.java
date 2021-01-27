@@ -4,10 +4,10 @@
  */
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JNodeCopyFactory;
-import net.vpc.common.jeep.JNodeFindAndReplace;
-import net.vpc.common.jeep.JToken;
+import net.thevpc.jeep.JNode;
+import net.thevpc.jeep.JNodeCopyFactory;
+import net.thevpc.jeep.JNodeFindAndReplace;
+import net.thevpc.jeep.JToken;
 
 import java.util.Collections;
 import java.util.List;

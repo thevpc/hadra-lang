@@ -1,8 +1,8 @@
 //package net.hl.compiler.core.types;
 //
-//import net.vpc.common.jeep.JEvalException;
-//import net.vpc.common.jeep.JField;
-//import net.vpc.common.jeep.JType;
+//import net.thevpc.jeep.JEvalException;
+//import net.thevpc.jeep.JField;
+//import net.thevpc.jeep.JType;
 //import net.hl.compiler.parser.ast.HNDeclareIdentifier;
 //import net.hl.compiler.core.invokables.HLJCompilerContext;
 //import net.hl.compiler.utils.HUtils;

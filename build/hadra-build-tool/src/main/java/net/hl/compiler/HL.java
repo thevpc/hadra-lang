@@ -1,7 +1,7 @@
 package net.hl.compiler;
 
-import net.vpc.common.jeep.JContext;
-import net.vpc.common.jeep.util.Chronometer;
+import net.thevpc.jeep.JContext;
+import net.thevpc.jeep.util.Chronometer;
 import net.hl.compiler.core.*;
 import net.hl.compiler.index.HIndexerImpl;
 import net.hl.compiler.stages.*;

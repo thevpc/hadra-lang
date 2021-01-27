@@ -5,15 +5,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
-import net.vpc.app.nuts.Nuts;
-import net.vpc.app.nuts.NutsDefinition;
-import net.vpc.app.nuts.NutsSearchCommand;
-import net.vpc.app.nuts.NutsWorkspace;
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.DefaultJTypedValue;
-import net.vpc.common.jeep.core.eval.JEvaluableValue;
-import net.vpc.common.jeep.impl.functions.DefaultJInvokeContext;
-import net.vpc.common.jeep.util.JStringUtils;
+import net.thevpc.nuts.Nuts;
+import net.thevpc.nuts.NutsDefinition;
+import net.thevpc.nuts.NutsSearchCommand;
+import net.thevpc.nuts.NutsWorkspace;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.DefaultJTypedValue;
+import net.thevpc.jeep.core.eval.JEvaluableValue;
+import net.thevpc.jeep.impl.functions.DefaultJInvokeContext;
+import net.thevpc.jeep.util.JStringUtils;
 import net.hl.compiler.core.*;
 import net.hl.compiler.core.elements.HNElementMetaPackageArtifact;
 import net.hl.compiler.core.elements.HNElementMetaPackageGroup;
@@ -251,7 +251,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                                             new String[0],
                                             preProcessorContext.types().forName("String[]")
                                     )},
-                                "compile", null
+                                "compile", null,null
                         ));
                 Set<String> foundIds = new HashSet<>();
                 Set<String> dfiles = new HashSet<>();
@@ -273,7 +273,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                         foundIds.add(resultDefinition.getId().getShortName());
                     }
                     for (HDependency effectiveDependency : env.dependencies()) {
-                        if (!foundIds.contains(ws.id().parse(effectiveDependency.getName()).getShortName())) {
+                        if (!foundIds.contains(ws.id().parser().parse(effectiveDependency.getName()).getShortName())) {
                             if (!effectiveDependency.isOptional()) {
                                 project.log().error("X000", "pre-processor", "unresolvable dependency " + effectiveDependency.getName(), block.getStartToken());
                             }

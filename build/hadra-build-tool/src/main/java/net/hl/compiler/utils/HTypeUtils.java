@@ -1,7 +1,7 @@
 package net.hl.compiler.utils;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.util.JTypeUtils;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.util.JTypeUtils;
 import net.hl.compiler.ast.ElementTypeAndConstraint;
 import net.hl.compiler.ast.InitValueConstraint;
 import net.hl.lang.Tuple;

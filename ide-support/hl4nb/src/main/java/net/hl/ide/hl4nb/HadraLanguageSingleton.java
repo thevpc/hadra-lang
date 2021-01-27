@@ -5,7 +5,7 @@
  */
 package net.hl.ide.hl4nb;
 
-import net.vpc.common.jeep.JIndexStore;
+import net.thevpc.jeep.JIndexStore;
 import net.hl.compiler.core.HadraLanguage;
 import net.hl.ide.hl4nb.project.HLnbJIndexStore;
 import org.netbeans.api.project.Project;

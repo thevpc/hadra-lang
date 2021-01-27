@@ -1,6 +1,6 @@
 package net.hl.compiler.index;
 
-import net.vpc.common.jeep.JIndexDocument;
+import net.thevpc.jeep.JIndexDocument;
 
 public class HIndexedCompilationUnit implements HIndexedElement{
     private String source;

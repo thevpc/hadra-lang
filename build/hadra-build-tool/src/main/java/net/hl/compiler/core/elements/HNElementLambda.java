@@ -1,7 +1,7 @@
 package net.hl.compiler.core.elements;
 
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypePattern;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.JTypePattern;
 
 public class HNElementLambda extends HNElement implements Cloneable{
     public JTypePattern typePattern;

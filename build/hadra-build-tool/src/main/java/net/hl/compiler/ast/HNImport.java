@@ -1,8 +1,8 @@
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.impl.compiler.DefaultJImportInfo;
-import net.vpc.common.jeep.JNodeFindAndReplace;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.impl.compiler.DefaultJImportInfo;
+import net.thevpc.jeep.JNodeFindAndReplace;
 
 import java.util.Collections;
 import java.util.List;

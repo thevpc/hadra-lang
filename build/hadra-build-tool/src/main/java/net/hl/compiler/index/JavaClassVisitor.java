@@ -1,8 +1,8 @@
 package net.hl.compiler.index;
 
-import net.vpc.common.jeep.JShouldNeverHappenException;
-import net.vpc.common.jeep.impl.functions.JNameSignature;
-import net.vpc.common.jeep.util.JTypeUtils;
+import net.thevpc.jeep.JShouldNeverHappenException;
+import net.thevpc.jeep.impl.functions.JNameSignature;
+import net.thevpc.jeep.util.JTypeUtils;
 import org.objectweb.asm.*;
 
 import java.io.IOException;

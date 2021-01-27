@@ -1,6 +1,6 @@
 package net.hl.compiler.parser;
 
-import net.vpc.common.jeep.core.JExpressionOptions;
+import net.thevpc.jeep.core.JExpressionOptions;
 
 import java.util.HashSet;
 import java.util.Set;

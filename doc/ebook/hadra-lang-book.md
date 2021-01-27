@@ -116,11 +116,11 @@ The easiest way to do so is via nut package manager. if you have not
 nuts installed you can do so by
 
     $ wget https://github.com/thevpc/vpc-public-maven\
-    /raw/master/net/vpc/app/nuts/nuts/0.7.0/nuts-0.7.0.jar
+    /raw/master/net/thevpc/nuts/nuts/0.8.0/nuts-0.8.0.jar
 
 installing nuts
 
-    $ java -jar nuts-0.7.0.jar
+    $ java -jar nuts-0.8.0.jar
 
 make sure you close and re-open you console after installing nuts for
 the environment to be configured correctly.

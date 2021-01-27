@@ -1,8 +1,8 @@
 //package net.hl.compiler.core.types;
 //
-//import net.vpc.common.jeep.*;
-//import net.vpc.common.jeep.core.types.DefaultTypeName;
-//import net.vpc.common.jeep.impl.functions.JSignature;
+//import net.thevpc.jeep.*;
+//import net.thevpc.jeep.core.types.DefaultTypeName;
+//import net.thevpc.jeep.impl.functions.JSignature;
 //import net.hl.compiler.parser.ast.HNExtends;
 //import net.hl.compiler.parser.ast.HNDeclareInvokable;
 //import net.hl.compiler.parser.ast.HNDeclareType;

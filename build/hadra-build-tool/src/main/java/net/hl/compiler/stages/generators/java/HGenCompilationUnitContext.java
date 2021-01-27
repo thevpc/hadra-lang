@@ -1,9 +1,9 @@
 package net.hl.compiler.stages.generators.java;
 
-import net.vpc.common.jeep.JArrayType;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypes;
-import net.vpc.common.jeep.JParameterizedType;
+import net.thevpc.jeep.JArrayType;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.JTypes;
+import net.thevpc.jeep.JParameterizedType;
 
 import java.util.*;
 

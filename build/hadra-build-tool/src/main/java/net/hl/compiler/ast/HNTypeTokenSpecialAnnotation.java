@@ -1,7 +1,7 @@
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.types.DefaultTypeName;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.types.DefaultTypeName;
 
 public class HNTypeTokenSpecialAnnotation extends HNTypeToken {
     private JToken nameToken;

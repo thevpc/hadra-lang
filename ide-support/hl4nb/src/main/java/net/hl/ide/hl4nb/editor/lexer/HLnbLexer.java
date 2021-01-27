@@ -6,8 +6,8 @@
 package net.hl.ide.hl4nb.editor.lexer;
 
 import java.util.logging.Logger;
-import net.vpc.common.jeep.JToken;
-import net.vpc.common.jeep.JTokenizer;
+import net.thevpc.jeep.JToken;
+import net.thevpc.jeep.JTokenizer;
 import org.netbeans.api.lexer.Token;
 import org.netbeans.spi.lexer.Lexer;
 import org.netbeans.spi.lexer.LexerRestartInfo;

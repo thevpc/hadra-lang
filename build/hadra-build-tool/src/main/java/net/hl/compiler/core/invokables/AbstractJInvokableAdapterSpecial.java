@@ -1,9 +1,9 @@
 package net.hl.compiler.core.invokables;
 
-import net.vpc.common.jeep.JContext;
-import net.vpc.common.jeep.JInvokable;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.impl.functions.JSignature;
+import net.thevpc.jeep.JContext;
+import net.thevpc.jeep.JInvokable;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.impl.functions.JSignature;
 
 public abstract class AbstractJInvokableAdapterSpecial extends AbstractJInvokableAdapter {
     protected final JSignature signature;

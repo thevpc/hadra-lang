@@ -1,11 +1,11 @@
 package net.hl.compiler.core.types;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.types.DefaultJField;
-import net.vpc.common.jeep.impl.types.*;
-import net.vpc.common.jeep.impl.types.host.HostJAnnotationType;
-import net.vpc.common.jeep.impl.types.host.HostJClassType;
-import net.vpc.common.jeep.impl.types.host.HostJEnumType;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.types.DefaultJField;
+import net.thevpc.jeep.impl.types.*;
+import net.thevpc.jeep.impl.types.host.HostJAnnotationType;
+import net.thevpc.jeep.impl.types.host.HostJClassType;
+import net.thevpc.jeep.impl.types.host.HostJEnumType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

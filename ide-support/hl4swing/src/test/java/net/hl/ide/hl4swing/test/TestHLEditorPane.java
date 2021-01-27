@@ -1,9 +1,9 @@
 package net.hl.ide.hl4swing.test;
 
-import net.vpc.common.textsource.JTextSourceFactory;
-import net.vpc.common.jeep.editor.JEditorPaneBuilder;
-import net.vpc.common.jeep.editor.JSyntaxUtils;
-import net.vpc.common.jeep.editor.comp.JSyntaxPosLabel;
+import net.thevpc.common.textsource.JTextSourceFactory;
+import net.thevpc.jeep.editor.JEditorPaneBuilder;
+import net.thevpc.jeep.editor.JSyntaxUtils;
+import net.thevpc.jeep.editor.comp.JSyntaxPosLabel;
 import net.hl.compiler.core.DefaultHLProjectContext;
 import net.hl.compiler.core.HCompletion;
 import net.hl.compiler.core.HadraLanguage;

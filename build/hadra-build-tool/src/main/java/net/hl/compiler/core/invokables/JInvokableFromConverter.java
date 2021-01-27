@@ -5,9 +5,9 @@
  */
 package net.hl.compiler.core.invokables;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.impl.functions.AbstractJInvokable;
-import net.vpc.common.jeep.impl.functions.JSignature;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.impl.functions.AbstractJInvokable;
+import net.thevpc.jeep.impl.functions.JSignature;
 
 /**
  *

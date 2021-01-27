@@ -1,6 +1,6 @@
 package net.hl.compiler.core;
 
-import net.vpc.common.jeep.util.JStringUtils;
+import net.thevpc.jeep.util.JStringUtils;
 
 public class HDependency {
     private String name;

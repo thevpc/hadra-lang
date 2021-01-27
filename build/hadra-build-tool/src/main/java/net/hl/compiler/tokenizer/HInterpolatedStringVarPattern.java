@@ -1,11 +1,11 @@
 package net.hl.compiler.tokenizer;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.tokens.AbstractJTokenMatcher;
-import net.vpc.common.jeep.core.tokens.JTokenDef;
-import net.vpc.common.jeep.core.tokens.JTokenPatternOrder;
-import net.vpc.common.jeep.impl.tokens.AbstractTokenPattern;
-import net.vpc.common.jeep.impl.tokens.JTokenId;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.tokens.AbstractJTokenMatcher;
+import net.thevpc.jeep.core.tokens.JTokenDef;
+import net.thevpc.jeep.core.tokens.JTokenPatternOrder;
+import net.thevpc.jeep.impl.tokens.AbstractTokenPattern;
+import net.thevpc.jeep.impl.tokens.JTokenId;
 import net.hl.compiler.core.HadraLanguage;
 
 public class HInterpolatedStringVarPattern extends AbstractTokenPattern {

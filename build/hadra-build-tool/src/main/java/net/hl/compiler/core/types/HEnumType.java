@@ -1,10 +1,10 @@
 package net.hl.compiler.core.types;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.types.DefaultJObject;
-import net.vpc.common.jeep.impl.functions.JSignature;
-import net.vpc.common.jeep.impl.types.*;
-import net.vpc.common.jeep.util.JTypeUtils;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.types.DefaultJObject;
+import net.thevpc.jeep.impl.functions.JSignature;
+import net.thevpc.jeep.impl.types.*;
+import net.thevpc.jeep.util.JTypeUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;

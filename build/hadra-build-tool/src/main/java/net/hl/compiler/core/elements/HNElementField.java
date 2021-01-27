@@ -1,9 +1,9 @@
 package net.hl.compiler.core.elements;
 
-import net.vpc.common.jeep.*;
+import net.thevpc.jeep.*;
 import net.hl.compiler.ast.HNDeclareTokenBase;
 import net.hl.compiler.index.HIndexedField;
-import net.vpc.common.jeep.JTypePattern;
+import net.thevpc.jeep.JTypePattern;
 import net.hl.compiler.utils.HUtils;
 
 public class HNElementField extends HNElement implements Cloneable{

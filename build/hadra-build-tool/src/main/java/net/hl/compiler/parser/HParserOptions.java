@@ -1,9 +1,9 @@
 package net.hl.compiler.parser;
 
-import net.vpc.common.jeep.JTokenType;
-import net.vpc.common.jeep.core.JExpressionBinaryOptions;
-import net.vpc.common.jeep.core.JExpressionUnaryOptions;
-import net.vpc.common.jeep.core.tokens.JTokenDef;
+import net.thevpc.jeep.JTokenType;
+import net.thevpc.jeep.core.JExpressionBinaryOptions;
+import net.thevpc.jeep.core.JExpressionUnaryOptions;
+import net.thevpc.jeep.core.tokens.JTokenDef;
 import net.hl.compiler.core.HTokenId;
 
 public class HParserOptions {

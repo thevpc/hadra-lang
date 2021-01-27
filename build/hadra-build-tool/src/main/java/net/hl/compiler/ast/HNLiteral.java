@@ -5,12 +5,12 @@
  */
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JToken;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JNodeVisitor;
-import net.vpc.common.jeep.JNodeFindAndReplace;
-import net.vpc.common.jeep.util.JNodeUtils;
+import net.thevpc.jeep.JNode;
+import net.thevpc.jeep.JToken;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.JNodeVisitor;
+import net.thevpc.jeep.JNodeFindAndReplace;
+import net.thevpc.jeep.util.JNodeUtils;
 import net.hl.compiler.core.elements.HNElementExpr;
 
 import java.time.temporal.Temporal;
@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import net.vpc.common.jeep.JNodeCopyFactory;
+import net.thevpc.jeep.JNodeCopyFactory;
 
 /**
  * @author vpc

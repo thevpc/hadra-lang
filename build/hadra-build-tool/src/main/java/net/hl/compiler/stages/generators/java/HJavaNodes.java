@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 import net.hl.compiler.ast.HNBlock;
 
-import net.vpc.common.textsource.JTextSource;
+import net.thevpc.common.textsource.JTextSource;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.ast.HNDeclareType;
 import net.hl.compiler.ast.HNode;

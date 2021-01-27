@@ -1,10 +1,10 @@
 package net.hl.compiler.stages;
 
-import net.vpc.common.jeep.DefaultJCompilationUnit;
-import net.vpc.common.textsource.JTextSource;
-import net.vpc.common.textsource.JTextSourceRoot;
-import net.vpc.common.jeep.log.LogJTextSourceReport;
-import net.vpc.common.jeep.util.JStringUtils;
+import net.thevpc.jeep.DefaultJCompilationUnit;
+import net.thevpc.common.textsource.JTextSource;
+import net.thevpc.common.textsource.JTextSourceRoot;
+import net.thevpc.jeep.log.LogJTextSourceReport;
+import net.thevpc.jeep.util.JStringUtils;
 import net.hl.compiler.core.HOptions;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.ast.HNBlock;

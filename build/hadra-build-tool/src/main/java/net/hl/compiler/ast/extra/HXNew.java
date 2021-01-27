@@ -4,9 +4,9 @@
  */
 package net.hl.compiler.ast.extra;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.util.JNodeUtils;
-import net.vpc.common.jeep.util.ListBuilder;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.util.JNodeUtils;
+import net.thevpc.jeep.util.ListBuilder;
 import net.hl.compiler.ast.HNNodeId;
 import net.hl.compiler.ast.HNode;
 

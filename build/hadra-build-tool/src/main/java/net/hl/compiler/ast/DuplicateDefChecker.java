@@ -1,7 +1,7 @@
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.JCompilerLog;
-import net.vpc.common.jeep.JToken;
+import net.thevpc.jeep.JCompilerLog;
+import net.thevpc.jeep.JToken;
 import net.hl.compiler.utils.HNodeUtils;
 
 import java.util.ArrayList;

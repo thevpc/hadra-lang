@@ -1,6 +1,6 @@
 package net.hl.compiler.parser;
 
-import net.vpc.common.textsource.log.JSourceMessage;
+import net.thevpc.common.textsource.log.JSourceMessage;
 import net.hl.compiler.core.HTokenId;
 
 import java.util.ArrayList;

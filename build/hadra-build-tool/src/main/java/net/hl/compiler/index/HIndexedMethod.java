@@ -1,10 +1,10 @@
 package net.hl.compiler.index;
 
-import net.vpc.common.jeep.JIndexDocument;
-import net.vpc.common.jeep.JMethod;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.core.index.DefaultJIndexDocument;
-import net.vpc.common.jeep.impl.functions.JNameSignature;
+import net.thevpc.jeep.JIndexDocument;
+import net.thevpc.jeep.JMethod;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.core.index.DefaultJIndexDocument;
+import net.thevpc.jeep.impl.functions.JNameSignature;
 import net.hl.compiler.ast.HNDeclareIdentifier;
 import net.hl.compiler.ast.HNDeclareInvokable;
 import net.hl.compiler.utils.HUtils;

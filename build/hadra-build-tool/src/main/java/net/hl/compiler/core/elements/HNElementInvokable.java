@@ -1,6 +1,6 @@
 package net.hl.compiler.core.elements;
 
-import net.vpc.common.jeep.JInvokable;
+import net.thevpc.jeep.JInvokable;
 import net.hl.compiler.ast.HNode;
 
 public abstract class HNElementInvokable extends HNElement implements Cloneable{

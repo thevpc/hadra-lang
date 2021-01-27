@@ -1,10 +1,10 @@
 package net.hl.compiler.index;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.JIndexQuery;
-import net.vpc.common.jeep.core.index.DefaultJIndexDocument;
-import net.vpc.common.jeep.util.Chronometer;
-import net.vpc.common.jeep.util.JeepUtils;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.JIndexQuery;
+import net.thevpc.jeep.core.index.DefaultJIndexDocument;
+import net.thevpc.jeep.util.Chronometer;
+import net.thevpc.jeep.util.JeepUtils;
 import net.hl.compiler.ast.HNBlock;
 import net.hl.compiler.ast.HNDeclareType;
 import net.hl.lang.IntRef;

@@ -1,6 +1,6 @@
 package net.hl.compiler.core.invokables;
 
-import net.vpc.common.jeep.*;
+import net.thevpc.jeep.*;
 import net.hl.compiler.ast.HNIdentifier;
 import net.hl.compiler.ast.HNLiteral;
 import net.hl.compiler.ast.HNode;

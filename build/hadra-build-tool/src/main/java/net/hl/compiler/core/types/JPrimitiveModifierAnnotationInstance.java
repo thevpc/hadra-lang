@@ -1,7 +1,7 @@
 package net.hl.compiler.core.types;
 
-import net.vpc.common.jeep.JAnnotationInstance;
-import net.vpc.common.jeep.JAnnotationInstanceField;
+import net.thevpc.jeep.JAnnotationInstance;
+import net.thevpc.jeep.JAnnotationInstanceField;
 
 import java.util.Objects;
 

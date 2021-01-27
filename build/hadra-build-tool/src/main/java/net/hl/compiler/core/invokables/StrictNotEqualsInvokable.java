@@ -1,10 +1,10 @@
 package net.hl.compiler.core.invokables;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.AbstractJFunction;
-import net.vpc.common.jeep.impl.functions.AbstractJInvokable;
-import net.vpc.common.jeep.impl.functions.JSignature;
-import net.vpc.common.jeep.util.JTypeUtils;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.AbstractJFunction;
+import net.thevpc.jeep.impl.functions.AbstractJInvokable;
+import net.thevpc.jeep.impl.functions.JSignature;
+import net.thevpc.jeep.util.JTypeUtils;
 
 public class StrictNotEqualsInvokable extends AbstractJFunction {
     JSignature sig;

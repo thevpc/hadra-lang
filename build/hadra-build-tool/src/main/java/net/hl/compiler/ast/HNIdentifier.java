@@ -5,7 +5,7 @@
  */
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.*;
+import net.thevpc.jeep.*;
 
 import java.util.Collections;
 import java.util.List;

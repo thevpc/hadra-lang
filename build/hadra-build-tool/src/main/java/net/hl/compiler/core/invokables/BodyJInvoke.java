@@ -1,6 +1,6 @@
 package net.hl.compiler.core.invokables;
 
-import net.vpc.common.jeep.*;
+import net.thevpc.jeep.*;
 import net.hl.compiler.ast.HNDeclareInvokable;
 import net.hl.compiler.ast.HNDeclareIdentifier;
 import net.hl.compiler.ast.HNLambdaExpression;

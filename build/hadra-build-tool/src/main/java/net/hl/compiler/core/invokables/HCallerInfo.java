@@ -1,7 +1,7 @@
 package net.hl.compiler.core.invokables;
 
-import net.vpc.common.jeep.JCallerInfo;
-import net.vpc.common.jeep.JType;
+import net.thevpc.jeep.JCallerInfo;
+import net.thevpc.jeep.JType;
 
 public class HCallerInfo implements JCallerInfo {
     private String source;

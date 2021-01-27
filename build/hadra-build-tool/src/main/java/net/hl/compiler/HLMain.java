@@ -1,7 +1,7 @@
 package net.hl.compiler;
 
 import net.hl.compiler.core.HTarget;
-import net.vpc.app.nuts.*;
+import net.thevpc.nuts.*;
 
 public class HLMain extends NutsApplication {
     public static void main(String[] args) {
@@ -13,8 +13,9 @@ public class HLMain extends NutsApplication {
         applicationContext.processCommandLine(new NutsCommandLineProcessor() {
             HL hl=HL.create();
             boolean noMoreOptions=false;
+
             @Override
-            public boolean processOption(NutsArgument argument, NutsCommandLine cmdLine) {
+            public boolean nextOption(NutsArgument argument, NutsCommandLine cmdLine) {
                 if(!noMoreOptions){
                     return false;
                 }
@@ -86,7 +87,7 @@ public class HLMain extends NutsApplication {
             }
 
             @Override
-            public boolean processNonOption(NutsArgument argument, NutsCommandLine cmdLine) {
+            public boolean nextNonOption(NutsArgument argument, NutsCommandLine cmdLine) {
                 String s = argument.getString();
                 if(isURL(s)){
                     hl.addSourceFileURL(s);

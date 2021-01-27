@@ -1,12 +1,12 @@
 package net.hl.compiler.core.invokables;
 
-import net.vpc.common.jeep.JContext;
-import net.vpc.common.jeep.JInvokable;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypes;
-import net.vpc.common.jeep.impl.functions.AbstractJInvokable;
-import net.vpc.common.jeep.impl.functions.JSignature;
-import net.vpc.common.jeep.util.JTypeUtils;
+import net.thevpc.jeep.JContext;
+import net.thevpc.jeep.JInvokable;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.JTypes;
+import net.thevpc.jeep.impl.functions.AbstractJInvokable;
+import net.thevpc.jeep.impl.functions.JSignature;
+import net.thevpc.jeep.util.JTypeUtils;
 
 public abstract class CompareToBaseInvokable extends AbstractJInvokableAdapterSpecial {
 

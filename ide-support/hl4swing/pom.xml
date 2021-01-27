@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.hl.ide</groupId>
+    <groupId>net.thevpc.hl.ide</groupId>
     <artifactId>hl4swing</artifactId>
-    <name>net.hl.ide.hl4swing</name>
+    <name>net.thevpc.hl.ide.hl4swing</name>
     <version>0.1.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,13 +15,13 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>net.hl.build</groupId>
+            <groupId>net.thevpc.hl.build</groupId>
             <artifactId>hadra-build-tool</artifactId>
             <version>0.1.0</version>
         </dependency>
         <dependency>
-            <groupId>net.vpc.common</groupId>
-            <artifactId>vpc-common-jeep-editor-swing</artifactId>
+            <groupId>net.thevpc.jeep</groupId>
+            <artifactId>jeep-editor-swing</artifactId>
             <version>1.2.7</version>
         </dependency>
         <dependency>

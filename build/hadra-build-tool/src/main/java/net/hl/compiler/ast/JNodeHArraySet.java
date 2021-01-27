@@ -1,9 +1,9 @@
 //package net.hl.compiler.parser.ast;
 //
-//import net.vpc.common.jeep.*;
-//import net.vpc.common.jeep.impl.JArgumentTypes;
-//import net.vpc.common.jeep.impl.functions.JSignature;
-//import net.vpc.common.jeep.util.JeepUtils;
+//import net.thevpc.jeep.*;
+//import net.thevpc.jeep.impl.JArgumentTypes;
+//import net.thevpc.jeep.impl.functions.JSignature;
+//import net.thevpc.jeep.util.JeepUtils;
 //import net.hl.compiler.core.invokables.HLJCompilerContext;
 //import net.hl.compiler.utils.HUtils;
 //

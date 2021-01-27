@@ -1,7 +1,7 @@
 package net.hl.compiler.utils;
 
-import net.vpc.common.jeep.JCompilerLog;
-import net.vpc.common.jeep.JToken;
+import net.thevpc.jeep.JCompilerLog;
+import net.thevpc.jeep.JToken;
 import net.hl.lang.ComparableRange;
 
 import java.util.ArrayList;

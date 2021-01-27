@@ -1,11 +1,11 @@
 package net.hl.ide.hl4swing;
 
-import net.vpc.common.jeep.JContext;
-import net.vpc.common.jeep.JTokenType;
-import net.vpc.common.jeep.core.tokens.JTokenDef;
-import net.vpc.common.jeep.editor.JSyntaxKit;
-import net.vpc.common.jeep.editor.JSyntaxStyle;
-import net.vpc.common.jeep.editor.JSyntaxStyleManager;
+import net.thevpc.jeep.JContext;
+import net.thevpc.jeep.JTokenType;
+import net.thevpc.jeep.core.tokens.JTokenDef;
+import net.thevpc.jeep.editor.JSyntaxKit;
+import net.thevpc.jeep.editor.JSyntaxStyle;
+import net.thevpc.jeep.editor.JSyntaxStyleManager;
 import net.hl.compiler.core.HadraLanguage;
 
 import java.awt.*;

@@ -1,6 +1,6 @@
 package net.hl.compiler.stages.generators.java;
 
-import net.vpc.common.jeep.*;
+import net.thevpc.jeep.*;
 import net.hl.compiler.core.elements.HNElementMethod;
 import net.hl.compiler.ast.*;
 import net.hl.compiler.ast.extra.HXInvokableCall;
@@ -12,7 +12,7 @@ import net.hl.lang.UncheckedCallable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import net.hl.compiler.core.elements.HNElementExpr;
-import net.vpc.common.jeep.util.JTypeUtils;
+import net.thevpc.jeep.util.JTypeUtils;
 
 public class HJavaGenUtils {
 

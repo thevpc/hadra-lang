@@ -1,4 +1,4 @@
-package net.vpc.hadralang.test:test06;
+package net.thevpc.hadralang.test:test06;
 /**
  * tested :
  *   FIXED : string multiplication : (from python)

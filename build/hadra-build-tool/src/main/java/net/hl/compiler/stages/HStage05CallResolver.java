@@ -1,12 +1,12 @@
 package net.hl.compiler.stages;
 
 import net.hl.compiler.core.invokables.NegateInvokable;
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.types.DefaultJField;
-import net.vpc.common.jeep.impl.functions.JSignature;
-import net.vpc.common.jeep.impl.types.DefaultJRawMethod;
-import net.vpc.common.jeep.util.JTypeUtils;
-import net.vpc.common.jeep.util.JeepUtils;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.types.DefaultJField;
+import net.thevpc.jeep.impl.functions.JSignature;
+import net.thevpc.jeep.impl.types.DefaultJRawMethod;
+import net.thevpc.jeep.util.JTypeUtils;
+import net.thevpc.jeep.util.JeepUtils;
 import net.hl.compiler.core.HFunctionType;
 import net.hl.compiler.core.HOptions;
 import net.hl.compiler.core.HProject;

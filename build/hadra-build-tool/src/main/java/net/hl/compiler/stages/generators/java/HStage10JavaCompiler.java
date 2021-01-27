@@ -30,11 +30,11 @@ import javax.tools.ToolProvider;
 import net.hl.compiler.core.HTarget;
 import net.hl.compiler.core.JModuleId;
 import net.hl.compiler.stages.AbstractHStage;
-import net.vpc.common.jeep.util.JStringUtils;
-import net.vpc.common.textsource.JTextSource;
-import net.vpc.common.textsource.JTextSourceFactory;
-import net.vpc.common.textsource.JTextSourceToken;
-import net.vpc.common.textsource.log.JSourceMessage;
+import net.thevpc.jeep.util.JStringUtils;
+import net.thevpc.common.textsource.JTextSource;
+import net.thevpc.common.textsource.JTextSourceFactory;
+import net.thevpc.common.textsource.JTextSourceToken;
+import net.thevpc.common.textsource.log.JSourceMessage;
 
 public class HStage10JavaCompiler extends AbstractHStage {
 

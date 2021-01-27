@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.vpc.hl.test;
+package net.thevpc.hl.test;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.textsource.JTextSourceFactory;
+import net.thevpc.jeep.*;
+import net.thevpc.common.textsource.JTextSourceFactory;
 import net.hl.compiler.HL;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import net.vpc.common.jeep.core.tokens.JTokenDef;
+import net.thevpc.jeep.core.tokens.JTokenDef;
 
 /**
  * @author vpc

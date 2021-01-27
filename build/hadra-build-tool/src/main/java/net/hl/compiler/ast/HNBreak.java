@@ -5,7 +5,7 @@
  */
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.JToken;
+import net.thevpc.jeep.JToken;
 
 /**
  *

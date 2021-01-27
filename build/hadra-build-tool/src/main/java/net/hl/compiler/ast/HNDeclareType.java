@@ -1,9 +1,9 @@
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.util.JNodeUtils;
-import net.vpc.common.jeep.util.JStringUtils;
-import net.vpc.common.jeep.util.JeepUtils;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.util.JNodeUtils;
+import net.thevpc.jeep.util.JStringUtils;
+import net.thevpc.jeep.util.JeepUtils;
 
 import java.util.*;
 

@@ -1,10 +1,10 @@
 package net.hl.compiler.core.elements;
 
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JToken;
-import net.vpc.common.jeep.JType;
+import net.thevpc.jeep.JNode;
+import net.thevpc.jeep.JToken;
+import net.thevpc.jeep.JType;
 import net.hl.compiler.ast.HNDeclareTokenBase;
-import net.vpc.common.jeep.JTypePattern;
+import net.thevpc.jeep.JTypePattern;
 import net.hl.compiler.ast.HNode;
 import net.hl.compiler.utils.HUtils;
 

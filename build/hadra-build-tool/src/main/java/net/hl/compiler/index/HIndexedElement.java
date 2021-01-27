@@ -1,6 +1,6 @@
 package net.hl.compiler.index;
 
-import net.vpc.common.jeep.JIndexedElement;
+import net.thevpc.jeep.JIndexedElement;
 
 public interface HIndexedElement extends JIndexedElement {
 }

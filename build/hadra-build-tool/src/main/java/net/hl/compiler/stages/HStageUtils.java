@@ -7,8 +7,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
-import net.vpc.common.jeep.JField;
-import net.vpc.common.jeep.JMethod;
+import net.thevpc.jeep.JField;
+import net.thevpc.jeep.JMethod;
 import net.hl.compiler.core.invokables.HLJCompilerContext;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.vpc.common.jeep.JShouldNeverHappenException;
+import net.thevpc.jeep.JShouldNeverHappenException;
 
 public class HStageUtils {
 

@@ -1,4 +1,4 @@
-package net.vpc.hl.test;
+package net.thevpc.hl.test;
 
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HProject;
@@ -7,7 +7,7 @@ import net.hl.compiler.utils.SetLog;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static net.vpc.hl.test.util.TestHelper.printHeader;
+import static net.thevpc.hl.test.util.TestHelper.printHeader;
 
 public class TestCompilerJarSuccess {
 

@@ -1,9 +1,9 @@
 package net.hl.compiler.core.elements;
 
-import net.vpc.common.jeep.JInvokable;
-import net.vpc.common.jeep.JToken;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypePattern;
+import net.thevpc.jeep.JInvokable;
+import net.thevpc.jeep.JToken;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.JTypePattern;
 import net.hl.compiler.ast.HNBracketsPostfix;
 import net.hl.compiler.utils.HUtils;
 

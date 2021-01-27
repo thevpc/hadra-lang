@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.hl.build</groupId>
+    <groupId>net.thevpc.hl.build</groupId>
     <artifactId>hadra-maven-plugin</artifactId>
     <version>0.1.0</version> <!--updated-->
-    <name>net.hl.hadra-maven-plugin</name>
+    <name>net.thevpc.hl.hadra-maven-plugin</name>
     <packaging>maven-plugin</packaging>
     <url>github.com/thevpc</url>
     <organization>
@@ -62,7 +62,7 @@
             <version>3.3.9</version>
         </dependency>
         <dependency>
-            <groupId>net.hl.build</groupId>
+            <groupId>net.thevpc.hl.build</groupId>
             <artifactId>hadra-build-tool</artifactId>
             <version>0.1.0</version> <!--updated-->
         </dependency>

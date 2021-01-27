@@ -9,10 +9,10 @@ import java.io.StringReader;
 import java.util.*;
 import java.util.logging.Logger;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.tokens.JTokenDef;
-import net.vpc.common.jeep.impl.tokens.DefaultJTokenizerReader;
-import net.vpc.common.jeep.impl.tokens.JTokenId;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.tokens.JTokenDef;
+import net.thevpc.jeep.impl.tokens.DefaultJTokenizerReader;
+import net.thevpc.jeep.impl.tokens.JTokenId;
 import net.hl.compiler.core.HTokenId;
 import net.hl.ide.hl4nb.HadraLanguageSingleton;
 import org.netbeans.api.lexer.Language;

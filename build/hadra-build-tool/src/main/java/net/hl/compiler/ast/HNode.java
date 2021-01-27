@@ -1,12 +1,12 @@
 package net.hl.compiler.ast;
 
 import net.hl.compiler.core.elements.HNElement;
-import net.vpc.common.jeep.JImportInfo;
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JNodeCopyFactory;
-import net.vpc.common.jeep.core.nodes.AbstractJNode;
-import net.vpc.common.jeep.util.JNodeUtils;
-import net.vpc.common.jeep.util.JeepUtils;
+import net.thevpc.jeep.JImportInfo;
+import net.thevpc.jeep.JNode;
+import net.thevpc.jeep.JNodeCopyFactory;
+import net.thevpc.jeep.core.nodes.AbstractJNode;
+import net.thevpc.jeep.util.JNodeUtils;
+import net.thevpc.jeep.util.JeepUtils;
 
 import java.util.*;
 

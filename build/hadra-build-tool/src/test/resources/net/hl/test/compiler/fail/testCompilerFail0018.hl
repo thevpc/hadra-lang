@@ -1,4 +1,4 @@
-package net.vpc.hlexamples;
+package net.thevpc.hlexamples;
 String[] args;
 String[] args;
 String[] a,a;

@@ -1,9 +1,9 @@
 package net.hl.compiler.core;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.nodes.AbstractJNode;
-import net.vpc.common.jeep.core.tokens.JTokenDef;
-import net.vpc.common.jeep.util.JStringUtils;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.nodes.AbstractJNode;
+import net.thevpc.jeep.core.tokens.JTokenDef;
+import net.thevpc.jeep.util.JStringUtils;
 import net.hl.compiler.HL;
 import net.hl.compiler.core.elements.HNElement;
 import net.hl.compiler.core.invokables.HLJCompilerContext;
@@ -46,8 +46,10 @@ public class HCompletion implements JCompletion {
 //        for (JToken token : hadraLanguage.tokens().of(compilationUnitText)) {
 //            System.out.println(token+"  "+token.length()+" :: "+token.image.length());
 //        }
-        JCompilationUnit compilationUnit = c.getCompilationUnit(0);
-        setCompilationUnit(compilationUnit);
+        if(c.getCompilationUnits().length>0) {
+            JCompilationUnit compilationUnit = c.getCompilationUnit(0);
+            setCompilationUnit(compilationUnit);
+        }
     }
 
     @Override

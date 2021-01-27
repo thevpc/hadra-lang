@@ -1,11 +1,11 @@
 package net.hl.compiler.core;
 
-import net.vpc.common.jeep.JCompletionProposal;
-import net.vpc.common.jeep.JTokenType;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.core.editor.DefaultJCompletionProposal;
-import net.vpc.common.jeep.core.tokens.JTokensStringBuilder;
-import net.vpc.common.jeep.impl.tokens.JTokensStringFormatPlain;
+import net.thevpc.jeep.JCompletionProposal;
+import net.thevpc.jeep.JTokenType;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.core.editor.DefaultJCompletionProposal;
+import net.thevpc.jeep.core.tokens.JTokensStringBuilder;
+import net.thevpc.jeep.impl.tokens.JTokensStringFormatPlain;
 
 public class HCompletionProposals {
     public static final int CAT_CLASS=2;

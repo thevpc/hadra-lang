@@ -1,9 +1,9 @@
 package net.hl.compiler.stages.runtime;
 
 import net.hl.lang.IntRange;
-import net.vpc.common.jeep.JMethod;
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.impl.types.host.HostJArray;
+import net.thevpc.jeep.JMethod;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.impl.types.host.HostJArray;
 import net.hl.compiler.ast.*;
 import net.hl.compiler.ast.extra.HXInvokableCall;
 import net.hl.lang.ext.HJavaDefaultOperators;

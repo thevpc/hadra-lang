@@ -1,8 +1,8 @@
 package net.hl.compiler.index;
 
-import net.vpc.common.jeep.JField;
-import net.vpc.common.jeep.JIndexDocument;
-import net.vpc.common.jeep.core.index.DefaultJIndexDocument;
+import net.thevpc.jeep.JField;
+import net.thevpc.jeep.JIndexDocument;
+import net.thevpc.jeep.core.index.DefaultJIndexDocument;
 
 import java.util.stream.Collectors;
 

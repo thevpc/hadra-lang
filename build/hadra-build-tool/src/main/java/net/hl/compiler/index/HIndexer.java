@@ -1,7 +1,7 @@
 package net.hl.compiler.index;
 
-import net.vpc.common.jeep.JIndexer;
-import net.vpc.common.jeep.core.JIndexQuery;
+import net.thevpc.jeep.JIndexer;
+import net.thevpc.jeep.core.JIndexQuery;
 import net.hl.compiler.ast.HNDeclareType;
 
 import java.util.Set;

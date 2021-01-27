@@ -1,9 +1,9 @@
 package net.hl.compiler.core.types;
 
-import net.vpc.common.jeep.JTypes;
-import net.vpc.common.jeep.impl.types.DefaultJAnnotationInstanceList;
-import net.vpc.common.jeep.impl.types.host.HostJClassType;
-import net.vpc.common.jeep.util.JeepUtils;
+import net.thevpc.jeep.JTypes;
+import net.thevpc.jeep.impl.types.DefaultJAnnotationInstanceList;
+import net.thevpc.jeep.impl.types.host.HostJClassType;
+import net.thevpc.jeep.util.JeepUtils;
 
 import java.lang.reflect.Modifier;
 

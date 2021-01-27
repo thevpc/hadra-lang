@@ -1,10 +1,10 @@
 //package net.hl.compiler.core.types;
 //
-//import net.vpc.common.jeep.JArray;
-//import net.vpc.common.jeep.JEvalException;
-//import net.vpc.common.jeep.JType;
-//import net.vpc.common.jeep.core.JStaticObject;
-//import net.vpc.common.jeep.impl.types.host.AbstractJType;
+//import net.thevpc.jeep.JArray;
+//import net.thevpc.jeep.JEvalException;
+//import net.thevpc.jeep.JType;
+//import net.thevpc.jeep.core.JStaticObject;
+//import net.thevpc.jeep.impl.types.host.AbstractJType;
 //import net.hl.compiler.core.invokables.HLJCompilerContext;
 //
 //public abstract class JTypeAbstractFromSource extends AbstractJType {

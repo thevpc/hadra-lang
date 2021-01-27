@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.vpc.hl.test.util;
+package net.thevpc.hl.test.util;
 
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HProject;

@@ -5,7 +5,7 @@
  */
 package net.hl.ide.hl4nb.editor.lexer;
 
-import net.vpc.common.jeep.JTokenizerReader;
+import net.thevpc.jeep.JTokenizerReader;
 import org.netbeans.spi.lexer.LexerInput;
 
 /**

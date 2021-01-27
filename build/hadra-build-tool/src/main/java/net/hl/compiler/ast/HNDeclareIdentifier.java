@@ -1,8 +1,8 @@
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.nodes.AbstractJNode;
-import net.vpc.common.jeep.util.JNodeUtils;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.nodes.AbstractJNode;
+import net.thevpc.jeep.util.JNodeUtils;
 import net.hl.compiler.utils.HUtils;
 
 import java.lang.reflect.Modifier;

@@ -1,9 +1,9 @@
 package net.hl.compiler.core.elements;
 
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypePattern;
-import net.vpc.common.jeep.JTypes;
-import net.vpc.common.jeep.util.JTypeUtils;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.JTypePattern;
+import net.thevpc.jeep.JTypes;
+import net.thevpc.jeep.util.JTypeUtils;
 
 public class HNElementStatement extends HNElement implements Cloneable{
     JTypePattern voidType;

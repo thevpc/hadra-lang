@@ -1,7 +1,7 @@
 package net.hl.compiler.tokenizer;
 
-import net.vpc.common.jeep.core.tokens.JTokenDef;
-import net.vpc.common.jeep.core.tokens.SimpleTokenPattern;
+import net.thevpc.jeep.core.tokens.JTokenDef;
+import net.thevpc.jeep.core.tokens.SimpleTokenPattern;
 import net.hl.compiler.core.HTokenId;
 import net.hl.compiler.core.HTokenTTypes;
 

@@ -1,9 +1,9 @@
 package net.hl.compiler.core.elements;
 
-import net.vpc.common.jeep.JInvokable;
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypePattern;
+import net.thevpc.jeep.JInvokable;
+import net.thevpc.jeep.JNode;
+import net.thevpc.jeep.JType;
+import net.thevpc.jeep.JTypePattern;
 import net.hl.compiler.ast.HNIf;
 import net.hl.compiler.utils.HUtils;
 

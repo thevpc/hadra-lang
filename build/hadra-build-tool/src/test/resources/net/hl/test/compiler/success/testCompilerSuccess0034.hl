@@ -1,4 +1,4 @@
-package net.vpc.hadralang.test:test05;
+package net.thevpc.hadralang.test:test05;
 /**
  * tested :
  *   * fixed decreasing ranges 3>..1 or 3<..1

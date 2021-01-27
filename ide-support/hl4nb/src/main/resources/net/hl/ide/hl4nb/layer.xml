@@ -65,7 +65,7 @@
                 <!--<file name="net-hl-editor-hl4nb-editor-parser-HLnbSyntaxErrorsHighlightingTaskFactory.instance"/>-->
                                 
 <!--                <file name="language.instance">
-                    <attr name="instanceCreate" methodvalue="net.vpc.hadralang.nb.hlsupport.lexer.HLnbLanguageHierarchy.getLanguage"/>
+                    <attr name="instanceCreate" methodvalue="net.thevpc.hadralang.nb.hlsupport.lexer.HLnbLanguageHierarchy.getLanguage"/>
                     <attr name="instanceOf" stringvalue="org.netbeans.api.lexer.Language"/>
                 </file>-->
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="net.hl.ide.hl4nb.Bundle"/>

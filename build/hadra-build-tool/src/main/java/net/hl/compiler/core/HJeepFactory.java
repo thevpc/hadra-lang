@@ -1,11 +1,11 @@
 package net.hl.compiler.core;
 
 import net.hl.compiler.core.types.HLJTypes;
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.impl.DefaultJeepFactory;
-import net.vpc.common.jeep.impl.functions.JFunctionsImpl;
-import net.vpc.common.jeep.impl.functions.JMultipleInvokableMatchFound;
-import net.vpc.common.jeep.util.JTypeUtils;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.impl.DefaultJeepFactory;
+import net.thevpc.jeep.impl.functions.JFunctionsImpl;
+import net.thevpc.jeep.impl.functions.JMultipleInvokableMatchFound;
+import net.thevpc.jeep.util.JTypeUtils;
 import net.hl.compiler.core.invokables.HCallerInfo;
 
 import java.util.ArrayList;

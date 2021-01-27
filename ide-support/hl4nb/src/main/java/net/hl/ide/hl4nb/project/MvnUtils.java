@@ -25,7 +25,7 @@ public class MvnUtils {
     public static final MvnArtifact MAVEN_COMPILER = new MvnArtifact("org.apache.maven.plugins", "maven-compiler-plugin", "3.3"); // NOI18N
 
 //    <plugin>
-//                <groupId>net.vpc.hadra-lang</groupId>
+//                <groupId>net.thevpc.hadra-lang</groupId>
 //                <artifactId>hadra-maven-plugin</artifactId>
 //                <version>1.0.0</version>
 //                <configuration>

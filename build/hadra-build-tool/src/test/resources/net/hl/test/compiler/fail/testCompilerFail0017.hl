@@ -1,4 +1,4 @@
-package net.vpc.hlexamples;
+package net.thevpc.hlexamples;
 fun main(String[] args,String[] args,int z){
     println("hello world");
     int a=z;

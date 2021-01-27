@@ -1,10 +1,10 @@
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.impl.functions.JFunctionLocal;
-import net.vpc.common.jeep.impl.functions.JNameSignature;
-import net.vpc.common.jeep.util.JNodeUtils;
-import net.vpc.common.jeep.JNodeFindAndReplace;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.impl.functions.JFunctionLocal;
+import net.thevpc.jeep.impl.functions.JNameSignature;
+import net.thevpc.jeep.util.JNodeUtils;
+import net.thevpc.jeep.JNodeFindAndReplace;
 import net.hl.compiler.core.invokables.BodyJInvoke;
 import net.hl.compiler.utils.HNodeUtils;
 

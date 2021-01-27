@@ -1,8 +1,8 @@
 package net.hl.compiler.core;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.eval.JEvaluableValue;
-import net.vpc.common.jeep.impl.functions.DefaultJInvokeContext;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.eval.JEvaluableValue;
+import net.thevpc.jeep.impl.functions.DefaultJInvokeContext;
 import net.hl.compiler.index.HIndexedProject;
 import net.hl.compiler.ast.*;
 import net.hl.compiler.core.invokables.HLJCompilerContext;
@@ -133,7 +133,7 @@ public class HProject implements HProjectContext{
                             new JEvaluable[]{
                                     new JEvaluableValue(new String[0],context.types().forName(String.class.getName()).toArray())
                             },
-                            "main",null
+                            "main",null,null
                     ));
 
             //then executing main with arguments
@@ -142,7 +142,7 @@ public class HProject implements HProjectContext{
                     this.context.evaluators().newEvaluator(),
                     null,
                     new JEvaluable[]{new JEvaluableValue(args,context.types().forName(String.class.getName()).toArray())},
-                    "main",null
+                    "main",null,null
             ));
         } else {
             //no entry point is found
@@ -153,7 +153,7 @@ public class HProject implements HProjectContext{
                             this.context.evaluators().newEvaluator(),
                             null,
                             new JEvaluable[]{new JEvaluableValue(args,context.types().forName(String.class.getName()).toArray())},
-                            "main",null
+                            "main",null,null
                     ));
         }
     }

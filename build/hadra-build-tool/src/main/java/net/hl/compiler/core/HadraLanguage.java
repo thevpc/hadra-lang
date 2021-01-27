@@ -9,10 +9,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import net.hl.compiler.stages.runtime.HNumberEvaluator;
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.DefaultJeep;
-import net.vpc.common.jeep.core.tokens.*;
-import net.vpc.common.jeep.impl.tokens.JTokenizerImpl;
+import net.thevpc.jeep.*;
+import net.thevpc.jeep.core.DefaultJeep;
+import net.thevpc.jeep.core.tokens.*;
+import net.thevpc.jeep.impl.tokens.JTokenizerImpl;
 import net.hl.compiler.parser.*;
 import net.hl.compiler.tokenizer.HSuperscriptPattern;
 import net.hl.compiler.tokenizer.HInterpolatedStringPartPattern;
@@ -53,7 +53,14 @@ public final class HadraLanguage extends DefaultJeep {
         /*
          * Lexical Parsing...
          */
-        JTokenConfigBuilder config = new JTokenConfigBuilder(this.tokens().config());
+        JTokenConfigBuilder config = this.tokens().config().builder();
+        config
+            .setParseWhitespaces(true)
+            .setAcceptIntNumber(true)
+            .setAcceptFloatNumber(true)
+            .setAcceptInfinity(true)
+            .setParseWhitespaces(true)
+        ;
         config.setIdPattern(new JavaIdPattern());
         //date/datetime/timestamp
         config.addPattern(new TemporalPattern("t\"", "\""));

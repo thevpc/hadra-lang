@@ -1,6 +1,6 @@
 package net.hl.compiler.ast;
 
-import net.vpc.common.jeep.JType;
+import net.thevpc.jeep.JType;
 
 public class ElementTypeAndConstraint {
     public JType valType;

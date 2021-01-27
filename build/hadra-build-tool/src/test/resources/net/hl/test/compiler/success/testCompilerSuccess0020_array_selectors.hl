@@ -2,7 +2,7 @@
  * tested :
  *   * array selectors
  */
-package net.vpc.hadralang.test:test04#1215 {
+package net.thevpc.hadralang.test:test04#1215 {
     String commonVersion="2.6";
     import package $"commons-lang:commons-lang#${commonVersion}";
 }

@@ -5,11 +5,11 @@
 // */
 //package net.hl.compiler.parser.ast;
 //
-//import net.vpc.common.jeep.JCompilerContext;
-//import net.vpc.common.jeep.JNode;
-//import net.vpc.common.jeep.JNodeVisitor;
-//import net.vpc.common.jeep.JToken;
-//import net.vpc.common.jeep.JNodeFindAndReplace;
+//import net.thevpc.jeep.JCompilerContext;
+//import net.thevpc.jeep.JNode;
+//import net.thevpc.jeep.JNodeVisitor;
+//import net.thevpc.jeep.JToken;
+//import net.thevpc.jeep.JNodeFindAndReplace;
 //import net.hl.compiler.core.invokables.HLJCompilerContext;
 //import net.hl.compiler.utils.HUtils;
 //

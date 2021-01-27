@@ -1,10 +1,10 @@
-package net.vpc.hadralang.test:test09#1215 {
+package net.thevpc.hadralang.test:test09#1215 {
     String commonVersion="2.6";
     import package $"commons-lang:commons-lang#${commonVersion}" for test;
     import package $"commons-lang:commons-lang#${commonVersion}" for compile;
     import package $"commons-lang:commons-lang#${commonVersion}" for optional build
             break "toto:titi#2", "toto:titi#2", "toto:titi#2";
-      import package "net.vpc.common:jeep#1.2.7" for compile;
+      import package "net.thevpc:jeep#1.2.7" for compile;
 }
 int z;
 fun main(String[] args){
