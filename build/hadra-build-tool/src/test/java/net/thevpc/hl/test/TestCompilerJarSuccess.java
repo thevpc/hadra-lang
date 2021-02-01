@@ -2,7 +2,7 @@ package net.thevpc.hl.test;
 
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HProject;
-import net.hl.compiler.core.HTarget;
+import net.hl.compiler.core.HTask;
 import net.hl.compiler.utils.SetLog;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -396,7 +396,7 @@ public class TestCompilerJarSuccess {
         HL hl = HL.create();
         return hl
                 .addSourceResourcesFile("net/hl/test/compiler/success/" + resourceFileName)
-                .addTarget(HTarget.COMPILE)
+                .addTask(HTask.COMPILE)
                 .setJavaFolder("target/hl/test/" + resourceFileName + "/java")
                 .setClassFolder("target/hl/test/" + resourceFileName + "/class")
                 .setJarFolder("target/hl/test/" + resourceFileName + "/jar")

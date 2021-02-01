@@ -14,7 +14,8 @@ import java.util.Set;
  *
  * @author vpc
  */
-public enum HTarget {
+public enum HTask {
+    CLEAN,
     AST,
     RESOLVED_AST,
     COMPILE,
@@ -25,17 +26,17 @@ public enum HTarget {
     CS,
     CPP;
 
-    public static Set<HTarget> getLanguagePorts() {
-        return new HashSet<HTarget>(
+    public static Set<HTask> getLanguagePorts() {
+        return new HashSet<HTask>(
                 Arrays.asList(
                         JAVA,C,CPP,CS
                 )
         );
     }
     
-    public Set<HTarget> getReverseDependencies() {
-        EnumSet<HTarget> a = EnumSet.noneOf(HTarget.class);
-        for (HTarget value : values()) {
+    public Set<HTask> getReverseDependencies() {
+        EnumSet<HTask> a = EnumSet.noneOf(HTask.class);
+        for (HTask value : values()) {
             if (value.getDependencies().contains(this)) {
                 a.add(value);
             }
@@ -43,10 +44,10 @@ public enum HTarget {
         return a;
     }
 
-    public Set<HTarget> getDependencies() {
+    public Set<HTask> getDependencies() {
         switch (this) {
             case AST: {
-                return EnumSet.noneOf(HTarget.class);
+                return EnumSet.noneOf(HTask.class);
             }
             case RESOLVED_AST: {
                 return EnumSet.of(AST);
@@ -61,28 +62,28 @@ public enum HTarget {
                 return EnumSet.of(AST, RESOLVED_AST, COMPILE);
             }
         }
-        return EnumSet.noneOf(HTarget.class);
+        return EnumSet.noneOf(HTask.class);
     }
 
-    public static Set<HTarget> expandDependencies(HTarget[] base) {
+    public static Set<HTask> expandDependencies(HTask[] base) {
         return expandDependencies(EnumSet.copyOf(Arrays.asList(base)));
     }
 
-    public static Set<HTarget> expandReverseDependencies(HTarget[] base) {
+    public static Set<HTask> expandReverseDependencies(HTask[] base) {
         return expandReverseDependencies(EnumSet.copyOf(Arrays.asList(base)));
     }
 
-    public static Set<HTarget> expandDependencies(Set<HTarget> base) {
-        EnumSet<HTarget> a = EnumSet.copyOf(base);
-        for (HTarget x : base) {
+    public static Set<HTask> expandDependencies(Set<HTask> base) {
+        EnumSet<HTask> a = EnumSet.copyOf(base);
+        for (HTask x : base) {
             a.addAll(x.getDependencies());
         }
         return a;
     }
 
-    public static Set<HTarget> expandReverseDependencies(Set<HTarget> base) {
-        EnumSet<HTarget> a = EnumSet.copyOf(base);
-        for (HTarget x : base) {
+    public static Set<HTask> expandReverseDependencies(Set<HTask> base) {
+        EnumSet<HTask> a = EnumSet.copyOf(base);
+        for (HTask x : base) {
             a.addAll(x.getReverseDependencies());
         }
         return a;

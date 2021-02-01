@@ -35,13 +35,13 @@ public class HStage02Preprocessor extends AbstractHStage {
     public static final Logger LOG = Logger.getLogger(HStage02Preprocessor.class.getName());
 
     @Override
-    public HTarget[] getTargets() {
-        return new HTarget[]{HTarget.RESOLVED_AST};
+    public HTask[] getTasks() {
+        return new HTask[]{HTask.RESOLVED_AST};
     }
 
     @Override
     public boolean isEnabled(HProject project, HL options) {
-        return options.containsAnyTargets(HTarget.RESOLVED_AST);
+        return options.containsAnyTask(HTask.RESOLVED_AST);
     }
     
 

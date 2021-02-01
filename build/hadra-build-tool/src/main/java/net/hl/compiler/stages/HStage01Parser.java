@@ -9,18 +9,18 @@ import net.thevpc.jeep.util.JStringUtils;
 import net.hl.compiler.core.HOptions;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.ast.HNBlock;
-import net.hl.compiler.core.HTarget;
+import net.hl.compiler.core.HTask;
 
 public class HStage01Parser extends AbstractHStage {
 
     @Override
-    public HTarget[] getTargets() {
-        return new HTarget[]{HTarget.AST};
+    public HTask[] getTasks() {
+        return new HTask[]{HTask.AST};
     }
 
     @Override
     public boolean isEnabled(HProject project, HL options) {
-        return options.containsAnyTargets(HTarget.AST);
+        return options.containsAnyTask(HTask.AST);
     }
 
     @Override

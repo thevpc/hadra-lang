@@ -28,13 +28,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import net.hl.compiler.HL;
-import net.hl.compiler.core.HTarget;
+import net.hl.compiler.core.HTask;
 import net.hl.compiler.stages.AbstractHStage;
+import net.hl.compiler.utils.HFileUtils;
 
 public class HStage09JavaGenerator extends AbstractHStage {
 
@@ -44,14 +46,14 @@ public class HStage09JavaGenerator extends AbstractHStage {
     private boolean staticStdDefaults = true;
 
     @Override
-    public HTarget[] getTargets() {
-        return new HTarget[]{HTarget.JAVA};
+    public HTask[] getTasks() {
+        return new HTask[]{HTask.JAVA};
     }
 
     @Override
     public boolean isEnabled(HProject project, HL options) {
-        if ((options.containsAnyTargets(HTarget.COMPILE,HTarget.RUN))) {
-            if (options.containsAllTargets(HTarget.JAVA)) {
+        if ((options.containsAnyTask(HTask.COMPILE,HTask.RUN))) {
+            if (options.containsAllTasks(HTask.JAVA)) {
                 return true;
             }
 
@@ -77,29 +79,19 @@ public class HStage09JavaGenerator extends AbstractHStage {
 
     @Override
     public void processProject(HProject project, HOptions options) {
-        generate(project, options.getJavaFolder(), options.isClean());
-    }
-
-    public void generate(HProject program, File folder, boolean clean) {
-        if (folder == null) {
-            folder = new File("target/hl/generated-java");
-        }
-        if (clean) {
-            if (folder.isDirectory()) {
-//                if(new File(".java-generated").exists()){
-//                   folder.get
-//                }
-            }
-        }
-        HJavaContextHelper jn = HJavaContextHelper.of(program);
-        HGenGlobalContext globalContext = new HGenGlobalContext(program);
+        File folder=HFileUtils.getPath(
+                HFileUtils.coalesce(options.getJavaFolder(),"hl/generated-java"),
+                Paths.get(HFileUtils.coalesce(options.getTargetFolder(),"target"))
+        ).toFile();
+        HJavaContextHelper jn = HJavaContextHelper.of(project);
+        HGenGlobalContext globalContext = new HGenGlobalContext(project);
         Set<String> sources = new LinkedHashSet<>();
         for (JTextSource sourceNode : jn.getMetaPackageSources()) {
             sources.add(sourceNode.name());
         }
-        generateClassFile(jn.getMetaPackage(), folder, sources.toArray(new String[0]), globalContext, program, true);
+        generateClassFile(jn.getMetaPackage(), folder, sources.toArray(new String[0]), globalContext, project, true);
         for (HNDeclareType classDeclaration : jn.getTopLevelTypes()) {
-            generateClassFile(classDeclaration, folder, new String[]{HSharedUtils.getSourceName(classDeclaration)}, globalContext, program, false);
+            generateClassFile(classDeclaration, folder, new String[]{HSharedUtils.getSourceName(classDeclaration)}, globalContext, project, false);
         }
     }
 

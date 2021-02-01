@@ -40,7 +40,7 @@ public class HLMvnPlugin extends AbstractMojo {
 
     //<editor-fold desc="Parameters">
     /**
-     * The directory where the hadra lang files ({@code *.hl}) are located.
+     * The directory where the Hadra Lang files ({@code *.hl}) are located.
      */
     @Parameter(defaultValue = "${basedir}/src/main/hl")
     private File sourceDirectory;
@@ -105,8 +105,8 @@ public class HLMvnPlugin extends AbstractMojo {
                 hl.addClassPathItem(item);
             }
         }
-        hl.addSourceFile(getSourceDirectory())
-                .setJavaFolder(getOutputDirectory());
+        hl.addSourceFile(getSourceDirectory());
+        hl.setJavaFolder(getOutputDirectory() == null ? null : getOutputDirectory().getPath());
 
         HProject project = hl.compile();
         if (!project.isSuccessful()) {

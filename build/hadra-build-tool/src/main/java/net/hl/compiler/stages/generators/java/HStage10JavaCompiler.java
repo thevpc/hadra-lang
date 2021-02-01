@@ -10,8 +10,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,10 +34,11 @@ import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 import net.hl.compiler.HL;
-import net.hl.compiler.core.HTarget;
+import net.hl.compiler.core.HTask;
 import net.hl.compiler.core.JModuleId;
 import net.hl.compiler.stages.AbstractHStage;
 import net.hl.compiler.utils.DepIdAndFile;
+import net.hl.compiler.utils.HFileUtils;
 import net.thevpc.common.msg.Messages;
 import net.thevpc.jeep.util.JStringUtils;
 import net.thevpc.common.textsource.JTextSource;
@@ -49,14 +54,14 @@ public class HStage10JavaCompiler extends AbstractHStage {
     private static final Logger LOG = Logger.getLogger(HStage10JavaCompiler.class.getName());
 
     @Override
-    public HTarget[] getTargets() {
-        return new HTarget[]{HTarget.RUN, HTarget.COMPILE, HTarget.JAVA};
+    public HTask[] getTasks() {
+        return new HTask[]{HTask.RUN, HTask.COMPILE, HTask.JAVA};
     }
 
     @Override
     public boolean isEnabled(HProject project, HL options) {
-        if ((options.containsAnyTargets(HTarget.COMPILE, HTarget.RUN))) {
-            if (options.containsAllTargets(HTarget.JAVA)) {
+        if ((options.containsAnyTask(HTask.COMPILE, HTask.RUN))) {
+            if (options.containsAllTasks(HTask.JAVA)) {
                 return true;
             }
         }
@@ -66,23 +71,20 @@ public class HStage10JavaCompiler extends AbstractHStage {
     @Override
     public void processProject(HProject project, HOptions options) {
         HJavaContextHelper jn = HJavaContextHelper.of(project);
-
+        File classesFolder = HFileUtils.getPath(
+                HFileUtils.coalesce(options.getClassFolder(), "hl/classes"),
+                Paths.get(HFileUtils.coalesce(options.getTargetFolder(), "target"))
+        ).toFile();
+        File jarFolder = HFileUtils.getPath(
+                HFileUtils.coalesce(options.getJarFolder(), "hl"),
+                Paths.get(HFileUtils.coalesce(options.getTargetFolder(), "target"))
+        ).toFile();
+               
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
         List<JavaFileObject> compilationUnits = new ArrayList<>();
         for (String javaFile : jn.getJavaFiles()) {
             compilationUnits.add(new SimpleJavaFileObjectImpl(new File(javaFile).toURI(), JavaFileObject.Kind.SOURCE));
-        }
-        File classesFolder = options.getClassFolder();
-        if (classesFolder == null) {
-            classesFolder = new File("target/hl/classes");
-        }
-        if (options.isClean()) {
-            if (classesFolder.isDirectory()) {
-//                if(new File(".java-generated").exists()){
-//                   folder.get
-//                }
-            }
         }
         classesFolder.mkdirs();
         DepIdAndFile[] dependencyFiles = project.getIndexedProject().getDependencies();
@@ -149,11 +151,7 @@ public class HStage10JavaCompiler extends AbstractHStage {
                                     ).toArray(NutsDependency[]::new)
                     ).build();
             project.getWorkspace().descriptor().formatter(desc).setSession(project.getSession())
-                    .print(new File("target/hl/classes/META-INF/" + NutsConstants.Files.DESCRIPTOR_FILE_NAME));
-            File jarFolder = options.getJarFolder();
-            if (jarFolder == null) {
-                jarFolder = new File("target/hl");
-            }
+                    .print(new File(classesFolder, "META-INF/" + NutsConstants.Files.DESCRIPTOR_FILE_NAME));
             jarFolder.mkdirs();
             File jarPath = new File(jarFolder, jarName);
             generateJar(project, jarPath, classesFolder);

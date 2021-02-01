@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import net.hl.compiler.stages.generators.java.HStage10JavaCompiler;
 import net.hl.compiler.index.HIndexer;
 import net.hl.compiler.stages.generators.java.HStage11JavaRun;
+import net.hl.compiler.utils.StringUtils;
 import net.thevpc.nuts.NutsSession;
 import net.thevpc.nuts.NutsTextNodeStyle;
 
@@ -73,8 +74,11 @@ public class HL extends HOptions<HL> {
         HadraContext context = languageContext().newContext();
         HProject project = new HProject(context, projectContext.indexer(), projectContext.getSession());
         Chronometer globalChronometer = Chronometer.start();
-        project.getSession().out().printf("----------------------------------- [%s] -------------------------------------------\n",
-                project.getWorkspace().formats().text().factory().styled("Hadra Lang Build Tool", NutsTextNodeStyle.success())
+        project.getSession().out().println(
+                StringUtils.center2(
+                        "[ " + project.getWorkspace().formats().text().factory().styled("Hadra Lang Build Tool", NutsTextNodeStyle.primary(1)).toString()
+                        + " ]",
+                         80, '-', context.getSession().getWorkspace())
         );
         project.log().jinfo("X000", null, null, "compiler started");
 
@@ -86,31 +90,33 @@ public class HL extends HOptions<HL> {
             }
         }
 
-        if (getTargets().contains(HTarget.COMPILE) || getTargets().contains(HTarget.RUN)) {
-            if (!getTargets().stream().anyMatch(x -> HTarget.getLanguagePorts().contains(x))) {
-                addTarget(HTarget.JAVA);
+        if (containsAnyTask(HTask.COMPILE, HTask.RUN)) {
+            if (!containsAnyTask(HTask.getLanguagePorts().toArray(new HTask[0]))) {
+                addTask(HTask.JAVA);
             }
         }
 
-        if (getTargets().isEmpty()) {
-            addTarget(HTarget.RUN);
-            addTarget(HTarget.COMPILE);
-            addTarget(HTarget.JAVA);
+        if (getTasks().isEmpty()) {
+            addTask(HTask.CLEAN);
+            addTask(HTask.COMPILE);
+            addTask(HTask.JAVA);
+            addTask(HTask.RUN);
         }
 
-        if (containsAnyTargets(HTarget.RUN)) {
-            addTarget(HTarget.COMPILE);
+        if (containsAnyTask(HTask.RUN)) {
+            addTask(HTask.COMPILE);
         }
-        if (containsAnyTargets(HTarget.COMPILE)) {
-            addTarget(HTarget.RESOLVED_AST);
+        if (containsAnyTask(HTask.COMPILE)) {
+            addTask(HTask.RESOLVED_AST);
         }
-        if (containsAnyTargets(HTarget.RESOLVED_AST)) {
-            addTarget(HTarget.AST);
+        if (containsAnyTask(HTask.RESOLVED_AST)) {
+            addTask(HTask.AST);
         }
 
         try {
             if (project.isSuccessful()) {
                 List<HStage> stages = new ArrayList<>();
+                stages.add(new HStage00CleanCompiler());
                 stages.add(new HStage01Parser());
                 stages.add(new HStage02Preprocessor());
                 stages.add(new HStage03Indexer(false));
@@ -120,13 +126,13 @@ public class HL extends HOptions<HL> {
                 stages.add(new HStage09JavaGenerator());
                 stages.add(new HStage10JavaCompiler());
                 stages.add(new HStage11JavaRun());
-                EnumSet<HTarget> toProcessTargets = EnumSet.copyOf(options.getTargets());
+                EnumSet<HTask> toProcessTarsks = EnumSet.copyOf(options.getTasks());
                 for (int i = 0; i < stages.size(); i++) {
                     HStage stage = stages.get(i);
                     String stageName = stage.getClass().getSimpleName();
                     if (stage.isEnabled(project, options)) {
-                        for (HTarget target : HTarget.expandDependencies(stage.getTargets())) {
-                            toProcessTargets.remove(target);
+                        for (HTask task : HTask.expandDependencies(stage.getTasks())) {
+                            toProcessTarsks.remove(task);
                         }
                         LOG.log(Level.FINE, "{0} ({1}/{2}) starting...", new Object[]{stageName, i + 1, stages.size()});
                         Chronometer chronometer = Chronometer.start(stageName);
@@ -139,9 +145,9 @@ public class HL extends HOptions<HL> {
                         stage.isEnabled(project, options);
                     }
                 }
-                if (toProcessTargets.size() > 0 && project.isSuccessful()) {
-                    LOG.log(Level.SEVERE, "unsupported targets : {0}", toProcessTargets);
-                    project.log().jerror("X000", null, null, "unsupported targets : " + toProcessTargets);
+                if (toProcessTarsks.size() > 0 && project.isSuccessful()) {
+                    LOG.log(Level.SEVERE, "unsupported tasks : {0}", toProcessTarsks);
+                    project.log().jerror("X000", null, null, "unsupported tasks : " + toProcessTarsks);
                 }
             }
         } catch (Exception ex) {

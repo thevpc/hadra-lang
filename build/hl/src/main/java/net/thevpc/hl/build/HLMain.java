@@ -2,7 +2,7 @@ package net.thevpc.hl.build;
 
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HProject;
-import net.hl.compiler.core.HTarget;
+import net.hl.compiler.core.HTask;
 import net.thevpc.nuts.*;
 
 public class HLMain extends NutsApplication {
@@ -26,7 +26,11 @@ public class HLMain extends NutsApplication {
                 }
                 switch (argument.getStringKey()) {
                     case "--clean": {
-                        hl.clean(cmdLine.nextBoolean().getBooleanValue());
+                        if (cmdLine.nextBoolean().getBooleanValue()) {
+                            hl.addTask(HTask.CLEAN);
+                        } else {
+                            hl.removeTask(HTask.CLEAN);
+                        }
                         return true;
                     }
                     case "-i":
@@ -41,27 +45,27 @@ public class HLMain extends NutsApplication {
                     }
                     case "--java": {
                         cmdLine.skip();
-                        hl.addTarget(HTarget.JAVA);
+                        hl.addTask(HTask.JAVA);
                         return true;
                     }
                     case "--c": {
                         cmdLine.skip();
-                        hl.addTarget(HTarget.C);
+                        hl.addTask(HTask.C);
                         return true;
                     }
                     case "--c++": {
                         cmdLine.skip();
-                        hl.addTarget(HTarget.CPP);
+                        hl.addTask(HTask.CPP);
                         return true;
                     }
                     case "--cs": {
                         cmdLine.skip();
-                        hl.addTarget(HTarget.CS);
+                        hl.addTask(HTask.CS);
                         return true;
                     }
                     case "--run": {
                         cmdLine.skip();
-                        hl.addTarget(HTarget.RUN);
+                        hl.addTask(HTask.RUN);
                         return true;
                     }
                 }

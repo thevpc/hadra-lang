@@ -7,7 +7,7 @@ package net.thevpc.hl.test.util;
 
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HProject;
-import net.hl.compiler.core.HTarget;
+import net.hl.compiler.core.HTask;
 import net.hl.compiler.utils.SetLog;
 
 /**
@@ -29,7 +29,7 @@ public class TestHelper {
         return HL.create()
                 .addSourceResourcesFile("net/hl/test/" + resourceFileName)
                 .setJavaFolder("target/custom-generated-test-sources/tmp/" + resourceFileName)
-                .addTarget(HTarget.JAVA)
+                .addTask(HTask.JAVA)
                 .compile();
 
     }
@@ -43,7 +43,7 @@ public class TestHelper {
         printHeader(resourceFileName);
         return HL.create()
                 .addSourceResourcesFile("net/hl/test/" + resourceFileName)
-                .addTarget(HTarget.RESOLVED_AST)
+                .addTask(HTask.RESOLVED_AST)
                 .compile();
 
     }
@@ -60,7 +60,7 @@ public class TestHelper {
         HL hl=HL.create();
         return hl
                 .addSourceText(text, "<user-text>")
-                .addTarget(HTarget.RESOLVED_AST)
+                .addTask(HTask.RESOLVED_AST)
                 .compile();
     }
     
@@ -69,7 +69,7 @@ public class TestHelper {
         printHeader(id);
         return HL.create()
                 .addSourceText(text, "<user-text>")
-                .addTarget(HTarget.AST)
+                .addTask(HTask.AST)
                 .compile();
     }
 

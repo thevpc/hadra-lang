@@ -11,7 +11,7 @@ import net.hl.compiler.index.HIndexedProject;
 import java.io.File;
 import java.util.Set;
 import net.hl.compiler.HL;
-import net.hl.compiler.core.HTarget;
+import net.hl.compiler.core.HTask;
 import net.hl.compiler.index.HIndexer;
 import net.hl.compiler.utils.DepIdAndFile;
 
@@ -26,17 +26,16 @@ public class HStage03Indexer extends AbstractHStage {
 
     @Override
     public boolean isEnabled(HProject project, HL options) {
-        return options.containsAnyTargets(
-                HTarget.RESOLVED_AST,
-                HTarget.COMPILE,
-                HTarget.RUN
+        return options.containsAnyTask(HTask.RESOLVED_AST,
+                HTask.COMPILE,
+                HTask.RUN
         );
     }
     
 
     @Override
-    public HTarget[] getTargets() {
-        return new HTarget[]{HTarget.RESOLVED_AST};
+    public HTask[] getTasks() {
+        return new HTask[]{HTask.RESOLVED_AST};
     }
 
     @Override

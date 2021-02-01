@@ -26,7 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HProject;
-import net.hl.compiler.core.HTarget;
+import net.hl.compiler.core.HTask;
 
 public class HStage04DefinitionResolver extends HStageType2 {
 
@@ -34,13 +34,13 @@ public class HStage04DefinitionResolver extends HStageType2 {
     private boolean inPreprocessor = false;
 
     @Override
-    public HTarget[] getTargets() {
-        return new HTarget[]{HTarget.RESOLVED_AST};
+    public HTask[] getTasks() {
+        return new HTask[]{HTask.RESOLVED_AST};
     }
 
     @Override
     public boolean isEnabled(HProject project, HL options) {
-        return options.containsAnyTargets(HTarget.RESOLVED_AST, HTarget.COMPILE, HTarget.RUN);
+        return options.containsAnyTask(HTask.RESOLVED_AST, HTask.COMPILE, HTask.RUN);
     }
 
     public HStage04DefinitionResolver(boolean inPreprocessor) {

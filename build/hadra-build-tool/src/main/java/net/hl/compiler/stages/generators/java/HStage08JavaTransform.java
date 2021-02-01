@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import net.hl.compiler.HL;
 import net.hl.compiler.ast.extra.HXInvokableCall;
-import net.hl.compiler.core.HTarget;
+import net.hl.compiler.core.HTask;
 import net.hl.compiler.core.types.JPrimitiveModifierAnnotationInstance;
 import net.hl.compiler.stages.AbstractHStage;
 import net.hl.compiler.utils.HNodeFactory;
@@ -51,8 +51,8 @@ public class HStage08JavaTransform extends AbstractHStage {
 
     @Override
     public boolean isEnabled(HProject project, HL options) {
-        if (options.containsAnyTargets(HTarget.COMPILE,HTarget.RUN)) {
-            if (options.containsAllTargets(HTarget.JAVA)) {
+        if (options.containsAnyTask(HTask.COMPILE,HTask.RUN)) {
+            if (options.containsAllTasks(HTask.JAVA)) {
                 return true;
             }
         }
@@ -60,8 +60,8 @@ public class HStage08JavaTransform extends AbstractHStage {
     }
 
     @Override
-    public HTarget[] getTargets() {
-        return new HTarget[]{HTarget.JAVA};
+    public HTask[] getTasks() {
+        return new HTask[]{HTask.JAVA};
     }
 
     public HStage08JavaTransform(boolean inPreprocessor) {
