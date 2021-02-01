@@ -43,7 +43,7 @@ public class HLnbLanguageHierarchy extends LanguageHierarchy<HLnbToken> {
     
     public JTokenizer tokenizer(JTokenizerReader reader) {
         JTokens tokens = HadraLanguageSingleton.HADRA_LANGUAGE.tokens();
-        return tokens.of(reader,false,false,new JTokenConfigBuilder(tokens.config()));
+        return tokens.of(reader,new JTokenConfigBuilder(tokens.config()));
     }
 
     public HLnbLanguageHierarchy() {

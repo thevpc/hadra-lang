@@ -9,7 +9,7 @@ import net.thevpc.common.textsource.JTextSourceRoot;
 
 public abstract class HOptions<T extends HOptions> {
 
-    private final List<JTextSourceRoot> roots = new ArrayList<>();
+    private final List<JTextSourceRoot> sources = new ArrayList<>();
     private final Set<String> classpath = new LinkedHashSet<>();
     private final EnumSet<HTarget> targets = EnumSet.noneOf(HTarget.class);
     private File javaFolder;
@@ -19,7 +19,7 @@ public abstract class HOptions<T extends HOptions> {
     private boolean clean;
 
     /**
-     * in incremental mode preprocessor wont be executed and all project
+     * in incremental mode pre-processor wont be executed and all project
      * information is supposed to be in the indexer. If not an error will be
      * reported.
      */
@@ -35,7 +35,7 @@ public abstract class HOptions<T extends HOptions> {
     }
 
     public <T, R extends HOptions> T setAll(HOptions<R> t) {
-        this.roots.addAll(t.roots);
+        this.sources.addAll(t.sources);
         this.classpath.addAll(t.classpath);
         this.javaFolder = t.javaFolder;
         this.clean = t.clean;
@@ -75,8 +75,8 @@ public abstract class HOptions<T extends HOptions> {
         return (T) this;
     }
 
-    public JTextSourceRoot[] roots() {
-        return roots.toArray(new JTextSourceRoot[0]);
+    public JTextSourceRoot[] sources() {
+        return sources.toArray(new JTextSourceRoot[0]);
     }
 
     public File getJavaFolder() {
@@ -122,12 +122,12 @@ public abstract class HOptions<T extends HOptions> {
     }
 
     public T addSourceResourcesFolder(String path) {
-        roots.add(JTextSourceFactory.rootResourceFolder(path, "*.hl"));
+        sources.add(JTextSourceFactory.rootResourceFolder(path, "*.hl"));
         return (T) this;
     }
 
     public T addSourceResourcesFile(String path) {
-        roots.add(JTextSourceFactory.rootResourceFile(path));
+        sources.add(JTextSourceFactory.rootResourceFile(path));
         return (T) this;
     }
 
@@ -137,18 +137,18 @@ public abstract class HOptions<T extends HOptions> {
     }
 
     public T addSourceFile(String path) {
-        roots.add(JTextSourceFactory.rootFile(new File(path)));
+        sources.add(JTextSourceFactory.rootFile(new File(path)));
         return (T) this;
     }
 
     public T addSourceFile(File file) {
-        roots.add(JTextSourceFactory.rootFile(file));
+        sources.add(JTextSourceFactory.rootFile(file));
         return (T) this;
     }
 
     public T addSourceLibraryURL(String url) {
         try {
-            roots.add(JTextSourceFactory.rootURLFolder(new URL(url), "*.hl"));
+            sources.add(JTextSourceFactory.rootURLFolder(new URL(url), "*.hl"));
         } catch (MalformedURLException e) {
             throw new UncheckedIOException(e);
         }
@@ -157,7 +157,7 @@ public abstract class HOptions<T extends HOptions> {
 
     public T addSourceFileURL(String url) {
         try {
-            roots.add(JTextSourceFactory.rootURL(new URL(url)));
+            sources.add(JTextSourceFactory.rootURL(new URL(url)));
         } catch (MalformedURLException e) {
             throw new UncheckedIOException(e);
         }
@@ -165,7 +165,7 @@ public abstract class HOptions<T extends HOptions> {
     }
 
     public T addSourceText(String text, String sourceName) {
-        roots.add(JTextSourceFactory.rootString(text, sourceName));
+        sources.add(JTextSourceFactory.rootString(text, sourceName));
         return (T) this;
     }
 
@@ -183,61 +183,60 @@ public abstract class HOptions<T extends HOptions> {
         return (T) this;
     }
 
-    public boolean isTargetAny(HTarget... ts) {
-        for (HTarget t : ts) {
-            if (isTarget(t)) {
+//    public boolean isTargetAny(HTarget... ts) {
+//        for (HTarget t : ts) {
+//            if (isTarget(t)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public boolean isTarget(HTarget t) {
+//        if (t == null) {
+//            return false;
+//        }
+//        switch (t) {
+//            case JAVA:
+//                return isTarget0(HTarget.JAVA) || isTargetAny(HTarget.JAR, HTarget.CLASS);
+//            case RESOLVED_AST:
+//                return isTarget0(HTarget.RESOLVED_AST) || isTargetAny(HTarget.JAVA);
+//            case AST:
+//                return isTarget0(HTarget.AST) || isTarget(HTarget.RESOLVED_AST);
+//        }
+//        return isTarget0(t);
+//    }
+//
+//    private boolean isTarget0(HTarget t) {
+//        if (targets.contains(t)) {
+//            return true;
+//        }
+//        if (t != null) {
+//            switch (t) {
+//                case JAVA: {
+//                    return javaFolder != null;
+//                }
+//            }
+//        }
+//        return false;
+//    }
+
+    public boolean containsAnyTargets(HTarget... others) {
+        for (HTarget other : others) {
+            if (getTargets().contains(other)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isTarget(HTarget t) {
-        if (t == null) {
-            return false;
-        }
-        switch (t) {
-            case JAR:
-                return isTarget0(HTarget.JAR);
-            case CLASS:
-                return isTarget0(HTarget.CLASS) || isTargetAny(HTarget.JAR);
-            case JAVA:
-                return isTarget0(HTarget.JAVA) || isTargetAny(HTarget.JAR, HTarget.CLASS);
-            case RESOLVED_AST:
-                return isTarget0(HTarget.RESOLVED_AST) || isTargetAny(HTarget.JAVA);
-            case AST:
-                return isTarget0(HTarget.AST) || isTarget(HTarget.RESOLVED_AST);
-        }
-        return isTarget0(t);
-    }
-
-    private boolean isTarget0Any(HTarget... ts) {
-        for (HTarget t : ts) {
-            if (isTarget0(t)) {
-                return true;
+    public boolean containsAllTargets(HTarget... others) {
+        for (HTarget other : others) {
+            if (!getTargets().contains(other)) {
+                return false;
             }
         }
-        return false;
-    }
-
-    private boolean isTarget0(HTarget t) {
-        if (targets.contains(t)) {
-            return true;
-        }
-        if (t != null) {
-            switch (t) {
-                case JAVA: {
-                    return javaFolder != null;
-                }
-                case CLASS: {
-                    return classFolder != null;
-                }
-                case JAR: {
-                    return jarFolder != null;
-                }
-            }
-        }
-        return false;
+        return true;
     }
 
     public Set<HTarget> getTargets() {

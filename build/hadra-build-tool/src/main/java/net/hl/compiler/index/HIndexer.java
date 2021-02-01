@@ -22,24 +22,26 @@ public interface HIndexer extends JIndexer {
 
     /**
      * first package with fullName
+     *
      * @param fullName fullName
      * @return
      */
     HIndexedPackage searchPackage(String fullName);
 
-    Set<HIndexedField> searchFields(String declaringType, String fieldNameOrNull,boolean inherited);
+    Set<HIndexedField> searchFields(String declaringType, String fieldNameOrNull, boolean inherited);
 
-    Set<HIndexedField> searchFields(JIndexQuery query,boolean inherited);
+    Set<HIndexedField> searchFields(JIndexQuery query, boolean inherited);
 
-    Set<HIndexedMethod> searchMethods(String declaringType, String methodNameOrNull,boolean inherited);
+    Set<HIndexedMethod> searchMethods(String declaringType, String methodNameOrNull, boolean inherited);
 
-    Set<HIndexedMethod> searchMethods(JIndexQuery query,boolean inherited);
+    Set<HIndexedMethod> searchMethods(JIndexQuery query, boolean inherited);
 
     Set<HIndexedConstructor> searchConstructors(String declaringType);
 
     Set<HIndexedConstructor> searchConstructors(JIndexQuery query);
 
     HIndexedProject searchProject(String projectRoot);
+
     Set<HIndexedProject> searchProjects();
 
     void indexType(HIndexedClass p);

@@ -59,7 +59,7 @@ public class HCompletion implements JCompletion {
                 return null;
             }
             debug((HNode) this.compilationUnit.getAst());
-            HProject program = new HProject(projectContext.languageContext().newContext(), projectContext.indexer());
+            HProject program = new HProject(projectContext.languageContext().newContext(), projectContext.indexer(),projectContext.getSession());
             JLocationContext searchResult = searchNode(program.newCompilerContext(compilationUnit), caretOffset, 0, null);
             return searchResult;
         } catch (Exception ex) {
@@ -77,7 +77,7 @@ public class HCompletion implements JCompletion {
             }
 //            JNode ast = this.compilationUnit.getAst();
             debug((HNode) compilationUnit.getAst());
-            HProject program = new HProject(projectContext.languageContext().newContext(), projectContext.indexer());
+            HProject program = new HProject(projectContext.languageContext().newContext(), projectContext.indexer(),projectContext.getSession());
             JLocationContext searchResult = searchNode(program.newCompilerContext(compilationUnit), caretOffset, completeLevel, completionProposals);
             System.out.println(searchResult);
         } catch (Exception ex) {

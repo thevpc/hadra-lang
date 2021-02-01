@@ -16,7 +16,7 @@ public class TestCompilerFail {
         //error : expected ';' at the end of a statement
         Assertions.assertEquals(1,
                 _compileResource("testCompilerFail0001.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
     @Test
@@ -24,7 +24,7 @@ public class TestCompilerFail {
         //error: 'expected value assignment'
         Assertions.assertEquals(1,
                 _compileResource("testCompilerFail0003.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
  
@@ -35,7 +35,7 @@ public class TestCompilerFail {
     public void testCompiler0009() {
         Assertions.assertTrue(
                 _compileResource("testCompilerFail0009.hl")
-                        .errorCount() >= 2);
+                        .getErrorCount() >= 2);
     }
 
     
@@ -47,7 +47,7 @@ public class TestCompilerFail {
     public void testCompiler0011() {
         Assertions.assertEquals(1,
                 _compileResource("testCompilerFail0011.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
    
@@ -57,21 +57,21 @@ public class TestCompilerFail {
     public void testCompiler0016() {
         Assertions.assertEquals(1,
                 _compileResource("testCompilerFail0016.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
     @Test
     public void testCompiler0017() {
         Assertions.assertEquals(3,
                 _compileResource("testCompilerFail0017.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
     @Test
     public void testCompiler0018() {
         Assertions.assertEquals(2,
                 _compileResource("testCompilerFail0018.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
   
@@ -80,21 +80,21 @@ public class TestCompilerFail {
     public void testCompiler0040() {
         Assertions.assertEquals(1,
                 _compileResource("testCompilerFail0040_hadruwaves.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
     @Test
     public void testCompiler0041() {
         Assertions.assertEquals(1,
                 _compileResource("testCompilerFail0041_hadruwaves_mon.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
     @Test
     public void testCompiler0042() {
         Assertions.assertTrue(
                 _compileResource("testCompilerFail0042.hl")
-                        .errorCount() > 0);
+                        .getErrorCount() > 0);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////

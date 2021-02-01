@@ -1,5 +1,6 @@
 package net.hl.compiler.stages;
 
+import net.hl.compiler.HL;
 import net.thevpc.jeep.DefaultJCompilationUnit;
 import net.thevpc.common.textsource.JTextSource;
 import net.thevpc.common.textsource.JTextSourceRoot;
@@ -18,13 +19,18 @@ public class HStage01Parser extends AbstractHStage {
     }
 
     @Override
+    public boolean isEnabled(HProject project, HL options) {
+        return options.containsAnyTargets(HTarget.AST);
+    }
+
+    @Override
     public void processProject(HProject project, HOptions options) {
-        JTextSourceRoot[] inputs = options.roots();
+        JTextSourceRoot[] inputs = options.sources();
         int foundCompilationUnits = 0;
         if (inputs.length > 0) {
             if (JStringUtils.isBlank(options.getProjectRoot())) {
                 if (inputs.length != 1) {
-                    project.log().error("X405", null, "missing project root", null);
+                    project.log().jerror("X405", null, null, "missing source");
                     return;
                 } else {
                     options.setProjectRoot(inputs[0].getId());
@@ -42,7 +48,7 @@ public class HStage01Parser extends AbstractHStage {
             }
         }
         if (foundCompilationUnits == 0 && project.log().isSuccessful()) {
-            project.log().error("X403", null, "missing units to compile", null);
+            project.log().jerror("X403", null, null, "missing units to compile");
         }
     }
 }

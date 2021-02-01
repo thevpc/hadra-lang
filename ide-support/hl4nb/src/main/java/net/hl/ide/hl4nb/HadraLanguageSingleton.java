@@ -18,15 +18,16 @@ import java.util.Map;
  * @author vpc
  */
 public class HadraLanguageSingleton {
-    public static final HadraLanguage HADRA_LANGUAGE=new HadraLanguage();
-    public static Map<String,JIndexStore> stores=new HashMap<>();
 
-    public static JIndexStore getIndexStoreByProject(Project project){
+    public static final HadraLanguage HADRA_LANGUAGE = HadraLanguage.getSingleton();
+    public static Map<String, JIndexStore> stores = new HashMap<>();
+
+    public static JIndexStore getIndexStoreByProject(Project project) {
         String id = project.getProjectDirectory().getPath();
         JIndexStore index = stores.get(id);
-        if(index==null){
-            index=new HLnbJIndexStore(id);
-            stores.put(id,index);
+        if (index == null) {
+            index = new HLnbJIndexStore(id);
+            stores.put(id, index);
         }
         return index;
     }

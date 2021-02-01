@@ -15,7 +15,7 @@ public class TestIndexer {
     @Test
     public void testJarIndexer() {
         HIndexerImpl mem=new HIndexerImpl(null);
-        mem.indexLibrary(new File("/data/public/git/vpc-common/vpc-common-jeep/target/vpc-common-jeep-1.2.7.jar"),true);
+        mem.indexLibrary(new File("/data/public/git/vpc-common/vpc-common-jeep/target/vpc-common-jeep-1.2.7.jar"),true, null);
         System.out.println("");
     }
 
@@ -48,7 +48,7 @@ public class TestIndexer {
     public void testJIndexStoreMemory2() {
         JIndexStoreMemory store = new JIndexStoreMemory();
         HIndexerImpl ii = new HIndexerImpl(store);
-        ii.indexSDK(null, true);
+        ii.indexSDK(null, true, null);
         System.out.println(ii.searchPackage("java"));
         Assertions.assertNotNull(ii.searchPackage("java"));
         Assertions.assertNotNull( ii.searchPackage("java.lang"));

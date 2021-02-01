@@ -20,7 +20,7 @@ import net.hl.compiler.core.invokables.JNodeHBlocJInvoke;
 import net.hl.compiler.ast.extra.HXInvokableCall;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTypeUtils;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -302,7 +302,7 @@ public class HEvaluator implements JEvaluator {
                 if (n.length == 1) {
                     return evaluate(n[0], context);
                 }
-                JType[] types = HUtils.getTypes(n);
+                JType[] types = HSharedUtils.getTypes(n);
                 Object[] values = new Object[n.length];
                 for (int i = 0; i < n.length; i++) {
                     values[i] = evaluate(n[i], context);

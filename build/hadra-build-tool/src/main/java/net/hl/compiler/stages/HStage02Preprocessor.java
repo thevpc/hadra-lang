@@ -1,10 +1,5 @@
 package net.hl.compiler.stages;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Paths;
 import net.thevpc.nuts.Nuts;
 import net.thevpc.nuts.NutsDefinition;
 import net.thevpc.nuts.NutsSearchCommand;
@@ -29,6 +24,11 @@ import net.hl.compiler.utils.HTokenUtils;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.hl.compiler.HL;
+import net.hl.compiler.utils.DepIdAndFile;
+import net.hl.compiler.utils.HSharedUtils;
+import net.thevpc.nuts.NutsDependency;
+import net.thevpc.nuts.NutsNotFoundException;
 
 public class HStage02Preprocessor extends AbstractHStage {
 
@@ -38,6 +38,12 @@ public class HStage02Preprocessor extends AbstractHStage {
     public HTarget[] getTargets() {
         return new HTarget[]{HTarget.RESOLVED_AST};
     }
+
+    @Override
+    public boolean isEnabled(HProject project, HL options) {
+        return options.containsAnyTargets(HTarget.RESOLVED_AST);
+    }
+    
 
     @Override
     public void processProject(HProject project, HOptions options) {
@@ -51,7 +57,7 @@ public class HStage02Preprocessor extends AbstractHStage {
             }
             for (HNDeclareMetaPackage metaPackage : ast.findDeclaredMetaPackages()) {
                 if (currentMetaPackage != null) {
-                    project.log().error("X400", null, "multiple package declarations detected", metaPackage.getStartToken());
+                    project.log().jerror("X400", null, metaPackage.getStartToken(), "multiple package declarations detected");
                 } else {
                     currentMetaPackage = metaPackage;
                     currentMetaPackageSource = compilationUnit.getSource().name();
@@ -62,75 +68,73 @@ public class HStage02Preprocessor extends AbstractHStage {
         HNDeclareMetaPackage metaPackage = project.getResolvedMetaPackage();
         HIndexedProject ip = null;
         String projectRoot = options.getProjectRoot();
+        JModuleId defaultModuleId = JModuleId.DEFAULT_MODULE_ID();
+        DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true);
+        if (defaultLangPaths.length == 0) {
+            project.log().jerror("X000", null, null, "unresolvable hadra-lang library");
+        }
         if (!options.isIncremental() || metaPackage != null) {
             ip = parsePreProcessorResult(metaPackage, projectRoot, currentMetaPackageSource, project, options);
             if (ip == null) {
                 if (currentMetaPackageSource == null) {
                     currentMetaPackageSource = projectRoot;
                 }
-                ip = new HIndexedProject(projectRoot, JModuleId.DEFAULT_MODULE_ID.toString(),
-                        currentMetaPackageSource, new String[0], new String[0]);
+                ip = new HIndexedProject(projectRoot, defaultModuleId.toString(),
+                        currentMetaPackageSource,
+                        defaultLangPaths.length > 0
+                                ? new DepIdAndFile[]{defaultLangPaths[0]} : new DepIdAndFile[0]
+                );
             } else {
                 if (JStringUtils.isBlank(JModuleId.valueOf(ip.getModuleId()).getArtifactId())) {
-                    project.log().error("X000", null, "missing artifact name", metaPackage == null ? anyToken : metaPackage.getStartToken());
+                    project.log().jerror("X000", null, metaPackage == null ? anyToken : metaPackage.getStartToken(), "missing artifact name");
                 }
-            }
-
-            String[] u = HStageUtils.resolveLangPaths(ip.getDependencyFiles(), false, false, true);
-            if (u.length == 0) {
-                u = HStageUtils.resolveLangPaths(null, true, true, true);
+                DepIdAndFile[] u = HStageUtils.resolveLangPaths(ip.getDependencies(), null, false, false, true);
                 if (u.length > 0) {
-                    List<String> depIds = new ArrayList<>(Arrays.asList(ip.getDependencyIds()));
-                    List<String> depFiles = new ArrayList<>(Arrays.asList(ip.getDependencyFiles()));
-                    depFiles.add(u[0]);
-                    ip = new HIndexedProject(ip.getId(), ip.getModuleId(), ip.getSource(), depIds.toArray(new String[0]), depFiles.toArray(new String[0]));
-                } else {
-                    project.log().error("X000", null, "unresolvable hadra-lang library", null);
+                    List<DepIdAndFile> depIds = new ArrayList<>(Arrays.asList(ip.getDependencies()));
+                    depIds.add(u[0]);
+                    ip = new HIndexedProject(ip.getId(), ip.getModuleId(), ip.getSource(), depIds.toArray(new DepIdAndFile[0]));
                 }
             }
-
             project.indexer().indexProject(ip);
         } else {
             ip = project.indexer().searchProject(projectRoot);
             if (ip == null) {
-                project.log().error("X000", null, "unable to resolve project in incremental node : " + projectRoot, anyToken);
+                project.log().jerror("X000", null, anyToken, "unable to resolve project in incremental node : " + projectRoot);
+                ip = new HIndexedProject(projectRoot, defaultModuleId.toString(), currentMetaPackageSource,
+                        defaultLangPaths.length > 0 ? new DepIdAndFile[]{defaultLangPaths[0]} : new DepIdAndFile[0]
+                );
             }
-        }
-        if (ip == null) {
-            ip = new HIndexedProject(projectRoot, JModuleId.DEFAULT_MODULE_ID.toString(), currentMetaPackageSource, new String[0], new String[0]);
         }
 
         project.setIndexedProject(ip);
         HNDeclareType mpt = project.getMetaPackageType();
-        JModuleId jModuleId = JModuleId.replaceBlanks(JModuleId.valueOf(ip.getModuleId()), JModuleId.DEFAULT_MODULE_ID);
-        mpt.setMetaPackageName(resolvePackageName(jModuleId.getGroupId()));
+        JModuleId jModuleId = JModuleId.replaceBlanks(JModuleId.valueOf(ip.getModuleId()), defaultModuleId);
+        mpt.setMetaPackageName(HSharedUtils.resolvePackageName(jModuleId.getGroupId()));
         mpt.setPackageName(null);
         mpt.setNameToken(HTokenUtils.createToken(resolveClassName(jModuleId.getArtifactId())));
-    }
-
-    protected String resolvePackageName(String groupId) {
-        StringBuilder sb = new StringBuilder(groupId.toLowerCase());
-        //TODO
-        return sb.toString();
     }
 
     protected String resolveClassName(String artifactId) {
         StringBuilder sb = new StringBuilder();
         boolean wasSpace = true;
         for (char c : artifactId.toCharArray()) {
-            if (c == '-') {
-                wasSpace = true;
-            } else if (c == '_') {
-                wasSpace = true;
-                sb.append(c);
-            } else {
-                if (wasSpace) {
-                    wasSpace = false;
-                    sb.append(Character.toUpperCase(c));
-                } else {
-                    wasSpace = false;
+            switch (c) {
+                case '-':
+                    wasSpace = true;
+                    break;
+                case '_':
+                    wasSpace = true;
                     sb.append(c);
-                }
+                    break;
+                default:
+                    if (wasSpace) {
+                        wasSpace = false;
+                        sb.append(Character.toUpperCase(c));
+                    } else {
+                        wasSpace = false;
+                        sb.append(c);
+                    }
+                    break;
             }
         }
         return sb.toString();
@@ -139,7 +143,7 @@ public class HStage02Preprocessor extends AbstractHStage {
     public HIndexedProject parsePreProcessorResult(HNDeclareMetaPackage metaPackage,
             String projectId,
             String currentMetaPackageSource, HProject project, HOptions options) {
-        JContext context = project.languageContext();
+        HadraContext context = project.languageContext();
         if (metaPackage != null) {
             HNBlock body = metaPackage.getBody();
             boolean requirePreprocessor = false;
@@ -169,13 +173,17 @@ public class HStage02Preprocessor extends AbstractHStage {
                 moduleId = hmoduleId.toJModuleId();
             }
             metaPackage.setElement(new HNElementNonExpr());
-            moduleId = JModuleId.replaceBlanks(moduleId, JModuleId.DEFAULT_MODULE_ID);
+            moduleId = JModuleId.replaceBlanks(moduleId, JModuleId.DEFAULT_MODULE_ID());
+            DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true);
+            if (defaultLangPaths.length == 0) {
+                project.log().jerror("X000", null, null, "unresolvable hadra-lang library");
+            }
+
             if (!requirePreprocessor) {
                 HIndexedProject i = new HIndexedProject(projectId,
                         moduleId.toString(),
                         currentMetaPackageSource,
-                        new String[0],
-                        new String[0]
+                        defaultLangPaths.length == 0 ? new DepIdAndFile[0] : new DepIdAndFile[]{defaultLangPaths[0]}
                 );
                 metaPackage.setIndex(i);
                 return i;
@@ -207,31 +215,30 @@ public class HStage02Preprocessor extends AbstractHStage {
                 }, block.getStartToken(), block.getEndToken());
 
 //                System.out.println("### START PREPROCESSOR");
-                JContext preProcessorContext = context.newContext();
+                HadraContext preProcessorContext = context.newContext();
                 preProcessorContext.log(context.log());//inherit logger
                 JNode nn = metaPackage;
                 while (nn != null && !(nn instanceof HNBlock.CompilationUnitBlock)) {
                     nn = nn.getParentNode();
                 }
                 if (nn == null) {
-                    project.log().error("X000", "unexpected error", "missing root CompilationUnitBlock", metaPackage.getStartToken());
+                    project.log().jerror("X000", "unexpected error", metaPackage.getStartToken(), "missing root CompilationUnitBlock");
                     return null;
                 }
                 HNBlock.CompilationUnitBlock cub = (HNBlock.CompilationUnitBlock) nn;
-                HProject preProcessorProgram = new HProject(preProcessorContext, project.indexer());
+                HProject preProcessorProgram = new HProject(preProcessorContext, project.indexer(), project.getSession());
                 preProcessorProgram.setIndexedProject(new HIndexedProject(projectId,
                         "HLPreprocessor#0.1.0",
                         currentMetaPackageSource,
-                        new String[0],
-                        new String[0]
+                        defaultLangPaths.length == 0 ? new DepIdAndFile[0] : new DepIdAndFile[]{defaultLangPaths[0]}
                 )
                 );
                 preProcessorProgram.getMetaPackageType().setNameToken(HTokenUtils.createToken("HLPreprocessor"));
-                LOG.log(Level.INFO, "Running Preprocessor with code \n" + preprocessorRootNode);
+                LOG.log(Level.FINE, "running Preprocessor with code \n{0}", preprocessorRootNode);
                 preProcessorProgram.addCompilationUnit(new DefaultJCompilationUnit(cub.getCompilationUnit().getSource(), preprocessorRootNode));
                 preProcessorProgram.setRootId("<preprocessor>:" + projectId);
                 for (HStage hlcStage : new HStage[]{
-                    new HStage03Indexer(),
+                    new HStage03Indexer(true),
                     new HStage04DefinitionResolver(true),
                     new HStage05CallResolver(true),
                     new HStage08JavaTransform(true) //transform to java nodes to help evaluation!
@@ -251,40 +258,39 @@ public class HStage02Preprocessor extends AbstractHStage {
                                             new String[0],
                                             preProcessorContext.types().forName("String[]")
                                     )},
-                                "compile", null,null
+                                "compile", null, null
                         ));
-                Set<String> foundIds = new HashSet<>();
+//                Set<String> foundIds = new HashSet<>();
                 Set<String> dfiles = new HashSet<>();
-                NutsWorkspace ws = Nuts.openWorkspace("-y"/*,"-z"*/);
-                NutsSearchCommand search = ws.search().setDependencies(true)
-                        .setLatest(true).setContent(true);
-                Set<String> classPath = new LinkedHashSet<>();
-
+                NutsWorkspace ws = project.getSession().getWorkspace();
+                NutsSearchCommand search = ws.search()
+                        .setDependencies(true).setInlineDependencies(true)
+                        .setLatest(true).setContent(true)
+                        .setSession(project.getSession());
                 boolean someSearch = false;
-                for (HDependency effectiveDependency : env.dependencies()) {
+                for (HDependency d : env.dependencies()) {
                     someSearch = true;
-                    search.addId(effectiveDependency.getName());
-                    classPath.add(effectiveDependency.toString());
+                    search.addId(d.toString());
                 }
-
+                Set<DepIdAndFile> classPath = new LinkedHashSet<>();
                 if (someSearch) {
-                    for (NutsDefinition resultDefinition : search.getResultDefinitions()) {
-                        dfiles.add(resultDefinition.getContent().getPath().toString());
-                        foundIds.add(resultDefinition.getId().getShortName());
-                    }
-                    for (HDependency effectiveDependency : env.dependencies()) {
-                        if (!foundIds.contains(ws.id().parser().parse(effectiveDependency.getName()).getShortName())) {
-                            if (!effectiveDependency.isOptional()) {
-                                project.log().error("X000", "pre-processor", "unresolvable dependency " + effectiveDependency.getName(), block.getStartToken());
-                            }
+                    for (NutsDependency dep : search.getResultDependencies()) {
+                        NutsDefinition def = null;
+                        try {
+                            def = ws.fetch().setId(dep.toId()).setEffective(true).setContent(true).getResultDefinition();
+                        } catch (NutsNotFoundException ex) {
+                            //
+                        }
+                        if (def == null || def.getContent().getLocation() == null) {
+                            project.log().jerror("X000", "pre-processor", block.getStartToken(), "unresolvable dependency " + dep);
+                        } else {
+                            classPath.add(new DepIdAndFile(dep.toString(), def.getContent().getLocation()));
                         }
                     }
                 }
-                //TODO!!
                 HIndexedProject ip = new HIndexedProject(
                         projectId, moduleId.toString(), currentMetaPackageSource,
-                        classPath.toArray(new String[0]),
-                        dfiles.toArray(new String[0])
+                        classPath.toArray(new DepIdAndFile[0])
                 );
                 metaPackage.setIndex(ip);
 

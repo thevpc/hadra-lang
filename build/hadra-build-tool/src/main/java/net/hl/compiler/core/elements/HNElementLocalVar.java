@@ -6,7 +6,7 @@ import net.thevpc.jeep.JType;
 import net.hl.compiler.ast.HNDeclareTokenBase;
 import net.thevpc.jeep.JTypePattern;
 import net.hl.compiler.ast.HNode;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 
 public class HNElementLocalVar extends HNElement implements Cloneable{
     String name;
@@ -31,7 +31,7 @@ public class HNElementLocalVar extends HNElement implements Cloneable{
             if(declaration instanceof JNode) {
                 JNode node = (JNode) declaration;
                 setLocation(node.getStartToken());
-                setSource(HUtils.getSource(node));
+                setSource(HSharedUtils.getSource(node));
             }
         }
         return this;

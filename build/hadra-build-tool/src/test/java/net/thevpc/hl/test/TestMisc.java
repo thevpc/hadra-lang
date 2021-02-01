@@ -5,7 +5,7 @@
  */
 package net.thevpc.hl.test;
 
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test;
 public class TestMisc {
     @Test
     public void testTemporal() {
-        System.out.println(HUtils.parseTemporal("12:13"));
-        System.out.println(HUtils.parseTemporal("12:13:33.666"));
-        System.out.println(HUtils.parseTemporal("1960-12-10"));
-        System.out.println(HUtils.parseTemporal("1960-12-10 12:10:01.200"));
-        System.out.println(HUtils.parseTemporal("1960-12-10T12:10:01.200"));
-        System.out.println(HUtils.parseTemporal("1960-12-10T12:10"));
-        System.out.println(HUtils.parseTemporal("1960-12-10 12:10"));
+        System.out.println(HSharedUtils.parseTemporal("12:13"));
+        System.out.println(HSharedUtils.parseTemporal("12:13:33.666"));
+        System.out.println(HSharedUtils.parseTemporal("1960-12-10"));
+        System.out.println(HSharedUtils.parseTemporal("1960-12-10 12:10:01.200"));
+        System.out.println(HSharedUtils.parseTemporal("1960-12-10T12:10:01.200"));
+        System.out.println(HSharedUtils.parseTemporal("1960-12-10T12:10"));
+        System.out.println(HSharedUtils.parseTemporal("1960-12-10 12:10"));
     }
 
 

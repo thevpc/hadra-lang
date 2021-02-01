@@ -5,24 +5,23 @@
  */
 package net.hl.compiler.stages;
 
-import java.util.Set;
-import net.hl.compiler.HL;
-import net.hl.compiler.core.HProject;
-import net.hl.compiler.core.HTarget;
-
 /**
  *
  * @author vpc
  */
 public abstract class AbstractHStage implements HStage{
-    @Override
-    public boolean isEnabled(HProject project, HL options) {
-        Set<HTarget> a = HTarget.expandReverseDependencies(getTargets());
-        for (HTarget target : options.getTargets()) {
-            if(a.contains(target)){
-                return true;
-            }
-        }
-        return false;
-    }
+//    @Override
+//    public boolean isEnabled(HProject project, HL options) {
+//        final Set<HTarget> targets = options.getTargets();
+//        if(targets.isEmpty()){
+//            return true;
+//        }
+//        Set<HTarget> a = HTarget.expandReverseDependencies(getTargets());
+//        for (HTarget target : targets) {
+//            if(a.contains(target)){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }

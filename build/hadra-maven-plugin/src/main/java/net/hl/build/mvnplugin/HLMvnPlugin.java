@@ -15,6 +15,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+import net.thevpc.nuts.Nuts;
 
 /**
  *
@@ -27,6 +28,7 @@ import java.util.List;
 )
 //@Execute(goal = "hl")
 public class HLMvnPlugin extends AbstractMojo {
+
     @Component
     private BuildPluginManager pluginManager;
 
@@ -76,30 +78,30 @@ public class HLMvnPlugin extends AbstractMojo {
         } catch (DependencyResolutionRequiredException e) {
             throw new MojoExecutionException("Unable to resolve dependencies", e);
         }
-        List<URL> classLoaderURLs=new ArrayList<>();
+        List<URL> classLoaderURLs = new ArrayList<>();
         for (String item : compileClasspathElements) {
-            if(item.equals(buildDirectory) || item.startsWith(buildDirectory+File.separator)){
+            if (item.equals(buildDirectory) || item.startsWith(buildDirectory + File.separator)) {
                 //ignore
-            }else {
+            } else {
                 try {
-                    if(item.startsWith("file://") || item.startsWith("http://") || item.startsWith("https://")) {
+                    if (item.startsWith("file://") || item.startsWith("http://") || item.startsWith("https://")) {
                         classLoaderURLs.add(new URL(item));
-                    }else{
+                    } else {
                         classLoaderURLs.add(new File(item).toURI().toURL());
                     }
                 } catch (MalformedURLException e) {
-                    throw new MojoExecutionException("invalid classpath URL : "+item);
+                    throw new MojoExecutionException("invalid classpath URL : " + item);
                 }
             }
         }
-        URLClassLoader classLoader=new URLClassLoader(classLoaderURLs.toArray(new URL[0]),
+        URLClassLoader classLoader = new URLClassLoader(classLoaderURLs.toArray(new URL[0]),
                 Thread.currentThread().getContextClassLoader()
         );
-        HL hl=new HL(classLoader,null);
+        HL hl = new HL(classLoader, null, Nuts.openWorkspace().createSession());
         for (String item : compileClasspathElements) {
-            if(item.equals(buildDirectory) || item.startsWith(buildDirectory+File.separator)){
+            if (item.equals(buildDirectory) || item.startsWith(buildDirectory + File.separator)) {
                 //ignore
-            }else {
+            } else {
                 hl.addClassPathItem(item);
             }
         }
@@ -109,7 +111,7 @@ public class HLMvnPlugin extends AbstractMojo {
         HProject project = hl.compile();
         if (!project.isSuccessful()) {
             throw new MojoExecutionException(
-                    "compilation failed with " + project.errorCount() + " errors.");
+                    "compilation failed with " + project.getErrorCount() + " errors.");
         }
     }
 }

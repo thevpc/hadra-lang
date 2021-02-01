@@ -6,7 +6,7 @@ import net.thevpc.jeep.JType;
 import net.thevpc.jeep.JTypePattern;
 import net.hl.compiler.ast.HNDeclareInvokable;
 import net.hl.compiler.ast.HNode;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 
 public class HNElementConstructor extends HNElementInvokable implements Cloneable{
 
@@ -40,7 +40,7 @@ public class HNElementConstructor extends HNElementInvokable implements Cloneabl
         if (declaration != null) {
             JNode node = (JNode) declaration;
             setLocation(node.getStartToken());
-            setSource(HUtils.getSource(node));
+            setSource(HSharedUtils.getSource(node));
         }
         return this;
     }

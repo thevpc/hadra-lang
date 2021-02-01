@@ -166,7 +166,7 @@ public class FindMatchFailInfo {
                 sb.append("\n\t\t").append(alt);
             }
         }
-        return JSourceMessage.error(errorId, null, sb.toString(), location);
+        return JSourceMessage.error(errorId, null, location, sb.toString());
     }
 
     public void fail(JOnError fail,JCompilerLog log, JToken location) {

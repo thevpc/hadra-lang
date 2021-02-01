@@ -103,8 +103,7 @@ public class DuplicateDefChecker {
                             .append(String.format("[%4s,%3s]", i.getStartToken().startLineNumber, i.getStartToken().startColumnNumber))
                             .append(" ").append(JToken.escapeString(String.valueOf(i)));
                 }
-                log.error("S044", null,
-                        sb.toString(), e.getValue().get(0).getStartToken()
+                log.jerror("S044", null, e.getValue().get(0).getStartToken(), sb.toString()
                 );
             }
         }
@@ -117,8 +116,7 @@ public class DuplicateDefChecker {
                             .append(String.format("[%4s,%3s]", i.getStartToken().startLineNumber, i.getStartToken().startColumnNumber))
                             .append(" ").append(i.getSignature());
                 }
-                log.error("S044", null,
-                        sb.toString(), e.getValue().get(0).getStartToken()
+                log.jerror("S044", null, e.getValue().get(0).getStartToken(), sb.toString()
                 );
             }
         }
@@ -131,8 +129,7 @@ public class DuplicateDefChecker {
                             .append(String.format("[%4s,%3s]", i.getStartToken().startLineNumber, i.getStartToken().startColumnNumber))
                             .append(" ").append(i.getFullName());
                 }
-                log.error("S044", null,
-                        sb.toString(), e.getValue().get(0).getStartToken()
+                log.jerror("S044", null, e.getValue().get(0).getStartToken(), sb.toString()
                 );
             }
         }

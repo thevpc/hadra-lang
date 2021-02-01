@@ -10,6 +10,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="tson" />
+    <orderEntry type="module" module-name="jeep" />
+    <orderEntry type="module" module-name="thevpc-common-text-source" />
+    <orderEntry type="module" module-name="thevpc-common-text-source-log" />
+    <orderEntry type="module" module-name="thevpc-common-classpath" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-api:3.3.9" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-model:3.3.9" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-artifact:3.3.9" level="project" />
@@ -46,11 +51,11 @@
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-util:8.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-tree:8.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-analysis:8.0.1" level="project" />
-    <orderEntry type="module" module-name="tson" />
+    <orderEntry type="library" name="Maven: net.thevpc:tson:1.0.0" level="project" />
     <orderEntry type="module" module-name="hadra-lang" />
-    <orderEntry type="module" module-name="jeep" />
-    <orderEntry type="module" module-name="thevpc-common-text-source" />
-    <orderEntry type="module" module-name="thevpc-common-text-source-log" />
-    <orderEntry type="module" module-name="thevpc-common-classpath" />
+    <orderEntry type="library" name="Maven: net.thevpc.jeep:jeep:1.2.7" level="project" />
+    <orderEntry type="library" name="Maven: net.thevpc.common:thevpc-common-text-source:1.3.0" level="project" />
+    <orderEntry type="library" name="Maven: net.thevpc.common:thevpc-common-text-source-log:1.3.0" level="project" />
+    <orderEntry type="library" name="Maven: net.thevpc.common:thevpc-common-classpath:1.3.2" level="project" />
   </component>
 </module>

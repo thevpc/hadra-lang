@@ -287,14 +287,36 @@ public class HNDeclareInvokable extends HNode implements HNDeclare {
         return this;
     }
 
+    public JInvokable getInvokableOrRebuild() {
+        if (invokable == null) {
+            buildInvokable();
+        }
+        return invokable;
+    }
+
     public HNDeclareInvokable buildInvokable() {
-        JType[] jTypes = getArguments().stream().map(x -> HNodeUtils.getType(x)).toArray(JType[]::new);
-        boolean varArg = getArguments().size() > 0 && getArguments().get(getArguments().size() - 1).getIdentifierTypeNode().getTypename().isVarArg();
-        setInvokable(new JFunctionLocal(
-                getName(), HNodeUtils.getType(this),
-                jTypes, varArg,
-                new BodyJInvoke(this)
-        ));
+        if (invokable == null) {
+            JType[] jTypes = getArguments().stream().map(x -> HNodeUtils.getType(x)).toArray(JType[]::new);
+            boolean varArg = getArguments().size() > 0 && getArguments().get(getArguments().size() - 1).getIdentifierTypeNode().getTypename().isVarArg();
+            setInvokable(new JFunctionLocal(
+                    getName(), HNodeUtils.getType(this),
+                    jTypes, varArg,
+                    new BodyJInvoke(this)
+            ));
+        } else {
+            if (invokable instanceof JFunctionLocal) {
+                BodyJInvoke b = (BodyJInvoke) ((JFunctionLocal) invokable).getHandler();
+                b.rebuild(this);
+            } else {
+                JType[] jTypes = getArguments().stream().map(x -> HNodeUtils.getType(x)).toArray(JType[]::new);
+                boolean varArg = getArguments().size() > 0 && getArguments().get(getArguments().size() - 1).getIdentifierTypeNode().getTypename().isVarArg();
+                setInvokable(new JFunctionLocal(
+                        getName(), HNodeUtils.getType(this),
+                        jTypes, varArg,
+                        new BodyJInvoke(this)
+                ));
+            }
+        }
         return this;
     }
 

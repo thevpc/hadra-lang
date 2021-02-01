@@ -4,7 +4,7 @@ import net.thevpc.jeep.*;
 import net.hl.compiler.ast.HNDeclareTokenBase;
 import net.hl.compiler.index.HIndexedField;
 import net.thevpc.jeep.JTypePattern;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 
 public class HNElementField extends HNElement implements Cloneable{
 
@@ -53,7 +53,7 @@ public class HNElementField extends HNElement implements Cloneable{
         if (declaration != null) {
             JNode node = (JNode) declaration;
             setLocation(node.getStartToken());
-            setSource(HUtils.getSource(node));
+            setSource(HSharedUtils.getSource(node));
         }
         return this;
     }

@@ -11,20 +11,34 @@ import net.hl.compiler.utils.HNodeUtils;
 
 import java.util.*;
 import net.hl.compiler.index.HIndexer;
+import net.thevpc.nuts.NutsSession;
+import net.thevpc.nuts.NutsWorkspace;
 
-public class HProject implements HProjectContext{
+public class HProject implements HProjectContext {
+
     HNDeclareType metaPackageType = new HNDeclareType();
-    private JContext context;
+    private HadraContext context;
     private HIndexer indexer;
     private HIndexedProject indexedProject;
     private HNDeclareMetaPackage resolvedMetaPackage;
     private String rootId;
-    private Map<String,Object> userProperties=new HashMap<>();
+    private Map<String, Object> userProperties = new HashMap<>();
+    private NutsSession session;
 
-    public HProject(JContext context,HIndexer indexer) {
+    public HProject(HadraContext context, HIndexer indexer, NutsSession session) {
         this.context = context;
         this.indexer = indexer;
+        this.session = session;
         metaPackageType.addAnnotationNoDuplicates(HNodeUtils.createAnnotationModifierCall("public"));
+    }
+
+    public NutsWorkspace getWorkspace() {
+        return getSession().getWorkspace();
+    }
+
+    @Override
+    public NutsSession getSession() {
+        return session;
     }
 
     public HNDeclareMetaPackage getResolvedMetaPackage() {
@@ -57,43 +71,45 @@ public class HProject implements HProjectContext{
 
     private List<JCompilationUnit> compilationUnits = new ArrayList<>();
 
-
-    public HLJCompilerContext newCompilerContext(){
+    public HLJCompilerContext newCompilerContext() {
         return new HLJCompilerContext(this);
     }
 
-    public HLJCompilerContext newCompilerContext(JCompilationUnit compilationUnit){
-        return new HLJCompilerContext(this,compilationUnit);
+    public HLJCompilerContext newCompilerContext(JCompilationUnit compilationUnit) {
+        return new HLJCompilerContext(this, compilationUnit);
     }
 
     public void addCompilationUnit(JCompilationUnit c) {
         compilationUnits.add(c);
         JNode n = c.getAst();
-        if(metaPackageType.getStartToken()==null){
+        if (metaPackageType.getStartToken() == null) {
             metaPackageType.setStartToken(n.getStartToken());
         }
-        metaPackageType.setBody(new HNBlock(HNBlock.BlocType.GLOBAL_BODY, new HNode[0],metaPackageType.getStartToken(),metaPackageType.getEndToken()));
+        metaPackageType.setBody(new HNBlock(HNBlock.BlocType.GLOBAL_BODY, new HNode[0], metaPackageType.getStartToken(), metaPackageType.getEndToken()));
     }
 
-
+    public String getErrorMessage() {
+        return log().getErrorMssage();
+    }
 
     public boolean isSuccessful() {
         return log().isSuccessful();
     }
 
-    public int errorCount() {
-        return log().errorCount();
+    public int getErrorCount() {
+        return log().getErrorCount();
     }
 
-    public int warningCount() {
-        return log().warningCount();
+    public int getWarningCount() {
+        return log().getWarningCount();
     }
 
     public JCompilerLog log() {
         return context.log();
     }
 
-    public JContext languageContext() {
+    @Override
+    public HadraContext languageContext() {
         return context;
     }
 
@@ -104,7 +120,6 @@ public class HProject implements HProjectContext{
     public JCompilationUnit[] getCompilationUnits() {
         return compilationUnits.toArray(new JCompilationUnit[0]);
     }
-
 
     public void printCompilationUnits() {
         for (JCompilationUnit compilationUnit : compilationUnits) {
@@ -131,9 +146,9 @@ public class HProject implements HProjectContext{
                             this.context.evaluators().newEvaluator(),
                             null,
                             new JEvaluable[]{
-                                    new JEvaluableValue(new String[0],context.types().forName(String.class.getName()).toArray())
+                                new JEvaluableValue(new String[0], context.types().forName(String.class.getName()).toArray())
                             },
-                            "main",null,null
+                            "main", null, null
                     ));
 
             //then executing main with arguments
@@ -141,8 +156,8 @@ public class HProject implements HProjectContext{
                     context,
                     this.context.evaluators().newEvaluator(),
                     null,
-                    new JEvaluable[]{new JEvaluableValue(args,context.types().forName(String.class.getName()).toArray())},
-                    "main",null,null
+                    new JEvaluable[]{new JEvaluableValue(args, context.types().forName(String.class.getName()).toArray())},
+                    "main", null, null
             ));
         } else {
             //no entry point is found
@@ -152,8 +167,8 @@ public class HProject implements HProjectContext{
                             context,
                             this.context.evaluators().newEvaluator(),
                             null,
-                            new JEvaluable[]{new JEvaluableValue(args,context.types().forName(String.class.getName()).toArray())},
-                            "main",null,null
+                            new JEvaluable[]{new JEvaluableValue(args, context.types().forName(String.class.getName()).toArray())},
+                            "main", null, null
                     ));
         }
     }

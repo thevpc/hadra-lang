@@ -15,12 +15,12 @@ public class TestParser {
     public void testParser0001() {
 //        T t=new T();
 //        ++t.x;
-        HProject hlProject = TestHelper.compileOnlyText(null, "!a.b");
+        HProject hlProject = TestHelper.parseOnlyText(null, "!a.b;");
         JNode n = hlProject.getCompilationUnit(0).getAst();
 
         Assertions.assertEquals(0,
                 hlProject
-                        .errorCount());
+                        .getErrorCount());
     }
 
 

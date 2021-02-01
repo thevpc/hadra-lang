@@ -155,6 +155,11 @@ public class HNBlock extends HNode {
         return r;
     }
 
+    public void add(int index,HNode node) {
+        statements.add(index,JNodeUtils.bind(this,node,"statements",statements.size()));
+        cacheByType.clear();
+    }
+
     public void add(HNode node) {
         statements.add(JNodeUtils.bind(this,node,"statements",statements.size()));
         cacheByType.clear();

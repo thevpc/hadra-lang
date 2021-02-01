@@ -8,7 +8,7 @@ import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.elements.*;
 import net.hl.compiler.core.invokables.*;
 import net.hl.compiler.utils.HNodeUtils;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 import net.hl.lang.IntRange;
 import net.hl.lang.ext.HHelpers;
 import net.hl.lang.ext.HJavaDefaultOperators;
@@ -32,6 +32,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import net.hl.compiler.HL;
 import net.hl.compiler.core.HTarget;
 import net.hl.compiler.stages.AbstractHStage;
 
@@ -45,6 +46,17 @@ public class HStage09JavaGenerator extends AbstractHStage {
     @Override
     public HTarget[] getTargets() {
         return new HTarget[]{HTarget.JAVA};
+    }
+
+    @Override
+    public boolean isEnabled(HProject project, HL options) {
+        if ((options.containsAnyTargets(HTarget.COMPILE,HTarget.RUN))) {
+            if (options.containsAllTargets(HTarget.JAVA)) {
+                return true;
+            }
+
+        }
+        return false;
     }
 
     public static String indent(StringPrec str) {
@@ -70,7 +82,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
 
     public void generate(HProject program, File folder, boolean clean) {
         if (folder == null) {
-            folder = new File("target/hlc/generated-java");
+            folder = new File("target/hl/generated-java");
         }
         if (clean) {
             if (folder.isDirectory()) {
@@ -79,7 +91,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
 //                }
             }
         }
-        HJavaNodes jn = HJavaNodes.of(program);
+        HJavaContextHelper jn = HJavaContextHelper.of(program);
         HGenGlobalContext globalContext = new HGenGlobalContext(program);
         Set<String> sources = new LinkedHashSet<>();
         for (JTextSource sourceNode : jn.getMetaPackageSources()) {
@@ -87,7 +99,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
         }
         generateClassFile(jn.getMetaPackage(), folder, sources.toArray(new String[0]), globalContext, program, true);
         for (HNDeclareType classDeclaration : jn.getTopLevelTypes()) {
-            generateClassFile(classDeclaration, folder, new String[]{HUtils.getSourceName(classDeclaration)}, globalContext, program, false);
+            generateClassFile(classDeclaration, folder, new String[]{HSharedUtils.getSourceName(classDeclaration)}, globalContext, program, false);
         }
     }
 
@@ -96,7 +108,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
             if (childrenNode != null) {
                 if (childrenNode instanceof HNDeclareType) {
                     generateClassFile((HNDeclareType) childrenNode, folder,
-                            new String[]{HUtils.getSourceName(childrenNode)}, globalContext, project, false);
+                            new String[]{HSharedUtils.getSourceName(childrenNode)}, globalContext, project, false);
                 } else {
                     throw new JShouldNeverHappenException();
                 }
@@ -120,7 +132,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
         relativePath.append(name);
         relativePath.append(".java");
         File file = new File(folder, relativePath.toString());
-        HJavaNodes jn = HJavaNodes.of(program);
+        HJavaContextHelper jn = HJavaContextHelper.of(program);
         jn.getJavaFiles().add(file.getPath());
         try {
             HGenCompilationUnitContext cuctx = new HGenCompilationUnitContext(globalContext, program.languageContext().types());
@@ -142,7 +154,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
             if (file.getParentFile() != null && !file.getParentFile().isDirectory()) {
                 file.getParentFile().mkdirs();
             }
-            LOG.log(Level.INFO, "Generate {0}", file.getCanonicalPath());
+            LOG.log(Level.FINE, "cenerate {0}", file.getCanonicalPath());
             Files.write(file.toPath(), fileString.toString().getBytes());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -848,7 +860,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
             case CONSTRUCTOR: {
                 HNElementConstructor c = (HNElementConstructor) element;
                 return onInvokable(node, null, c.getInvokable(),
-                        HUtils.getEvaluables(c.getArgNodes()),
+                        HSharedUtils.getEvaluables(c.getArgNodes()),
                         cuctx, path);
             }
             case METHOD: {
@@ -858,11 +870,11 @@ public class HStage09JavaGenerator extends AbstractHStage {
 //                    aa.add();
                     aa.addAll(Arrays.asList(c.getArgNodes()));
                     return onInvokable(node, null, c.getInvokable(),
-                            HUtils.getEvaluables(c.getArgNodes()),
+                            HSharedUtils.getEvaluables(c.getArgNodes()),
                             cuctx, path);
                 }
                 return onInvokable(node, null, c.getInvokable(),
-                        HUtils.getEvaluables(c.getArgNodes()),
+                        HSharedUtils.getEvaluables(c.getArgNodes()),
                         cuctx, path);
             }
         }
@@ -1038,7 +1050,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
         }
         sb.append(")");
         return new StringPrec(sb);
-//        return onInvokable(node, base, node.getInvokable(), HUtils.getEvaluables(node.getArgs()), cuctx, path.append(node));
+//        return onInvokable(node, base, node.getInvokable(), HSharedUtils.getEvaluables(node.getArgs()), cuctx, path.append(node));
     }
 
     private StringPrec Convert_ToString(JConverter converter, StringPrec anyResultString, HGenCompilationUnitContext cuctx, JNodePath path) {
@@ -1400,7 +1412,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
         StringBuilder sb = new StringBuilder();
         sb.append(beforeMethod());
         sb.append(onAnnotationsList(node, cuctx, path));
-        if (node.getInvokableType()==HLInvokableType.CLASS_INIT) {
+        if (node.getInvokableType() == HLInvokableType.CLASS_INIT) {
             //this is a static bloc!
             HNBlock jb = null;
             sb.append("static");
@@ -1415,7 +1427,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
                 jb = (HNBlock) node.getBody();
             }
             sb.append(onBlock(jb, cuctx, false, true, node.isSetUserObject("javagen.injectRunModule"), path.append(node)));
-        }else if (node.getInvokableType()==HLInvokableType.INSTANCE_INIT) {
+        } else if (node.getInvokableType() == HLInvokableType.INSTANCE_INIT) {
             //this is a static bloc!
             HNBlock jb = null;
             if (node.isImmediateBody()) {
@@ -1468,7 +1480,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
                     } else if (node.getBody() == null) {
                         JToken aFalse = JTokenUtils.createKeywordToken("false");
                         jb = new HNBlock(HNBlock.BlocType.METHOD_BODY, new HNode[]{new HNLiteral(false, aFalse)}, aFalse, aFalse);
-                    }else{
+                    } else {
                         jb = (HNBlock) node.getBody();
                     }
                 } else {

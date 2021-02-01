@@ -7,7 +7,7 @@ import net.thevpc.jeep.core.index.DefaultJIndexDocument;
 import net.thevpc.jeep.impl.functions.JNameSignature;
 import net.hl.compiler.ast.HNDeclareIdentifier;
 import net.hl.compiler.ast.HNDeclareInvokable;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,9 +38,9 @@ public class HIndexedConstructor implements HIndexedElement{
         }
         parameterNames=pn.toArray(new String[0]);
         parameterTypes=pt.toArray(new String[0]);
-        imports= HUtils.getImports(m);
+        imports= HSharedUtils.getImports(m);
         signature=JNameSignature.of(name,parameterTypes);
-        source=HUtils.getSourceName(m);
+        source=HSharedUtils.getSourceName(m);
         id=declaringType+"."+signature.toString();
     }
     public HIndexedConstructor(JConstructor m,String source) {

@@ -7,7 +7,7 @@ import net.thevpc.jeep.core.index.DefaultJIndexDocument;
 import net.thevpc.jeep.impl.functions.JNameSignature;
 import net.hl.compiler.ast.HNDeclareIdentifier;
 import net.hl.compiler.ast.HNDeclareInvokable;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,8 +42,8 @@ public class HIndexedMethod implements HIndexedElement{
         }
         parameterNames=pn.toArray(new String[0]);
         parameterTypes=pt.toArray(new String[0]);
-        imports= HUtils.getImports(m);
-        source=HUtils.getSourceName(m);
+        imports= HSharedUtils.getImports(m);
+        source=HSharedUtils.getSourceName(m);
         this.signature=JNameSignature.of(name,parameterTypes);
         id=declaringType==null?signature.toString():(declaringType+"."+signature.toString());
     }

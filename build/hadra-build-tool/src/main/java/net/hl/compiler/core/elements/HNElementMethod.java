@@ -7,7 +7,7 @@ import net.hl.compiler.ast.HNThis;
 import net.hl.compiler.index.HIndexedMethod;
 import net.thevpc.jeep.JTypePattern;
 import net.hl.compiler.ast.HNode;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 
 public class HNElementMethod extends HNElementInvokable implements Cloneable{
     public JType declaringType;
@@ -61,7 +61,7 @@ public class HNElementMethod extends HNElementInvokable implements Cloneable{
         if(declaration!=null){
             JNode node = (JNode) declaration;
             setLocation(node.getStartToken());
-            setSource(HUtils.getSource(node));
+            setSource(HSharedUtils.getSource(node));
         }
         return this;
     }

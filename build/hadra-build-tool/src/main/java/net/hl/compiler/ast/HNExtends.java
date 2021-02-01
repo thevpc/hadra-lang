@@ -4,7 +4,7 @@ import net.thevpc.jeep.JNode;
 import net.thevpc.jeep.JToken;
 import net.thevpc.jeep.util.JNodeUtils;
 import net.thevpc.jeep.JNodeFindAndReplace;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 
 import java.util.ArrayList;
 import java.util.List;

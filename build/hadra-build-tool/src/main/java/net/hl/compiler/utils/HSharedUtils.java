@@ -15,18 +15,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-public class HUtils {
+public class HSharedUtils {
 
 //    public static final int READONLY = 0x00400000;
 //    public static final int PACKAGE = 0x00800000;
 //    public static final int CONST = 0x01000000;
 //    public static final int STATIC = Modifier.STATIC;
 //    public static final int PUBLIC = Modifier.PUBLIC;
-
 //    public static boolean isPackageProtected(int mod) {
 //        return (mod & PACKAGE) != 0;
 //    }
-
 //    public static boolean isReadOnly(int mod) {
 //        return (mod & READONLY) != 0;
 //    }
@@ -42,11 +40,9 @@ public class HUtils {
 //    public static boolean isPrivate(int modifiers) {
 //        return Modifier.isPrivate(modifiers);
 //    }
-
 //    public static boolean isProtected(int modifiers) {
 //        return Modifier.isProtected(modifiers);
 //    }
-
 //    public static final String modifiersToString(int modifiers) {
 //        List<String> sb = new ArrayList<>();
 //        if (Modifier.isPublic(modifiers)) {
@@ -87,7 +83,6 @@ public class HUtils {
 //        }
 //        return String.join(" ", sb);
 //    }
-
 //    public static final String modifiersToString0(int modifiers) {
 //        List<String> sb = new ArrayList<>();
 //        if (Modifier.isPublic(modifiers)) {
@@ -131,45 +126,43 @@ public class HUtils {
 //        }
 //        return String.join(" ", sb);
 //    }
-
 //    public static int publifyModifiers(int modifiers) {
 //        if (!Modifier.isPrivate(modifiers)
 //                && !Modifier.isProtected(modifiers)
-//                && !HUtils.isPackageProtected(modifiers)) {
+//                && !HSharedUtils.isPackageProtected(modifiers)) {
 //            //default is public!
 //            modifiers |= Modifier.PUBLIC;
 //        }
 //        return modifiers;
 //    }
-
     public static HNAnnotationCall[] publifyModifiers(HNAnnotationCall[] calls) {
-        HNAnnotationList li=new HNAnnotationList(
-                calls,null,null,null
+        HNAnnotationList li = new HNAnnotationList(
+                calls, null, null, null
         );
-        li=publifyModifiers(li);
+        li = publifyModifiers(li);
         return li.getChildren();
     }
+
     public static HNAnnotationList publifyModifiers(HNAnnotationList modifiers) {
-        if(
-                !modifiers.containsModifier("private")
+        if (!modifiers.containsModifier("private")
                 && !modifiers.containsModifier("protected")
-                && !modifiers.containsModifier("public")
-        ){
-            modifiers=modifiers.addModifier("public");
+                && !modifiers.containsModifier("public")) {
+            modifiers = modifiers.addModifier("public");
         }
         return modifiers;
     }
 
     public static HNAnnotationCall[] statifyModifiers(HNAnnotationCall[] calls) {
-        HNAnnotationList li=new HNAnnotationList(
-                calls,null,null,null
+        HNAnnotationList li = new HNAnnotationList(
+                calls, null, null, null
         );
-        li=statifyModifiers(li);
+        li = statifyModifiers(li);
         return li.getChildren();
     }
+
     public static HNAnnotationList statifyModifiers(HNAnnotationList modifiers) {
-        if(!modifiers.containsModifier("static")){
-            modifiers=modifiers.addModifier("static");
+        if (!modifiers.containsModifier("static")) {
+            modifiers = modifiers.addModifier("static");
         }
         return modifiers;
     }
@@ -287,19 +280,20 @@ public class HUtils {
     }
 
     public static void setSource(JNode node, JTextSource src) {
-        node.setUserObject(JTextSource.class.getName(),src);
+        node.setUserObject(JTextSource.class.getName(), src);
     }
+
     public static JTextSource getSource(JNode node) {
         while (node != null) {
             Object ss = node.getUserObjects().get(JTextSource.class.getName());
-            if(ss instanceof JTextSource){
-                return (JTextSource)ss;
+            if (ss instanceof JTextSource) {
+                return (JTextSource) ss;
             }
             if (node instanceof HNBlock.CompilationUnitBlock) {
-                JCompilationUnit cu=((HNBlock.CompilationUnitBlock) node).getCompilationUnit();
-                if(cu!=null){
+                JCompilationUnit cu = ((HNBlock.CompilationUnitBlock) node).getCompilationUnit();
+                if (cu != null) {
                     JTextSource s = cu.getSource();
-                    if(s!=null){
+                    if (s != null) {
                         return s;
                     }
                 }
@@ -407,25 +401,25 @@ public class HUtils {
         return argTypes;
     }
 
-    public static Temporal parseTemporal(String sval){
-        if(sval==null){
-            sval="";
+    public static Temporal parseTemporal(String sval) {
+        if (sval == null) {
+            sval = "";
         }
         Temporal parsed = null;
-        String mostLikelyFormat=null;
+        String mostLikelyFormat = null;
         int svalLength = sval.length();
-        if(sval.indexOf('/')>0){
-            sval=sval.replace('/','-');
+        if (sval.indexOf('/') > 0) {
+            sval = sval.replace('/', '-');
         }
-        boolean dte=false;
-        boolean tm=false;
-        if(sval.indexOf('-')>=0){
-            dte=true;
+        boolean dte = false;
+        boolean tm = false;
+        if (sval.indexOf('-') >= 0) {
+            dte = true;
         }
-        if(sval.indexOf(':')>=0){
-            tm=true;
+        if (sval.indexOf(':') >= 0) {
+            tm = true;
         }
-        if(dte && tm){
+        if (dte && tm) {
             mostLikelyFormat = "2019-03-27T10:15:30";
             try {
                 parsed = (LocalDateTime.parse(sval));
@@ -433,11 +427,11 @@ public class HUtils {
                 //ignore
             }
             try {
-                parsed = (LocalDateTime.parse(sval.replace(' ','T')));
+                parsed = (LocalDateTime.parse(sval.replace(' ', 'T')));
             } catch (Exception ex) {
                 //ignore
             }
-        }else if(dte){
+        } else if (dte) {
             mostLikelyFormat = "2019-03-27";
             if ("2019-03-27".length() == svalLength) {
                 try {
@@ -446,29 +440,35 @@ public class HUtils {
                     //
                 }
             }
-        }else if(tm){
+        } else if (tm) {
             mostLikelyFormat = "12:03:27";
             try {
                 parsed = (LocalTime.parse(sval));
             } catch (Exception ex) {
                 //
             }
-        }else{
+        } else {
             mostLikelyFormat = "2019-03-27T10:15:30";
         }
         if (parsed == null) {
-            throw new JParseException("local date/time must be in the ISO format ex: "+mostLikelyFormat);
+            throw new JParseException("local date/time must be in the ISO format ex: " + mostLikelyFormat);
         }
         return parsed;
     }
 
-    public static HNode skipFirstPar(HNode n){
-        if(n instanceof HNPars){
+    public static HNode skipFirstPar(HNode n) {
+        if (n instanceof HNPars) {
             HNode[] i = ((HNPars) n).getItems();
-            if(i.length==1){
+            if (i.length == 1) {
                 return i[0];
             }
         }
         return n;
+    }
+
+    public static String resolvePackageName(String groupId) {
+        StringBuilder sb = new StringBuilder(groupId.toLowerCase());
+        //TODO
+        return sb.toString();
     }
 }

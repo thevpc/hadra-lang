@@ -75,7 +75,7 @@ public class StringExtensions {
     }
 
     /**
-     * this should be inlined by the HLC compiler...
+     * this should be inlined by the HL compiler...
      *
      * @param str   str
      * @param index index

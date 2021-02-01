@@ -17,7 +17,7 @@ public class TestCompilerOther {
     public void testCompiler0001() {
         Assertions.assertEquals(0,
                 TestHelper.compileOnlyText("0001", "java.lang.System.out.println('Hello');")
-                        .errorCount());
+                        .getErrorCount());
     }
 
 }

@@ -1,10 +1,39 @@
 package net.hl.compiler.core;
 
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 import net.thevpc.jeep.util.JStringUtils;
 
 public class JModuleId {
 
-    public static final JModuleId DEFAULT_MODULE_ID = new JModuleId(null, "no-name", "1.0.0-SNAPSHOT");
+    public static final JModuleId DEFAULT_MODULE_ID() {
+        String z = System.getProperty("user.name").toLowerCase();
+        //normalize the name
+
+        String nfdNormalizedString = Normalizer.normalize(z, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        z = pattern.matcher(nfdNormalizedString).replaceAll("");
+
+        StringBuilder sb = new StringBuilder();
+        for (char c : z.toCharArray()) {
+            if (c >= '0' && c <= '9') {
+                if (sb.length() == 0) {
+                    sb.append('_');
+                }
+                sb.append(c);
+            } else if (c == '_' || c == '.' || (c >= 'a' && c <= 'z')) {
+                sb.append(c);
+            } else {
+                sb.append('_');
+            }
+        }
+        if (sb.toString().equals("_")) {
+            sb.append("unknown");
+        }
+        return new JModuleId("local."
+                + sb.toString(),
+                "no-name", "1.0.0-SNAPSHOT");
+    }
     private final String groupId;
     private final String artifactId;
     private final String version;
@@ -67,7 +96,7 @@ public class JModuleId {
 
     public static JModuleId replaceBlanks(JModuleId moduleId, JModuleId defaultId) {
         if (defaultId == null) {
-            defaultId = DEFAULT_MODULE_ID;
+            defaultId = DEFAULT_MODULE_ID();
         }
         if (moduleId == null) {
             moduleId = defaultId;

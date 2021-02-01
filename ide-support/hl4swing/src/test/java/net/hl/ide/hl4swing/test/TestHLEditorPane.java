@@ -15,13 +15,14 @@ import java.awt.*;
 import java.net.URL;
 
 public class TestHLEditorPane {
+
     public static void main(String[] args) {
-        System.setProperty("java.util.logging.SimpleFormatter.format","%1$tF %1$tT %4$s %2$s %5$s%6$s%n");
+        System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF %1$tT %4$s %2$s %5$s%6$s%n");
         JFrame f = new JFrame("Test");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JEditorPaneBuilder editorBuilder = new JEditorPaneBuilder();
-        HadraLanguage jContext = new HadraLanguage();
-        DefaultHLProjectContext projectContext = new DefaultHLProjectContext(jContext, new HIndexerImpl(),null);
+        HadraLanguage jContext = HadraLanguage.getSingleton();
+        DefaultHLProjectContext projectContext = new DefaultHLProjectContext(jContext, new HIndexerImpl(), null);
 
         HCompletion completion = new HCompletion(projectContext);
         JEditorPane e = editorBuilder.editor();
@@ -43,7 +44,7 @@ public class TestHLEditorPane {
 
         URL resource = TestHLEditorPane.class.getResource("Example.hl");
 //        JSyntaxUtils.setText(editorBuilder.editor(),JTextSourceFactory.fromURL(resource));
-        JSyntaxUtils.setText(editorBuilder.editor(), JTextSourceFactory.fromString("","<text>"));
+        JSyntaxUtils.setText(editorBuilder.editor(), JTextSourceFactory.fromString("", "<text>"));
 
 //        long allTime = 0;
 //        int count = 0;

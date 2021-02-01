@@ -2,7 +2,7 @@ package net.hl.compiler.index;
 
 import net.hl.compiler.ast.HNDeclareType;
 import net.hl.compiler.ast.HNExtends;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 import net.thevpc.jeep.JIndexDocument;
 import net.thevpc.jeep.JType;
 import net.thevpc.jeep.core.index.DefaultJIndexDocument;
@@ -69,7 +69,7 @@ public class HIndexedClass implements HIndexedElement {
         packageName = type.getFullPackage();
         this.source = source;
         annotations = Arrays.stream(type.getAnnotations()).map(Object::toString).collect(Collectors.joining(" "));
-        imports = HUtils.getImports(type);
+        imports = HSharedUtils.getImports(type);
         List<String> superTypesList = new ArrayList<>();
         for (HNExtends extend : type.getExtends()) {
             superTypesList.add(extend.getFullName());

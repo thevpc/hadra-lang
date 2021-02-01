@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class HUtils {
+public class HCoreUtils {
     public static final int EXPAND_RANGE_SIZE = 50;
 
     public static Object checkSimpleValue(Object value, JNode node, JType type, HLJCompilerContext compilerContextBase, boolean acceptSwitchCaseAlternatives, boolean[] refError) {
@@ -23,7 +23,7 @@ public class HUtils {
                 long f = ((Number) value).longValue();
                 if (f < Byte.MIN_VALUE || f > Byte.MAX_VALUE) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X450", null, "byte overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X450", null, node.getStartToken(), "byte overflow");
                 }
                 return (byte) f;
             } else if (value instanceof BigInteger) {
@@ -33,7 +33,7 @@ public class HUtils {
                                 || f.compareTo(BigInteger.valueOf(Byte.MAX_VALUE)) > 0
                 ) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X450", null, "byte overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X450", null, node.getStartToken(), "byte overflow");
                 }
                 return f.byteValue();
             } else {
@@ -43,7 +43,7 @@ public class HUtils {
                     }
                 }
                 refError[0]=true;
-                compilerContextBase.getLog().error("X451", null, "expected constant byte value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X451", null, node.getStartToken(), "expected constant byte value");
                 return 0;
             }
         } else if (type.boxed().getName().equals(Short.class.getName())) {
@@ -51,7 +51,7 @@ public class HUtils {
                 long f = ((Number) value).longValue();
                 if (f < Short.MIN_VALUE || f > Short.MAX_VALUE) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X452", null, "short overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X452", null, node.getStartToken(), "short overflow");
                 }
                 return (short) f;
             } else if (value instanceof BigInteger) {
@@ -61,7 +61,7 @@ public class HUtils {
                                 || f.compareTo(BigInteger.valueOf(Short.MAX_VALUE)) > 0
                 ) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X452", null, "short overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X452", null, node.getStartToken(), "short overflow");
                 }
                 return f.shortValue();
             } else {
@@ -71,7 +71,7 @@ public class HUtils {
                     }
                 }
                 refError[0]=true;
-                compilerContextBase.getLog().error("X453", null, "expected constant short value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X453", null, node.getStartToken(), "expected constant short value");
                 return 0;
             }
         } else if (type.boxed().getName().equals(Character.class.getName())) {
@@ -81,7 +81,7 @@ public class HUtils {
                 long f = ((Number) value).longValue();
                 if (f < Character.MIN_VALUE || f > Character.MAX_VALUE) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X454", null, "char overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X454", null, node.getStartToken(), "char overflow");
                 }
                 return (char) f;
             } else if (value instanceof BigInteger) {
@@ -91,7 +91,7 @@ public class HUtils {
                                 || f.compareTo(BigInteger.valueOf(Character.MAX_VALUE)) > 0
                 ) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X455", null, "short overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X455", null, node.getStartToken(), "short overflow");
                 }
                 return (char) f.intValue();
             } else {
@@ -101,7 +101,7 @@ public class HUtils {
                     }
                 }
                 refError[0]=true;
-                compilerContextBase.getLog().error("X456", null, "expected constant short value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X456", null, node.getStartToken(), "expected constant short value");
                 return 0;
             }
         } else if (type.boxed().getName().equals(Integer.class.getName())) {
@@ -109,7 +109,7 @@ public class HUtils {
                 long f = ((Number) value).longValue();
                 if (f < Integer.MIN_VALUE || f > Integer.MAX_VALUE) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X457", null, "int overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X457", null, node.getStartToken(), "int overflow");
                 }
                 return (int) f;
             } else if (value instanceof BigInteger) {
@@ -119,7 +119,7 @@ public class HUtils {
                                 || f.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0
                 ) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X457", null, "int overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X457", null, node.getStartToken(), "int overflow");
                 }
                 return f.shortValue();
             } else {
@@ -129,7 +129,7 @@ public class HUtils {
                     }
                 }
                 refError[0]=true;
-                compilerContextBase.getLog().error("X458", null, "expected constant int value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X458", null, node.getStartToken(), "expected constant int value");
                 return 0;
             }
         } else if (type.boxed().getName().equals(Long.class.getName())) {
@@ -142,7 +142,7 @@ public class HUtils {
                                 || f.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0
                 ) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X459", null, "long overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X459", null, node.getStartToken(), "long overflow");
                 }
                 return f.shortValue();
             } else {
@@ -152,7 +152,7 @@ public class HUtils {
                     }
                 }
                 refError[0]=true;
-                compilerContextBase.getLog().error("X460", null, "expected constant long value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X460", null, node.getStartToken(), "expected constant long value");
                 return 0;
             }
         } else if (type.boxed().getName().equals(BigInteger.class.getName())) {
@@ -167,7 +167,7 @@ public class HUtils {
                     }
                 }
                 refError[0]=true;
-                compilerContextBase.getLog().error("X461", null, "expected constant bigint value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X461", null, node.getStartToken(), "expected constant bigint value");
                 return 0;
             }
         } else if (type.boxed().getName().equals(Float.class.getName())) {
@@ -175,7 +175,7 @@ public class HUtils {
                 double f = ((Number) value).doubleValue();
                 if (f < Float.MIN_VALUE || f > Float.MAX_VALUE) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X462", null, "float overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X462", null, node.getStartToken(), "float overflow");
                 }
                 return (float) f;
             } else if (value instanceof BigInteger) {
@@ -186,7 +186,7 @@ public class HUtils {
                                 || d.compareTo(BigDecimal.valueOf(Float.MAX_VALUE)) > 0
                 ) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X462", null, "float overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X462", null, node.getStartToken(), "float overflow");
                 }
                 return d.floatValue();
             } else if (value instanceof BigDecimal) {
@@ -196,7 +196,7 @@ public class HUtils {
                                 || d.compareTo(BigDecimal.valueOf(Float.MAX_VALUE)) > 0
                 ) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X463", null, "float overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X463", null, node.getStartToken(), "float overflow");
                 }
                 return d.floatValue();
             } else {
@@ -206,7 +206,7 @@ public class HUtils {
                     }
                 }
                 refError[0]=true;
-                compilerContextBase.getLog().error("X464", null, "expected constant float value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X464", null, node.getStartToken(), "expected constant float value");
                 return 0;
             }
         } else if (type.boxed().getName().equals(Double.class.getName())) {
@@ -220,7 +220,7 @@ public class HUtils {
                                 || d.compareTo(BigDecimal.valueOf(Double.MAX_VALUE)) > 0
                 ) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X465", null, "double overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X465", null, node.getStartToken(), "double overflow");
                 }
                 return d.floatValue();
             } else if (value instanceof BigDecimal) {
@@ -230,7 +230,7 @@ public class HUtils {
                                 || d.compareTo(BigDecimal.valueOf(Double.MAX_VALUE)) > 0
                 ) {
                     refError[0]=true;
-                    compilerContextBase.getLog().error("X465", null, "double overflow", node.getStartToken());
+                    compilerContextBase.getLog().jerror("X465", null, node.getStartToken(), "double overflow");
                 }
                 return d.floatValue();
             } else {
@@ -240,7 +240,7 @@ public class HUtils {
                     }
                 }
                 refError[0]=true;
-                compilerContextBase.getLog().error("X466", null, "expected constant double value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X466", null, node.getStartToken(), "expected constant double value");
                 return 0;
             }
         } else if (type.boxed().getName().equals(BigDecimal.class.getName())) {
@@ -258,7 +258,7 @@ public class HUtils {
                     }
                 }
                 refError[0]=true;
-                compilerContextBase.getLog().error("X466", null, "expected constant double value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X466", null, node.getStartToken(), "expected constant double value");
                 return 0;
             }
         } else if (type.boxed().getName().equals(Boolean.class.getName())) {
@@ -266,7 +266,7 @@ public class HUtils {
                 return value;
             } else {
                 refError[0]=true;
-                compilerContextBase.getLog().error("X467", null, "expected constant boolean value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X467", null, node.getStartToken(), "expected constant boolean value");
                 return false;
             }
         } else if (type.boxed().getName().equals(String.class.getName())) {
@@ -279,7 +279,7 @@ public class HUtils {
                     }
                 }
                 refError[0]=true;
-                compilerContextBase.getLog().error("X468", null, "expected constant string value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X468", null, node.getStartToken(), "expected constant string value");
                 return false;
             }
         } else if (type.isAssignableFrom(compilerContextBase.getContext().types().typeOf(value))) {
@@ -289,16 +289,16 @@ public class HUtils {
                 return value;
             } else if (value instanceof CharSequence) {
                 refError[0]=true;
-                compilerContextBase.getLog().error("X469", null, "expected constant " + type.getName() + " value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X469", null, node.getStartToken(), "expected constant " + type.getName() + " value");
                 return Pattern.compile(value.toString());
             } else {
                 refError[0]=true;
-                compilerContextBase.getLog().error("X469", null, "expected constant " + type.getName() + " value", node.getStartToken());
+                compilerContextBase.getLog().jerror("X469", null, node.getStartToken(), "expected constant " + type.getName() + " value");
                 return null;
             }
         } else {
             refError[0]=true;
-            compilerContextBase.getLog().error("X469", null, "expected constant " + type.getName() + " value", node.getStartToken());
+            compilerContextBase.getLog().jerror("X469", null, node.getStartToken(), "expected constant " + type.getName() + " value");
             return null;
         }
     }
@@ -326,7 +326,7 @@ public class HUtils {
                     compilerContextBase.getCallerInfo(),null
             ));
         }catch (Exception ex){
-            compilerContextBase.getLog().error("X470", null,"unable to evaluate constant value "+n,n.getStartToken());
+            compilerContextBase.getLog().jerror("X470", null,n.getStartToken(), "unable to evaluate constant value "+n);
             refError[0]=true;
             return null;
         }

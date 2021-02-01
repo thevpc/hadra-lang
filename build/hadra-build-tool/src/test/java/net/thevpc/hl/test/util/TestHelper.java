@@ -34,6 +34,10 @@ public class TestHelper {
 
     }
 
+    public static HProject compileOnlySuccessResource(String resourceFileName) {
+        return TestHelper.compileOnlyResource("compiler/success/" + resourceFileName);
+    }
+    
     public static HProject compileOnlyResource(String resourceFileName) {
         SetLog.prepare();
         printHeader(resourceFileName);

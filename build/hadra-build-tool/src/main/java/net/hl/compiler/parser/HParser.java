@@ -9,7 +9,7 @@ import net.hl.compiler.core.elements.HNElementMetaPackageVersion;
 import net.hl.compiler.stages.runtime.HNumberEvaluator;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTokenUtils;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.DefaultJListWithSeparators;
 import net.thevpc.jeep.core.DefaultJParser;
@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
+
     //    private static final HashSet<String> unacceptableWordSuffixedForNumbers = new HashSet<>();
 //
 //    static {
@@ -103,7 +104,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     //this is a lambda expression
                     HNode e = parseExpression();
                     if (e == null) {
-                        log().error("X127", "lambda expression", "expected body", peek());
+                        log().jerror("X127", "lambda expression", peek(), "expected body");
                     } else {
                         endToken = e.getEndToken();
                     }
@@ -136,7 +137,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             JToken token = peek();
             HNAnnotationCall[] anns = parseAnnotationGroup(bounds, options);
             if (anns.length == 0 && peek().isImage("@")) {
-                log().error("X000", "annotation", "expected annotation", token);
+                log().jerror("X000", "annotation", token, "expected annotation");
             }
             if (anns.length == 0) {
                 break;
@@ -202,7 +203,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         break;
                     }
                     default: {
-                        log().error("X101", null, "superscript: invalid superscript characters " + next.image, next);
+                        log().jerror("X101", null, next, "superscript: invalid superscript characters " + next.image);
                     }
                 }
             }
@@ -210,7 +211,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             try {
                 intv = Integer.parseInt(sb.toString());
             } catch (Exception any) {
-                log().error("X101", null, "superscript: invalid superscript characters " + next.image, next);
+                log().jerror("X101", null, next, "superscript: invalid superscript characters " + next.image);
             }
             return new HNOpBinaryCall(HTokenUtils.createToken("^"), middle, new HNLiteral(intv, next), middle.getStartToken(), middle.getEndToken());
         }
@@ -338,7 +339,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                 sb.insert(0, ((HNOpDot) n).getRight());
                                 n = ((HNOpDot) n).getLeft();
                             } else {
-                                log().error("X105", null, "invalid '." + next.sval + "' operator on " + o1, n.getStartToken());
+                                log().jerror("X105", null, n.getStartToken(), "invalid '." + next.sval + "' operator on " + o1);
                                 return o1;
                             }
                         }
@@ -360,7 +361,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 }
 
             }
-            log().error("X106", null, "unexpected '." + next.sval + "'", next);
+            log().jerror("X106", null, next, "unexpected '." + next.sval + "'");
             return o1;
         } else if (op.id() == HTokenId.KEYWORD_IS) {
             JToken n = peek();
@@ -375,7 +376,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             }
             HNTypeToken tn = parseTypeName();
             if (tn == null) {
-                log().error("X107", null, "expected type name", next);
+                log().jerror("X107", null, next, "expected type name");
                 return new HNIs(
                         null, o1,
                         null,
@@ -412,7 +413,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             }
             HNTypeToken tn = parseTypeName();
             if (tn == null) {
-                log().error("X107", null, "expected type name", next);
+                log().jerror("X107", null, next, "expected type name");
                 return new HNIs(
                         null, o1,
                         null,
@@ -442,7 +443,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
     }
 
     protected HNode parseAndBuildListOpNodeElement(HNode o1, int opPrecedence, JToken token, HExpressionOptions options) {
-        log().error("X108", null, "list operator not supported in this context", peek());
+        log().jerror("X108", null, peek(), "list operator not supported in this context");
         token = token.copy();
         HNode o2 = parseExpression(opPrecedence, options);
         JToken s = o1 != null && o1.getStartToken() != null ? o1.getStartToken() : token;
@@ -554,12 +555,12 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                     return new HNStaticEval(s[0], s[1], p, s[0], p);
                                 }
                                 default: {
-                                    log().warn("X000", null, "invalid static postfix : " + p.sval, p);
+                                    log().warn("X000", null, p, "invalid static postfix : " + p.sval);
                                 }
                             }
                         }
                         default: {
-                            log().warn("X000", null, "invalid static postfix : " + p.sval, p);
+                            log().warn("X000", null, p, "invalid static postfix : " + p.sval);
                         }
                     }
                 }
@@ -596,13 +597,13 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             case HTokenId.TEMPORAL: {
                 JToken token = next();
                 if (token.isError()) {
-                    log().warn("X000", null, "token never terminated", token);
+                    log().warn("X000", null, token, "token never terminated");
                 }
                 Object parsed = null;
                 try {
-                    parsed = HUtils.parseTemporal(token.sval);
+                    parsed = HSharedUtils.parseTemporal(token.sval);
                 } catch (Exception ex) {
-                    log().warn("X013", null, ex.getMessage(), token);
+                    log().warn("X013", null, token, ex.getMessage());
                     parsed = LocalDateTime.of(2000, 1, 1, 0, 0, 0, 0);
                 }
                 return getNodeFactory().createLiteralNode(parsed, new JNodeTokens().setStart(token).setEnd(token));
@@ -610,7 +611,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             case HTokenId.REGEX: {
                 JToken token = next();
                 if (token.isError()) {
-                    log().warn("X000", null, "token never terminated", token);
+                    log().warn("X000", null, token, "token never terminated");
                 }
                 return getNodeFactory().createLiteralNode(Pattern.compile(token.sval), new JNodeTokens().setStart(token).setEnd(token));
             }
@@ -620,26 +621,26 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             case HTokenId.DOUBLE_QUOTES: {
                 JToken token = next();
                 if (token.isError()) {
-                    log().warn("X000", null, "token never terminated", token);
+                    log().warn("X000", null, token, "token never terminated");
                 }
                 return getNodeFactory().createLiteralNode(token.sval, new JNodeTokens().setStart(token).setEnd(token));
             }
             case HTokenId.SIMPLE_QUOTES: {
                 JToken token = next();
                 if (token.isError()) {
-                    log().warn("X000", null, "token never terminated", token);
+                    log().warn("X000", null, token, "token never terminated");
                 }
                 if (token.sval.length() == 1) {
                     return getNodeFactory().createLiteralNode(token.sval.charAt(0), new JNodeTokens().setStart(token).setEnd(token));
                 } else {
-//                            log().error("X110", "Invalid character token", token);
+//                            log().jerror("X110", "Invalid character token", token);
                     return getNodeFactory().createLiteralNode(token.sval, new JNodeTokens().setStart(token).setEnd(token));
                 }
             }
             case JTokenId.ANTI_QUOTES: {//TODO FIX ME
                 JToken token = next();
                 if (token.isError()) {
-                    log().warn("X000", null, "token never terminated", token);
+                    log().warn("X000", null, token, "token never terminated");
                 }
                 return getNodeFactory().createIdentifierNode(token.sval, new JNodeTokens().setStart(token).setEnd(token));
             }
@@ -663,7 +664,6 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //    public HNode parseExpression() {
 //        return super.parseExpression();
 //    }
-
     protected HNAnnotationCall[] parseAnnotationGroup(JTokenBoundsBuilder bounds, HExpressionOptions options) {
         JExpressionUnaryOptions unary = options == null ? null : options.getUnary();
         JToken token = peek();
@@ -680,7 +680,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         }
                         HNAnnotationCall aa = parseAnnotation(bounds0, options);
                         if (aa == null) {
-                            log().error("X000", "annotation", "expected annotation", peek());
+                            log().jerror("X000", "annotation", peek(), "expected annotation");
                             break;
                         }
                         a.add(aa);
@@ -690,7 +690,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     JTokenBoundsBuilder bounds0 = new JTokenBoundsBuilder();
                     HNAnnotationCall aa = parseAnnotation(bounds0, options);
                     if (aa == null) {
-                        log().error("X000", "annotation", "expected annotation", peek());
+                        log().jerror("X000", "annotation", peek(), "expected annotation");
                     }
                     return new HNAnnotationCall[]{aa};
                 }
@@ -713,7 +713,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                             JTokenBoundsBuilder bb = new JTokenBoundsBuilder();
                             bb.visit(p = next());
                             return new HNAnnotationCall[]{
-                                    new HNAnnotationCall(new HNTypeTokenSpecialAnnotation(p), new HNode[0], bb)
+                                new HNAnnotationCall(new HNTypeTokenSpecialAnnotation(p), new HNode[0], bb)
                             };
                         }
                     }
@@ -768,7 +768,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 default: {
                     name = parseTypeName();
                     if (name == null) {
-                        log().error("X000", "annotation", "expected annotation", peek());
+                        log().jerror("X000", "annotation", peek(), "expected annotation");
                     }
                 }
             }
@@ -792,7 +792,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                 bounds.visitSeparator(next());
                                 break;
                             } else {
-                                log().error("X000", "annotation", "expected ','", peek());
+                                log().jerror("X000", "annotation", peek(), "expected ','");
                                 e = bounds.visit(parseAnnotationArgument());
                                 if (e != null) {
                                     args.add(e);
@@ -816,7 +816,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
         }
         HNode e = parseExpression(HParserOptions.annotationsOptions);
         if (e == null) {
-            log().error("X000", "annotation", "expected annotation argument", peek());
+            log().jerror("X000", "annotation", peek(), "expected annotation argument");
         }
         return e;
     }
@@ -842,7 +842,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
         if (p.id() == HTokenId.RIGHT_CURLY_BRACKET || p.id() == HTokenIdOffsets.OFFSET_CLOSE_BRACE2) {
             endToken = next();
         } else {
-            log().error("X102", null, "block statement: expected '}'", peek());
+            log().jerror("X102", null, peek(), "block statement: expected '}'");
         }
         return new HNBlock(type,
                 elements.getItems().toArray(new HNode[0]),
@@ -881,7 +881,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         break;
                     }
                     JToken toSkip = next();
-                    log().error("X103", null, "block statement: invalid statement", toSkip);
+                    log().jerror("X103", null, toSkip, "block statement: invalid statement");
                     if (toSkip.isEOF()) {
                         break;
                     }
@@ -910,7 +910,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //                            }
 //                            separators.add(n1);
 //                        } else {
-//                            log().error("X104", null, "block statement: expected ';' at the end of a statement", peek);
+//                            log().jerror("X104", null, "block statement: expected ';' at the end of a statement", peek);
 //                        }
 //                    }
                 }
@@ -945,14 +945,14 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             switch (n.id()) {
                 case JTokenType.TT_EOF: {
                     end = true;
-                    log().error("X000", null, "expected '\"'", n);
+                    log().jerror("X000", null, n, "expected '\"'");
                     break;
                 }
                 case HTokenId.STRING_INTERP_TEXT: {
                     JToken next = next();
                     tokens.add(endToken = next);
                     if (n.isError()) {
-                        log().error("X000", null, "expected '\"'", n);
+                        log().jerror("X000", null, n, "expected '\"'");
                     }
                     break;
                 }
@@ -961,7 +961,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     JToken next = next();
                     tokens.add(endToken = next);
                     if (n.isError()) {
-                        log().error("X000", null, "expected '\"'", n);
+                        log().jerror("X000", null, n, "expected '\"'");
                     }
                     break;
                 }
@@ -969,7 +969,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     JToken next = next();
                     tokens.add(endToken = next);
                     if (n.isError()) {
-                        log().error("X000", null, "expected '\"'", n);
+                        log().jerror("X000", null, n, "expected '\"'");
                     }
                     break;
                 }
@@ -986,12 +986,12 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                 if (next.id() == HTokenId.RIGHT_CURLY_BRACKET || next.id() == HTokenIdOffsets.OFFSET_CLOSE_BRACE2) {
                                     tokens.add(endToken = next());
                                 } else {
-                                    log().error("X000", null, "expected '}'", next);
+                                    log().jerror("X000", null, next, "expected '}'");
                                 }
                             }
                         } else {
                             end = true;
-                            log().error("X000", null, "expected valid expression", next);
+                            log().jerror("X000", null, next, "expected valid expression");
                             while (true) {
                                 next = peek();
                                 if (next.isEOF() || next.def.ttype == JTokenType.TT_STRING_INTERP) {
@@ -1006,13 +1006,13 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                             HNIdentifier id = new HNIdentifier(endToken = next);
                             expressions.add(id);
                         } else {
-                            log().error("X000", null, "expected identifier", next);
+                            log().jerror("X000", null, next, "expected identifier");
                         }
                     }
                     break;
                 }
                 default: {
-                    log().error("X000", null, "not expected : " + n, n);
+                    log().jerror("X000", null, n, "not expected : " + n);
                     end = true;
                 }
             }
@@ -1049,7 +1049,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             case HTokenId.KEYWORD_CLASS: {
                 HNode dec = null;
                 if (metaParsingMode) {
-                    err.error("X113", "class declaration", "class definitions are not allowed in package declaration", p);
+                    err.jerror("X113", "class declaration", p, "class definitions are not allowed in package declaration");
                     //ignore it;
                 }
                 JMessageList err2 = errorList();
@@ -1111,7 +1111,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 if (p.id() == HTokenId.SEMICOLON) {
                     skip();
                 } else {
-                    err.error("X000", "declaration", "expected ';'", p);
+                    err.jerror("X000", "declaration", p, "expected ';'");
                 }
             }
             return n;
@@ -1126,7 +1126,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 next();
                 return true;
             } else {
-                log().error("X131", logName, "expected ';'", t);
+                log().jerror("X131", logName, t, "expected ';'");
             }
             return false;
         }
@@ -1143,7 +1143,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             }
         }
         if (!ok) {
-            log().error("X131", logName, "expected ';'", found);
+            log().jerror("X131", logName, found, "expected ';'");
         }
         return ok;
     }
@@ -1204,7 +1204,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     endToken = next();
                     if (tt.inits.length == 0) {
                         // How can we create an array without specifying a valid constructor?
-                        log().error("X193", "constructor", "unresolved empty constructor", t2);
+                        log().jerror("X193", "constructor", t2, "unresolved empty constructor");
                     }
                     return new HNArrayNew(tt.typeToken, tt.inits, null, startToken, endToken);
                 } else {
@@ -1217,12 +1217,12 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 if (t2.isImage(")")) {
                     endToken = next();
                 } else {
-                    log().error("X114", "constructor", "expected ')'", t2);
+                    log().jerror("X114", "constructor", t2, "expected ')'");
 
                 }
                 if (tt.type.isArray() || tt.type.isVarArg()) {
 //                    if (setter != null && tt.inits.length == 0) {
-//                        log().error("S052", null, "initialized array is missing initializer", startToken);
+//                        log().jerror("S052", null, "initialized array is missing initializer", startToken);
 //                    }
                     return new HNArrayNew(tt.typeToken, tt.inits, setter, startToken, endToken);
                 } else {
@@ -1230,7 +1230,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         throw new JFixMeLaterException();
                     } else {
 //                        if (setter != null && tt.inits.length == 0) {
-//                            log().error("S052", null, "initialized array is missing initializer", startToken);
+//                            log().jerror("S052", null, "initialized array is missing initializer", startToken);
 //                        }
                         return new HNObjectNew(tt.typeToken, new HNode[]{setter}, startToken, endToken);
                     }
@@ -1449,7 +1449,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //                    case "float":
 //                    case "double": {
 //                        if (visitedVarVal) {
-//                            log().error("X055", "type construct: after var/val keywords, you need not to add type declaration", peek());
+//                            log().jerror("X055", "type construct: after var/val keywords, you need not to add type declaration", peek());
 //                        }
 //                        type.type = context().types().parseName(v.sval);
 //                        break;
@@ -1457,14 +1457,14 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //                    case "var":
 //                    case "val": {
 //                        if (visitedVarVal) {
-//                            log().error("X056", "type construct: multiple var/val keywords", peek());
+//                            log().jerror("X056", "type construct: multiple var/val keywords", peek());
 //                        }
 //                        type.visitedVarVal = true;
 //                        break;
 //                    }
 //                    case "void": {
 //                        if (visitedVarVal) {
-//                            log().error("X056", "type construct: var/val and void combination mismatch", peek());
+//                            log().jerror("X056", "type construct: var/val and void combination mismatch", peek());
 //                        }
 //                        type.visitedVoid = true;
 //                        type.type = context().types().parseName("void");
@@ -1529,7 +1529,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //                    List<JTypeNameOrVariable> z = new ArrayList<>();
 //                    JTypeNameOrVariable t2 = parseTypeName();
 //                    if (t2 == null) {
-//                        log().error("X057", "type construct: generic type argument missing", peek());
+//                        log().jerror("X057", "type construct: generic type argument missing", peek());
 //                        t2 = new DefaultTypeName("unknown");
 //                    }
 //                    z.add(t2);
@@ -1542,7 +1542,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //                        } else if ((t.ttype == JToken.TT_OPERATOR && t.image.equals(">"))) {
 //                            break;
 //                        } else {
-//                            log().error("X058", "type construct: expected ',' or '>'", peek());
+//                            log().jerror("X058", "type construct: expected ',' or '>'", peek());
 //                            skip();
 //                        }
 //                    }
@@ -1562,13 +1562,13 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //                            lastOk = false;
 //                        } else {
 //                            if (!lastOk) {
-//                                log().error("X058", "type construct: expected '[]'", peek());
+//                                log().jerror("X058", "type construct: expected '[]'", peek());
 //                            }
 //                            //String[12*6] a;
 //                            HNode jNode = parseExpression();
 //                            if (jNode == null) {
 //                                jNode = parseExpression();
-//                                log().error("X058", "type construct: expected initializer expression", peek());
+//                                log().jerror("X058", "type construct: expected initializer expression", peek());
 //                            } else {
 //                                arrImplicitInitialization.add(jNode);
 //                            }
@@ -1703,7 +1703,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 if (acceptVarArg) {
                     varArg = true;
                 } else {
-                    log().error("X115", null, "vararg not supported in this context", n);
+                    log().jerror("X115", null, n, "vararg not supported in this context");
                 }
             }
             JTypeNameOrVariable[] jTypeNameOrVariables0 = new JTypeNameOrVariable[jTypeNameOrVariables == null ? 0 : jTypeNameOrVariables.getItems().size()];
@@ -1741,7 +1741,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 while (true) {
                     x = peek();
                     if (x.isEOF()) {
-                        reportedErrors.error("X000", null, "expected ','", x);
+                        reportedErrors.jerror("X000", null, x, "expected ','");
                         break;
                     } else if (x.id() == HTokenId.COMMA) {
                         endToken = x = next();
@@ -1757,7 +1757,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         endToken = x = next();
                         break;
                     } else {
-                        reportedErrors.error("X000", null, "expected ','", x);
+                        reportedErrors.jerror("X000", null, x, "expected ','");
                         HNDeclareTokenTupleItem a = parseDeclareTokenTupleItem(reportedErrors);
                         if (a != null) {
                             endToken = a.getEndToken();
@@ -1839,7 +1839,6 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //        }
 //        return name;
 //    }
-
 //    private int parseModifiers() {
 //        int modifiers = 0;
 //        while (true) {
@@ -1851,7 +1850,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //                    break;
 //                }
 //                case HTokenId.KEYWORD_PACKAGE: {
-//                    modifiers |= HUtils.PACKAGE;
+//                    modifiers |= HSharedUtils.PACKAGE;
 //                    break;
 //                }
 //                case HTokenId.KEYWORD_PRIVATE: {
@@ -1875,7 +1874,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //                    break;
 //                }
 //                case HTokenId.KEYWORD_CONST: {
-//                    modifiers |= HUtils.CONST;
+//                    modifiers |= HSharedUtils.CONST;
 //                    break;
 //                }
 //                case HTokenId.KEYWORD_TRANSIENT: {
@@ -1891,7 +1890,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //                    break;
 //                }
 //                case HTokenId.KEYWORD_READONLY: {
-//                    modifiers |= HUtils.READONLY;
+//                    modifiers |= HSharedUtils.READONLY;
 //                    break;
 //                }
 //                case HTokenId.KEYWORD_SYNCHRONIZED: {
@@ -1909,14 +1908,9 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //        }
 //        return modifiers;
 //    }
-
     /**
-     * var a=2
-     * val a=2
-     * a=Z
-     * int a=2;
-     * String a="";
-     * The same applies with ':' instead of '='
+     * var a=2 val a=2 a=Z int a=2; String a=""; The same applies with ':'
+     * instead of '='
      *
      * @return
      */
@@ -1924,8 +1918,8 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //        JToken a = peek();
 //        boolean acceptColon = eqOp == null || !eqOp;
 //        boolean acceptEq = eqOp == null || eqOp;
-        HDeclarationOptions options = eqOp == null ? HParserOptions.DECLARE_ASSIGN_EQ_OR_COLON :
-                eqOp ? HParserOptions.DECLARE_ASSIGN_EQ : HParserOptions.DECLARE_ASSIGN_COLON;
+        HDeclarationOptions options = eqOp == null ? HParserOptions.DECLARE_ASSIGN_EQ_OR_COLON
+                : eqOp ? HParserOptions.DECLARE_ASSIGN_EQ : HParserOptions.DECLARE_ASSIGN_COLON;
 
 //        switch (a.id()) {
 //            case HTokenId.KEYWORD_VAL:
@@ -1957,7 +1951,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //                    HNDeclareTokenIdentifier t = new HNDeclareTokenIdentifier(idVar);
 //                    HNode e = parseExpression();
 //                    if (e == null) {
-//                        log().error("X127", "identifier declaration", "expected initialization", peek());
+//                        log().jerror("X127", "identifier declaration", "expected initialization", peek());
 //                    } else {
 //                        endToken = e.endToken();
 //                    }
@@ -1981,7 +1975,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             }
             err.addAll(err2);
         }
-        err.error("X000", null, "expected expression", peek());
+        err.jerror("X000", null, peek(), "expected expression");
         return null;
     }
 
@@ -1998,7 +1992,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 if (HNAnnotationList.isModifier("static", annotations)) {
                     if (peek().id() == HTokenId.LEFT_CURLY_BRACKET) {
                         if (annotations.getChildren().length != 1) {
-                            err.error("X116", null, "static initializer should not have modifiers", peek());
+                            err.jerror("X116", null, peek(), "static initializer should not have modifiers");
                         }
                         HNode jNode = parseBraces(false, HNBlock.BlocType.METHOD_BODY);
                         if (jNode != null) {
@@ -2025,13 +2019,13 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             JToken t = peek();
             if (t.id() == HTokenId.KEYWORD_CLASS) {
                 if (!options.acceptClass) {
-                    err.error("X117", "class definition", "not allowed class definition in the current context", t);
+                    err.jerror("X117", "class definition", t, "not allowed class definition in the current context");
                 }
                 skip();
                 return parseDeclareClass(annotations, jTokenBoundsBuilder.getStartToken());
             } else if (t.id() == HTokenId.KEYWORD_FUN || t.id() == HTokenId.KEYWORD_INIT || t.id() == HTokenId.KEYWORD_VOID) {
                 if (!options.acceptFunction) {
-                    log().error("X118", "function/method definition", "not allowed class method/function/constructor definition in the current context", t);
+                    log().jerror("X118", "function/method definition", t, "not allowed class method/function/constructor definition in the current context");
                 }
                 if (t.id() == HTokenId.KEYWORD_VOID) {
                     JToken voidToken = next();
@@ -2090,7 +2084,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             pdic.tt = parseTypeNameAndInit(true, pdic.options.acceptVarArg);
             if (pdic.tt == null) {
                 if (HNAnnotationList.size(pdic.annotations) != 0) {
-                    err.error("X119", groupName, "identifier definition : unexpected modifier", peek());
+                    err.jerror("X119", groupName, peek(), "identifier definition : unexpected modifier");
                     return null;
                 } else {
                     //this is not a declaration!
@@ -2113,7 +2107,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 if (pdic.options.getNoTypeNameOption() == HDeclarationOptions.NoTypeNameOption.TYPE) {
                     pdic.varIds = new HNDeclareTokenIdentifier(HTokenUtils.createToken(pdic.options.getDefaultVarName()));
                 } else {
-                    err.error("X000", groupName, "missing name", peek());
+                    err.jerror("X000", groupName, peek(), "missing name");
                     return null;
                 }
             }
@@ -2128,8 +2122,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
     }
 
     /**
-     * parse declare vars in the following forms :
-     * a
+     * parse declare vars in the following forms : a
      *
      * @param pdic
      * @return
@@ -2139,7 +2132,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
         JTokenBoundsBuilder se = new JTokenBoundsBuilder(pdic.bounds);
         try (JTokenizerSnapshot snapshot = tokenizer().snapshot()) {
             String logGroup = "identifier definition";
-            if ( /*(varVal != null) && */ peek().id() == HTokenId.LEFT_PARENTHESIS) {
+            if ( /*(varVal != null) && */peek().id() == HTokenId.LEFT_PARENTHESIS) {
                 se.visit(peek());
                 JMessageList reportedErrors = errorList();
                 HNDeclareTokenTupleItem u = parseDeclareTokenTupleItem(reportedErrors);
@@ -2148,7 +2141,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     JToken pp = peek();
                     if (pp.id() != HTokenId.EQ && pp.id() != HTokenId.COLON) {
                         //not a tuple assignment!
-                        err.error("X120", logGroup, "expected ':' or '='", peek());
+                        err.jerror("X120", logGroup, peek(), "expected ':' or '='");
                         snapshot.rollback();
                         return false;
                     }
@@ -2176,7 +2169,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 }
                 if (name == null) {
                     //this is not a name. It should be an expression
-//                    err.error("X000", logGroup, "expected name", peek());
+//                    err.jerror("X000", logGroup, "expected name", peek());
 //                    snapshot.rollback();
 //                    return false;
                     //has null name
@@ -2192,7 +2185,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         next();
                         JToken name2 = parseNameWithPackageSingleToken();
                         if (name2 == null) {
-                            err.error("X120", logGroup, "expected name", peek());
+                            err.jerror("X120", logGroup, peek(), "expected name");
                             break;
                         } else {
                             se.visit(name2);
@@ -2211,7 +2204,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         if (v instanceof HNDeclareTokenIdentifier) {
                             ids.add((HNDeclareTokenIdentifier) v);
                         } else {
-                            err.error("X000", logGroup, "expected identifier", v.getStartToken());
+                            err.jerror("X000", logGroup, v.getStartToken(), "expected identifier");
                         }
                     }
                     varIds = new HNDeclareTokenList(ids.toArray(new HNDeclareTokenIdentifier[0]),
@@ -2241,7 +2234,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     break;
                 }
             }
-            err.error("X000", logGroup, "expected identifier", p);
+            err.jerror("X000", logGroup, p, "expected identifier");
             snapshot.rollback();
             return false;
         }
@@ -2258,7 +2251,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 val = parseExpression();
                 pdic.bounds.visit(val);
                 if (val == null) {
-                    err.error("X121", "identifier definition", "expected value assignment", peek());
+                    err.jerror("X121", "identifier definition", peek(), "expected value assignment");
                 }
             } else if (n.id() == HTokenId.COLON && (pdic.varVal != null || pdic.options.acceptInValue)) {
                 opToken = n;
@@ -2266,7 +2259,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 val = parseExpression();
                 pdic.bounds.visit(val);
                 if (val == null) {
-                    log().error("X121", "identifier definition", "expected value assignment", peek());
+                    log().jerror("X121", "identifier definition", peek(), "expected value assignment");
                 }
             } else if (n.isImage("(")) {
                 //this is a constructor call!
@@ -2280,7 +2273,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 pdic.bounds.visit(val);
             } else {
                 if (pdic.varVal != null) {
-                    err.error("X121", "identifier definition", "expected value assignment", n);
+                    err.jerror("X121", "identifier definition", n, "expected value assignment");
                 }
                 pushBack(n);
             }
@@ -2301,11 +2294,11 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 if (t2.isImage(")")) {
                     pdic.bounds.visit(next());
                 } else {
-                    err.error("X122", "identifier definition", "expected ')'", t2);
+                    err.jerror("X122", "identifier definition", t2, "expected ')'");
                 }
             }
             if (setter != null && pdic.tt.inits.length == 0) {
-                err.error("S052", null, "initialized array is missing initializer", pdic.bounds.getStartToken());
+                err.jerror("S052", null, pdic.bounds.getStartToken(), "initialized array is missing initializer");
             }
             val = new HNArrayNew(pdic.tt.typeToken, pdic.tt.inits, setter, pdic.bounds.getStartToken(), pdic.bounds.getEndToken());
             //create init!!
@@ -2333,7 +2326,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
         if (vname instanceof HNDeclareTokenIdentifier) {
             JToken ttt = ((HNDeclareTokenIdentifier) vname).getToken();
             if (ttt.image.indexOf('.') >= 0) {
-                err.error("X120", "identifier definition", "invalid identifier name ", ttt);
+                err.jerror("X120", "identifier definition", ttt, "invalid identifier name ");
             }
         } else {
             throw new JFixMeLaterException();
@@ -2341,8 +2334,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
     }
 
     /**
-     * String a;
-     * a;
+     * String a; a;
      *
      * @param options
      * @return
@@ -2375,11 +2367,11 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             if (HNAnnotationList.size(annotations) == 0) {
                 return null;
             }
-            log().error("X123", "class declaration", "expected class name", peek());
+            log().jerror("X123", "class declaration", peek(), "expected class name");
             return null;
         }
         endToken = name[name.length - 1];
-        String[] nameAndNamespace = HUtils.splitNameAndPackage(name);
+        String[] nameAndNamespace = HSharedUtils.splitNameAndPackage(name);
         JListWithSeparators<HNode> li = parseParsList("extends", "super argument declaration", () -> parseExpression());
         HNExtends dec = new HNExtends(nameAndNamespace[1], startNode, li == null ? endToken : li.getEndToken());
         dec.setPackageName(nameAndNamespace[0]);
@@ -2394,13 +2386,13 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             if (peek().id() == HTokenId.LEFT_CURLY_BRACKET) {
                 HNode b = parseBraces(asExpr, HNBlock.BlocType.LOCAL_BLOC);
                 if (b == null) {
-                    log().error("X000", "lambda", "expected lambda body", peek());
+                    log().jerror("X000", "lambda", peek(), "expected lambda body");
                 }
                 return new LambdaBody(n, b, false);
             } else {
                 HNode b = parseExpression();
                 if (b == null) {
-                    log().error("X000", "lambda", "expected expression", peek());
+                    log().jerror("X000", "lambda", peek(), "expected expression");
                 }
                 return new LambdaBody(n, b, true);
             }
@@ -2438,11 +2430,11 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         //we did'nt read the type, actually this is the name.
                         //type is supposed "void" or none (for constructors)
                         if (type == null) {
-                            log().error("X124", "function/method declaration", "expected type", peek());
+                            log().jerror("X124", "function/method declaration", peek(), "expected type");
                             //type = createSpecialTypeToken("void");
                         }
                         if (type != null && (type.getTypename().isArray() || type.getTypenameOrVar().name().indexOf('.') >= 0)) {
-                            log().error("X125", "function/method declaration", "expected name", peek());
+                            log().jerror("X125", "function/method declaration", peek(), "expected name");
                         } else {
                             if (type != null) {
                                 JTokenUtils.fillToken(
@@ -2474,7 +2466,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                             name = next();
                         }
                         if (name == null) {
-                            log().error("X125", "function/method declaration", "expected name", peek());
+                            log().jerror("X125", "function/method declaration", peek(), "expected name");
                         }
                         jTypeNameOrVariables = parseJTypeNameOrVariables();
                     }
@@ -2488,19 +2480,18 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             }
         }
         if (jTypeNameOrVariables == null) {
-            //log().error("X052", "function/method declaration: invalid generic arguments", peek());
+            //log().jerror("X052", "function/method declaration: invalid generic arguments", peek());
             jTypeNameOrVariables = new DefaultJListWithSeparators<>(new ArrayList<>(), null, new ArrayList<>(), null);
         }
-//        String[] nameAndNamespace = HUtils.splitNameAndNamespace(name);
+//        String[] nameAndNamespace = HSharedUtils.splitNameAndNamespace(name);
         annotations = HNAnnotationList.publify(annotations);
-
 
         HDeclarationOptions argOptions = constr ? HParserOptions.DECLARE_CONSTR_ARG : HParserOptions.DECLARE_FUNCTION_ARG;
         JListWithSeparators<HNDeclareIdentifier> li = parseParsList("function/method declaration", "argument declaration",
                 () -> parseDeclareArgument(argOptions, log())
         );
         if (li == null) {
-            log().error("X126", "function/method declaration", "expected parameters", peek());
+            log().jerror("X126", "function/method declaration", peek(), "expected parameters");
         }
         HNDeclareInvokable f = new HNDeclareInvokable(name, startToken, tokenizer().lastToken());
         f.setNameToken(name);
@@ -2553,7 +2544,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             f.setBody(parseBraces(false, HNBlock.BlocType.METHOD_BODY));
             f.setEndToken(f.getBody().getEndToken());
         } else {
-            log().error("X128", "function/method declaration", "expected '{' or '->'", peek());
+            log().jerror("X128", "function/method declaration", peek(), "expected '{' or '->'");
             HNode e = parseExpression();
             if (e != null) {
                 f.setBody(e);
@@ -2586,10 +2577,10 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             pushDeclarationContext(classDef);
             JToken[] name = parseNameWithPackageTokens();
             if (name == null) {
-                log().error("X129", "class declaration", "expected class name", peek());
+                log().jerror("X129", "class declaration", peek(), "expected class name");
                 name = new JToken[]{JTokenUtils.createTokenIdPointer(startToken, "<anonymous>")};
             }
-            String[] nameAndNamespace = HUtils.splitNameAndPackage(name);
+            String[] nameAndNamespace = HSharedUtils.splitNameAndPackage(name);
 //            HNDeclareType f = new HNDeclareType(nameAndNamespace[1]);
 //            f.setNamespace(nameAndNamespace[0]);
             classDef.setNameToken(name[name.length - 1]);
@@ -2632,7 +2623,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     endToken = (classDef.getBody().getEndToken());
                 }
             } else {
-                log().error("X130", "class declaration", "expected '{' or '->'", peek());
+                log().jerror("X130", "class declaration", peek(), "expected '{' or '->'");
             }
             classDef.setEndToken(endToken);
             return classDef;
@@ -2672,7 +2663,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
         }
         JToken p = peek();
         if (!p.isEOF()) {
-            log().error("X133", null, "unable to parse till the end of the document.", p);
+            log().jerror("X133", null, p, "unable to parse till the end of the document.");
         }
         HNBlock.CompilationUnitBlock block = new HNBlock.CompilationUnitBlock(
                 statements.getItems().toArray(new HNode[0]),
@@ -2697,7 +2688,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             while (true) {
                 HNode t = parseExpression();
                 if (t == null) {
-                    log().error("X134", "array", "invalid expression", peek());
+                    log().jerror("X134", "array", peek(), "invalid expression");
                     skipUntil(x -> x.isImage("]"));
                     break;
                 }
@@ -2726,9 +2717,9 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
         for (int i = 0; i < mat.length; i++) {
             List<HNode> row = rows.get(i);
             if (row.size() != maxColumns) {
-                log().error("X135", "matrix", "columns mismatch : "
-                                + "expected " + maxColumns + " but found " + row.size() + " at row " + (i + 1),
-                        startToken);
+                log().jerror("X135", "matrix",
+                        startToken, "columns mismatch : "
+                        + "expected " + maxColumns + " but found " + row.size() + " at row " + (i + 1));
             }
             mat[i] = row.toArray(new HNode[0]);
         }
@@ -2746,15 +2737,15 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             endToken = (startToken);
             condExpr = parseExpression(HParserOptions.noBracesExpressionOptions);
             if (condExpr == null) {
-                log().error("X136", "if statement", "expected condition", peek());
+                log().jerror("X136", "if statement", peek(), "expected condition");
                 i.setEndToken(endToken);
                 return i;
             }
             HNode doExpr = parseExpressionOrStatement(asExpr, false);
             if (doExpr == null) {
-                log().error("X137", "if statement", "expected then statement/expression", peek());
+                log().jerror("X137", "if statement", peek(), "expected then statement/expression");
                 if (peek().id() == HTokenId.KEYWORD_ELSE) {
-                    //doExpr=HUtils.createUnknownBlocNode();
+                    //doExpr=HSharedUtils.createUnknownBlocNode();
                 } else {
                     i.setEndToken(endToken);
                     return i;
@@ -2772,15 +2763,15 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     endToken = (next());
                     condExpr = parseParenthesis("else if condition");
                     if (condExpr == null) {
-                        log().error("X138", "if statement", "expected else condition", peek());
+                        log().jerror("X138", "if statement", peek(), "expected else condition");
                         i.setEndToken(endToken);
                         return i;
                     }
                     endToken = (condExpr.getEndToken());
                     doExpr = parseExpressionOrStatement(asExpr, false);
                     if (doExpr == null) {
-                        log().error("X139", "if statement", "expected then statement/expression", peek());
-                        //doExpr=HUtils.createUnknownBlocNode();
+                        log().jerror("X139", "if statement", peek(), "expected then statement/expression");
+                        //doExpr=HSharedUtils.createUnknownBlocNode();
                     } else {
                         endToken = (doExpr.getEndToken());
                     }
@@ -2790,7 +2781,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     endToken = (next());
                     doExpr = parseExpressionOrStatement(asExpr, false);
                     if (doExpr == null) {
-                        log().error("X140", "if statement", "expected else statement/expression", peek());
+                        log().jerror("X140", "if statement", peek(), "expected else statement/expression");
                     } else {
                         endToken = (doExpr.getEndToken());
                     }
@@ -2817,7 +2808,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 pushBack(p);
                 cond = parseParenthesis("while condition");
                 if (cond == null) {
-                    log().error("X141", "while statement", "expected while condition", peek());
+                    log().jerror("X141", "while statement", peek(), "expected while condition");
                     while (true) {
                         JToken peek = next();
                         if (peek.id() != HTokenId.RIGHT_PARENTHESIS || peek.isEOF()) {
@@ -2831,10 +2822,10 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     endToken = cond.getEndToken();
                 }
             } else {
-                log().error("X142", "while statement", "expected '(' for while condition", peek());
+                log().jerror("X142", "while statement", peek(), "expected '(' for while condition");
                 cond = parseExpression();
                 if (cond == null) {
-                    log().error("X143", "while statement", "expected while condition", peek());
+                    log().jerror("X143", "while statement", peek(), "expected while condition");
                 } else {
                     endToken = cond.getEndToken();
                 }
@@ -2848,7 +2839,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 block = parseExpressionOrStatement(asExpr, false);
                 if (block == null) {
 //                    block = new HNBlock();
-                    log().error("X144", "while statement", "expected while block", peek());
+                    log().jerror("X144", "while statement", peek(), "expected while block");
                 } else {
                     endToken = block.getEndToken();
                 }
@@ -2888,7 +2879,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //            leftNode = bc.getLeft();
 //            rightNode = bc.getRight();
 //        } else {
-//            log().error("X145", "for statement", "expected ':' or '=' assignment var initializer", c.startToken());
+//            log().jerror("X145", "for statement", "expected ':' or '=' assignment var initializer", c.startToken());
 //        }
 //        if (assignOperator == null) {
 //            assignOperator = HNodeUtils.createToken("=");
@@ -2907,7 +2898,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 ////                HNode[] items = ((HNPars) leftNode).getItems();
 ////                boolean ok2 = items.length > 0;
 ////                if (!ok2) {
-////                    log().error("X146", "for statement: expected '" + assignOperator.image + "' assignment var initializer but found empty tuple", c.startToken());
+////                    log().jerror("X146", "for statement: expected '" + assignOperator.image + "' assignment var initializer but found empty tuple", c.startToken());
 ////                }
 ////                List<HNDeclareIdentifier> identifiers = new ArrayList<>();
 ////                for (int i = 0; i < items.length; i++) {
@@ -2917,7 +2908,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 ////                        HNDeclareIdentifier did = new HNDeclareIdentifier(new JToken[]{hid.startToken().copy()}, null, (HNTypeToken) null, assignOperator, item.startToken(), item.endToken());
 ////                        identifiers.add(did);
 ////                    } else {
-////                        log().error("X147", "for statement: expected '" + assignOperator.image + "' assignment var initializer for expression tuple", c.startToken());
+////                        log().jerror("X147", "for statement: expected '" + assignOperator.image + "' assignment var initializer for expression tuple", c.startToken());
 ////                        ok2 = false;
 ////                    }
 ////                }
@@ -2932,7 +2923,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 ////                    return tt;
 ////                }
 //            } else {
-//                log().error("X148", "for statement", "expected '" + assignOperator.image + "' assignment var initializer", c.startToken());
+//                log().jerror("X148", "for statement", "expected '" + assignOperator.image + "' assignment var initializer", c.startToken());
 //            }
 //        }
 //        return null;
@@ -2949,7 +2940,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 //okkay
             } else {
                 pushBack(p);
-                log().error("X149", "for statement", "expected '(' after 'for'", peek());
+                log().jerror("X149", "for statement", peek(), "expected '(' after 'for'");
             }
             HNFor hf = new HNFor(startNode);
             int state = 1;
@@ -2961,7 +2952,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                             case ",": {
                                 endToken = next();
                                 if (wasSep) {
-                                    log().error("X145", "for statement", "unexpected ','", peek());
+                                    log().jerror("X145", "for statement", peek(), "unexpected ','");
                                 }
                                 wasSep = true;
                                 break;
@@ -2978,13 +2969,13 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                 break;
                             }
                             case ""/*JToken.TT_EOF*/: {
-                                log().error("X146", "for statement", "expected ')'", peek());
+                                log().jerror("X146", "for statement", peek(), "expected ')'");
                                 state = -1;
                                 break;
                             }
                             default: {
                                 if (!wasSep) {
-                                    log().error("X147", "for statement", "expected ','", peek());
+                                    log().jerror("X147", "for statement", peek(), "expected ','");
                                 }
                                 wasSep = false;
                                 JMessageList err2 = errorList();
@@ -2992,7 +2983,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                 log().addAll(err2);
                                 if (e == null) {
                                     wasSep = true;
-                                    log().error("X148", "for statement", "expected expression", peek());
+                                    log().jerror("X148", "for statement", peek(), "expected expression");
                                     skip();
                                 } else {
                                     endToken = e.getEndToken();
@@ -3017,19 +3008,19 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                 break;
                             }
                             case ""/*JToken.TT_EOF*/: {
-                                log().error("X146", "for statement", "expected ')'", peek());
+                                log().jerror("X146", "for statement", peek(), "expected ')'");
                                 state = -1;
                                 break;
                             }
                             default: {
                                 if (!wasSep) {
-                                    log().error("X147", "for statement", "expected ','", peek());
+                                    log().jerror("X147", "for statement", peek(), "expected ','");
                                 }
                                 wasSep = false;
                                 HNode e = parseExpression();
                                 if (e == null) {
                                     wasSep = true;
-                                    log().error("X149", "for statement", "expected expression", peek());
+                                    log().jerror("X149", "for statement", peek(), "expected expression");
                                     skip();
                                 } else {
                                     endToken = e.getEndToken();
@@ -3045,7 +3036,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                             case ",": {
                                 endToken = next();
                                 if (wasSep) {
-                                    log().error("X145", "for statement", "unexpected ','", peek());
+                                    log().jerror("X145", "for statement", peek(), "unexpected ','");
                                 }
                                 wasSep = true;
                                 break;
@@ -3057,19 +3048,19 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                             }
                             case ";":
                             case ""/*JToken.TT_EOF*/: {
-                                log().error("X146", "for statement", "expected ')'", peek());
+                                log().jerror("X146", "for statement", peek(), "expected ')'");
                                 state = -1;
                                 break;
                             }
                             default: {
                                 if (!wasSep) {
-                                    log().error("X147", "for statement", "expected ','", peek());
+                                    log().jerror("X147", "for statement", peek(), "expected ','");
                                 }
                                 wasSep = false;
                                 HNode e = parseExpression();
                                 if (e == null) {
                                     wasSep = true;
-                                    log().error("X150", "for statement", "expected expression", peek());
+                                    log().jerror("X150", "for statement", peek(), "expected expression");
                                     skip();
                                 } else {
                                     endToken = e.getEndToken();
@@ -3090,7 +3081,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             } else {
                 HNode ok = parseStatement(log());
                 if (ok == null) {
-                    log().error("X152", "for statement", "expected for statement body", peek());
+                    log().jerror("X152", "for statement", peek(), "expected for statement body");
                 } else {
                     endToken = (ok.getEndToken());
                 }
@@ -3106,12 +3097,12 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 }
                 if (o.image.equals("=")) {
                     if (countIterable > 0) {
-                        log().error("X153", "for statement", "cannot mix simple and iterable for statement constructs", c.getStartToken());
+                        log().jerror("X153", "for statement", c.getStartToken(), "cannot mix simple and iterable for statement constructs");
                     }
                     countNonIterable++;
                 } else {
                     if (countNonIterable > 0) {
-                        log().error("X153", "for statement", "cannot mix simple and iterable for statement constructs", c.getStartToken());
+                        log().jerror("X153", "for statement", c.getStartToken(), "cannot mix simple and iterable for statement constructs");
                     }
                     countIterable++;
                 }
@@ -3148,7 +3139,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             } else if (n.id() == HTokenId.SEMICOLON) {
                 endToken = (next());
             } else {
-                log().error("X154", "package definition", "expected ';' or '{'", n);
+                log().jerror("X154", "package definition", n, "expected ';' or '{'");
             }
             pp.setEndToken(endToken);
             return pp;
@@ -3165,15 +3156,15 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             try {
                 ival = (int) HNumberEvaluator.H_NUMBER.eval(p.id(), p.image, p.sval, "int");
                 if (ival == 0) {
-                    log().error("X155", stmtType + " statement", stmtType + " label should be positive number (excluding zero which you can apply without any label)", p);
+                    log().jerror("X155", stmtType + " statement", p, stmtType + " label should be positive number (excluding zero which you can apply without any label)");
                     return p;
                 } else if (ival < 0) {
-                    log().error("X156", stmtType + " statement", stmtType + " label should be positive number", p);
+                    log().jerror("X156", stmtType + " statement", p, stmtType + " label should be positive number");
                     return p;
                 }
                 return p;
             } catch (Exception ex) {
-                log().error("X157", stmtType + " statement", "invalid " + stmtType + " label : " + p.image, p);
+                log().jerror("X157", stmtType + " statement", p, "invalid " + stmtType + " label : " + p.image);
                 return p;
             }
         } else {
@@ -3209,7 +3200,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             } else {
                 HNode e = parseExpression();
                 if (e == null) {
-                    log().error("X158", "return statement", "expected expression", peek());
+                    log().jerror("X158", "return statement", peek(), "expected expression");
                 }
                 return new HNReturn(e, startToken, e == null ? startToken : e.getEndToken());
             }
@@ -3225,7 +3216,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             endToken = n = peek();
             if (n.id() == HTokenId.KEYWORD_PACKAGE) {
                 if (!metaParsingMode) {
-                    log().error("X159", "import package statement", "import package is not allowed outside package declaration", n);
+                    log().jerror("X159", "import package statement", n, "import package is not allowed outside package declaration");
                 }
                 endToken = next();
                 HNode id = parseExpression();
@@ -3259,7 +3250,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                             break;
                         }
                         default: {
-                            log().error("X160", "import package statement", "expected compile,build,test,api,runtime", p);
+                            log().jerror("X160", "import package statement", p, "expected compile,build,test,api,runtime");
                             pushBack(p);
                             node.setEndToken(endToken);
                             return node;
@@ -3301,7 +3292,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     switch (n.id()) {
                         case HTokenId.DOT: {
                             if (sb.length() == 0 || sb.charAt(sb.length() - 1) == '.' || sb.charAt(sb.length() - 1) == '*') {
-                                log().error("X161", "import package statement", "invalid package to import " + sb, importStartToken);
+                                log().jerror("X161", "import package statement", importStartToken, "invalid package to import " + sb);
                             } else {
                                 sb.append(".");
                             }
@@ -3311,7 +3302,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         case HTokenId.SEQ_DOT_ASTERISK:
                         case HTokenId.DOT_ASTERISK2: {
                             if (sb.length() == 0 || sb.charAt(sb.length() - 1) == '.' || sb.charAt(sb.length() - 1) == '*') {
-                                log().error("X161", "import package statement", "invalid package to import " + sb, importStartToken);
+                                log().jerror("X161", "import package statement", importStartToken, "invalid package to import " + sb);
                             } else {
                                 sb.append(n.image);
                             }
@@ -3320,7 +3311,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         }
                         case HTokenId.IDENTIFIER: {
                             if (sb.length() > 0 && sb.charAt(sb.length() - 1) != '.') {
-                                log().error("X161", "import package statement", "invalid package to import " + sb, importStartToken);
+                                log().jerror("X161", "import package statement", importStartToken, "invalid package to import " + sb);
                             } else {
                                 sb.append(n.sval);
                             }
@@ -3335,7 +3326,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                 break;
                             } else {
                                 endToken = n;
-                                log().error("X161", "import package statement", "invalid package to import " + sb, importStartToken);
+                                log().jerror("X161", "import package statement", importStartToken, "invalid package to import " + sb);
                             }
                             break;
                         }
@@ -3347,13 +3338,13 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                 break;
                             } else {
                                 endToken = n;
-                                log().error("X161", "import package statement", "invalid package to import " + sb, importStartToken);
+                                log().jerror("X161", "import package statement", importStartToken, "invalid package to import " + sb);
                             }
                             break;
                         }
                         default: {
                             if (n.isKeyword()) {
-                                log().error("X161", "import package statement", "invalid package to import " + sb, importStartToken);
+                                log().jerror("X161", "import package statement", importStartToken, "invalid package to import " + sb);
                                 sb.append(n.sval);
                                 endToken = n.copy();
                             } else {
@@ -3418,7 +3409,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     endToken = t;
                 } else if (t.isImage(".")) {
                     if (lastDot != null) {
-                        log().error("X162", "package statement", "unexpected '.'", t);
+                        log().jerror("X162", "package statement", t, "unexpected '.'");
                     } else {
                         if (group != null) {
                             group.addToken(t);
@@ -3437,7 +3428,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     }
                     endToken = t;
                 } else if (t.isImage("#")) {
-                    log().error("X162", "package statement", "unexpected Token", t);
+                    log().jerror("X162", "package statement", t, "unexpected Token");
                     sharp = t;
                     state = STATE_VERSION;
                     if (startToken == null) {
@@ -3557,7 +3548,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //            if (psc.functionalSwitch == null) {
 //                psc.functionalSwitch = false;
 //            } else if (psc.functionalSwitch) {
-//                log().error("X172", "switch statement", "expected '->' after " + condName, p);
+//                log().jerror("X172", "switch statement", "expected '->' after " + condName, p);
 //            }
             if (psc.op == null) {
                 psc.op = psc.endToken;
@@ -3576,27 +3567,27 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //            if (psc.functionalSwitch == null) {
 //                psc.functionalSwitch = true;
 //            } else if (!psc.functionalSwitch) {
-//                log().error("X172", "switch statement", "expected ':' after " + condName, p);
+//                log().jerror("X172", "switch statement", "expected ':' after " + condName, p);
 //            }
         } else {
-            log().error("X172", "switch statement", "expected ':' after " + condName, p);
+            log().jerror("X172", "switch statement", p, "expected ':' after " + condName);
 //            if (psc.functionalSwitch == null) {
-//                log().error("X172", "switch statement", "expected ':' after " + condName, p);
+//                log().jerror("X172", "switch statement", "expected ':' after " + condName, p);
 //            } else if (psc.functionalSwitch) {
-//                log().error("X172", "switch statement", "expected ':' after " + condName, p);
+//                log().jerror("X172", "switch statement", "expected ':' after " + condName, p);
 //            } else {
-//                log().error("X172", "switch statement", "expected '->' after " + condName, p);
+//                log().jerror("X172", "switch statement", "expected '->' after " + condName, p);
 //            }
 //            if (psc.functionalSwitch != null && psc.functionalSwitch) {
 //                stmt = parseExpression();
 //                if (stmt == null) {
-//                    log().error("X173", "switch statement", "expected expression", peek());
+//                    log().jerror("X173", "switch statement", "expected expression", peek());
 //                } else {
 //                    JToken comma = peek();
 //                    if (comma.id() == HTokenId.SEMICOLON) {
 //                        psc.endToken = next();
 //                    } else {
-//                        log().error("X173", "switch statement", "expected ';'", peek());
+//                        log().jerror("X173", "switch statement", "expected ';'", peek());
 //                    }
 //                }
 //            } else {
@@ -3605,7 +3596,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
         }
         stmt = parseExpressionOrStatement(psc.functionalSwitch, true);
         if (stmt == null) {
-            log().error("X173", "switch statement", "expected switch " + condName + " " + (psc.functionalSwitch ? "expression" : "statement"), peek());
+            log().jerror("X173", "switch statement", peek(), "expected switch " + condName + " " + (psc.functionalSwitch ? "expression" : "statement"));
         } else {
             psc.endToken = stmt.getEndToken();
         }
@@ -3620,7 +3611,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     if (peek().id() == HTokenId.SEMICOLON) {
                         next();
                     } else {
-                        log().error("X000", null, "expected ';'", peek());
+                        log().jerror("X000", null, peek(), "expected ';'");
                     }
                 }
                 return e;
@@ -3717,7 +3708,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         seps.add(tbb.visit(next()));
                         HNPars v = new HNPars(
                                 new HNode[]{
-                                        id
+                                    id
                                 }, tbb.getStartToken(), seps.toArray(new JToken[0]), tbb.getEndToken()
                         );
                         if (endValidator != null && endValidator.test(v)) {
@@ -3752,7 +3743,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                             exceptionTypes.add(tn);
                         } else {
                             hasErr = true;
-                            err.error("X000", "try statement", "expected catch exception type", peek());
+                            err.jerror("X000", "try statement", peek(), "expected catch exception type");
                             break;
                         }
                     } else {
@@ -3767,7 +3758,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     separators.add(next());
                 } else {
                     hasErr = true;
-                    err.error("X000", "try statement", "expected ')'", peek());
+                    err.jerror("X000", "try statement", peek(), "expected ')'");
                 }
                 if (hasErr && !quiteSureThisIsCatchDecl) {
                     snapshot.rollback();
@@ -3828,7 +3819,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 }
                 HNode v = tbb.visit(parseExpression());
                 if (v == null) {
-                    err.error("X000", "map", "expected value", peek());
+                    err.jerror("X000", "map", peek(), "expected value");
                 }
                 entries.add(new HNMap.HNMapEntry(k, op, v, k.getStartToken(), tbb.getEndToken()));
                 boolean hasNextEntry = true;
@@ -3846,7 +3837,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                 if (peek().id() == HTokenId.RIGHT_CURLY_BRACKET || peek().id() == HTokenId.EOF) {
                                     //this is a trailing comma, ignore it!
                                 } else {
-                                    err.error("X000", "map", "expected entry key", peek());
+                                    err.jerror("X000", "map", peek(), "expected entry key");
                                 }
                                 hasNextEntry = false;
                             } else {
@@ -3854,11 +3845,11 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                                     //yes this is a map!
                                     op = tbb.visit(next());
                                 } else {
-                                    err.error("X000", "map", "expected ':'", peek());
+                                    err.jerror("X000", "map", peek(), "expected ':'");
                                 }
                                 v = tbb.visit(parseExpression());
                                 if (v == null) {
-                                    err.error("X000", "map", "expected value", peek());
+                                    err.jerror("X000", "map", peek(), "expected value");
                                 }
                                 entries.add(new HNMap.HNMapEntry(k, op, v, k.getStartToken(), tbb.getEndToken()));
                             }
@@ -3886,7 +3877,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             psc.block = parseExpressionOrStatement(asExpr, false);
             psc.bounds.visit(psc.block);
             if (psc.block == null) {
-                log().error("X000", "try statement", "expected try block", peek());
+                log().jerror("X000", "try statement", peek(), "expected try block");
             }
             while (true) {
                 JToken p = peek();
@@ -3904,7 +3895,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     HNode body = parseExpressionOrStatement(asExpr, false);
                     cbounds.visit(body);
                     if (body == null) {
-                        log().error("X000", "try statement", "expected catch block", peek());
+                        log().jerror("X000", "try statement", peek(), "expected catch block");
                     }
                     if (catchDecl == null) {
                         catchDecl = new HNTryCatch.CatchBranch(new HNTypeToken[0], null, body, asExpr, cbounds.getStartToken(), cbounds.getEndToken(), new JToken[0]);
@@ -3920,7 +3911,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     psc.finallyBlock = parseExpressionOrStatement(asExpr, false);
                     psc.bounds.visit(psc.finallyBlock);
                     if (psc.finallyBlock == null) {
-                        log().error("X000", "try statement", "expected finally block", peek());
+                        log().jerror("X000", "try statement", peek(), "expected finally block");
                     }
                     break;
                 } else {
@@ -3949,12 +3940,12 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             skip();
             JToken p = peek();
 //            if (!p.isImage("(")) {
-//                log().error("X163", "switch statement", "expected '('", peek());
+//                log().jerror("X163", "switch statement", "expected '('", peek());
 //            }
             HNSwitch jNodeHSwitch = new HNSwitch(startToken);
             HNode expr = parseExpression(HParserOptions.noBracesExpressionOptions);
             if (expr == null) {
-                log().error("X164", "switch statement", "expected switch discriminator", peek());
+                log().jerror("X164", "switch statement", peek(), "expected switch discriminator");
                 JToken f = p.copy();
                 f.setError(1, "expected switch discriminator");
                 f.sval = "false";
@@ -3968,7 +3959,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             jNodeHSwitch.setExpr(expr);
             p = peek();
             if (!p.isImage("{")) {
-                log().error("X167", "switch statement", "expected { after switch keyword", peek());
+                log().jerror("X167", "switch statement", peek(), "expected { after switch keyword");
             } else {
                 psc.endToken = next();
             }
@@ -3977,20 +3968,20 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             while (true) {
                 p = peek();
                 if (p.isEOF()) {
-                    log().error("X168", "switch statement", "expected closing '}'", peek());
+                    log().jerror("X168", "switch statement", peek(), "expected closing '}'");
                     break;
                 } else if (p.id() == HTokenId.KEYWORD_CASE) {
                     if (psc.defaultVisited) {
-                        log().error("X169", "switch statement", "unexpected switch case after default", peek());
+                        log().jerror("X169", "switch statement", peek(), "unexpected switch case after default");
                     }
                     if (psc.isVisited || psc.ifVisited) {
-                        log().error("X170", "switch statement", "cannot  merge case with if or is constructs", peek());
+                        log().jerror("X170", "switch statement", peek(), "cannot  merge case with if or is constructs");
                     }
                     psc.caseVisited = true;
                     psc.endToken = next();
                     List<HNode> matches = splitByBinaryOperator(parseExpressionSimple(), "|");
                     if (matches.size() == 0) {
-                        log().error("X171", "switch statement", "expected case expression", peek());
+                        log().jerror("X171", "switch statement", peek(), "expected case expression");
                     } else {
                         psc.endToken = matches.get(matches.size() - 1).getEndToken();
                     }
@@ -3998,26 +3989,26 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                     jNodeHSwitch.add(new HNSwitch.SwitchCase(matches, psc.op, stmt, p, psc.endToken));
                 } else if (p.id() == HTokenId.KEYWORD_IF) {
                     if (psc.defaultVisited) {
-                        log().error("X174", "switch statement", "unexpected switch case after default", peek());
+                        log().jerror("X174", "switch statement", peek(), "unexpected switch case after default");
                     }
                     if (psc.isVisited || psc.caseVisited) {
-                        log().error("X175", "switch statement", "cannot  merge case with if or is constructs", peek());
+                        log().jerror("X175", "switch statement", peek(), "cannot  merge case with if or is constructs");
                     }
                     psc.ifVisited = true;
                     JToken ss = p.copy();
                     psc.endToken = next();
                     HNode m = parseExpression();
                     if (m == null) {
-                        log().error("X176", "switch statement", "expected case expression", peek());
+                        log().jerror("X176", "switch statement", peek(), "expected case expression");
                     }
                     HNode stmt = _parseSwitch_parseCaseBody(psc, "case");
                     jNodeHSwitch.add(new HNSwitch.SwitchIf(m, psc.op, stmt, ss, psc.endToken));
                 } else if (p.isImage("is")) {
                     if (psc.defaultVisited) {
-                        log().error("X179", "switch statement", "unexpected switch case after default", peek());
+                        log().jerror("X179", "switch statement", peek(), "unexpected switch case after default");
                     }
                     if (psc.caseVisited || psc.ifVisited) {
-                        log().error("X180", "switch statement", "cannot  merge case with if or is constructs", peek());
+                        log().jerror("X180", "switch statement", peek(), "cannot  merge case with if or is constructs");
                     }
                     psc.isVisited = true;
                     JToken ss = p.copy();
@@ -4032,12 +4023,12 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         } else {
                             HNTypeToken t = parseTypeName();
                             if (t == null) {
-                                log().error("X181", "switch statement", "expected type name", peek());
+                                log().jerror("X181", "switch statement", peek(), "expected type name");
                                 break;
                             } else {
                                 psc.endToken = t.getEndToken();
                                 if (t.getTypename().varsCount() > 0) {
-                                    log().error("X182", "switch statement", "cannot switch on generic types", peek());
+                                    log().jerror("X182", "switch statement", peek(), "cannot switch on generic types");
 //                                    t = t.rawType();
                                 }
                                 typeNames.add(t);
@@ -4045,7 +4036,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         }
                         vn = peek();
                         if (vn.isEOF()) {
-                            log().error("X183", "switch statement", "expected type name", peek());
+                            log().jerror("X183", "switch statement", peek(), "expected type name");
                             break;
                         } else if (vn.isOperator("|")) {
                             psc.endToken = next();
@@ -4054,7 +4045,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         }
                     }
                     if (typeNames.isEmpty()) {
-                        log().error("X184", "switch statement", "expected type name", peek());
+                        log().jerror("X184", "switch statement", peek(), "expected type name");
                     }
                     JToken vn = peek();
                     JToken varName = null;
@@ -4068,7 +4059,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                 } else if (p.id() == HTokenId.KEYWORD_DEFAULT) {
                     next();
                     if (psc.defaultVisited) {
-                        log().error("X187", "switch statement", "default already matched", peek());
+                        log().jerror("X187", "switch statement", peek(), "default already matched");
                     }
                     psc.defaultVisited = true;
                     HNode stmt = _parseSwitch_parseCaseBody(psc, "default");
@@ -4078,17 +4069,17 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         psc.endToken = next();
                         break;
                     } else {
-                        log().error("X189", "switch statement", "expect switch '}'", peek());
+                        log().jerror("X189", "switch statement", peek(), "expect switch '}'");
                         break;
                     }
                 } else if (p.id() == HTokenId.RIGHT_CURLY_BRACKET || p.id() == HTokenIdOffsets.OFFSET_CLOSE_BRACE2) {
                     psc.endToken = next();
                     if (jNodeHSwitch.getCases().isEmpty()) {
-                        log().error("X191", "switch statement", "expect case expression", peek());
+                        log().jerror("X191", "switch statement", peek(), "expect case expression");
                     }
                     break;
                 } else {
-                    log().error("X192", "switch statement", "expect case or default keywords", peek());
+                    log().jerror("X192", "switch statement", peek(), "expect case or default keywords");
                     skip();
                 }
             }
@@ -4111,6 +4102,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
     }
 
     private static class ParseDeclareIdentifierContext {
+
         HNDeclareToken varIds = null;
         HNAnnotationList annotations;
         JTypeNameAndInit tt;
@@ -4120,6 +4112,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
     }
 
     public static class LambdaBody {
+
         public JToken op;
         public HNode body;
         public boolean expr;
@@ -4170,6 +4163,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
     }
 
     class ParseTryCatchContext {
+
         public HNode finallyBlock;
         public List<HNTryCatch.CatchBranch> catches = new ArrayList<>();
         public List<JToken> separators = new ArrayList<>();

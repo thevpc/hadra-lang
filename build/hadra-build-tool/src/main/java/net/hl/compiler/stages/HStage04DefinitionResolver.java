@@ -10,7 +10,7 @@ import net.hl.compiler.index.HIndexedConstructor;
 import net.hl.compiler.index.HIndexedField;
 import net.hl.compiler.index.HIndexedMethod;
 import net.hl.compiler.utils.HNodeUtils;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.types.DefaultTypeName;
 import net.thevpc.jeep.impl.functions.JNameSignature;
@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.hl.compiler.HL;
+import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.HTarget;
 
 public class HStage04DefinitionResolver extends HStageType2 {
@@ -35,7 +37,12 @@ public class HStage04DefinitionResolver extends HStageType2 {
     public HTarget[] getTargets() {
         return new HTarget[]{HTarget.RESOLVED_AST};
     }
-    
+
+    @Override
+    public boolean isEnabled(HProject project, HL options) {
+        return options.containsAnyTargets(HTarget.RESOLVED_AST, HTarget.COMPILE, HTarget.RUN);
+    }
+
     public HStage04DefinitionResolver(boolean inPreprocessor) {
         this.inPreprocessor = inPreprocessor;
     }
@@ -330,7 +337,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
     private boolean onThis(HNThis node, HLJCompilerContext compilerContext) {
         JType thisType = compilerContext.getThisType(node);
         if (thisType == null) {
-            compilerContext.getLog().error("S---", null, "'this' cannot be referenced in this context", node.getStartToken());
+            compilerContext.getLog().jerror("S---", null, node.getStartToken(), "'this' cannot be referenced in this context");
             node.setElement(new HNElementExpr());
         } else {
             node.setElement(new HNElementExpr(thisType));
@@ -341,7 +348,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
     private boolean onSuper(HNSuper node, HLJCompilerContext compilerContext) {
         JType thisType = compilerContext.getThisType(node);
         if (thisType == null) {
-            compilerContext.getLog().error("S---", null, "'super' cannot be referenced in this context", node.getStartToken());
+            compilerContext.getLog().jerror("S---", null, node.getStartToken(), "'super' cannot be referenced in this context");
             node.setElement(new HNElementExpr());
         } else {
             node.setElement(new HNElementExpr(thisType.getSuperType()));
@@ -383,7 +390,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
         try {
             type = compilerContext.lookupType(node.getTypename());
         } catch (Exception ex) {
-            compilerContext.getLog().error("S000", null, "invalid type :" + node.getTypename() + " : " + ex.toString(), node.getStartToken());
+            compilerContext.getLog().jerror("S000", null, node.getStartToken(), "invalid type :" + node.getTypename() + " : " + ex.toString());
             return true;
         }
         if (type == null) {
@@ -395,7 +402,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                 try {
                     type = compilerContext.lookupType(typename2);
                 } catch (Exception ex) {
-                    compilerContext.getLog().error("S000", null, "invalid type :" + node.getTypename() + " : " + ex.toString(), node.getStartToken());
+                    compilerContext.getLog().jerror("S000", null, node.getStartToken(), "invalid type :" + node.getTypename() + " : " + ex.toString());
                     return true;
                 }
             }
@@ -416,7 +423,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
             }
         }
         if (type == null) {
-            compilerContext.getLog().error("S000", null, "cannot resolve type symbol " + node.getTypename(), node.getStartToken());
+            compilerContext.getLog().jerror("S000", null, node.getStartToken(), "cannot resolve type symbol " + node.getTypename());
         }
         node.setTypeVal(type);
         node.setElement(new HNElementType(type, compilerContext.types()));
@@ -432,7 +439,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
         List<HNDeclareIdentifier> mainConstructorArgs = typeDec.getMainConstructorArgs();
         DefaultJType jType = (DefaultJType) compilerContext.getOrCreateType(typeDec);
         boolean indexable = !inPreprocessor && !typeDec.isInternalType();
-        String source = HUtils.getSourceName(node);
+        String source = HSharedUtils.getSourceName(node);
         if (indexable) {
             HIndexedClass ii = new HIndexedClass(jType, source);
             compilerContext.indexer().indexType(ii);
@@ -458,7 +465,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                     compilerContext.indexer().indexConstructor(new HIndexedConstructor(jConstructor, source));
                 }
             } catch (Exception ex) {
-                compilerContext.getLog().error("X000", null, ex.getMessage(), typeDec.getStartToken());
+                compilerContext.getLog().jerror("X000", null, typeDec.getStartToken(), ex.getMessage());
             }
             //wont declare fields as they are declared in onDeclareIdentifier!
 //            for (HNDeclareIdentifier identifier : mainConstructorArgs) {
@@ -482,11 +489,11 @@ public class HStage04DefinitionResolver extends HStageType2 {
                 HNBlock bl = (HNBlock) b;
                 //already processed
             } else {
-                compilerContext.getLog().error("X000", null, "expected class body", b.getStartToken());
+                compilerContext.getLog().jerror("X000", null, b.getStartToken(), "expected class body");
             }
         } else {
             if (!HNAnnotationList.isAbstract(typeDec.getAnnotations())) {
-                compilerContext.getLog().error("X000", null, "expected class body", node.getStartToken());
+                compilerContext.getLog().jerror("X000", null, node.getStartToken(), "expected class body");
             }
         }
         return true;
@@ -505,7 +512,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
     private boolean onDeclareIdentifier(HNDeclareIdentifier identifier, HLJCompilerContext compilerContext) {
         HNode idec = compilerContext.lookupEnclosingDeclarationOrMetaPackage(identifier);
         identifier.setElement(new HNElementStatement(compilerContext.types()));
-        String source = HUtils.getSourceName(identifier);
+        String source = HSharedUtils.getSourceName(identifier);
         if (idec instanceof HNDeclareType) {
             identifier.setSyntacticType(HNDeclareIdentifier.SyntacticType.FIELD);
             List<JField> fields = new ArrayList<>();
@@ -524,7 +531,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                             );
                     compilerContext.indexer().indexField(new HIndexedField(jField, source));
                 } catch (Exception ex) {
-                    compilerContext.getLog().error("X000", null, ex.toString(), identifierToken.getToken());
+                    compilerContext.getLog().jerror("X000", null, identifierToken.getToken(), ex.toString());
                 }
                 if (jField != null) {
                     fields.add(jField);
@@ -533,7 +540,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                         noTypeFields.add(jField);
                     }
                     if (indexable) {
-                        HIndexedField ii = new HIndexedField(jField, HUtils.getSourceName(identifier));
+                        HIndexedField ii = new HIndexedField(jField, HSharedUtils.getSourceName(identifier));
                         compilerContext.indexer().indexField(ii);
                     }
                     identifierToken.setElement(new HNElementField(jField));
@@ -564,7 +571,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                 ).filter(x -> x.getDeclaration() != identifierToken)
                         .toArray(HNElementLocalVar[]::new);
         if (t.length > 0) {
-            compilerContext.getLog().error("X000", null, "multiple local variable declaration : " + identifierToken.getName(), location);
+            compilerContext.getLog().jerror("X000", null, location, "multiple local variable declaration : " + identifierToken.getName());
         }
     }
 
@@ -591,7 +598,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                     );
                     method.setInvokable(jConstructor);
                     if (indexable) {
-                        HIndexedConstructor ii = new HIndexedConstructor(jConstructor, HUtils.getSourceName(method));
+                        HIndexedConstructor ii = new HIndexedConstructor(jConstructor, HSharedUtils.getSourceName(method));
                         compilerContext.indexer().indexConstructor(ii);
                     }
                 } else {
@@ -613,7 +620,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                             HNodeUtils.toAnnotations(method.getAnnotations()),
                             false
                     );
-                    jMethod.setSourceName(HUtils.getSourceName(method));
+                    jMethod.setSourceName(HSharedUtils.getSourceName(method));
                     method.setInvokable(jMethod);
                     if (returnType == null) {
                         List<JMethod> noTypeMethods = HStageUtils.getNoTypeMethods(compilerContext);
@@ -622,16 +629,16 @@ public class HStage04DefinitionResolver extends HStageType2 {
                         method.setEffectiveReturnType(returnType);
                     }
                     if (indexable) {
-                        HIndexedMethod ii = new HIndexedMethod(jMethod, HUtils.getSourceName(method));
+                        HIndexedMethod ii = new HIndexedMethod(jMethod, HSharedUtils.getSourceName(method));
                         compilerContext.indexer().indexMethod(ii);
                     }
                 }
             } catch (Exception ex) {
-                LOG.log(Level.INFO, "unexpected error : " + ex.toString(), ex);
-                compilerContext.getLog().error("X000", null, "unexpected error : " + ex.toString(), method.getStartToken());
+                LOG.log(Level.FINE, "unexpected error : " + ex.toString(), ex);
+                compilerContext.getLog().jerror("X000", null, method.getStartToken(), "unexpected error : " + ex.toString());
             }
         } else {
-            compilerContext.getLog().error("X000", null, "you cannot create function inside a local bloc (for the moment)", method.getStartToken());
+            compilerContext.getLog().jerror("X000", null, method.getStartToken(), "you cannot create function inside a local bloc (for the moment)");
         }
         method.setElement(new HNElementStatement(compilerContext.types()));
         return true;
@@ -697,7 +704,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
     private boolean onBracketsPostfix(HNBracketsPostfix node, HLJCompilerContext compilerContext) {
         List<HNode> array = node.getRight();
         if (array.size() == 0) {
-            compilerContext.getLog().error("S044", null, "empty  brackets. missing indices.", node.getStartToken());
+            compilerContext.getLog().jerror("S044", null, node.getStartToken(), "empty  brackets. missing indices.");
         }
         node.setUserObject("LHS", isLHS(node));
         node.setElement(new HNElementExpr());
@@ -711,7 +718,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
             node.setElement(i0.getElement());
         } else {
             node.setElement(new HNElementNonExpr());
-            compilerContext.getLog().error("S000", null, "invalid expression", node.getEndToken());
+            compilerContext.getLog().jerror("S000", null, node.getEndToken(), "invalid expression");
         }
         return true;
     }
@@ -758,13 +765,13 @@ public class HStage04DefinitionResolver extends HStageType2 {
             }
             case EXPR: {
                 if (!onAssign_isValidLeft(left)) {
-                    compilerContext.getLog().error("S052", null, "invalid assignment of " + left.getClass().getSimpleName(), right.getStartToken());
+                    compilerContext.getLog().jerror("S052", null, right.getStartToken(), "invalid assignment of " + left.getClass().getSimpleName());
                     return false;
                 }
                 break;
             }
             default: {
-                compilerContext.getLog().error("S052", null, "invalid assignment of " + left.getClass().getSimpleName(), right.getStartToken());
+                compilerContext.getLog().jerror("S052", null, right.getStartToken(), "invalid assignment of " + left.getClass().getSimpleName());
                 return false;
             }
         }
@@ -826,7 +833,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
     protected boolean processCompilerStageCurrentCheck(HNode node, HLJCompilerContext compilerContext) {
         String simpleName = node.getClass().getSimpleName();
         if (node.getElement() == null) {
-            compilerContext.getLog().error("X000", null, "node.getElement()==null for " + simpleName, node.getStartToken());
+            compilerContext.getLog().jerror("X000", null, node.getStartToken(), "node.getElement()==null for " + simpleName);
         }
         return true;
     }

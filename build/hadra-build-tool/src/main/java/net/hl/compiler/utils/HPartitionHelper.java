@@ -20,12 +20,12 @@ public class HPartitionHelper<T extends Comparable> {
 
     public void add(T o, JToken token) {
         if (set.contains(o)) {
-            log.error("S012", null, "literal already matched : " + o, token);
+            log.jerror("S012", null, token, "literal already matched : " + o);
             return;
         }
         for (ComparableRange<T> range : ranges) {
             if (range.contains(o)) {
-                log.error("S012", null, "literal already matched : " + o, token);
+                log.jerror("S012", null, token, "literal already matched : " + o);
                 return;
             }
         }
@@ -35,14 +35,14 @@ public class HPartitionHelper<T extends Comparable> {
     public void add(ComparableRange<T> r, JToken token) {
         for (T t : set) {
             if (r.contains(t)) {
-                log.error("S012", null, "literal range already matched totally or partially : " + r, token);
+                log.jerror("S012", null, token, "literal range already matched totally or partially : " + r);
                 return;
             }
         }
         for (ComparableRange<T> range : ranges) {
             ComparableRange<T> z = range.intersect(r);
             if (z != null && !z.isEmpty()) {
-                log.error("S012", null, "literal range already matched totally or partially : " + r, token);
+                log.jerror("S012", null, token, "literal range already matched totally or partially : " + r);
             }
         }
         ranges.add(r);

@@ -1,24 +1,29 @@
 package net.hl.compiler.core;
 
-import net.thevpc.jeep.JContext;
 import net.hl.compiler.index.HIndexer;
+import net.thevpc.nuts.NutsSession;
 
-public class DefaultHLProjectContext implements HProjectContext{
-    JContext languageContext;
+public class DefaultHLProjectContext implements HProjectContext {
+
+    HadraContext languageContext;
     HIndexer indexer;
     String rootId;
 
-    public DefaultHLProjectContext(JContext languageContext, HIndexer indexer,String rootId) {
+    public DefaultHLProjectContext(HadraContext languageContext, HIndexer indexer, String rootId) {
         this.languageContext = languageContext;
         this.indexer = indexer;
         this.rootId = rootId;
+    }
+
+    public NutsSession getSession() {
+        return languageContext.getSession();
     }
 
     public String rootId() {
         return rootId;
     }
 
-    public JContext languageContext() {
+    public HadraContext languageContext() {
         return languageContext;
     }
 

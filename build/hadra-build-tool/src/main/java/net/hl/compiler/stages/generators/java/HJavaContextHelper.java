@@ -5,6 +5,7 @@
  */
 package net.hl.compiler.stages.generators.java;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,22 +21,31 @@ import net.hl.compiler.ast.HNode;
  *
  * @author vpc
  */
-public class HJavaNodes {
+public class HJavaContextHelper {
 
     private HNDeclareType metaPackage;
     private List<HNDeclareType> topLevelTypes = new ArrayList<>();
     private Set<JTextSource> metaPackageSources = new HashSet<JTextSource>();
     private List<String> javaFiles = new ArrayList<>();
+    private File outputJarFile;
 
-    public static HJavaNodes of(HProject project) {
-        return (HJavaNodes) project.getUserProperties().computeIfAbsent(HJavaNodes.class.getName(), (k) -> new HJavaNodes());
+    public static HJavaContextHelper of(HProject project) {
+        return (HJavaContextHelper) project.getUserProperties().computeIfAbsent(HJavaContextHelper.class.getName(), (k) -> new HJavaContextHelper());
     }
 
-    public HJavaNodes() {
+    public HJavaContextHelper() {
     }
 
     public List<String> getJavaFiles() {
         return javaFiles;
+    }
+
+    public File getOutputJarFile() {
+        return outputJarFile;
+    }
+
+    public void setOutputJarFile(File outputJarFile) {
+        this.outputJarFile = outputJarFile;
     }
 
     public Set<JTextSource> getMetaPackageSources() {

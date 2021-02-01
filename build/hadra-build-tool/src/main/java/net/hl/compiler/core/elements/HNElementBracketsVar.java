@@ -5,7 +5,7 @@ import net.thevpc.jeep.JToken;
 import net.thevpc.jeep.JType;
 import net.thevpc.jeep.JTypePattern;
 import net.hl.compiler.ast.HNBracketsPostfix;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 
 public class HNElementBracketsVar extends HNElement implements Cloneable{
     String name;
@@ -24,7 +24,7 @@ public class HNElementBracketsVar extends HNElement implements Cloneable{
         this.declaration = declaration;
         if(declaration!=null){
             setLocation(declaration.getStartToken());
-            setSource(HUtils.getSource(declaration));
+            setSource(HSharedUtils.getSource(declaration));
         }
         return this;
     }

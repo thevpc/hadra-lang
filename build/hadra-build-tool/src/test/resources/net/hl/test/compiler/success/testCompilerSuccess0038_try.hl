@@ -29,12 +29,6 @@ fun void myMethod(){
         catch(IOException|IllegalArgumentException x) 2
         catch(RuntimeException) 3;
 
-    // Exceptions need no more in the catch clause to be suffixed with Exception
-    // This makes code more concise
-    int x4=try(c=connexion) int("one")
-        catch(IO|IllegalArgument x) 2
-        catch(Runtime) 3;
-
     int y=0;
     try{
         y="one";

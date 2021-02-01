@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.thevpc.hl.build</groupId>
+    <groupId>net.thevpc.hl</groupId>
     <artifactId>hadra-build-tool</artifactId>
     <version>0.1.0</version> <!--updated-->
-    <name>net.thevpc.hl.build.hadra-build-tool</name>
+    <name>net.thevpc.hl.hadra-build-tool</name>
     <packaging>jar</packaging>
 
     <url>https://github.com/thevpc/scholar-mw</url>

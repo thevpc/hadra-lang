@@ -7,6 +7,7 @@ package net.hl.compiler.core;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -16,17 +17,22 @@ import java.util.Set;
 public enum HTarget {
     AST,
     RESOLVED_AST,
-    JAVA,
-    CLASS,
-    JAR,
+    COMPILE,
     RUN,
+    
+    JAVA,
     C,
-    BIN_C,
     CS,
-    BIN_CS,
-    CPP,
-    BIN_CPP;
+    CPP;
 
+    public static Set<HTarget> getLanguagePorts() {
+        return new HashSet<HTarget>(
+                Arrays.asList(
+                        JAVA,C,CPP,CS
+                )
+        );
+    }
+    
     public Set<HTarget> getReverseDependencies() {
         EnumSet<HTarget> a = EnumSet.noneOf(HTarget.class);
         for (HTarget value : values()) {
@@ -51,23 +57,8 @@ public enum HTarget {
             case CS: {
                 return EnumSet.of(AST, RESOLVED_AST);
             }
-            case CLASS: {
-                return EnumSet.of(AST, RESOLVED_AST, JAVA);
-            }
-            case JAR: {
-                return EnumSet.of(AST, RESOLVED_AST, JAVA, CLASS);
-            }
-            case BIN_C: {
-                return EnumSet.of(AST, RESOLVED_AST, C);
-            }
-            case BIN_CPP: {
-                return EnumSet.of(AST, RESOLVED_AST, CPP);
-            }
-            case BIN_CS: {
-                return EnumSet.of(AST, RESOLVED_AST, CS);
-            }
             case RUN: {
-                return EnumSet.of(AST, RESOLVED_AST, JAVA);
+                return EnumSet.of(AST, RESOLVED_AST, COMPILE);
             }
         }
         return EnumSet.noneOf(HTarget.class);

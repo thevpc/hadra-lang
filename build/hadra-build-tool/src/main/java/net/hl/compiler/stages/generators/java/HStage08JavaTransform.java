@@ -16,7 +16,7 @@ import net.hl.compiler.core.invokables.*;
 import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.HNodeUtils;
 import net.hl.compiler.utils.HTokenUtils;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 import net.hl.lang.BooleanRef;
 import net.hl.lang.ext.HJavaDefaultOperators;
 
@@ -24,10 +24,12 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import net.hl.compiler.HL;
 import net.hl.compiler.ast.extra.HXInvokableCall;
 import net.hl.compiler.core.HTarget;
 import net.hl.compiler.core.types.JPrimitiveModifierAnnotationInstance;
 import net.hl.compiler.stages.AbstractHStage;
+import net.hl.compiler.utils.HNodeFactory;
 import net.hl.lang.ext.HHelpers;
 import net.thevpc.jeep.impl.functions.JSignature;
 import net.thevpc.jeep.impl.types.DefaultJType;
@@ -46,6 +48,16 @@ public class HStage08JavaTransform extends AbstractHStage {
             return processNode((HNode) other, compilerContext0);
         }
     };
+
+    @Override
+    public boolean isEnabled(HProject project, HL options) {
+        if (options.containsAnyTargets(HTarget.COMPILE,HTarget.RUN)) {
+            if (options.containsAllTargets(HTarget.JAVA)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public HTarget[] getTargets() {
@@ -317,7 +329,7 @@ public class HStage08JavaTransform extends AbstractHStage {
 
     @Override
     public void processProject(HProject project, HOptions options) {
-        HJavaNodes.of(project).setMetaPackage(
+        HJavaContextHelper.of(project).setMetaPackage(
                 (HNDeclareType) copyFactory.copy(project.getMetaPackageType())
         );
         inMetaPackage = true;
@@ -334,6 +346,7 @@ public class HStage08JavaTransform extends AbstractHStage {
             //JavaNodes.of(project).getSourceNodes().add(node2);
 
         }
+        getOrCreateMainMethod(compilerContext0);
     }
 
     public HNode processNode(HNode node, HLJCompilerContext2 compilerContext) {
@@ -563,7 +576,7 @@ public class HStage08JavaTransform extends AbstractHStage {
                 return (HNDeclareType) contextStack.get(i);
             }
         }
-        HJavaNodes jn = HJavaNodes.of(compilerContext.project());
+        HJavaContextHelper jn = HJavaContextHelper.of(compilerContext.project());
         return jn.getMetaPackage();
     }
 
@@ -646,7 +659,7 @@ public class HStage08JavaTransform extends AbstractHStage {
     }
 
     private void onBlockGlobal(HNode statement, HLJCompilerContext2 compilerContext) {
-        HJavaNodes jn = HJavaNodes.of(compilerContext.project());
+        HJavaContextHelper jn = HJavaContextHelper.of(compilerContext.project());
         switch (statement.id()) {
             case H_IMPORT: {
                 //ignore
@@ -654,14 +667,14 @@ public class HStage08JavaTransform extends AbstractHStage {
             }
             case H_DECLARE_TYPE: {
                 HNDeclareType r = (HNDeclareType) processNode(statement, compilerContext);
-                JTextSource s0 = HUtils.getSource(statement);
-                HUtils.setSource(r, s0);
+                JTextSource s0 = HSharedUtils.getSource(statement);
+                HSharedUtils.setSource(r, s0);
                 jn.getTopLevelTypes().add(r);
                 break;
             }
 
             case H_DECLARE_INVOKABLE: {
-                JTextSource s0 = HUtils.getSource(statement);
+                JTextSource s0 = HSharedUtils.getSource(statement);
                 if (s0 != null) {
                     jn.getMetaPackageSources().add(s0);
                 }
@@ -679,7 +692,7 @@ public class HStage08JavaTransform extends AbstractHStage {
             case H_DECLARE_IDENTIFIER: {
                 //always dissociate declaration and assignement as the metaPackage may be run
                 //multiple times
-                JTextSource s0 = HUtils.getSource(statement);
+                JTextSource s0 = HSharedUtils.getSource(statement);
                 if (s0 != null) {
                     jn.getMetaPackageSources().add(s0);
                 }
@@ -701,7 +714,7 @@ public class HStage08JavaTransform extends AbstractHStage {
                         onBlockGlobal(hNode, compilerContext);
                     }
                 } else {
-                    JTextSource s0 = HUtils.getSource(statement);
+                    JTextSource s0 = HSharedUtils.getSource(statement);
                     if (s0 != null) {
                         jn.getMetaPackageSources().add(s0);
                     }
@@ -853,7 +866,7 @@ public class HStage08JavaTransform extends AbstractHStage {
                     nhs1.addModifierKeys("static");
                 }
                 if (publify) {
-                    nhs1.setAnnotations(HUtils.publifyModifiers(nhs1.getAnnotations()));
+                    nhs1.setAnnotations(HSharedUtils.publifyModifiers(nhs1.getAnnotations()));
                 }
 
                 newBlock.add(nhs1);
@@ -901,7 +914,7 @@ public class HStage08JavaTransform extends AbstractHStage {
         if (r instanceof HNSwitch) {
             HNSwitch sw = (HNSwitch) r;
             HNode e = sw.getExpr();
-            sw.setExpr(e = HUtils.skipFirstPar(e));
+            sw.setExpr(e = HSharedUtils.skipFirstPar(e));
             if (e instanceof HNDeclareIdentifier) {
                 HNBlock b = createExprGroup();
                 b.add(e);
@@ -1049,7 +1062,7 @@ public class HStage08JavaTransform extends AbstractHStage {
     private HNode onAssign(HNAssign node, HLJCompilerContext2 compilerContext) {
         HNBlock b = createExprGroup();
         HNode left = (HNode) copyFactory.copy(node.getLeft());
-        if(left instanceof HXInvokableCall){
+        if (left instanceof HXInvokableCall) {
             return left;
         }
         HNode right = (HNode) copyFactory.copy(node.getRight());
@@ -1340,8 +1353,8 @@ public class HStage08JavaTransform extends AbstractHStage {
             return n;
         } else if (!node.isNullableInstance() && node.isUncheckedMember()) {
             JType hh = types.forName(HHelpers.class.getName());
-                rn = (rn instanceof HNIdentifier) ? HJavaGenUtils.Literal(((HNIdentifier) (rn)).getName(), types)
-                        : rn;
+            rn = (rn instanceof HNIdentifier) ? HJavaGenUtils.Literal(((HNIdentifier) (rn)).getName(), types)
+                    : rn;
             if (node.getLeft().getElement() instanceof HNElementType) {
                 JMethod m1 = hh.findDeclaredMethodOrNull("rtInstanceCall(Object,String,Supplier<Object[]>,Class<T>,boolean)");
                 HNode n = HJavaGenUtils.callStatic(m1, hh, new HNode[]{
@@ -1369,8 +1382,8 @@ public class HStage08JavaTransform extends AbstractHStage {
             }
         } else if (node.isNullableInstance() && node.isUncheckedMember()) {
             JType hh = types.forName(HHelpers.class.getName());
-                rn = (rn instanceof HNIdentifier) ? HJavaGenUtils.Literal(((HNIdentifier) (rn)).getName(), types)
-                        : rn;
+            rn = (rn instanceof HNIdentifier) ? HJavaGenUtils.Literal(((HNIdentifier) (rn)).getName(), types)
+                    : rn;
             if (node.getLeft().getElement() instanceof HNElementType) {
                 JMethod m1 = hh.findDeclaredMethodOrNull("rtInstanceCall(Object,String,Supplier<Object[]>,Class<T>,boolean)");
                 HNode n = HJavaGenUtils.callStatic(m1, hh, new HNode[]{
@@ -1396,16 +1409,39 @@ public class HStage08JavaTransform extends AbstractHStage {
                 });
                 return n;
             }
-        }else{
+        } else {
             throw new JShouldNeverHappenException();
         }
     }
 
     ///////////////////////////////////////////////:
     public HNDeclareInvokable getRunModuleMethod(HLJCompilerContext2 compilerContext) {
-        HNBlock b = HJavaNodes.of(compilerContext.project()).getMetaPackageBody();
+        HNBlock b = HJavaContextHelper.of(compilerContext.project()).getMetaPackageBody();
         for (HNDeclareInvokable ii : b.findDeclaredInvokables()) {
             if (ii.getSignature() != null && ii.getSignature().toString().equals("runModule()")) {
+                return ii;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * search for module main method (outside any class) . search for signature:
+     * main(java.lang.String[]) if not found look for main()
+     *
+     * @param compilerContext compilerContext
+     * @return
+     */
+    public HNDeclareInvokable getMainModuleMethod(HLJCompilerContext2 compilerContext) {
+        HNBlock b = HJavaContextHelper.of(compilerContext.project()).getMetaPackageBody();
+        List<HNDeclareInvokable> decInvokables = b.findDeclaredInvokables();
+        for (HNDeclareInvokable ii : decInvokables) {
+            if (ii.getSignature() != null && ii.getSignature().toString().equals("main(java.lang.String[])")) {
+                return ii;
+            }
+        }
+        for (HNDeclareInvokable ii : decInvokables) {
+            if (ii.getSignature() != null && ii.getSignature().toString().equals("main()")) {
                 return ii;
             }
         }
@@ -1417,7 +1453,7 @@ public class HStage08JavaTransform extends AbstractHStage {
     }
 
     public HNDeclareInvokable getOrCreateRunModuleMethod(HLJCompilerContext2 compilerContext) {
-        HJavaNodes jn = HJavaNodes.of(compilerContext.project());
+        HJavaContextHelper jn = HJavaContextHelper.of(compilerContext.project());
         HNDeclareType meta = jn.getMetaPackage();
         HNDeclareInvokable m = getRunModuleMethod(compilerContext);
         if (m == null) {
@@ -1450,6 +1486,131 @@ public class HStage08JavaTransform extends AbstractHStage {
 //            );
 //            ii.setInvokable(runModuleMethod);
             m = ii;
+        }
+        return m;
+    }
+
+    public HNDeclareInvokable getOrCreateMainMethod(HLJCompilerContext2 compilerContext) {
+        HJavaContextHelper jn = HJavaContextHelper.of(compilerContext.project());
+        HNDeclareType meta = jn.getMetaPackage();
+        HNDeclareInvokable m = getMainModuleMethod(compilerContext);
+        if (m == null) {
+            HNDeclareInvokable runModule = getRunModuleMethod(compilerContext);
+            if (runModule != null) {
+                HNDeclareInvokable ii = new HNDeclareInvokable(
+                        JTokenUtils.createTokenIdPointer(new JToken(), "main"),
+                        null,
+                        null
+                );
+                DefaultJType metaType = (DefaultJType) compilerContext.base.getOrCreateType(jn.getMetaPackage());
+                ii.setSignature(JNameSignature.of("main(java.lang.String[])"));
+                ii.setReturnTypeName(compilerContext.base.createSpecialTypeToken("void"));
+                ii.setDeclaringType(meta);
+                ii.setArguments(new ArrayList<>(
+                        Arrays.asList(
+                                new HNodeFactory(compilerContext.types()).createMethodArg("args", "java.lang.String[]")
+                        )
+                ));
+                if (runModule.getInvokable() == null) {
+                    runModule.buildInvokable();
+                }
+                ii.setBody(new HNBlock(HNBlock.BlocType.METHOD_BODY,
+                        new HNode[]{
+                            new HXInvokableCall(runModule.getInvokable(), null, new HNode[0], ii.getStartToken(), ii.getEndToken())
+                        },
+                        ii.getStartToken(), ii.getEndToken()));
+//            ii.buildInvokable();
+                ii.addModifierKeys("public", "static");
+                HNBlock b = jn.getMetaPackageBody();
+
+                JMethod jm = metaType.addMethod(JSignature.of(compilerContext.types(), "main(java.lang.String[])"),
+                        new String[]{"args"}, JTypeUtils.forVoid(compilerContext.types()),
+                        new BodyJInvoke(ii), new JModifier[0], new JAnnotationInstance[]{
+                            JPrimitiveModifierAnnotationInstance.PUBLIC,
+                            JPrimitiveModifierAnnotationInstance.STATIC
+                        }, false);
+                ii.setElement(new HNElementMethod(jm));
+                b.add(ii);
+                ii.buildInvokable();
+                m = ii;
+                return m;
+            } else {
+                return null;
+            }
+        } else if (m.getSignature().argTypes().length == 0) {
+            HNDeclareInvokable ii = new HNDeclareInvokable(
+                    JTokenUtils.createTokenIdPointer(new JToken(), "main"),
+                    null,
+                    null
+            );
+            DefaultJType metaType = (DefaultJType) compilerContext.base.getOrCreateType(jn.getMetaPackage());
+            ii.setSignature(JNameSignature.of("main(java.lang.String[])"));
+            ii.setReturnTypeName(compilerContext.base.createSpecialTypeToken("void"));
+            ii.setDeclaringType(meta);
+            ii.setBody(new HNBlock(HNBlock.BlocType.METHOD_BODY,
+                    new HNode[]{
+                        new HXInvokableCall(m.getInvokable(), null, new HNode[0], ii.getStartToken(), ii.getEndToken())
+                    },
+                    ii.getStartToken(), ii.getEndToken()));
+            ii.addModifierKeys("public", "static");
+            ii.setArguments(new ArrayList<>(
+                    Arrays.asList(
+                            new HNodeFactory(compilerContext.types()).createMethodArg("args", "java.lang.String[]")
+                    )
+            ));
+            HNBlock b = jn.getMetaPackageBody();
+
+            JMethod jm = metaType.addMethod(JSignature.of(compilerContext.types(), "main(java.lang.String[])"),
+                    new String[0], JTypeUtils.forVoid(compilerContext.types()),
+                    new BodyJInvoke(ii), new JModifier[0], new JAnnotationInstance[]{
+                        JPrimitiveModifierAnnotationInstance.STATIC
+                    }, false);
+            HNDeclareInvokable runModule = getRunModuleMethod(compilerContext);
+            if (runModule != null) {
+                if (runModule.getInvokable() == null) {
+                    runModule.buildInvokable();
+                }
+                HXInvokableCall runModuleCall = new HXInvokableCall(runModule.getInvokable(), null, new HNode[0], ii.getStartToken(), ii.getEndToken());
+                HNode bb = m.getBody();
+                if (bb != null) {
+                    if (bb instanceof HNBlock) {
+                        HNBlock b2 = (HNBlock) bb;
+                        b2.add(0, runModuleCall);
+                    } else {
+                        HNBlock b2 = new HNBlock(HNBlock.BlocType.METHOD_BODY, new HNode[]{
+                            runModuleCall,
+                            bb
+                        }, bb.getStartToken(), bb.getEndToken());
+                        m.setBody(b2);
+                    }
+                }
+            }
+            ii.setElement(new HNElementMethod(jm));
+            ii.buildInvokable();
+            b.add(ii);
+            m = ii;
+        } else {
+            //this is the case of a normal main(String[])
+            HNDeclareInvokable runModule = getRunModuleMethod(compilerContext);
+            if (runModule != null) {
+                if (runModule.getInvokable() == null) {
+                    runModule.buildInvokable();
+                }
+                HXInvokableCall runModuleCall = new HXInvokableCall(runModule.getInvokable(), null, new HNode[0], m.getStartToken(), m.getEndToken());
+                HNode bb = m.getBody();
+                if (bb != null) {
+                    if (bb instanceof HNBlock) {
+                        HNBlock b2 = (HNBlock) bb;
+                        b2.add(0, runModuleCall);
+                    } else {
+                        HNBlock b2 = new HNBlock(HNBlock.BlocType.METHOD_BODY, new HNode[]{
+                            runModuleCall,
+                            bb
+                        }, bb.getStartToken(), bb.getEndToken());
+                        m.setBody(b2);
+                    }
+                }
+            }
         }
         return m;
     }
@@ -1607,10 +1768,10 @@ public class HStage08JavaTransform extends AbstractHStage {
                         null, null
                 ), declAnnotations).addModifierKeys(modifiers);
                 if (isField) {
-                    nhs1.setAnnotations(HUtils.publifyModifiers(nhs1.getAnnotations()));
+                    nhs1.setAnnotations(HSharedUtils.publifyModifiers(nhs1.getAnnotations()));
                 }
                 if (isStatic) {
-                    nhs1.setAnnotations(HUtils.statifyModifiers(nhs1.getAnnotations()));
+                    nhs1.setAnnotations(HSharedUtils.statifyModifiers(nhs1.getAnnotations()));
                 }
 
                 block.add(nhs1);
@@ -1631,10 +1792,10 @@ public class HStage08JavaTransform extends AbstractHStage {
                         null, null
                 );
                 if (isField) {
-                    nhs1.setAnnotations(HUtils.publifyModifiers(nhs1.getAnnotations()));
+                    nhs1.setAnnotations(HSharedUtils.publifyModifiers(nhs1.getAnnotations()));
                 }
                 if (isStatic) {
-                    nhs1.setAnnotations(HUtils.statifyModifiers(nhs1.getAnnotations()));
+                    nhs1.setAnnotations(HSharedUtils.statifyModifiers(nhs1.getAnnotations()));
                 }
                 block.add(nhs1);
             }
@@ -1660,10 +1821,10 @@ public class HStage08JavaTransform extends AbstractHStage {
                         null, null
                 );
                 if (isField) {
-                    nhs1.setAnnotations(HUtils.publifyModifiers(nhs1.getAnnotations()));
+                    nhs1.setAnnotations(HSharedUtils.publifyModifiers(nhs1.getAnnotations()));
                 }
                 if (isStatic) {
-                    nhs1.setAnnotations(HUtils.statifyModifiers(nhs1.getAnnotations()));
+                    nhs1.setAnnotations(HSharedUtils.statifyModifiers(nhs1.getAnnotations()));
                 }
                 block.add(nhs1);
                 if (right != null) {
@@ -1693,10 +1854,10 @@ public class HStage08JavaTransform extends AbstractHStage {
                         null, null
                 );
                 if (isField) {
-                    nhs1.setAnnotations(HUtils.publifyModifiers(nhs1.getAnnotations()));
+                    nhs1.setAnnotations(HSharedUtils.publifyModifiers(nhs1.getAnnotations()));
                 }
                 if (isStatic) {
-                    nhs1.setAnnotations(HUtils.statifyModifiers(nhs1.getAnnotations()));
+                    nhs1.setAnnotations(HSharedUtils.statifyModifiers(nhs1.getAnnotations()));
                 }
                 block.add(nhs1);
             }

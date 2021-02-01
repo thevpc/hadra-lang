@@ -13,6 +13,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
@@ -20,6 +21,7 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
@@ -27,14 +29,20 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
+import net.hl.compiler.HL;
 import net.hl.compiler.core.HTarget;
 import net.hl.compiler.core.JModuleId;
 import net.hl.compiler.stages.AbstractHStage;
+import net.hl.compiler.utils.DepIdAndFile;
+import net.thevpc.common.msg.Messages;
 import net.thevpc.jeep.util.JStringUtils;
 import net.thevpc.common.textsource.JTextSource;
 import net.thevpc.common.textsource.JTextSourceFactory;
 import net.thevpc.common.textsource.JTextSourceToken;
 import net.thevpc.common.textsource.log.JSourceMessage;
+import net.thevpc.nuts.NutsConstants;
+import net.thevpc.nuts.NutsDependency;
+import net.thevpc.nuts.NutsDescriptor;
 
 public class HStage10JavaCompiler extends AbstractHStage {
 
@@ -42,12 +50,22 @@ public class HStage10JavaCompiler extends AbstractHStage {
 
     @Override
     public HTarget[] getTargets() {
-        return new HTarget[]{HTarget.CLASS,HTarget.JAR};
+        return new HTarget[]{HTarget.RUN, HTarget.COMPILE, HTarget.JAVA};
+    }
+
+    @Override
+    public boolean isEnabled(HProject project, HL options) {
+        if ((options.containsAnyTargets(HTarget.COMPILE, HTarget.RUN))) {
+            if (options.containsAllTargets(HTarget.JAVA)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public void processProject(HProject project, HOptions options) {
-        HJavaNodes jn = HJavaNodes.of(project);
+        HJavaContextHelper jn = HJavaContextHelper.of(project);
 
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
@@ -57,7 +75,7 @@ public class HStage10JavaCompiler extends AbstractHStage {
         }
         File classesFolder = options.getClassFolder();
         if (classesFolder == null) {
-            classesFolder = new File("target/hlc/classes");
+            classesFolder = new File("target/hl/classes");
         }
         if (options.isClean()) {
             if (classesFolder.isDirectory()) {
@@ -67,10 +85,10 @@ public class HStage10JavaCompiler extends AbstractHStage {
             }
         }
         classesFolder.mkdirs();
-        String[] dependencyFiles = project.getIndexedProject().getDependencyFiles();
+        DepIdAndFile[] dependencyFiles = project.getIndexedProject().getDependencies();
         List<String> joptions = new ArrayList<>();
         joptions.add("-classpath");
-        joptions.add(String.join(File.pathSeparator, dependencyFiles));
+        joptions.add(Arrays.stream(dependencyFiles).map(x -> x.getFile()).collect(Collectors.joining(File.pathSeparator)));
         joptions.add("-d");
         joptions.add(classesFolder.getPath());
 
@@ -103,22 +121,47 @@ public class HStage10JavaCompiler extends AbstractHStage {
                     break;
                 }
             }
-            project.log().add(new JSourceMessage(diagnostic.getCode(), "javac", diagnostic.getMessage(null), level, new DiagnosticJTextSourceToken(diagnostic)));
+            project.log().add(
+                    new JSourceMessage(
+                            diagnostic.getCode(),
+                            "javac",
+                            new DiagnosticJTextSourceToken(diagnostic),
+                            Messages.text(level, diagnostic.getMessage(null))
+                    )
+            );
         }
+
         if (success) {
-            if (options.isTarget(HTarget.JAR)) {
-                File jarFolder = options.getJarFolder();
-                if (jarFolder == null) {
-                    jarFolder = new File("target/hlc");
-                }
-                jarFolder.mkdirs();
-                File jarPath = new File(jarFolder, jarName);
-                generateJar(jarPath, classesFolder);
+            //need to generate descriptor that contains dependencies...
+            //project.getIndexedProject().getDependencies()
+            NutsDescriptor desc = project.getWorkspace().descriptor().descriptorBuilder()
+                    .setId(project.getIndexedProject().getModuleId())
+                    .setPackaging("jar")
+                    .addPlatform("java")
+                    .addDependencies(
+                            Arrays.stream(project.getIndexedProject().getDependencies())
+                                    .map(
+                                            i
+                                            -> project.getWorkspace().dependency().builder()
+                                                    .setId(
+                                                            project.getWorkspace().id().parser().parse(i.getId())
+                                                    ).build()
+                                    ).toArray(NutsDependency[]::new)
+                    ).build();
+            project.getWorkspace().descriptor().formatter(desc).setSession(project.getSession())
+                    .print(new File("target/hl/classes/META-INF/" + NutsConstants.Files.DESCRIPTOR_FILE_NAME));
+            File jarFolder = options.getJarFolder();
+            if (jarFolder == null) {
+                jarFolder = new File("target/hl");
             }
+            jarFolder.mkdirs();
+            File jarPath = new File(jarFolder, jarName);
+            generateJar(project, jarPath, classesFolder);
+            jn.setOutputJarFile(jarPath);
         }
     }
 
-    private void generateJar(File jarFile, File... classesAndResourcesFolders) {
+    private void generateJar(HProject project, File jarFile, File... classesAndResourcesFolders) {
         Manifest manifest = new Manifest();
         manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
         try (JarOutputStream target = new JarOutputStream(new FileOutputStream(jarFile), manifest)) {
@@ -129,7 +172,6 @@ public class HStage10JavaCompiler extends AbstractHStage {
                     addToJar(classesAndResourcesFolder.getParentFile(), classesAndResourcesFolder, target);
                 }
             }
-            target.close();
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
         }
@@ -147,6 +189,9 @@ public class HStage10JavaCompiler extends AbstractHStage {
                     if (!name.endsWith("/")) {
                         name += "/";
                     }
+                    if (!name.equals("/") && name.startsWith("/")) {
+                        name = name.substring(1);
+                    }
                     JarEntry entry = new JarEntry(name);
                     entry.setTime(source.lastModified());
                     target.putNextEntry(entry);
@@ -158,7 +203,11 @@ public class HStage10JavaCompiler extends AbstractHStage {
                 return;
             }
 
-            JarEntry entry = new JarEntry(sourcePath);
+            String name = sourcePath;
+            if (!name.equals("/") && name.startsWith("/")) {
+                name = name.substring(1);
+            }
+            JarEntry entry = new JarEntry(name);
             entry.setTime(source.lastModified());
             target.putNextEntry(entry);
             in = new BufferedInputStream(new FileInputStream(source));

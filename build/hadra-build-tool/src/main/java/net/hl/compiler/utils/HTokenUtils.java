@@ -56,7 +56,7 @@ public class HTokenUtils {
 
     public static JTokenDef[] getjTokenDefs() {
         if(jTokenDefs==null){
-            jTokenDefs=new HadraLanguage().tokens().tokenDefinitions();
+            jTokenDefs=HadraLanguage.getSingleton().tokens().tokenDefinitions();
         }
         return jTokenDefs;
     }

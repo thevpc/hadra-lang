@@ -41,6 +41,11 @@ public class HStage05CallResolver extends HStageType2 {
     }
 
     @Override
+    public boolean isEnabled(HProject project, HL options) {
+        return options.containsAnyTargets(HTarget.RESOLVED_AST, HTarget.COMPILE, HTarget.RUN);
+    }
+
+    @Override
     public HTarget[] getTargets() {
         return new HTarget[]{HTarget.RESOLVED_AST};
     }
@@ -234,7 +239,7 @@ public class HStage05CallResolver extends HStageType2 {
                 JType nev = exceptionType.getTypeVal();
                 for (JType v : visitedExceptions) {
                     if (v.isAssignableFrom(nev)) {
-                        compilerContext.getLog().error("X000", "catch", "expected type already handled by previous " + v.getName(), exceptionType.getNameToken());
+                        compilerContext.getLog().jerror("X000", "catch", exceptionType.getNameToken(), "expected type already handled by previous " + v.getName());
                     }
                 }
                 visitedExceptions.add(nev);
@@ -265,7 +270,7 @@ public class HStage05CallResolver extends HStageType2 {
                 if (throwableType.isAssignableFrom(exceptionType.getTypeVal())) {
                     s = JTypeUtils.firstCommonSuperType(s, exceptionType.getTypeVal(), compilerContext.types());
                 } else {
-                    compilerContext.getLog().error("X000", "catch", "expected Throwable type", exceptionType.getNameToken());
+                    compilerContext.getLog().jerror("X000", "catch", exceptionType.getNameToken(), "expected Throwable type");
                 }
             }
             if (s == null) {
@@ -286,7 +291,7 @@ public class HStage05CallResolver extends HStageType2 {
     private boolean onExtends(HNExtends node, HLJCompilerContext compilerContext) {
         JType t = compilerContext.lookupType(node.getFullName());
         if (t == null) {
-            compilerContext.getLog().error("X000", "extends", "type not found : " + node.getFullName(), node.getStartToken());
+            compilerContext.getLog().jerror("X000", "extends", node.getStartToken(), "type not found : " + node.getFullName());
         }
         node.setElement(new HNElementType(
                 t, compilerContext.types()
@@ -333,7 +338,7 @@ public class HStage05CallResolver extends HStageType2 {
                 }
                 y = y.getDeclaringType();
             }
-            compilerContext.getLog().error("X000", null, "not an enclosing type : " + tv.getName(), node.getStartToken());
+            compilerContext.getLog().jerror("X000", null, node.getStartToken(), "not an enclosing type : " + tv.getName());
         }
         return true;
     }
@@ -358,7 +363,7 @@ public class HStage05CallResolver extends HStageType2 {
             HNElementExpr.get(node).setType(dType);
             return true;
         }
-        compilerContext.getLog().error("X000", "if statement", "expected boolean condition", w.getStartToken());
+        compilerContext.getLog().jerror("X000", "if statement", w.getStartToken(), "expected boolean condition");
         return true;
     }
 
@@ -603,9 +608,9 @@ public class HStage05CallResolver extends HStageType2 {
             resultType = JTypeUtils.firstCommonSuperTypePattern(resultType, elseToL, compilerContext.types());
         }
         if (condType == null || condType.isLambda()) {
-            compilerContext.getLog().error("X000", null, "invalid condition type : " + condType, node.getStartToken());
+            compilerContext.getLog().jerror("X000", null, node.getStartToken(), "invalid condition type : " + condType);
             for (HNode whenNodeWithLambda : whenNodeWithLambdas) {
-                compilerContext.getLog().error("X000", null, "invalid condition type", whenNodeWithLambda.getStartToken());
+                compilerContext.getLog().jerror("X000", null, whenNodeWithLambda.getStartToken(), "invalid condition type");
             }
         }
         if (resultType == null || resultType.isLambda()) {
@@ -694,7 +699,7 @@ public class HStage05CallResolver extends HStageType2 {
         for (int i = 0; i < etypes.length; i++) {
             JTypePattern etype = etypes[i];
             if (etype.isLambda()) {
-                compilerContext.getLog().error("S000", null, "lambda expressions are not supported in Tuples", node.getItems()[i].getStartToken());
+                compilerContext.getLog().jerror("S000", null, node.getItems()[i].getStartToken(), "lambda expressions are not supported in Tuples");
                 err = true;
             }
         }
@@ -717,11 +722,11 @@ public class HStage05CallResolver extends HStageType2 {
             }
             JType arrType = null;
             if (allToL.length == 0) {
-                compilerContext.getLog().error("S000", null, "could not resolve empty array type", node.getStartToken());
+                compilerContext.getLog().jerror("S000", null, node.getStartToken(), "could not resolve empty array type");
             } else {
                 for (int i = 0; i < allToL.length; i++) {
                     if (allToL[i].isLambda()) {
-                        compilerContext.getLog().error("S000", null, "unsupported lambda expressions in array initialization", node.getItems()[i].getStartToken());
+                        compilerContext.getLog().jerror("S000", null, node.getItems()[i].getStartToken(), "unsupported lambda expressions in array initialization");
                     } else {
                         if (arrType == null) {
                             arrType = allToL[i].getType();
@@ -768,15 +773,15 @@ public class HStage05CallResolver extends HStageType2 {
                             if (tt instanceof JArrayType) {
                                 tt = ((JArrayType) tt).componentType();
                             } else {
-                                compilerContext.getLog().error("X000", null, "not an array " + tt, node.getStartToken());
+                                compilerContext.getLog().jerror("X000", null, node.getStartToken(), "not an array " + tt);
                             }
                         }
                         element.setType(tt);
                         //ok
                     } else {
                         acceptMethodImpl = false;
-                        compilerContext.getLog().error("S000", null, "array type expected",
-                                inodes[inodes.length - 1].getStartToken());
+                        compilerContext.getLog().jerror("S000", null,
+                                inodes[inodes.length - 1].getStartToken(), "array type expected");
                     }
                 }
             }
@@ -838,12 +843,12 @@ public class HStage05CallResolver extends HStageType2 {
         JToken location = rightNode.getStartToken();
 
         if (JTypeUtils.isVoid(leftType) && JTypeUtils.isVoid(rightToL)) {
-            compilerContext.getLog().error("S052", null, "void is not an expression", location);
+            compilerContext.getLog().jerror("S052", null, location, "void is not an expression");
             return true;
         }
 
         if (JTypeUtils.isVoid(leftType) || JTypeUtils.isVoid(rightToL)) {
-            compilerContext.getLog().error("S052", null, "void is not an expression", location);
+            compilerContext.getLog().jerror("S052", null, location, "void is not an expression");
             return true;
         }
 
@@ -867,7 +872,7 @@ public class HStage05CallResolver extends HStageType2 {
                 return true;
             }
         }
-        compilerContext.getLog().error("S052", null, "type mismatch. expected " + leftType + " but found " + rightToL, location);
+        compilerContext.getLog().jerror("S052", null, location, "type mismatch. expected " + leftType + " but found " + rightToL);
         return true;
     }
 
@@ -920,8 +925,8 @@ public class HStage05CallResolver extends HStageType2 {
                                 //ok
                             } else {
                                 acceptMethodImpl = false;
-                                compilerContext.getLog().error("S000", null, "array type expected",
-                                        indicesNodes.get(indicesNodes.size() - 1).getStartToken());
+                                compilerContext.getLog().jerror("S000", null,
+                                        indicesNodes.get(indicesNodes.size() - 1).getStartToken(), "array type expected");
                             }
                         }
                     }
@@ -953,22 +958,22 @@ public class HStage05CallResolver extends HStageType2 {
                     HNTuple tuple = (HNTuple) left;
                     //de-constructor matcher
                     if (!right.getElement().getTypePattern().isType()) {
-                        compilerContext.getLog().error("S000", null, "invalid Tuple", right.getStartToken());
+                        compilerContext.getLog().jerror("S000", null, right.getStartToken(), "invalid Tuple");
                     } else {
                         JType encountered = right.getElement().getTypePattern().getType();
                         if (!HTypeUtils.isTupleType(encountered)) {
-                            compilerContext.getLog().error("X000", null, "expected tuple type", right.getStartToken());
+                            compilerContext.getLog().jerror("X000", null, right.getStartToken(), "expected tuple type");
                             return false;
                         }
                         JType[] tupleArgTypes;
                         try {
                             tupleArgTypes = HTypeUtils.tupleArgTypes(encountered);
                         } catch (Exception ex) {
-                            compilerContext.getLog().error("X000", null, "invalid tuple type", right.getStartToken());
+                            compilerContext.getLog().jerror("X000", null, right.getStartToken(), "invalid tuple type");
                             return false;
                         }
                         if (tupleArgTypes.length != tuple.getItems().length) {
-                            compilerContext.getLog().error("X000", null, "tuple mismatch " + tupleArgTypes.length + "!=" + tuple.getItems().length, right.getStartToken());
+                            compilerContext.getLog().jerror("X000", null, right.getStartToken(), "tuple mismatch " + tupleArgTypes.length + "!=" + tuple.getItems().length);
                             return false;
                         }
                         HNElement lelement = tuple.getElement();
@@ -995,7 +1000,7 @@ public class HStage05CallResolver extends HStageType2 {
                         //}
                     }
                 } else {
-                    compilerContext.getLog().error("X000", null, "invalid assignment", left.getStartToken());
+                    compilerContext.getLog().jerror("X000", null, left.getStartToken(), "invalid assignment");
                 }
                 break;
             }
@@ -1167,7 +1172,7 @@ public class HStage05CallResolver extends HStageType2 {
                 }
                 applyDeclareTokenType(node, typePattern, compilerContext);
             } else {
-                compilerContext.getLog().error("S000", null, "type inference failed with no init value", node.getStartToken());
+                compilerContext.getLog().jerror("S000", null, node.getStartToken(), "type inference failed with no init value");
             }
         } else {
             JType identifierType = node.getIdentifierType();
@@ -1191,7 +1196,7 @@ public class HStage05CallResolver extends HStageType2 {
 
     private void applyDeclareTokenType(HNDeclareToken identifierToken, JTypePattern identifierType, HLJCompilerContext compilerContext) {
         if (identifierType.isLambda()) {
-            compilerContext.getLog().error("S000", null, "type inference failed with unresolvable lambda expression", identifierToken.getStartToken());
+            compilerContext.getLog().jerror("S000", null, identifierToken.getStartToken(), "type inference failed with unresolvable lambda expression");
             return;
         }
         if (identifierToken instanceof HNDeclareTokenIdentifier || identifierToken instanceof HNDeclareTokenList) {
@@ -1202,7 +1207,7 @@ public class HStage05CallResolver extends HStageType2 {
                     if (field.type() == null) {
                         ((DefaultJField) field).setGenericType(identifierType.getType());
                         //reindex
-                        compilerContext.indexer().indexField(new HIndexedField(field, HUtils.getSourceName(identifierToken)));
+                        compilerContext.indexer().indexField(new HIndexedField(field, HSharedUtils.getSourceName(identifierToken)));
                     }
                 } else if (e.getKind() == HNElementKind.LOCAL_VAR) {
                     HNElementLocalVar lv = (HNElementLocalVar) e;
@@ -1213,7 +1218,7 @@ public class HStage05CallResolver extends HStageType2 {
                         } else if (id.getAssignOperator().isImage(":")) {
                             ElementTypeAndConstraint cc = HTypeUtils.resolveIterableComponentType(identifierType.getType(), compilerContext.types());
                             if (cc == null) {
-                                compilerContext.getLog().error("S000", null, "expected iterable/iterator type", identifierToken.getStartToken());
+                                compilerContext.getLog().jerror("S000", null, identifierToken.getStartToken(), "expected iterable/iterator type");
                             } else {
                                 lv.setEffectiveType(cc.valType);
                             }
@@ -1224,17 +1229,17 @@ public class HStage05CallResolver extends HStageType2 {
                         throw new JShouldNeverHappenException();
                     }
                 } else {
-                    compilerContext.getLog().error("S000", null, "unexpected value", identifierToken.getStartToken());
+                    compilerContext.getLog().jerror("S000", null, identifierToken.getStartToken(), "unexpected value");
                 }
             }
         } else if (identifierToken instanceof HNDeclareTokenTuple) {
             HNDeclareTokenTuple tt = (HNDeclareTokenTuple) identifierToken;
             if (!HTypeUtils.isTupleType(identifierType.getType())) {
-                compilerContext.getLog().error("S000", null, "expected tuple type, found " + identifierType.getType().getName(), identifierToken.getStartToken());
+                compilerContext.getLog().jerror("S000", null, identifierToken.getStartToken(), "expected tuple type, found " + identifierType.getType().getName());
             } else {
                 JType[] jTypes = HTypeUtils.tupleArgTypes(identifierType.getType());
                 if (jTypes.length != tt.getItems().length) {
-                    compilerContext.getLog().error("S000", null, "expected tuple elements count mismatch  " + jTypes.length + "!=" + tt.getItems().length, identifierToken.getStartToken());
+                    compilerContext.getLog().jerror("S000", null, identifierToken.getStartToken(), "expected tuple elements count mismatch  " + jTypes.length + "!=" + tt.getItems().length);
                 } else {
 //                HNElementExpr element = (HNElementExpr) tt.getElement();
 //                element.setType(identifierType);
@@ -1317,7 +1322,7 @@ public class HStage05CallResolver extends HStageType2 {
                         JType tt = compilerContext.getOrCreateType(di.getDeclaringType());
                         JType st = tt.getSuperType();
                         if (st == null) {
-                            compilerContext.getLog().error("X000", null, "mismatch 'super' call", node.getStartToken());
+                            compilerContext.getLog().jerror("X000", null, node.getStartToken(), "mismatch 'super' call");
                         } else {
                             JInvokable c = compilerContext.findConstructorMatch(JOnError.TRACE, st, argTypes.toArray(new JTypePattern[0]), node.getStartToken(), null);
                             if (c != null) {
@@ -1356,7 +1361,7 @@ public class HStage05CallResolver extends HStageType2 {
             return false;
         }
         if (t.isLambda()) {
-            compilerContext.getLog().error("X000", null, "unresolved call of a lambda expression", node.getRight().get(0).getStartToken());
+            compilerContext.getLog().jerror("X000", null, node.getRight().get(0).getStartToken(), "unresolved call of a lambda expression");
             return true;
         }
         argTypes.add(0, t);
@@ -1404,7 +1409,7 @@ public class HStage05CallResolver extends HStageType2 {
             if (node.getArrayTypeName().getTypeVal() == null) {
                 return false;
             }
-            String methodName = HUtils.getStaticConstructorName(node.getArrayTypeName().getTypeVal());
+            String methodName = HSharedUtils.getStaticConstructorName(node.getArrayTypeName().getTypeVal());
             JInvokable f = compilerContext.lookupFunctionMatch(JOnError.TRACE, methodName,
                     HFunctionType.SPECIAL, argsTypes.toArray(new JTypePattern[0]), node.getStartToken());
             if (f != null) {
@@ -1452,7 +1457,7 @@ public class HStage05CallResolver extends HStageType2 {
             HNode initValue = node.getBody();
             if (initValue == null) {
                 //no body
-                compilerContext.getLog().error("S000", null, "type inference failed for function/method without body", node.getStartToken());
+                compilerContext.getLog().jerror("S000", null, node.getStartToken(), "type inference failed for function/method without body");
             } else {
                 if (node.getInvokable() instanceof DefaultJRawMethod) {
                     DefaultJRawMethod method = (DefaultJRawMethod) node.getInvokable();
@@ -1461,11 +1466,11 @@ public class HStage05CallResolver extends HStageType2 {
                         if (method.getSignature().toString().equals("main(java.lang.String[])")) {
                             ert = JTypeUtils.forVoid(compilerContext.types());
                             method.setGenericReturnType(ert);
-                            compilerContext.indexer().indexMethod(new HIndexedMethod(method, HUtils.getSourceName(node)));
+                            compilerContext.indexer().indexMethod(new HIndexedMethod(method, HSharedUtils.getSourceName(node)));
                         } else {
                             HNode[] exitPoints = initValue.getExitPoints();
                             if (exitPoints.length == 0) {
-                                compilerContext.getLog().error("S000", null, "type inference failed for function/method without body", initValue.getStartToken());
+                                compilerContext.getLog().jerror("S000", null, initValue.getStartToken(), "type inference failed for function/method without body");
                             } else {
                                 JTypePattern[] args = compilerContext.getTypePattern(showFinalErrors, exitPoints);
                                 if (args == null) {
@@ -1475,7 +1480,7 @@ public class HStage05CallResolver extends HStageType2 {
                                 for (int i = 0; i < args.length; i++) {
                                     if (args[i].isLambda()) {
                                         error = true;
-                                        compilerContext.getLog().error("S000", null, "type inference failed with unresolvable lambda expression", initValue.getStartToken());
+                                        compilerContext.getLog().jerror("S000", null, initValue.getStartToken(), "type inference failed with unresolvable lambda expression");
                                         break;
                                     } else {
                                         ert = ert == null ? args[i].getType() : ert.firstCommonSuperType(args[i].getType());
@@ -1484,7 +1489,7 @@ public class HStage05CallResolver extends HStageType2 {
                                 if (!error && ert != null) {
                                     //ert = method.genericReturnType();
                                     method.setGenericReturnType(ert);
-                                    compilerContext.indexer().indexMethod(new HIndexedMethod(method, HUtils.getSourceName(node)));
+                                    compilerContext.indexer().indexMethod(new HIndexedMethod(method, HSharedUtils.getSourceName(node)));
                                 }
                             }
                         }
@@ -1527,10 +1532,10 @@ public class HStage05CallResolver extends HStageType2 {
         }
 //        } else if (
 //                node.getType() == null &&
-//                        HUtils.isComparisonOperator(opName)
+//                        HSharedUtils.isComparisonOperator(opName)
 //                        &&
-//                        (HUtils.isNullLiteral(left))
-//                        || (HUtils.isNullLiteral(right))
+//                        (HSharedUtils.isNullLiteral(left))
+//                        || (HSharedUtils.isNullLiteral(right))
 //        ) {
 //            node.setType(compilerContext.types().forName("boolean"));
 //        }
@@ -1692,7 +1697,7 @@ public class HStage05CallResolver extends HStageType2 {
     protected void processProjectReplay(HProject project, HOptions options) {
         if (!replays.isEmpty()) {
             while (true) {
-                LOG.log(Level.INFO, "processing " + replays.size() + " nodes");
+                LOG.log(Level.FINE, "processing " + replays.size() + " nodes");
                 List<HLJCompilerContext> oldRedos = new ArrayList<>(replays);
                 replays.clear();
                 int progress = 0;
@@ -1743,8 +1748,8 @@ public class HStage05CallResolver extends HStageType2 {
             }
             return succeeded;
         } catch (Exception ex) {
-            LOG.log(Level.INFO, "unexpected error : " + ex.toString(), ex);
-            compilerContext.getLog().error("S000", "unexpected error", ex.toString(), compilerContext.getNode().getStartToken());
+            LOG.log(Level.FINE, "unexpected error : " + ex.toString(), ex);
+            compilerContext.getLog().jerror("S000", "unexpected error", compilerContext.getNode().getStartToken(), ex.toString());
             throw ex;
         }
     }
@@ -1778,20 +1783,20 @@ public class HStage05CallResolver extends HStageType2 {
     public boolean processCompilerStageCurrentCheck(HNode node, HLJCompilerContext compilerContext) {
         String simpleName = node.getClass().getSimpleName();
         if (node.getElement() == null) {
-            compilerContext.getLog().error("X000", null, "node.getElement()==null for " + simpleName, node.getStartToken());
+            compilerContext.getLog().jerror("X000", null, node.getStartToken(), "node.getElement()==null for " + simpleName);
         } else {
             HNElement element = node.getElement();
             switch (element.getKind()) {
                 case CONSTRUCTOR: {
                     if (element.getTypePattern() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementConstructor.getTypeOrLambda()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementConstructor.getTypeOrLambda()==null for " + simpleName);
                     }
                     HNElementConstructor c = (HNElementConstructor) element;
                     if (c.getInvokable() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementConstructor.getInvokable()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementConstructor.getInvokable()==null for " + simpleName);
                     }
                     if (c.getDeclaringType() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementConstructor.getDeclaringType()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementConstructor.getDeclaringType()==null for " + simpleName);
                     }
 //                    if(node.getType()==null){
 //                        compilerContext.log().error("X000","node.getType()==null for "+simpleName,node.startToken());
@@ -1801,16 +1806,16 @@ public class HStage05CallResolver extends HStageType2 {
                 case METHOD: {
                     HNElementMethod c = (HNElementMethod) element;
                     if (element.getTypePattern() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementMethod.getTypeOrLambda()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementMethod.getTypeOrLambda()==null for " + simpleName);
                     }
                     if (c.getInvokable() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementMethod.getInvokable()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementMethod.getInvokable()==null for " + simpleName);
                     }
 //                    if(c.getDeclaringType()==null){
 //                        compilerContext.log().error("X000","HNElementMethod.getDeclaringType()==null for "+simpleName,node.startToken());
 //                    }
                     if (c.getReturnType() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementMethod.getReturnType()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementMethod.getReturnType()==null for " + simpleName);
                     }
 //                    if(node.getType()==null){
 //                        compilerContext.log().error("X000","node.getType()==null for "+simpleName,node.startToken());
@@ -1820,16 +1825,16 @@ public class HStage05CallResolver extends HStageType2 {
                 case FIELD: {
                     HNElementField c = (HNElementField) element;
                     if (element.getTypePattern() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementField.getTypeOrLambda()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementField.getTypeOrLambda()==null for " + simpleName);
                     }
                     if (c.getField() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementField.getField()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementField.getField()==null for " + simpleName);
                     }
                     if (c.getDeclaringType() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementField.getDeclaringType()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementField.getDeclaringType()==null for " + simpleName);
                     }
                     if (c.getType() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementField.getType()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementField.getType()==null for " + simpleName);
                     }
 //                    if(node.getType()==null){
 //                        compilerContext.log().error("X000","node.getType()==null for "+simpleName,node.startToken());
@@ -1839,10 +1844,10 @@ public class HStage05CallResolver extends HStageType2 {
                 case EXPR: {
                     HNElementExpr c = (HNElementExpr) element;
                     if (element.getTypePattern() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementExpr.getTypeOrLambda()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementExpr.getTypeOrLambda()==null for " + simpleName);
                     }
                     if (c.getType() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementExpr.getType()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementExpr.getType()==null for " + simpleName);
                     }
 //                    if(node.getType()==null){
 //                        compilerContext.log().error("X000","node.getType()==null for "+simpleName,node.startToken());
@@ -1852,10 +1857,10 @@ public class HStage05CallResolver extends HStageType2 {
                 case LOCAL_VAR: {
                     HNElementLocalVar c = (HNElementLocalVar) element;
                     if (element.getTypePattern() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementLocalVar.getTypeOrLambda()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementLocalVar.getTypeOrLambda()==null for " + simpleName);
                     }
                     if (c.getType() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementLocalVar.getType()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementLocalVar.getType()==null for " + simpleName);
                     }
 //                    if(node.getType()==null){
 //                        compilerContext.log().error("X000","node.getType()==null for "+simpleName,node.startToken());
@@ -1865,7 +1870,7 @@ public class HStage05CallResolver extends HStageType2 {
                 case TYPE: {
                     HNElementType c = (HNElementType) element;
                     if (c.getValue() == null) {
-                        compilerContext.getLog().error("X000", null, "HNElementType.getType()==null for " + simpleName, node.getStartToken());
+                        compilerContext.getLog().jerror("X000", null, node.getStartToken(), "HNElementType.getType()==null for " + simpleName);
                     }
                     break;
                 }

@@ -98,14 +98,14 @@ public class TestGenerateJava {
     public void testCompilerSuccess0013() {
         Assertions.assertEquals(0,
                 _compileResource("compiler/success/testCompilerSuccess0013.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
     @Test
     public void testCompiler0047() {
         Assertions.assertEquals(0,
                 _compileResource("testCompilerSuccess0047_swing_Console.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////

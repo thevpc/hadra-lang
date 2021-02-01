@@ -5,7 +5,7 @@ import net.thevpc.jeep.JNode;
 import net.thevpc.jeep.JType;
 import net.thevpc.jeep.JTypePattern;
 import net.hl.compiler.ast.HNIf;
-import net.hl.compiler.utils.HUtils;
+import net.hl.compiler.utils.HSharedUtils;
 
 public class HNElementWhenDo extends HNElement implements Cloneable{
     public String methodName;
@@ -24,7 +24,7 @@ public class HNElementWhenDo extends HNElement implements Cloneable{
         this.elseNode = elseNode;
         this.resultType = resultType;
         setLocation(branches[0].getStartToken());
-        setSource(HUtils.getSource(branches[0]));
+        setSource(HSharedUtils.getSource(branches[0]));
     }
 
     public JType getResultType() {

@@ -167,7 +167,7 @@ public class HFactory implements JParserNodeFactory<HNode> {
 //        HNode n = null;
 //        for (String s : y) {
 //            if (s.isEmpty()) {
-//                log().error("S036", "Invalid identifier " + varName, startToken);
+//                log().jerror("S036", "Invalid identifier " + varName, startToken);
 //            } else {
 //                if (n == null) {
 //                    n = new HNIdentifier(s, startToken);
@@ -235,7 +235,7 @@ public class HFactory implements JParserNodeFactory<HNode> {
 
     @Override
     public HNode createImplicitOperatorNode(HNode o1, HNode o2, JNodeTokens nodeTokens) {
-        log().error("X300", null, "Implicit operator not allowed", o1.getStartToken());
+        log().jerror("X300", null, o1.getStartToken(), "Implicit operator not allowed");
         return new HNTuple(new HNode[]{o1, o2}, nodeTokens.getStart(),new JToken[0], nodeTokens.getEnd());
     }
 
@@ -257,19 +257,17 @@ public class HFactory implements JParserNodeFactory<HNode> {
                 } else if (item instanceof HNDeclareIdentifier) {
                     HNDeclareIdentifier a1 = (HNDeclareIdentifier) item;
                     if (a1.getInitValue() != null) {
-                        log().error("X301", "lambda expression", "unexpected default value for lambda expression parameter", a1.getStartToken());
+                        log().jerror("X301", "lambda expression", a1.getStartToken(), "unexpected default value for lambda expression parameter");
                         a1.setInitValue(null);
                     }
                     List<String> unacceptableCalls = HNodeUtils.filterModifierAnnotations(a1.getAnnotations(),"private", "protected", "public", "static", "final", "const");
                     if (!unacceptableCalls.isEmpty()) {
-                        log().error("X302", "lambda expression", "lambda expression: unexpected modifiers " + String.join(",",unacceptableCalls)
-                                , a1.getStartToken());
+                        log().jerror("X302", "lambda expression", a1.getStartToken(), "lambda expression: unexpected modifiers " + String.join(",",unacceptableCalls));
                     }
                     lex.addArgument(a1);
                 } else {
-                    log().error("X303", "lambda expression", "unexpected expression of type " +
-                                    item.getClass().getSimpleName() + ". Was expecting identifier or declared identifier"
-                            , decl.getStartToken());
+                    log().jerror("X303", "lambda expression", decl.getStartToken(), "unexpected expression of type " +
+                            item.getClass().getSimpleName() + ". Was expecting identifier or declared identifier");
                 }
             }
         } else if (decl instanceof HNIdentifier) {
@@ -285,18 +283,17 @@ public class HFactory implements JParserNodeFactory<HNode> {
         } else if (decl instanceof HNDeclareIdentifier) {
             HNDeclareIdentifier a1 = (HNDeclareIdentifier) decl;
             if (a1.getInitValue() != null) {
-                log().error("X304", "lambda expression", "unexpected default value for lambda expression parameter", a1.getStartToken());
+                log().jerror("X304", "lambda expression", a1.getStartToken(), "unexpected default value for lambda expression parameter");
                 a1.setInitValue(null);
             }
             List<String> unacceptableCalls = HNodeUtils.filterModifierAnnotations(a1.getAnnotations(),"private", "protected", "public", "static", "final", "const");
             if (!unacceptableCalls.isEmpty()) {
-                log().error("X305", "lambda expression", "unexpected modifiers " + String.join(",",unacceptableCalls), a1.getStartToken());
+                log().jerror("X305", "lambda expression", a1.getStartToken(), "unexpected modifiers " + String.join(",",unacceptableCalls));
             }
             lex.addArgument(a1);
         } else {
-            log().error("X306", "lambda expression", "unexpected expression of type " +
-                            decl.getClass().getSimpleName() + ". Was expecting identifier or declared identifier"
-                    , decl.getStartToken());
+            log().jerror("X306", "lambda expression", decl.getStartToken(), "unexpected expression of type " +
+                    decl.getClass().getSimpleName() + ". Was expecting identifier or declared identifier");
         }
         lex.setBody(body);
         if (body instanceof HNBlock) {

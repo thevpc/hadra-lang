@@ -70,7 +70,7 @@ public class HNodeUtils {
             } else if (item instanceof HNTuple) {
                 children.add(toDeclareTupleItem((HNTuple) item, log));
             } else {
-                log.error("X000", null, "expected valid tuple item declaration", item.getStartToken());
+                log.jerror("X000", null, item.getStartToken(), "expected valid tuple item declaration");
             }
         }
         //should i add other tokens?

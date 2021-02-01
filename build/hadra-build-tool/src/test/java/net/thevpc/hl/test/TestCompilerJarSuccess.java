@@ -124,7 +124,7 @@ public class TestCompilerJarSuccess {
     public void testCompiler0012() {
         Assertions.assertEquals(0,
                 _compileResource("testCompilerSuccess0012.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
     /**
@@ -138,21 +138,21 @@ public class TestCompilerJarSuccess {
     public void testCompiler0013() {
         Assertions.assertEquals(0,
                 _compileResource("testCompilerSuccess0013_tuple.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
     @Test
     public void testCompiler0014() {
         Assertions.assertEquals(0,
                 _compileResource("testCompilerSuccess0014.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 
     @Test
     public void testCompiler0015() {
         Assertions.assertEquals(0,
                 _compileResource("testCompilerSuccess0015.hl")
-                        .errorCount());
+                        .getErrorCount());
         ;
     }
 
@@ -181,7 +181,7 @@ public class TestCompilerJarSuccess {
     public void testCompiler0019() {
         Assertions.assertEquals(0,
                 _compileResource("testCompilerSuccess0019_nulls.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
     /**
      * array selectors
@@ -203,7 +203,7 @@ public class TestCompilerJarSuccess {
     public void testCompiler0020() {
         Assertions.assertEquals(0,
                 _compileResource("testCompilerSuccess0020_array_selectors.hl")
-                        .errorCount());
+                        .getErrorCount());
     }
 //
 //    @Test
@@ -396,10 +396,10 @@ public class TestCompilerJarSuccess {
         HL hl = HL.create();
         return hl
                 .addSourceResourcesFile("net/hl/test/compiler/success/" + resourceFileName)
-                .addTarget(HTarget.JAR)
-                .setJavaFolder("target/hlc/test/" + resourceFileName + "/java")
-                .setClassFolder("target/hlc/test/" + resourceFileName + "/class")
-                .setJarFolder("target/hlc/test/" + resourceFileName + "/jar")
+                .addTarget(HTarget.COMPILE)
+                .setJavaFolder("target/hl/test/" + resourceFileName + "/java")
+                .setClassFolder("target/hl/test/" + resourceFileName + "/class")
+                .setJarFolder("target/hl/test/" + resourceFileName + "/jar")
                 .compile();
     }
 

@@ -36,15 +36,15 @@ public class NoTypeErrorCountVisitor implements JNodeVisitor {
                     if(((HNLiteral) node).getValue()==null){
                         return;
                     }
-                    logger.error("X33", null, "unable to resolve type for [" + node.getClass().getSimpleName() + "]", node.getStartToken());
+                    logger.jerror("X33", null, node.getStartToken(), "unable to resolve type for [" + node.getClass().getSimpleName() + "]");
                 }else if(node instanceof HNIdentifier) {
-                    logger.error("X33", null, "unable to resolve symbol : " + ((HNIdentifier) node).getName(), node.getStartToken());
+                    logger.jerror("X33", null, node.getStartToken(), "unable to resolve symbol : " + ((HNIdentifier) node).getName());
 //                }else if(node instanceof HNField){
 //                    HNField g=(HNField) node;
 //                    JType instanceNodeType = g.getInstanceNode()==null?null:((HNode)g.getInstanceNode()).getElement().getType();
 //                    logger.error("X33", "unable to resolve field : " + instanceNodeType +"."+g.getFieldName(), node.startToken());
                 }else {
-                    logger.error("X33", null, "unable to resolve type for [" + node.getClass().getSimpleName() + "]", node.getStartToken());
+                    logger.jerror("X33", null, node.getStartToken(), "unable to resolve type for [" + node.getClass().getSimpleName() + "]");
                 }
             }
             errors++;

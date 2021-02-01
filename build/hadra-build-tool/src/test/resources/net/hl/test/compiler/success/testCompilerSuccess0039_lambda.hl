@@ -22,7 +22,7 @@ fun void sum(int[] arr){
     for(i=0;i<arr.length;i=i+slice){
         tasks.add(()->sum(arr,i,max(arr.length,i+slice),ai));
     }
-    pool.invokeAll(tasks);
+    //pool.invokeAll(tasks); //cannot involke Runnable, must be Callable, so... change me...
     
     //alternative 2
     //try(pool = Executors.newFixedThreadPool(10)){

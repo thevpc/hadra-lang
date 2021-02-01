@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -32,6 +31,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class HIndexerImpl implements HIndexer {
+
     private static final Logger LOG = Logger.getLogger(HIndexerImpl.class.getName());
     JIndexStore store;
 
@@ -47,7 +47,7 @@ public class HIndexerImpl implements HIndexer {
     }
 
     @Override
-    public int indexSDK(String sdkHome, boolean force) {
+    public int indexSDK(String sdkHome, boolean force, JCompilerLog clog) {
         if (sdkHome == null) {
             sdkHome = System.getProperty("java.home");
         }
@@ -55,29 +55,29 @@ public class HIndexerImpl implements HIndexer {
             File file = new File(sdkHome, "lib" + File.separator + "rt.jar");
             if (file.exists()) {
                 //this is pre JDK 9 SDK
-                return indexLibrary(file, force);
+                return indexLibrary(file, force, clog);
             }
             file = new File(sdkHome, "jmods");
             if (file.isDirectory()) {
                 //this is JDK 9 SDK or later
                 File[] files = file.listFiles(x -> x.getName().endsWith(".jmod") && x.isFile());
-                if(files!=null) {
-                    int x=0;
+                if (files != null) {
+                    int x = 0;
                     for (File file1 : files) {
-                        int v = indexLibrary(file1, force);
-                        if(v>0){
-                            x+=v;
+                        int v = indexLibrary(file1, force, clog);
+                        if (v > 0) {
+                            x += v;
                         }
                     }
                     return x;
                 }
             }
         }
-        throw new JParseException("unable to resolve SDK location (rt.jar). using home :"+sdkHome);
+        throw new JParseException("unable to resolve SDK location (rt.jar). using home :" + sdkHome);
     }
 
     @Override
-    public int indexSource(JCompilationUnit compilationUnit) {
+    public int indexSource(JCompilationUnit compilationUnit, JCompilerLog clog) {
         Chronometer chrono = Chronometer.start();
         String uuid = compilationUnit.getSource().name();
         store.removeIndex(uuid);
@@ -85,7 +85,7 @@ public class HIndexerImpl implements HIndexer {
         IntRef counter = Ref.of(0);
         if (body != null) {
             for (HNDeclareType item : body.findDeclaredTypes()) {
-                indexDeclareType(uuid, item,counter);
+                indexDeclareType(uuid, item, counter);
             }
 //            for (HNDeclareIdentifier item : body.findDeclaredIdentifiers()) {
 //                indexDeclareIdentifier(uuid, item);
@@ -97,12 +97,15 @@ public class HIndexerImpl implements HIndexer {
 //                indexDeclareMetaPackage(uuid, item);
 //            }
         }
-        LOG.log(Level.INFO, "Index Source " + uuid + " ("+counter.get()+" classes )"+" in " + chrono.stop().getDuration());
+        LOG.log(Level.FINE, "index source {0} ({1} classes ) in {2}", new Object[]{uuid, counter.get(), chrono.stop().getDuration()});
+        if (clog != null) {
+            clog.jinfo("II01", "index", null, "index source {0} ({1} classes ) in {2}", new Object[]{uuid, counter.get(), chrono.stop().getDuration()});
+        }
         return counter.get();
     }
 
     @Override
-    public int indexLibrary(URL url, boolean force) {
+    public int indexLibrary(URL url, boolean force, JCompilerLog clog) {
         if ("file".equals(url.getProtocol())) {
             File f;
             try {
@@ -110,7 +113,7 @@ public class HIndexerImpl implements HIndexer {
             } catch (URISyntaxException e) {
                 f = new File(url.getPath());
             }
-            return indexLibrary(f, force);
+            return indexLibrary(f, force, clog);
         } else {
             throw new JFixMeLaterException();
         }
@@ -133,7 +136,7 @@ public class HIndexerImpl implements HIndexer {
     }
 
     @Override
-    public int indexLibrary(File file, boolean force) {
+    public int indexLibrary(File file, boolean force, JCompilerLog clog) {
         String uuid = file.getAbsolutePath();
         IntRef counter = Ref.of(0);
         try {
@@ -148,64 +151,79 @@ public class HIndexerImpl implements HIndexer {
                 return 0;
             }
         }
-        LOG.log(Level.INFO, "Index Library " + uuid + " started...");
+        LOG.log(Level.FINE, "index library {0} started...", uuid);
         Chronometer chrono = Chronometer.start();
         if (file.isDirectory()) {
             try {
-                Files.walk(file.toPath()).forEach(x -> readFile(x.toFile(),file,counter));
+                Files.walk(file.toPath()).forEach(x -> readFile(x.toFile(), file, counter, clog));
             } catch (IOException e) {
-                LOG.log(Level.INFO, "Index Library " + uuid + " failed with : " + e.toString());
+                LOG.log(Level.FINE, "index library {0} failed with : {1}", new Object[]{uuid, e.toString()});
+                if (clog != null) {
+                    clog.jerror("IE01", "index", null, "index library {0} failed with : {1}", new Object[]{uuid, e.toString()});
+                }
                 return counter.get();
             }
         } else {
             String fname = file.getName().toLowerCase();
-            if(fname.endsWith(".jar")) {
+            if (fname.endsWith(".jar")) {
                 try (JarFile jar = new JarFile(uuid)) {
                     Stream<JarEntry> str = jar.stream();
-                    str.forEach(z -> readJar(jar, z, counter));
+                    str.forEach(z -> readJar(jar, z, counter,clog));
                 } catch (IOException e) {
-                    LOG.log(Level.INFO, "Index Library " + uuid + " failed with : " + e.toString());
+                    LOG.log(Level.FINE, "index library {0} failed with : {1}", new Object[]{uuid, e.toString()});
+                    if (clog != null) {
+                        clog.jerror("IE01", "index", null, "index library {0} failed with : {1}", new Object[]{uuid, e.toString()});
+                    }
                     return counter.get();
                 }
-            }else if(fname.endsWith(".jmod")) {
+            } else if (fname.endsWith(".jmod")) {
                 try (ZipFile jar = new ZipFile(uuid)) {
                     Stream<ZipEntry> str = (Stream<ZipEntry>) jar.stream();
-                    str.forEach(z -> readJmod(jar, z, counter));
+                    str.forEach(z -> readJmod(jar, z, counter,clog));
                 } catch (IOException e) {
-                    LOG.log(Level.INFO, "Index Library " + uuid + " failed with : " + e.toString());
+                    LOG.log(Level.FINE, "index library {0} failed with : {1}", new Object[]{uuid, e.toString()});
+                    if (clog != null) {
+                        clog.jerror("IE01", "index", null, "index library {0} failed with : {1}", new Object[]{uuid, e.toString()});
+                    }
                     return counter.get();
                 }
-            }else if(fname.endsWith(".zip")) {
+            } else if (fname.endsWith(".zip")) {
                 try (ZipFile jar = new ZipFile(uuid)) {
                     Stream<ZipEntry> str = (Stream<ZipEntry>) jar.stream();
-                    str.forEach(z -> readJmod(jar, z, counter));
+                    str.forEach(z -> readJmod(jar, z, counter,clog));
                 } catch (IOException e) {
-                    LOG.log(Level.INFO, "Index Library " + uuid + " failed with : " + e.toString());
+                    LOG.log(Level.FINE, "index library {0} failed with : {1}", new Object[]{uuid, e.toString()});
+                    if (clog != null) {
+                        clog.jerror("IE01", "index", null, "index library {0} failed with : {1}", new Object[]{uuid, e.toString()});
+                    }
                     return counter.get();
                 }
-            }else {
-                throw new IllegalArgumentException("Unsupported file type : "+fname);
+            } else {
+                throw new IllegalArgumentException("unable to index library. unsupported library file type : " + fname);
             }
         }
         store.index(uuid, elementType,
                 new DefaultJIndexDocument(uuid)
                         .add("lastModified", String.valueOf(lastModified), true), true
         );
-        LOG.log(Level.INFO, "Index Library " + uuid + " ("+counter.get()+" classes)"+ " finished in " + chrono.stop().getDuration());
+        LOG.log(Level.FINE, "index Library {0} ({1} classes) finished in {2}", new Object[]{uuid, counter.get(), chrono.stop().getDuration()});
+        if (clog != null) {
+            clog.jinfo("II02", "index", null, "index library {0} ({1} classes) finished in {2}", new Object[]{uuid, counter.get(), chrono.stop().getDuration()});
+        }
         return counter.get();
     }
 
-    private void readFile(File entry,File root,IntRef typesCounter) {
+    private void readFile(File entry, File root, IntRef typesCounter, JCompilerLog clog) {
         String name = entry.getAbsolutePath();
-        try{
+        try {
             name = entry.getCanonicalPath();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             //
         }
         String rname = root.getAbsolutePath();
-        try{
+        try {
             rname = root.getCanonicalPath();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             //
         }
         if (name.endsWith(".class") && isValidClassFile(name)) {
@@ -214,12 +232,15 @@ public class HIndexerImpl implements HIndexer {
                 cr.accept(new JavaClassVisitor(this, rname), ClassReader.SKIP_FRAMES);
                 typesCounter.inc();
             } catch (IOException e) {
-                LOG.log(Level.INFO, "Read Class file failed with : " + e.toString());
+                LOG.log(Level.FINE, "read Class file failed with : {0}", e.toString());
+                if (clog != null) {
+                    clog.warn("IE03", "index", null, String.format("read class file failed with : {0}", e.toString()));
+                }
             }
         }
     }
 
-    private void readJar(JarFile jarFile, JarEntry entry,IntRef typesCounter) {
+    private void readJar(JarFile jarFile, JarEntry entry, IntRef typesCounter, JCompilerLog clog) {
         String name = entry.getName();
         if (name.endsWith(".class") && isValidClassFile(name)) {
             try (InputStream jis = jarFile.getInputStream(entry)) {
@@ -227,12 +248,15 @@ public class HIndexerImpl implements HIndexer {
                 cr.accept(new JavaClassVisitor(this, jarFile.getName()), ClassReader.SKIP_FRAMES);
                 typesCounter.inc();
             } catch (IOException e) {
-                LOG.log(Level.INFO, "Read jar class file failed with : " + e.toString());
+                LOG.log(Level.FINE, "read jar jar file failed with : {0}", e.toString());
+                if (clog != null) {
+                    clog.warn("IE04", "index", null, String.format("read jar file failed with : {0}", e.toString()));
+                }
             }
         }
     }
 
-    private void readJmod(ZipFile jmodFile, ZipEntry entry,IntRef typesCounter) {
+    private void readJmod(ZipFile jmodFile, ZipEntry entry, IntRef typesCounter, JCompilerLog clog) {
         String name = entry.getName();
         if (name.startsWith("classes/") && name.endsWith(".class") && isValidClassFile(name)) {
             try (InputStream jis = jmodFile.getInputStream(entry)) {
@@ -240,11 +264,15 @@ public class HIndexerImpl implements HIndexer {
                 cr.accept(new JavaClassVisitor(this, jmodFile.getName()), ClassReader.SKIP_FRAMES);
                 typesCounter.inc();
             } catch (IOException e) {
-                LOG.log(Level.INFO, "Read jmod class file failed with : " + e.toString());
+                LOG.log(Level.FINE, "read jmod file failed with : {0}", e.toString());
+                if (clog != null) {
+                    clog.warn("IE05", "index", null, String.format("read jmod file failed with : {0}", e.toString()));
+                }
             }
         }
     }
-    private void readJavaZip(ZipFile jmodFile, ZipEntry entry,IntRef typesCounter) {
+
+    private void readJavaZip(ZipFile jmodFile, ZipEntry entry, IntRef typesCounter, JCompilerLog clog) {
         String name = entry.getName();
         if (name.endsWith(".class") && isValidClassFile(name)) {
             try (InputStream jis = jmodFile.getInputStream(entry)) {
@@ -252,34 +280,37 @@ public class HIndexerImpl implements HIndexer {
                 cr.accept(new JavaClassVisitor(this, jmodFile.getName()), ClassReader.SKIP_FRAMES);
                 typesCounter.inc();
             } catch (IOException e) {
-                LOG.log(Level.INFO, "Read jmod class file failed with : " + e.toString());
+                LOG.log(Level.FINE, "read zip file failed with : {0}", e.toString());
+                if (clog != null) {
+                    clog.warn("IE06", "index", null, String.format("read zip file failed with : {0}", e.toString()));
+                }
             }
         }
     }
 
     public void indexDeclareType(String uuid, HNDeclareType item) {
-        indexDeclareType(uuid,item,new IntRef(0));
+        indexDeclareType(uuid, item, new IntRef(0));
     }
 
-    public void indexDeclareType(String uuid, HNDeclareType item,IntRef typesCounter) {
+    public void indexDeclareType(String uuid, HNDeclareType item, IntRef typesCounter) {
         typesCounter.inc();
         //remove old indexes
         for (String elementType : new String[]{
-                "Method",
-                "Field",
-                "Type",
-                "Constructor"
+            "Method",
+            "Field",
+            "Type",
+            "Constructor"
         }) {
             for (JIndexDocument d : store.searchDocuments(uuid, elementType, new JIndexQuery().whereEq("declaringType", item.getFullName()))) {
                 store.removeIndex(uuid, elementType, d.getId());
             }
         }
-        indexType(new HIndexedClass(item,uuid));
+        indexType(new HIndexedClass(item, uuid));
         JNode body = item.getBody();
         if (body instanceof HNBlock) {
             HNBlock bloc = (HNBlock) body;
             for (HNDeclareType item2 : bloc.findDeclaredTypes()) {
-                indexDeclareType(uuid, item2,typesCounter);
+                indexDeclareType(uuid, item2, typesCounter);
             }
 //            for (HNDeclareIdentifier item2 : bloc.getVarDeclarations()) {
 //                indexDeclareIdentifier(uuid, item2);
@@ -296,7 +327,6 @@ public class HIndexerImpl implements HIndexer {
 //            store.index(uuid, "Field", new HLIndexedField(item, i),true);
 //        }
 //    }
-
 //    private void indexDeclareInvokable(String uuid, HNDeclareInvokable item) {
 //        if (item.isConstructor()) {
 //            store.index(uuid, "Constructor", new HLIndexedConstructor(item),true);
@@ -304,11 +334,9 @@ public class HIndexerImpl implements HIndexer {
 //            store.index(uuid, "Method", new HLIndexedMethod(item),true);
 //        }
 //    }
-
-
     @Override
-    public void indexProject(HIndexedProject project){
-        LOG.log(Level.INFO, "index project " + project.getId()+" @ "+project.getSource());
+    public void indexProject(HIndexedProject project) {
+        LOG.log(Level.FINE, "index project {0} @ {1}", new Object[]{project.getId(), project.getSource()});
         store.index(project.getSource(), "Project", project, true);
     }
 
@@ -411,7 +439,6 @@ public class HIndexerImpl implements HIndexer {
         return all;
     }
 
-
     @Override
     public Set<HIndexedMethod> searchMethods(String declaringType, String methodNameOrNull, boolean inherited) {
         JIndexQuery q = new JIndexQuery();
@@ -423,7 +450,6 @@ public class HIndexerImpl implements HIndexer {
         }
         return searchMethods(q, inherited);
     }
-
 
     @Override
     public Set<HIndexedConstructor> searchConstructors(JIndexQuery query) {
@@ -456,7 +482,6 @@ public class HIndexerImpl implements HIndexer {
         return JeepUtils.first(store.searchElements(null, "Package", q));
     }
 
-
     @Override
     public Set<HIndexedProject> searchProjects() {
         return store.searchElements(null, "Project");
@@ -465,8 +490,8 @@ public class HIndexerImpl implements HIndexer {
     public HIndexedProject searchProject(String projectRoot) {
         return JeepUtils.first(
                 store.searchElements(null, "Project",
-                        new JIndexQuery().whereEq("projectRoot",projectRoot)
-                        )
+                        new JIndexQuery().whereEq("projectRoot", projectRoot)
+                )
         );
     }
 
@@ -480,7 +505,7 @@ public class HIndexerImpl implements HIndexer {
 
     @Override
     public void indexType(HIndexedClass p) {
-        LOG.log(Level.INFO, "index type " + p.getFullName());
+        LOG.log(Level.FINE, "index type {0}", p.getFullName());
         indexType0(p);
     }
 
@@ -491,7 +516,7 @@ public class HIndexerImpl implements HIndexer {
 
     @Override
     public void indexField(HIndexedField p) {
-        LOG.log(Level.INFO, "index field " + p.getType() + " " + p.getDeclaringType() + "." + p.getName());
+        LOG.log(Level.FINE, "index field {0} {1}.{2}", new Object[]{p.getType(), p.getDeclaringType(), p.getName()});
         indexField0(p);
     }
 
@@ -501,9 +526,9 @@ public class HIndexerImpl implements HIndexer {
 
     @Override
     public void indexMethod(HIndexedMethod p) {
-        LOG.log(Level.INFO, "index method " + (p.getReturnType().isEmpty() ? "?" : p.getReturnType()) + " "
-                + (p.getDeclaringType().isEmpty() ? "" : (p.getDeclaringType() + ".")) + p.getSignature()
-        );
+        LOG.log(Level.FINE, "index method {0} {1}{2}", new Object[]{
+            p.getReturnType().isEmpty() ? "?" : p.getReturnType(), p.getDeclaringType().isEmpty() ? "" : (p.getDeclaringType() + "."), p.getSignature()
+        });
         indexMethod0(p);
     }
 
@@ -513,37 +538,38 @@ public class HIndexerImpl implements HIndexer {
 
     @Override
     public void indexConstructor(HIndexedConstructor p) {
-        LOG.log(Level.INFO, "index constructor " + p.getDeclaringType() + "." + p.getSignature());
+        LOG.log(Level.FINE, "index constructor {0}.{1}", new Object[]{p.getDeclaringType(), p.getSignature()});
         indexConstructor0(p);
     }
+
     public final void indexConstructor0(HIndexedConstructor p) {
         store.index(p.getSource(), "Constructor", p, true);
     }
 
-    public boolean isValidClassFile(String name){
-        int i=name.lastIndexOf('/');
-        if(i<0){
-            i=0;
-        }else{
-            i=i+1;
+    public boolean isValidClassFile(String name) {
+        int i = name.lastIndexOf('/');
+        if (i < 0) {
+            i = 0;
+        } else {
+            i = i + 1;
         }
         for (int j = i; j < name.length(); j++) {
             char c = name.charAt(j);
-            switch (c){
-                case '-':{
+            switch (c) {
+                case '-': {
                     return false;
                 }
-                case '$':{
-                    if(j+1<name.length()) {
+                case '$': {
+                    if (j + 1 < name.length()) {
                         char c2 = name.charAt(j + 1);
-                        if(c2>='0' && c2<='9'){
+                        if (c2 >= '0' && c2 <= '9') {
                             return false;
                         }
                     }
                     break;
                 }
-                default:{
-                    if(!Character.isJavaIdentifierPart(c) && c!='.'){
+                default: {
+                    if (!Character.isJavaIdentifierPart(c) && c != '.') {
                         return false;
                     }
                 }

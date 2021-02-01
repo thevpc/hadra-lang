@@ -13,12 +13,25 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
+import net.thevpc.nuts.NutsSession;
 
 public class HJeepFactory extends DefaultJeepFactory {
+
+    private NutsSession session;
+
+    public HJeepFactory(NutsSession session) {
+        this.session = session;
+    }
+
     @Override
     public JFunctions createFunctions(JContext context) {
         JContext p = context.parent();
         return new HLFunctions(context, p);
+    }
+
+    @Override
+    public JCompilerLog createLog(JContext context) {
+        return new HCompilerLog(session);
     }
 
     @Override
@@ -27,13 +40,14 @@ public class HJeepFactory extends DefaultJeepFactory {
     }
 
     private static class HLFunctions extends JFunctionsImpl {
+
         public HLFunctions(JContext context, JContext p) {
             super(context, p == null ? null : p.functions());
         }
 
         @Override
         public JInvokable resolveBestMatch(JCallerInfo callerInfo, JInvokable[] invokables, Function<JTypePattern, JConverter[]> convertersSupplier, JTypePattern[] argTypes, JTypePattern returnType) {
-            HCallerInfo hCallerInfo=(callerInfo instanceof HCallerInfo)?((HCallerInfo) callerInfo):null;
+            HCallerInfo hCallerInfo = (callerInfo instanceof HCallerInfo) ? ((HCallerInfo) callerInfo) : null;
             JInvokableCost[] result = resolveMatches(true, invokables, convertersSupplier, argTypes, returnType);
             if (result.length == 0) {
                 return null;
@@ -45,12 +59,12 @@ public class HJeepFactory extends DefaultJeepFactory {
                 }
                 CallerInfoComparator comparator = new CallerInfoComparator(hCallerInfo);
                 Arrays.sort(error, comparator);
-                List<JInvokable> reorderedResults=new ArrayList<>();
+                List<JInvokable> reorderedResults = new ArrayList<>();
                 reorderedResults.add(error[0]);
                 for (int i = 1; i < error.length; i++) {
-                    if(comparator.compare(error[0],error[i])==0){
+                    if (comparator.compare(error[0], error[i]) == 0) {
                         reorderedResults.add(error[i]);
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -65,6 +79,7 @@ public class HJeepFactory extends DefaultJeepFactory {
         }
 
         private static class CallerInfoComparator implements Comparator<JInvokable> {
+
             private final HCallerInfo hCallerInfo;
 
             public CallerInfoComparator(HCallerInfo hCallerInfo) {
@@ -82,11 +97,11 @@ public class HJeepFactory extends DefaultJeepFactory {
                     if (s2.endsWith(".hl") && !s1.endsWith(".hl")) {
                         return 1;
                     }
-                    if(hCallerInfo !=null){
-                        if(s1.equals(hCallerInfo.getSource())){
+                    if (hCallerInfo != null) {
+                        if (s1.equals(hCallerInfo.getSource())) {
                             return -1;
                         }
-                        if(s2.equals(hCallerInfo.getSource())){
+                        if (s2.equals(hCallerInfo.getSource())) {
                             return 1;
                         }
                     }

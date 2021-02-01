@@ -21,13 +21,25 @@ import net.thevpc.jeep.core.tokens.JTokenDef;
  * @author vpc
  */
 public class TestTokenizer {
+
+    @Test
+    public void testTok1() {
+        HL c = new HL();
+        JTokenizer tokens = c.languageContext().tokens().of("println(\"Hello World\");");
+        int count=0;
+        for (JToken token : tokens) {
+            System.out.println(token);
+            count++;
+        }
+    }
+
     @Test
     public void testRange() {
         HL c = new HL();
         double a = 1E-5;
-        JTokenizer tokens = c.languageContext().tokens().of("1E-1..2", false, false);
+        JTokenizer tokens = c.languageContext().tokens().of("1E-1..2");
         int count = 0;
-        Assertions.assertEquals(0.1, tokens.next().sval);
+        Assertions.assertEquals("1E-1", tokens.next().image);
         Assertions.assertEquals("..", tokens.next().image);
         Assertions.assertEquals("2", tokens.next().image);
         Assertions.assertEquals(JTokenType.TT_EOF, tokens.next().def.ttype);
@@ -41,7 +53,7 @@ public class TestTokenizer {
     @Test
     public void test1() {
         JTokens tokens = new HL().languageContext().tokens();
-        JTokenizer jTokenizer = tokens.of("public static", true, true);
+        JTokenizer jTokenizer = tokens.of("public static");
         int count = 0;
         for (JToken jToken : jTokenizer) {
             System.out.println(jToken);
@@ -54,7 +66,7 @@ public class TestTokenizer {
     @Test
     public void testIs() {
         JTokens tokens = new HL().languageContext().tokens();
-        JTokenizer jTokenizer = tokens.of("is", true, true);
+        JTokenizer jTokenizer = tokens.of("is");
         for (JTokenPattern pattern : jTokenizer.getPatterns()) {
             System.out.println(pattern.matcher().matches("is") + " :: " + pattern + "  " + pattern.getClass().getSimpleName());
         }
@@ -66,7 +78,7 @@ public class TestTokenizer {
         }
         System.out.println("------------------------------------------");
 
-        jTokenizer = tokens.of("isBlank", true, true);
+        jTokenizer = tokens.of("isBlank");
         for (JTokenPattern pattern : jTokenizer.getPatterns()) {
             System.out.println(pattern.matcher().matches("is") + " :: " + pattern + "  " + pattern.getClass().getSimpleName());
         }
@@ -79,7 +91,7 @@ public class TestTokenizer {
     @Test
     public void testDollar() {
         JTokens tokens = new HL().languageContext().tokens();
-        JTokenizer jTokenizer = tokens.of("($/2+1)..$", false, false);
+        JTokenizer jTokenizer = tokens.of("($/2+1)..$");
         for (JTokenPattern pattern : jTokenizer.getPatterns()) {
             System.out.println(pattern.matcher().matches("$") + " :: " + pattern + "  " + pattern.getClass().getSimpleName());
         }
@@ -95,7 +107,7 @@ public class TestTokenizer {
     public void testTokenDefinitions() {
         JTokens tokens = new HL().languageContext().tokens();
 
-        JTokenizer jTokenizer = tokens.of("public $\"Hello", false, false);
+        JTokenizer jTokenizer = tokens.of("public $\"Hello");
         JTokenDef[] tokenTemplates = jTokenizer.getTokenDefinitions();
         Arrays.sort(tokenTemplates, Comparator.<JTokenDef>comparingInt(x -> x.stateId)
                 .thenComparingInt(x -> x.id)
@@ -110,7 +122,7 @@ public class TestTokenizer {
     public void testInvalid() {
         JTokens tokens = new HL().languageContext().tokens();
 
-        JTokenizer jTokenizer = tokens.of("public $\"Hello", false, false);
+        JTokenizer jTokenizer = tokens.of("public $\"Hello");
         System.out.println("========================================================");
         int count = 0;
         for (JToken token : jTokenizer) {
@@ -124,7 +136,7 @@ public class TestTokenizer {
     public void testInterpolation1() {
         HL c = new HL();
         JTokenizer tokens = c.languageContext().tokens().of(
-                getClass().getResource("/net/hl/test/tokenizer/interpolation1.hl"), false, false);
+                getClass().getResource("/net/hl/test/tokenizer/interpolation1.hl"));
         for (JToken token : tokens) {
             System.out.println(token.sval + " :: " + token);
             if (token.pushState > 0) {
@@ -139,7 +151,7 @@ public class TestTokenizer {
     public void testInterpolation2() {
         HL c = new HL();
         JTokenizer tokens = c.languageContext().tokens().of(
-                getClass().getResource("/net/hl/test/tokenizer/interpolation2.hl"), false, false);
+                getClass().getResource("/net/hl/test/tokenizer/interpolation2.hl"));
         for (JToken token : tokens) {
             System.out.println(
                     token.def.ttype + ":" + token.def.id + ":" + token.sval + " :: " + token);
@@ -161,19 +173,18 @@ public class TestTokenizer {
         for (String s : a) {
             System.out.println(s);
         }
-        Assertions.assertArrayEquals((
-                        "DEFAULT:TT_STRING_INTERP/STRING_INTERP_START;PUSH STRING_INTERP_TEXT\n" +
-                                "STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_TEXT\n" +
-                                "STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_DOLLAR_START;PUSH STRING_INTERP_VAR\n" +
-                                "STRING_INTERP_VAR:TT_IDENTIFIER/IDENTIFIER;POP STRING_INTERP_TEXT\n" +
-                                "STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_TEXT\n" +
-                                "STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_DOLLAR_START;PUSH STRING_INTERP_CODE\n" +
-                                "STRING_INTERP_CODE:TT_IDENTIFIER/IDENTIFIER\n" +
-                                "STRING_INTERP_CODE:TT_OPERATOR/+\n" +
-                                "STRING_INTERP_CODE:TT_NUMBER/NUMBER_INT\n" +
-                                "STRING_INTERP_CODE:TT_STRING_INTERP/STRING_INTERP_DOLLAR_END;POP STRING_INTERP_TEXT\n" +
-                                "STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_END;POP DEFAULT\n" +
-                                "DEFAULT:TT_EOF/EOF").split("\n"),
+        Assertions.assertArrayEquals(("STATE_DEFAULT:TT_STRING_INTERP/STRING_INTERP_START;PUSH STATE_STRING_INTERP_TEXT\n"
+                + "STATE_STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_TEXT\n"
+                + "STATE_STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_DOLLAR_START;PUSH STATE_STRING_INTERP_VAR\n"
+                + "STATE_STRING_INTERP_VAR:TT_IDENTIFIER/IDENTIFIER;POP STATE_STRING_INTERP_TEXT\n"
+                + "STATE_STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_TEXT\n"
+                + "STATE_STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_DOLLAR_START;PUSH STATE_STRING_INTERP_CODE\n"
+                + "STATE_STRING_INTERP_CODE:TT_IDENTIFIER/IDENTIFIER\n"
+                + "STATE_STRING_INTERP_CODE:TT_OPERATOR/PLUS\n"
+                + "STATE_STRING_INTERP_CODE:TT_NUMBER/NUMBER_INT\n"
+                + "STATE_STRING_INTERP_CODE:TT_STRING_INTERP/STRING_INTERP_DOLLAR_END;POP STATE_STRING_INTERP_TEXT\n"
+                + "STATE_STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_END;POP STATE_DEFAULT\n"
+                + "STATE_DEFAULT:EOF/EOF").split("\n"),
                 a
         );
     }
@@ -186,36 +197,37 @@ public class TestTokenizer {
         while (true) {
             tokens.peek();
             JToken token = tokens.next();
-            System.out.println(">> "+JTokenFormat.COLUMNS.format(token));
+            System.out.println(">> " + JTokenFormat.COLUMNS.format(token));
             if (!token.isEOF()) {
                 a.add(tokenSig(token, tokens));
-            }else{
+            } else {
                 break;
             }
         }
+        System.out.println("FOUND::");
         for (String s : a) {
             System.out.println(s);
         }
-        Assertions.assertArrayEquals((
-                        "DEFAULT:TT_STRING_INTERP/STRING_INTERP_START;PUSH STRING_INTERP_TEXT\n" +
-                                "STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_TEXT\n" +
-                                "STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_DOLLAR_START;PUSH STRING_INTERP_VAR\n" +
-                                "STRING_INTERP_VAR:TT_IDENTIFIER/IDENTIFIER;POP STRING_INTERP_TEXT\n" +
-                                "STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_TEXT\n" +
-                                "STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_DOLLAR_START;PUSH STRING_INTERP_CODE\n" +
-                                "STRING_INTERP_CODE:TT_IDENTIFIER/IDENTIFIER\n" +
-                                "STRING_INTERP_CODE:TT_OPERATOR/+\n" +
-                                "STRING_INTERP_CODE:TT_NUMBER/NUMBER_INT\n" +
-                                "STRING_INTERP_CODE:TT_STRING_INTERP/STRING_INTERP_DOLLAR_END;POP STRING_INTERP_TEXT\n" +
-                                "STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_END;POP DEFAULT"
-                                ).split("\n"),
+        System.out.println("EXPECTED::");
+        final String expected = "STATE_DEFAULT:TT_STRING_INTERP/STRING_INTERP_START;PUSH STATE_STRING_INTERP_TEXT\n"
+                + "STATE_STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_TEXT\n"
+                + "STATE_STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_DOLLAR_START;PUSH STATE_STRING_INTERP_VAR\n"
+                + "STATE_STRING_INTERP_VAR:TT_IDENTIFIER/IDENTIFIER;POP STATE_STRING_INTERP_TEXT\n"
+                + "STATE_STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_TEXT\n"
+                + "STATE_STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_DOLLAR_START;PUSH STATE_STRING_INTERP_CODE\n"
+                + "STATE_STRING_INTERP_CODE:TT_IDENTIFIER/IDENTIFIER\n"
+                + "STATE_STRING_INTERP_CODE:TT_OPERATOR/PLUS\n"
+                + "STATE_STRING_INTERP_CODE:TT_NUMBER/NUMBER_INT\n"
+                + "STATE_STRING_INTERP_CODE:TT_STRING_INTERP/STRING_INTERP_DOLLAR_END;POP STATE_STRING_INTERP_TEXT\n"
+                + "STATE_STRING_INTERP_TEXT:TT_STRING_INTERP/STRING_INTERP_END;POP STATE_DEFAULT";
+        System.out.println(expected);
+        Assertions.assertArrayEquals((expected).split("\n"),
                 a.toArray(new String[0])
         );
     }
 
     /**
-     * incomplete interpolation
-     * $"values are x=$
+     * incomplete interpolation $"values are x=$
      */
     @Test
     public void testInterpolation4() {
@@ -241,7 +253,7 @@ public class TestTokenizer {
 //                a
 //        );
     }
-    
+
     @Test
     public void testTokenizer05() {
         HL hl = new HL();
@@ -290,7 +302,7 @@ public class TestTokenizer {
 
     private JTokenizer _tokenizeResource(String resourceName, HL hl) {
         return hl.languageContext().tokens().of(
-                getClass().getResource("/net/hl/test/tokenizer/" + resourceName), false, false);
+                getClass().getResource("/net/hl/test/tokenizer/" + resourceName));
     }
 
     private void dump(JTokenizer tokens) {
