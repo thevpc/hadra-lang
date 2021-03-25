@@ -20,6 +20,7 @@ fun void myMethod(){
     String one="one";
     FileInputStream connexion;
 
+    int x0=try int(str) catch 0;
     int x1=try int("one");
     int x1b=try int("one") catch 1;
     int x2=try(c=connexion) int("one") catch 1;

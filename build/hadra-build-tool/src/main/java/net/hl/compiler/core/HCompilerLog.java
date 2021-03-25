@@ -19,8 +19,8 @@ import net.thevpc.jeep.DefaultJCompilerLog;
 import net.thevpc.nuts.NutsMessage;
 import net.thevpc.nuts.NutsSession;
 import net.thevpc.nuts.NutsTextNode;
-import net.thevpc.nuts.NutsTextNodeFactory;
 import net.thevpc.nuts.NutsTextNodeStyle;
+import net.thevpc.nuts.NutsTextManager;
 
 /**
  *
@@ -37,7 +37,7 @@ public class HCompilerLog extends DefaultJCompilerLog {
     @Override
     public void printFooter() {
         PrintStream out = session.out();
-        final NutsTextNodeFactory factory = session.getWorkspace().formats().text().factory();
+        final NutsTextManager factory = session.getWorkspace().formats().text();
         String op = getOperationName();
         if (op == null) {
             op = DEFAULT_OPERATION_NAME;
@@ -57,7 +57,7 @@ public class HCompilerLog extends DefaultJCompilerLog {
 
         out.println(
                 StringUtils.center2(
-                        "[ " + session.getWorkspace().formats().text().factory().nodeFor(
+                        "[ " + session.getWorkspace().formats().text().nodeFor(
                                 m
                         ).toString()
                         + " ]",
@@ -73,7 +73,7 @@ public class HCompilerLog extends DefaultJCompilerLog {
         final Level level = jSourceMessage.getLevel();
         final String id = jSourceMessage.getId();
         final Message message = jSourceMessage.getMessage();
-        final NutsTextNodeFactory factory = session.getWorkspace().formats().text().factory();
+        final NutsTextManager factory = session.getWorkspace().formats().text();
 
         JTextSource compilationUnitSource0 = token == null ? null : token.getSource();
         String compilationUnitSource = compilationUnitSource0 == null ? "" : compilationUnitSource0.name();
@@ -145,9 +145,9 @@ public class HCompilerLog extends DefaultJCompilerLog {
             out.printf("%s", factory.styled("^^^", NutsTextNodeStyle.path()));
 
 //            out.printf("%s", " [Line:");
-//            out.printf("%s", factory.styled(String.valueOf(token.getStartLineNumber() + 1), NutsTextNodeStyle.number()));
+//            out.printf("%s", text.styled(String.valueOf(token.getStartLineNumber() + 1), NutsTextNodeStyle.number()));
 //            out.printf("%s", ",Column:");
-//            out.printf("%s", factory.styled(String.valueOf(token.getStartColumnNumber() + 1), NutsTextNodeStyle.number()));
+//            out.printf("%s", text.styled(String.valueOf(token.getStartColumnNumber() + 1), NutsTextNodeStyle.number()));
 //            out.printf("%s", "]");
             if (compilationUnitSource.length() > 0 && (compilationUnitSource.contains("/") || compilationUnitSource.contains("\\"))) {
                 String s = compilationUnitSource;

@@ -6,11 +6,10 @@
 package net.hl.compiler.utils;
 
 import net.hl.lang.IntToIntFunction;
-import net.thevpc.nuts.NutsTextFormatManager;
-import net.thevpc.nuts.NutsTextNode;
-import net.thevpc.nuts.NutsTextNodeFactory;
+import net.thevpc.nuts.NutsFormatManager;
 import net.thevpc.nuts.NutsTextNodeStyle;
 import net.thevpc.nuts.NutsWorkspace;
+import net.thevpc.nuts.NutsTextManager;
 
 /**
  *
@@ -62,9 +61,9 @@ public class StringUtils {
     public static String center2(String msg, int length, char c, NutsWorkspace ws) {
         StringBuilder sb = new StringBuilder();
         sb.append(msg);
-        NutsTextFormatManager t = ws.formats().text();
-        NutsTextNodeFactory f = t.factory();
-        int len0 = t.parse(sb.toString()).textLength();
+        NutsFormatManager t = ws.formats();
+        NutsTextManager f = t.text();
+        int len0 = t.text().parse(sb.toString()).textLength();
         int variant = 2;
         IntToIntFunction color
                 = variant == 1 ? (i -> 30 + (i % 40) / 2)

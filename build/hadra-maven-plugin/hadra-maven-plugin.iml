@@ -6,6 +6,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -54,8 +55,9 @@
     <orderEntry type="library" name="Maven: net.thevpc:tson:1.0.0" level="project" />
     <orderEntry type="module" module-name="hadra-lang" />
     <orderEntry type="library" name="Maven: net.thevpc.jeep:jeep:1.2.7" level="project" />
-    <orderEntry type="library" name="Maven: net.thevpc.common:thevpc-common-text-source:1.3.0" level="project" />
-    <orderEntry type="library" name="Maven: net.thevpc.common:thevpc-common-text-source-log:1.3.0" level="project" />
-    <orderEntry type="library" name="Maven: net.thevpc.common:thevpc-common-classpath:1.3.2" level="project" />
+    <orderEntry type="module" module-name="thevpc-common-text-source" />
+    <orderEntry type="module" module-name="thevpc-common-text-source-log" />
+    <orderEntry type="module" module-name="thevpc-common-msg" />
+    <orderEntry type="module" module-name="thevpc-common-classpath" />
   </component>
 </module>

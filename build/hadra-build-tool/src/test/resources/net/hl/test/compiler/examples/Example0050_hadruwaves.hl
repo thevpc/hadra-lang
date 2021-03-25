@@ -13,7 +13,7 @@ import net.thevpc.scholar.**
   val μ = μ0;
   val r = (500mm) * 2;
   val a = 100.567mm;
-  val b = 30mm;
+  val b = 30 mm;
   val ep = 1.59mm;
   val ap = 50mm;
   val bp = 5 mm;

@@ -44,7 +44,7 @@
             <version>8.0.1</version>
         </dependency>
         <dependency>
-            <groupId>net.thevpc</groupId>
+            <groupId>net.thevpc.tson</groupId>
             <artifactId>tson</artifactId>
             <version>1.0.0</version>
         </dependency>
