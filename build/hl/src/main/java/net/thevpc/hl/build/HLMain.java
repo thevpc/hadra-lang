@@ -111,7 +111,7 @@ public class HLMain extends NutsApplication {
         NutsSession session = applicationContext.getSession();
         NutsWorkspaceCommandAlias a = findDefaultAlias(applicationContext);
         if (a != null) {
-            ws.aliases().remove(PREFERRED_ALIAS, new NutsRemoveOptions().setSession(session));
+            ws.aliases().setSession(session).remove(PREFERRED_ALIAS);
             ws.config().save(session);
         }
     }
@@ -134,11 +134,13 @@ public class HLMain extends NutsApplication {
             add = true;
         }
         if (update || add) {
-            ws.aliases().add(new NutsCommandAliasConfig()
+            ws.aliases()
+                    .setSession((update ? session.copy().setConfirm(NutsConfirmationMode.YES) : session))
+                    .add(new NutsCommandAliasConfig()
                     .setName(PREFERRED_ALIAS)
                     .setOwner(applicationContext.getAppId())
-                    .setCommand(applicationContext.getAppId().getShortName()),
-                    new NutsAddOptions().setSession(update ? session.copy().setConfirm(NutsConfirmationMode.YES) : session));
+                    .setCommand(applicationContext.getAppId().getShortName())
+                    );
             ws.config().save(session);
         }
     }
