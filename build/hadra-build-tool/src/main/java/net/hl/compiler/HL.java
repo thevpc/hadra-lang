@@ -18,7 +18,7 @@ import net.hl.compiler.index.HIndexer;
 import net.hl.compiler.stages.generators.java.HStage11JavaRun;
 import net.hl.compiler.utils.StringUtils;
 import net.thevpc.nuts.NutsSession;
-import net.thevpc.nuts.NutsTextNodeStyle;
+import net.thevpc.nuts.NutsTextStyle;
 
 /**
  * Hadra Language Build Tool
@@ -76,7 +76,7 @@ public class HL extends HOptions<HL> {
         Chronometer globalChronometer = Chronometer.start();
         project.getSession().out().println(
                 StringUtils.center2(
-                        "[ " + project.getWorkspace().formats().text().styled("Hadra Lang Build Tool", NutsTextNodeStyle.primary(1)).toString()
+                        "[ " + project.getWorkspace().formats().text().forStyled("Hadra Lang Build Tool", NutsTextStyle.primary(1)).toString()
                         + " ]",
                          80, '-', context.getSession().getWorkspace())
         );

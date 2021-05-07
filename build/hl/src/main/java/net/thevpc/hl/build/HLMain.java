@@ -99,7 +99,7 @@ public class HLMain extends NutsApplication {
                     if (e.getWarningCount() > 0) {
                         m += (" and " + (e.getWarningCount() > 1 ? (String.valueOf(e.getWarningCount()) + " errors") : "1 error"));
                     }
-                    throw new NutsExecutionException(applicationContext.getWorkspace(), m, 201);
+                    throw new NutsExecutionException(applicationContext.getSession(), m, 201);
                 }
             }
         });
@@ -112,7 +112,7 @@ public class HLMain extends NutsApplication {
         NutsWorkspaceCommandAlias a = findDefaultAlias(applicationContext);
         if (a != null) {
             ws.aliases().setSession(session).remove(PREFERRED_ALIAS);
-            ws.config().save(session);
+            ws.config().save();
         }
     }
 
@@ -130,7 +130,7 @@ public class HLMain extends NutsApplication {
         boolean add = false;
         if (a != null) {
             update = true;
-        } else if (ws.aliases().find(PREFERRED_ALIAS, session) == null) {
+        } else if (ws.aliases().find(PREFERRED_ALIAS) == null) {
             add = true;
         }
         if (update || add) {
@@ -141,7 +141,7 @@ public class HLMain extends NutsApplication {
                     .setOwner(applicationContext.getAppId())
                     .setCommand(applicationContext.getAppId().getShortName())
                     );
-            ws.config().save(session);
+            ws.config().save();
         }
     }
 
@@ -149,7 +149,7 @@ public class HLMain extends NutsApplication {
         NutsWorkspace ws = applicationContext.getWorkspace();
         NutsSession session = applicationContext.getSession();
         NutsId appId = applicationContext.getAppId();
-        return ws.aliases().find(PREFERRED_ALIAS, appId, appId, session);
+        return ws.aliases().find(PREFERRED_ALIAS, appId, appId);
     }
 
 }

@@ -18,9 +18,9 @@ import net.thevpc.common.textsource.log.JSourceMessage;
 import net.thevpc.jeep.DefaultJCompilerLog;
 import net.thevpc.nuts.NutsMessage;
 import net.thevpc.nuts.NutsSession;
-import net.thevpc.nuts.NutsTextNode;
-import net.thevpc.nuts.NutsTextNodeStyle;
+import net.thevpc.nuts.NutsTextStyle;
 import net.thevpc.nuts.NutsTextManager;
+import net.thevpc.nuts.NutsText;
 
 /**
  *
@@ -57,7 +57,7 @@ public class HCompilerLog extends DefaultJCompilerLog {
 
         out.println(
                 StringUtils.center2(
-                        "[ " + session.getWorkspace().formats().text().nodeFor(
+                        "[ " + session.getWorkspace().formats().text().toText(
                                 m
                         ).toString()
                         + " ]",
@@ -101,35 +101,35 @@ public class HCompilerLog extends DefaultJCompilerLog {
             }
             if (token != null) {
                 out.printf(" [%s,%s]",
-                        factory.styled(StringUtils.right(String.valueOf(token.getStartLineNumber() + 1), 4), NutsTextNodeStyle.number()),
-                        factory.styled(StringUtils.right(String.valueOf(token.getStartColumnNumber() + 1), 3), NutsTextNodeStyle.number())
+                        factory.forStyled(StringUtils.right(String.valueOf(token.getStartLineNumber() + 1), 4), NutsTextStyle.number()),
+                        factory.forStyled(StringUtils.right(String.valueOf(token.getStartColumnNumber() + 1), 3), NutsTextStyle.number())
                 );
             } else {
                 out.print("           ");
             }
         }
         out.print(" ");
-        NutsTextNode n;
+        NutsText n;
         if (level.intValue() >= Level.SEVERE.intValue()) {
-            n = factory.styled(StringUtils.left("ERROR  ", 6), NutsTextNodeStyle.error());
+            n = factory.forStyled(StringUtils.left("ERROR  ", 6), NutsTextStyle.error());
         } else if (level.intValue() >= Level.WARNING.intValue()) {
-            n = factory.styled(StringUtils.left("WARNING", 6), NutsTextNodeStyle.warn());
+            n = factory.forStyled(StringUtils.left("WARNING", 6), NutsTextStyle.warn());
         } else if (level.intValue() >= Level.INFO.intValue()) {
-            n = factory.styled(StringUtils.left("INFO   ", 6), NutsTextNodeStyle.info());
+            n = factory.forStyled(StringUtils.left("INFO   ", 6), NutsTextStyle.info());
         } else if (level.intValue() >= Level.CONFIG.intValue()) {
-            n = factory.styled(StringUtils.left("CONFIG ", 6), NutsTextNodeStyle.config());
+            n = factory.forStyled(StringUtils.left("CONFIG ", 6), NutsTextStyle.config());
         } else {
-            n = factory.styled(StringUtils.left(level.toString(), 6), NutsTextNodeStyle.pale());
+            n = factory.forStyled(StringUtils.left(level.toString(), 6), NutsTextStyle.pale());
         }
         out.printf("%s [%-5s] : %s",
                 n,
-                factory.styled(StringUtils.left(id == null ? "" : id, 6), NutsTextNodeStyle.version()),
+                factory.forStyled(StringUtils.left(id == null ? "" : id, 6), NutsTextStyle.version()),
                 message.getText()
         );
         boolean includeSourceNameInRange = false;
         if (token != null && compilationUnitSource0 != null) {
             if (includeSourceNameInRange) {
-                out.printf("%s", factory.styled(compilationUnitSource0.name(), NutsTextNodeStyle.path()));
+                out.printf("%s", factory.forStyled(compilationUnitSource0.name(), NutsTextStyle.path()));
                 out.printf("%s", ":");
             }
             long cn = token.getStartCharacterNumber();
@@ -137,17 +137,17 @@ public class HCompilerLog extends DefaultJCompilerLog {
             JTextSourceRange range = compilationUnitSource0.range((int) cn - window, (int) cn + window);
             JTextSourceRange.JRangePointer windowString = range.trim(cn, window);
             out.print("\n   ");
-            out.printf("%s", factory.code("hadra", windowString.getText()));
+            out.printf("%s", factory.forCode("hadra", windowString.getText()));
             out.append("\n   ");
             for (int i = 0; i < windowString.getOffset(); i++) {
                 out.print(" ");
             }
-            out.printf("%s", factory.styled("^^^", NutsTextNodeStyle.path()));
+            out.printf("%s", factory.forStyled("^^^", NutsTextStyle.path()));
 
 //            out.printf("%s", " [Line:");
-//            out.printf("%s", text.styled(String.valueOf(token.getStartLineNumber() + 1), NutsTextNodeStyle.number()));
+//            out.printf("%s", text.forStyled(String.valueOf(token.getStartLineNumber() + 1), NutsTextStyle.number()));
 //            out.printf("%s", ",Column:");
-//            out.printf("%s", text.styled(String.valueOf(token.getStartColumnNumber() + 1), NutsTextNodeStyle.number()));
+//            out.printf("%s", text.forStyled(String.valueOf(token.getStartColumnNumber() + 1), NutsTextStyle.number()));
 //            out.printf("%s", "]");
             if (compilationUnitSource.length() > 0 && (compilationUnitSource.contains("/") || compilationUnitSource.contains("\\"))) {
                 String s = compilationUnitSource;
@@ -156,9 +156,9 @@ public class HCompilerLog extends DefaultJCompilerLog {
                 } catch (Exception ex) {
                     //
                 }
-                out.printf(" %s", factory.styled(s, NutsTextNodeStyle.path()));
+                out.printf(" %s", factory.forStyled(s, NutsTextStyle.path()));
             } else if (compilationUnitSource.length() > 0) {
-                out.printf(" %s", factory.styled(compilationUnitSource, NutsTextNodeStyle.path()));
+                out.printf(" %s", factory.forStyled(compilationUnitSource, NutsTextStyle.path()));
             }
             out.printf("%n");
         } else {

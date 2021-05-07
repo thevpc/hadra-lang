@@ -20,7 +20,7 @@ public class TestHLEditorPane {
         System.setProperty("java.util.logging.SimpleFormatter.format", "%1$tF %1$tT %4$s %2$s %5$s%6$s%n");
         JFrame f = new JFrame("Test");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JEditorPaneBuilder editorBuilder = new JEditorPaneBuilder();
+        JEditorPaneBuilder editorBuilder = new JEditorPaneBuilder()/*.setEditor(new JTextPane())*/;
         HadraLanguage jContext = HadraLanguage.getSingleton();
         DefaultHLProjectContext projectContext = new DefaultHLProjectContext(jContext, new HIndexerImpl(), null);
 

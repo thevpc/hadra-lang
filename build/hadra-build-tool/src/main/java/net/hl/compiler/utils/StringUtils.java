@@ -6,8 +6,9 @@
 package net.hl.compiler.utils;
 
 import net.hl.lang.IntToIntFunction;
+import net.thevpc.nuts.NutsConstants;
 import net.thevpc.nuts.NutsFormatManager;
-import net.thevpc.nuts.NutsTextNodeStyle;
+import net.thevpc.nuts.NutsTextStyle;
 import net.thevpc.nuts.NutsWorkspace;
 import net.thevpc.nuts.NutsTextManager;
 
@@ -72,11 +73,11 @@ public class StringUtils {
         int cc = 0;
         while (len0 < length) {
             int z = color.applyAsInt(cc);
-            String cc2 = f.styled(String.valueOf(c), NutsTextNodeStyle.foregroundColor(z)).toString() + "ø";
+            String cc2 = f.forStyled(String.valueOf(c), NutsTextStyle.foregroundColor(z)).toString() + NutsConstants.Ntf.SILENT;
             if (cc % 2 == 0) {
                 sb.insert(0, cc2);
             } else {
-                sb.append(cc2).append("ø");
+                sb.append(cc2).append(NutsConstants.Ntf.SILENT);
             }
             len0++;
             cc++;

@@ -39,6 +39,10 @@ public final class HadraLanguage extends DefaultJeep implements HadraContext {
         JTokenType.JTOKEN_TYPES.addIntField("TT_SUPERSCRIPT", HTokenTTypes.TT_SUPERSCRIPT);
     }
 
+    public static boolean isSetSingleton() {
+        return RANDOM_INSTANCE != null;
+    }
+
     public static HadraLanguage getSingleton() {
         if (RANDOM_INSTANCE == null) {
             RANDOM_INSTANCE = new HadraLanguage(Nuts.openWorkspace().createSession());
@@ -78,7 +82,7 @@ public final class HadraLanguage extends DefaultJeep implements HadraContext {
         JTokenConfigBuilder config = this.tokens().config().builder();
         config
                 .setParseWhitespaces(true)
-                .setParsetIntNumber(true)
+                .setParseIntNumber(true)
                 .setParseFloatNumber(true)
                 .setParsetInfinity(true)
                 .setParseWhitespaces(true)

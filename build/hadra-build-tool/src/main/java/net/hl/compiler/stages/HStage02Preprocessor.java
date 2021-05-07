@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import net.hl.compiler.HL;
 import net.hl.compiler.utils.DepIdAndFile;
 import net.hl.compiler.utils.HSharedUtils;
+import net.thevpc.nuts.NutsDependencies;
 import net.thevpc.nuts.NutsDependency;
 import net.thevpc.nuts.NutsNotFoundException;
 
@@ -43,7 +44,6 @@ public class HStage02Preprocessor extends AbstractHStage {
     public boolean isEnabled(HProject project, HL options) {
         return options.containsAnyTask(HTask.RESOLVED_AST);
     }
-    
 
     @Override
     public void processProject(HProject project, HOptions options) {
@@ -274,17 +274,19 @@ public class HStage02Preprocessor extends AbstractHStage {
                 }
                 Set<DepIdAndFile> classPath = new LinkedHashSet<>();
                 if (someSearch) {
-                    for (NutsDependency dep : search.getResultDependencies()) {
-                        NutsDefinition def = null;
-                        try {
-                            def = ws.fetch().setId(dep.toId()).setEffective(true).setContent(true).getResultDefinition();
-                        } catch (NutsNotFoundException ex) {
-                            //
-                        }
-                        if (def == null || def.getContent().getLocation() == null) {
-                            project.log().jerror("X000", "pre-processor", block.getStartToken(), "unresolvable dependency " + dep);
-                        } else {
-                            classPath.add(new DepIdAndFile(dep.toString(), def.getContent().getLocation()));
+                    for (NutsDependencies depd : search.getResultDependencies()) {
+                        for (NutsDependency dep : depd.all()) {
+                            NutsDefinition def = null;
+                            try {
+                                def = ws.fetch().setId(dep.toId()).setEffective(true).setContent(true).getResultDefinition();
+                            } catch (NutsNotFoundException ex) {
+                                //
+                            }
+                            if (def == null || def.getContent().getLocation() == null) {
+                                project.log().jerror("X000", "pre-processor", block.getStartToken(), "unresolvable dependency " + dep);
+                            } else {
+                                classPath.add(new DepIdAndFile(dep.toString(), def.getContent().getLocation()));
+                            }
                         }
                     }
                 }

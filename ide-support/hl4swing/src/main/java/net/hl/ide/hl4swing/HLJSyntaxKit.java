@@ -10,10 +10,13 @@ import java.awt.*;
 import net.hl.compiler.core.HTokenId;
 import net.hl.compiler.core.HadraContext;
 import net.hl.compiler.core.HadraLanguage;
+import net.thevpc.jeep.editor.ColorResource;
 import net.thevpc.nuts.NutsSession;
 
 public class HLJSyntaxKit extends JSyntaxKit {
+
     private static NutsSession session;
+
     public HLJSyntaxKit() {
         this(null);
     }
@@ -24,16 +27,16 @@ public class HLJSyntaxKit extends JSyntaxKit {
             jContext = HadraLanguage.getSingleton();
         }
         JSyntaxStyleManager styles = new JSyntaxStyleManager();
-        JSyntaxStyle keywords = new JSyntaxStyle(Color.decode("#735db7"), JSyntaxStyle.BOLD);
-        JSyntaxStyle comments = new JSyntaxStyle(Color.DARK_GRAY, JSyntaxStyle.ITALIC);
-        JSyntaxStyle strings = new JSyntaxStyle(Color.decode("#2b9946"), JSyntaxStyle.BOLD);
-        JSyntaxStyle numbers = new JSyntaxStyle(Color.RED.darker(), JSyntaxStyle.PLAIN);
-        JSyntaxStyle operators = new JSyntaxStyle(Color.cyan.darker(), JSyntaxStyle.PLAIN);
-        JSyntaxStyle separators = new JSyntaxStyle(Color.red, JSyntaxStyle.PLAIN);
-        JSyntaxStyle regexs = new JSyntaxStyle(Color.MAGENTA.darker(), JSyntaxStyle.PLAIN);
-        JSyntaxStyle temporals = new JSyntaxStyle(Color.pink.darker(), JSyntaxStyle.PLAIN);
-        JSyntaxStyle primitiveTypes = new JSyntaxStyle(Color.decode("#aa557f"), JSyntaxStyle.BOLD);
-        JSyntaxStyle trueFalseLiterals = new JSyntaxStyle(Color.decode("#f1a100"), JSyntaxStyle.BOLD);
+        JSyntaxStyle keywords = new JSyntaxStyle(ColorResource.of(UI_KEY_RESERVED_WORD, Color.decode("#735db7")), JSyntaxStyle.BOLD);
+        JSyntaxStyle comments = new JSyntaxStyle(ColorResource.of(UI_KEY_COMMENTS, Color.DARK_GRAY), JSyntaxStyle.ITALIC);
+        JSyntaxStyle strings = new JSyntaxStyle(ColorResource.of(UI_KEY_LITERAL_STRING, Color.decode("#2b9946")), JSyntaxStyle.BOLD);
+        JSyntaxStyle numbers = new JSyntaxStyle(ColorResource.of(UI_KEY_LITERAL_NUMBER, Color.RED.darker()), JSyntaxStyle.PLAIN);
+        JSyntaxStyle operators = new JSyntaxStyle(ColorResource.of(UI_KEY_OPERATOR, Color.cyan.darker()), JSyntaxStyle.PLAIN);
+        JSyntaxStyle separators = new JSyntaxStyle(ColorResource.of(UI_KEY_SEPARATOR, Color.red), JSyntaxStyle.PLAIN);
+        JSyntaxStyle regexs = new JSyntaxStyle(ColorResource.of(UI_KEY_LITERAL_REGEXP, Color.MAGENTA.darker()), JSyntaxStyle.PLAIN);
+        JSyntaxStyle temporals = new JSyntaxStyle(ColorResource.of(UI_KEY_LITERAL_DATE, Color.pink.darker()), JSyntaxStyle.PLAIN);
+        JSyntaxStyle primitiveTypes = new JSyntaxStyle(ColorResource.of(UI_KEY_TYPE_PRIMITIVE, Color.decode("#aa557f")), JSyntaxStyle.BOLD);
+        JSyntaxStyle trueFalseLiterals = new JSyntaxStyle(ColorResource.of(UI_KEY_LITERAL_BOOLEAN, Color.decode("#f1a100")), JSyntaxStyle.BOLD);
         for (JTokenDef o : jContext.tokens().tokenDefinitions()) {
             switch (o.ttype) {
                 case JTokenType.TT_KEYWORD: {
@@ -113,6 +116,5 @@ public class HLJSyntaxKit extends JSyntaxKit {
         setStyles(styles);
         //setCompletionSupplier(new HLJCompletionSupplier(jContext));
     }
-
 
 }
