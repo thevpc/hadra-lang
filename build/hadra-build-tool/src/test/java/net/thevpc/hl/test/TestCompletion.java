@@ -23,7 +23,6 @@ public class TestCompletion {
                 "<source>",
                 new DepIdAndFile[0]
         ));
-        final NutsSession session = Nuts.openWorkspace().createSession();
         HCompletion c = new HCompletion(new DefaultHLProjectContext(
                 HadraLanguage.getSingleton(), indexer, "<example>"
         ));

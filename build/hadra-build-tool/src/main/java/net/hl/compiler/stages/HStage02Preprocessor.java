@@ -69,7 +69,7 @@ public class HStage02Preprocessor extends AbstractHStage {
         HIndexedProject ip = null;
         String projectRoot = options.getProjectRoot();
         JModuleId defaultModuleId = JModuleId.DEFAULT_MODULE_ID();
-        DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true);
+        DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true,project.getSession());
         if (defaultLangPaths.length == 0) {
             project.log().jerror("X000", null, null, "unresolvable hadra-lang library");
         }
@@ -88,7 +88,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                 if (JStringUtils.isBlank(JModuleId.valueOf(ip.getModuleId()).getArtifactId())) {
                     project.log().jerror("X000", null, metaPackage == null ? anyToken : metaPackage.getStartToken(), "missing artifact name");
                 }
-                DepIdAndFile[] u = HStageUtils.resolveLangPaths(ip.getDependencies(), null, false, false, true);
+                DepIdAndFile[] u = HStageUtils.resolveLangPaths(ip.getDependencies(), null, false, false, true, project.getSession());
                 if (u.length > 0) {
                     List<DepIdAndFile> depIds = new ArrayList<>(Arrays.asList(ip.getDependencies()));
                     depIds.add(u[0]);
@@ -174,7 +174,7 @@ public class HStage02Preprocessor extends AbstractHStage {
             }
             metaPackage.setElement(new HNElementNonExpr());
             moduleId = JModuleId.replaceBlanks(moduleId, JModuleId.DEFAULT_MODULE_ID());
-            DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true);
+            DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true, project.getSession());
             if (defaultLangPaths.length == 0) {
                 project.log().jerror("X000", null, null, "unresolvable hadra-lang library");
             }
@@ -285,7 +285,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                             if (def == null || def.getContent().getLocation() == null) {
                                 project.log().jerror("X000", "pre-processor", block.getStartToken(), "unresolvable dependency " + dep);
                             } else {
-                                classPath.add(new DepIdAndFile(dep.toString(), def.getContent().getLocation()));
+                                classPath.add(new DepIdAndFile(dep.toString(), def.getContent().getLocation().toString()));
                             }
                         }
                     }

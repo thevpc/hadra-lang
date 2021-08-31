@@ -97,7 +97,7 @@ public class HLMvnPlugin extends AbstractMojo {
         URLClassLoader classLoader = new URLClassLoader(classLoaderURLs.toArray(new URL[0]),
                 Thread.currentThread().getContextClassLoader()
         );
-        HL hl = new HL(classLoader, null, Nuts.openWorkspace().createSession());
+        HL hl = new HL(classLoader, null, Nuts.openWorkspace());
         for (String item : compileClasspathElements) {
             if (item.equals(buildDirectory) || item.startsWith(buildDirectory + File.separator)) {
                 //ignore

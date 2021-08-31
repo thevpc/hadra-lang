@@ -5,7 +5,7 @@ import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.HTask;
 import net.thevpc.nuts.*;
 
-public class HLMain extends NutsApplication {
+public class HLMain implements NutsApplication {
 
     private static final String PREFERRED_ALIAS = "hl";
 
@@ -20,7 +20,7 @@ public class HLMain extends NutsApplication {
             boolean noMoreOptions = false;
 
             @Override
-            public boolean nextOption(NutsArgument argument, NutsCommandLine cmdLine) {
+            public boolean onNextOption(NutsArgument argument, NutsCommandLine cmdLine) {
                 if (noMoreOptions) {
                     return false;
                 }
@@ -73,7 +73,7 @@ public class HLMain extends NutsApplication {
             }
 
             @Override
-            public boolean nextNonOption(NutsArgument argument, NutsCommandLine cmdLine) {
+            public boolean onNextNonOption(NutsArgument argument, NutsCommandLine cmdLine) {
                 String s = cmdLine.next().getString();
                 if (isURL(s)) {
                     hl.addSourceFileURL(s);
@@ -91,7 +91,7 @@ public class HLMain extends NutsApplication {
             }
 
             @Override
-            public void exec() {
+            public void onExec() {
                 final HProject e = hl.compile();
                 if (!e.isSuccessful()) {
                     String m = "compilation failed with ";
@@ -99,44 +99,40 @@ public class HLMain extends NutsApplication {
                     if (e.getWarningCount() > 0) {
                         m += (" and " + (e.getWarningCount() > 1 ? (String.valueOf(e.getWarningCount()) + " errors") : "1 error"));
                     }
-                    throw new NutsExecutionException(applicationContext.getSession(), m, 201);
+                    throw new NutsExecutionException(applicationContext.getSession(), NutsMessage.plain(m), 201);
                 }
             }
         });
     }
 
     @Override
-    protected void onUninstallApplication(NutsApplicationContext applicationContext) {
+    public void onUninstallApplication(NutsApplicationContext applicationContext) {
         NutsWorkspace ws = applicationContext.getWorkspace();
-        NutsSession session = applicationContext.getSession();
-        NutsWorkspaceCommandAlias a = findDefaultAlias(applicationContext);
-        if (a != null) {
-            ws.aliases().setSession(session).remove(PREFERRED_ALIAS);
-            ws.config().save();
-        }
+        ws.commands().removeCommandIfExists(PREFERRED_ALIAS);
+        ws.config().save();
     }
 
     @Override
-    protected void onUpdateApplication(NutsApplicationContext applicationContext) {
+    public void onUpdateApplication(NutsApplicationContext applicationContext) {
         onInstallApplication(applicationContext);
     }
 
     @Override
-    protected void onInstallApplication(NutsApplicationContext applicationContext) {
+    public void onInstallApplication(NutsApplicationContext applicationContext) {
         NutsWorkspace ws = applicationContext.getWorkspace();
         NutsSession session = applicationContext.getSession();
-        NutsWorkspaceCommandAlias a = findDefaultAlias(applicationContext);
+        NutsWorkspaceCustomCommand a = ws.commands().findCommand(PREFERRED_ALIAS, applicationContext.getAppId(), applicationContext.getAppId());
         boolean update = false;
         boolean add = false;
         if (a != null) {
             update = true;
-        } else if (ws.aliases().find(PREFERRED_ALIAS) == null) {
+        } else if (ws.commands().findCommand(PREFERRED_ALIAS) == null) {
             add = true;
         }
         if (update || add) {
-            ws.aliases()
+            ws.commands()
                     .setSession((update ? session.copy().setConfirm(NutsConfirmationMode.YES) : session))
-                    .add(new NutsCommandAliasConfig()
+                    .addCommand(new NutsCommandConfig()
                     .setName(PREFERRED_ALIAS)
                     .setOwner(applicationContext.getAppId())
                     .setCommand(applicationContext.getAppId().getShortName())
@@ -145,11 +141,6 @@ public class HLMain extends NutsApplication {
         }
     }
 
-    private NutsWorkspaceCommandAlias findDefaultAlias(NutsApplicationContext applicationContext) {
-        NutsWorkspace ws = applicationContext.getWorkspace();
-        NutsSession session = applicationContext.getSession();
-        NutsId appId = applicationContext.getAppId();
-        return ws.aliases().find(PREFERRED_ALIAS, appId, appId);
-    }
+
 
 }

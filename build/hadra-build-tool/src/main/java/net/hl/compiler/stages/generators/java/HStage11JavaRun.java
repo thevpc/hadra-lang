@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HTask;
 import net.hl.compiler.stages.AbstractHStage;
+import net.thevpc.nuts.NutsExecutionType;
 import net.thevpc.nuts.NutsWorkspace;
 
 public class HStage11JavaRun extends AbstractHStage {
@@ -42,6 +43,7 @@ public class HStage11JavaRun extends AbstractHStage {
                         .setInheritSystemIO(true)
                         .setRedirectErrorStream(true)
                         .setFailFast(true)
+                        .setExecutionType(NutsExecutionType.EMBEDDED)
                         .getResult();
                 return;
             } catch (IOException ex) {

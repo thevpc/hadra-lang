@@ -1,29 +1,24 @@
 package net.hl.compiler.stages;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UncheckedIOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.URLDecoder;
+import net.hl.compiler.core.invokables.HLJCompilerContext;
+import net.hl.compiler.utils.DepIdAndFile;
 import net.thevpc.jeep.JField;
 import net.thevpc.jeep.JMethod;
-import net.hl.compiler.core.invokables.HLJCompilerContext;
+import net.thevpc.nuts.NutsSession;
+import net.thevpc.nuts.NutsUtilStrings;
 
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import net.hl.compiler.utils.DepIdAndFile;
-import net.thevpc.jeep.JShouldNeverHappenException;
 
 public class HStageUtils {
 
@@ -45,32 +40,60 @@ public class HStageUtils {
         return list;
     }
 
-    public static String urlToFilePath(URL url) {
-        if ("file".equalsIgnoreCase(url.getProtocol())) {
-            String filename = url.getFile().replace('/', File.separatorChar);
-            try {
-                return URLDecoder.decode(filename, "UTF-8");
-            } catch (UnsupportedEncodingException ex) {
-                throw new IllegalArgumentException(ex);
-            }
-        } else {
-            throw new JShouldNeverHappenException("not supported");
+    public static File toFile(String url) {
+        if (NutsUtilStrings.isBlank(url)) {
+            return null;
+        }
+        URL u = null;
+        try {
+            u = new URL(url);
+            return toFile(u);
+        } catch (MalformedURLException e) {
+            //
+            return new File(url);
         }
     }
 
-    public static DepIdAndFile[] resolveLangPaths(DepIdAndFile[] deps,String[] dependencyFiles, boolean checkClassLoader, boolean checkCompilerVM, boolean checkContent) {
+    public static File toFile(URL url) {
+        if (url == null) {
+            return null;
+        }
+        if ("file".equals(url.getProtocol())) {
+            try {
+                return Paths.get(url.toURI()).toFile();
+            } catch (URISyntaxException e) {
+                //
+            }
+        }
+        return null;
+    }
+
+//    public static String urlToFilePath(URL url) {
+//        if ("file".equalsIgnoreCase(url.getProtocol())) {
+//            String filename = url.getFile().replace('/', File.separatorChar);
+//            try {
+//                return URLDecoder.decode(filename, "UTF-8");
+//            } catch (UnsupportedEncodingException ex) {
+//                throw new IllegalArgumentException(ex);
+//            }
+//        } else {
+//            throw new JShouldNeverHappenException("not supported");
+//        }
+//    }
+
+    public static DepIdAndFile[] resolveLangPaths(DepIdAndFile[] deps, String[] dependencyFiles, boolean checkClassLoader, boolean checkCompilerVM, boolean checkContent, NutsSession session) {
         LinkedHashSet<DepIdAndFile> found = new LinkedHashSet<>();
         //check depdencies
         if (deps != null) {
             for (DepIdAndFile dependencyFile : deps) {
-                if(dependencyFile.getId().startsWith("net.thevpc.hl:hadra-lang#")){
+                if (dependencyFile.getId().startsWith("net.thevpc.hl:hadra-lang#")) {
                     found.add(dependencyFile);
                 }
             }
         }
         if (dependencyFiles != null) {
             for (String dependencyFile : dependencyFiles) {
-                DepIdAndFile e = hadraLangDepIdAndFileForPath(dependencyFile);
+                DepIdAndFile e = hadraLangDepIdAndFileForPath(dependencyFile, session);
                 if (e != null) {
                     found.add(e);
                 }
@@ -82,7 +105,7 @@ public class HStageUtils {
                 URLClassLoader ucl = (URLClassLoader) cl;
                 for (URL url : ucl.getURLs()) {
                     String s = url.toString();
-                    DepIdAndFile e = hadraLangDepIdAndFileForPath(s);
+                    DepIdAndFile e = hadraLangDepIdAndFileForPath(s, session);
                     if (e != null) {
                         found.add(e);
                     }
@@ -94,7 +117,7 @@ public class HStageUtils {
             String cp = System.getProperty("java.class.path");
             if (cp != null) {
                 for (String s : cp.split(File.pathSeparator)) {
-                    DepIdAndFile e = hadraLangDepIdAndFileForPath(s);
+                    DepIdAndFile e = hadraLangDepIdAndFileForPath(s, session);
                     if (e != null) {
                         found.add(e);
                     }
@@ -104,7 +127,7 @@ public class HStageUtils {
         return found.toArray(new DepIdAndFile[0]);
     }
 
-    public static DepIdAndFile hadraLangDepIdAndFileForPath(String path) {
+    public static DepIdAndFile hadraLangDepIdAndFileForPath(String path, NutsSession session) {
         String s0 = path;
         path = path.replace("\\", "/");
         if (path.endsWith("/hadra-lang/target/classes/") || path.endsWith("/hadra-lang/target/classes")) {
@@ -138,7 +161,7 @@ public class HStageUtils {
             }
             return null;
         } else if (path.matches(".*/hadra-lang-[a-z0-9.-]+[.]jar")) {
-            try (InputStream is = new FileInputStream(s0)) {
+            try (InputStream is = session.getWorkspace().io().path(s0).input().open()) {
                 try (ZipInputStream zis = new ZipInputStream(is)) {
                     //get the zipped file list entry
                     ZipEntry ze = zis.getNextEntry();
@@ -189,7 +212,9 @@ public class HStageUtils {
                             if (artifactId == null) {
                                 return null;
                             }
-                            return new DepIdAndFile(groupId + ":" + artifactId + "#" + version, s0);
+                            return new DepIdAndFile(groupId + ":" + artifactId + "#" + version,
+                                    toFile(s0).getPath()
+                            );
                         }
                         ze = zis.getNextEntry();
                     }

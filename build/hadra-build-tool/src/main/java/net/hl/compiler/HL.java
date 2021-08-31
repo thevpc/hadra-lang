@@ -76,7 +76,7 @@ public class HL extends HOptions<HL> {
         Chronometer globalChronometer = Chronometer.start();
         project.getSession().out().println(
                 StringUtils.center2(
-                        "[ " + project.getWorkspace().formats().text().forStyled("Hadra Lang Build Tool", NutsTextStyle.primary(1)).toString()
+                        "[ " + project.getWorkspace().text().forStyled("Hadra Lang Build Tool", NutsTextStyle.primary(1)).toString()
                         + " ]",
                          80, '-', context.getSession().getWorkspace())
         );

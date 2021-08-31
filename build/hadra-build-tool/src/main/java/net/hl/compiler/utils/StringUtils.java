@@ -62,9 +62,8 @@ public class StringUtils {
     public static String center2(String msg, int length, char c, NutsWorkspace ws) {
         StringBuilder sb = new StringBuilder();
         sb.append(msg);
-        NutsFormatManager t = ws.formats();
-        NutsTextManager f = t.text();
-        int len0 = t.text().parse(sb.toString()).textLength();
+        NutsTextManager f = ws.text();
+        int len0 = f.parse(sb.toString()).textLength();
         int variant = 2;
         IntToIntFunction color
                 = variant == 1 ? (i -> 30 + (i % 40) / 2)

@@ -17,6 +17,7 @@ import net.thevpc.common.textsource.JTextSourceToken;
 import net.thevpc.common.textsource.log.JSourceMessage;
 import net.thevpc.jeep.DefaultJCompilerLog;
 import net.thevpc.nuts.NutsMessage;
+import net.thevpc.nuts.NutsPrintStream;
 import net.thevpc.nuts.NutsSession;
 import net.thevpc.nuts.NutsTextStyle;
 import net.thevpc.nuts.NutsTextManager;
@@ -36,8 +37,7 @@ public class HCompilerLog extends DefaultJCompilerLog {
 
     @Override
     public void printFooter() {
-        PrintStream out = session.out();
-        final NutsTextManager factory = session.getWorkspace().formats().text();
+        NutsPrintStream out = session.out();
         String op = getOperationName();
         if (op == null) {
             op = DEFAULT_OPERATION_NAME;
@@ -57,7 +57,7 @@ public class HCompilerLog extends DefaultJCompilerLog {
 
         out.println(
                 StringUtils.center2(
-                        "[ " + session.getWorkspace().formats().text().toText(
+                        "[ " + session.getWorkspace().text().toText(
                                 m
                         ).toString()
                         + " ]",
@@ -67,13 +67,13 @@ public class HCompilerLog extends DefaultJCompilerLog {
 
     @Override
     public void printlnMessage(JSourceMessage jSourceMessage) {
-        PrintStream out = session.out();
+        NutsPrintStream out = session.out();
         boolean showCompilationSource = true;
         final JTextSourceToken token = jSourceMessage.getToken();
         final Level level = jSourceMessage.getLevel();
         final String id = jSourceMessage.getId();
         final Message message = jSourceMessage.getMessage();
-        final NutsTextManager factory = session.getWorkspace().formats().text();
+        final NutsTextManager factory = session.getWorkspace().text();
 
         JTextSource compilationUnitSource0 = token == null ? null : token.getSource();
         String compilationUnitSource = compilationUnitSource0 == null ? "" : compilationUnitSource0.name();

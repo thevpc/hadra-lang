@@ -21,8 +21,8 @@
         </dependency>
         <dependency>
             <groupId>net.thevpc.jeep</groupId>
-            <artifactId>jeep-editor-swing</artifactId>
-            <version>1.2.7</version>
+            <artifactId>jeep-swing-editor</artifactId>
+            <version>1.2.8</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

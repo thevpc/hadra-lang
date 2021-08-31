@@ -45,7 +45,7 @@ public final class HadraLanguage extends DefaultJeep implements HadraContext {
 
     public static HadraLanguage getSingleton() {
         if (RANDOM_INSTANCE == null) {
-            RANDOM_INSTANCE = new HadraLanguage(Nuts.openWorkspace().createSession());
+            RANDOM_INSTANCE = new HadraLanguage(Nuts.openWorkspace());
         }
         return RANDOM_INSTANCE;
     }
