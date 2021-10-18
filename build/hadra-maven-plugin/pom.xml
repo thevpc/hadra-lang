@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.hl</groupId>
     <artifactId>hadra-maven-plugin</artifactId>
-    <version>0.1.0</version> <!--updated-->
+    <version>0.1.1</version>
     <name>Hadra Lang Maven Plugin</name>
     <description>Maven Plugin to build Hadra Lang Project using maven</description>
     <packaging>maven-plugin</packaging>
@@ -71,7 +71,7 @@
         <dependency>
             <groupId>net.thevpc.hl</groupId>
             <artifactId>hadra-build-tool</artifactId>
-            <version>0.1.0</version> <!--updated-->
+            <version>0.1.1</version>
         </dependency>
     </dependencies>
 

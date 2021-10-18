@@ -48,6 +48,7 @@ import net.thevpc.common.textsource.log.JSourceMessage;
 import net.thevpc.nuts.NutsConstants;
 import net.thevpc.nuts.NutsDependency;
 import net.thevpc.nuts.NutsDescriptor;
+import net.thevpc.nuts.NutsEnvConditionBuilder;
 
 public class HStage10JavaCompiler extends AbstractHStage {
 
@@ -139,7 +140,10 @@ public class HStage10JavaCompiler extends AbstractHStage {
             NutsDescriptor desc = project.getWorkspace().descriptor().descriptorBuilder()
                     .setId(project.getIndexedProject().getModuleId())
                     .setPackaging("jar")
-                    .addPlatform("java")
+                    .setCondition(
+                            NutsEnvConditionBuilder.of(project.getSession())
+                                    .addPlatform("java")
+                    )
                     .addDependencies(
                             Arrays.stream(project.getIndexedProject().getDependencies())
                                     .map(

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.hl</groupId>
     <artifactId>hadra-lang</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <name>Hadra Language Standard Library</name>
     <packaging>jar</packaging>
     <description>Hadra Language Standard Library</description>
@@ -84,6 +84,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>net.thevpc.hl.lang</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -4,7 +4,7 @@
 
     <groupId>net.thevpc.hl</groupId>
     <artifactId>hadra-build-tool</artifactId>
-    <version>0.1.0</version> <!--updated-->
+    <version>0.1.1</version> <!--updated-->
     <name>Hadra Build Tool</name>
     <description>Hadra Build Tool Library</description>
     <packaging>jar</packaging>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>net.thevpc.nuts</groupId>
             <artifactId>nuts</artifactId>
-            <version>0.8.2</version>
+            <version>0.8.3</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
@@ -77,7 +77,7 @@
         <dependency>
             <groupId>net.thevpc.hl</groupId>
             <artifactId>hadra-lang</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </dependency>
         <dependency>
             <groupId>net.thevpc.jeep</groupId>
@@ -118,6 +118,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>net.thevpc.hl.buildtool</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

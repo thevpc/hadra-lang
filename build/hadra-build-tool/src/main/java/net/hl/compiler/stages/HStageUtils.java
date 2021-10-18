@@ -4,6 +4,7 @@ import net.hl.compiler.core.invokables.HLJCompilerContext;
 import net.hl.compiler.utils.DepIdAndFile;
 import net.thevpc.jeep.JField;
 import net.thevpc.jeep.JMethod;
+import net.thevpc.nuts.NutsBlankable;
 import net.thevpc.nuts.NutsSession;
 import net.thevpc.nuts.NutsUtilStrings;
 
@@ -41,7 +42,7 @@ public class HStageUtils {
     }
 
     public static File toFile(String url) {
-        if (NutsUtilStrings.isBlank(url)) {
+        if (NutsBlankable.isBlank(url)) {
             return null;
         }
         URL u = null;

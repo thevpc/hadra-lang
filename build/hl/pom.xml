@@ -4,7 +4,7 @@
 
     <groupId>net.thevpc.hl</groupId>
     <artifactId>hl</artifactId>
-    <version>0.1.0</version> <!--updated-->
+    <version>0.1.1</version> <!--updated-->
     <name>Hadra Language Compiler and Runtime</name>
     <packaging>jar</packaging>
     <description>Hadra Language Compiler and Runtime</description>
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>net.thevpc.hl</groupId>
             <artifactId>hadra-build-tool</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -89,6 +89,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>net.thevpc.hl.hl</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

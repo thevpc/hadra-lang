@@ -22,34 +22,24 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f1cf708f-f133-4792-a05e-0ddd77f1da07" name="Default Changelist" comment="20200710">
-      <change afterPath="$PROJECT_DIR$/doc/ebook/latex/hadra-lang-book.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/doc/ebook/latex/hadra-lang-book.tex" afterDir="false" />
+    <list default="true" id="f1cf708f-f133-4792-a05e-0ddd77f1da07" name="Default Changelist" comment="[CHANGED] Version Bumped to nuts 0.8.2&#10;[ADDED] Initial documentation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/hadra-build-tool.iml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/hadra-build-tool.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/HL.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/HL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HCompilerLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HCompilerLog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HadraLanguage.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HadraLanguage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage02Preprocessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage02Preprocessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage03Indexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage03Indexer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStageUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStageUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HStage11JavaRun.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HStage11JavaRun.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/StringUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/thevpc/hl/test/TestCompletion.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/thevpc/hl/test/TestCompletion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/thevpc/hl/test/TestGenerateTokenClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/thevpc/hl/test/TestGenerateTokenClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HStage10JavaCompiler.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HStage10JavaCompiler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/hadra-maven-plugin/hadra-maven-plugin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-maven-plugin/hadra-maven-plugin.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/hadra-maven-plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-maven-plugin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-maven-plugin/src/main/java/net/hl/build/mvnplugin/HLMvnPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-maven-plugin/src/main/java/net/hl/build/mvnplugin/HLMvnPlugin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/hl/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hl/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hl/src/main/java/net/thevpc/hl/build/HLMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hl/src/main/java/net/thevpc/hl/build/HLMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/extra/hadra-example/hadra-example.iml" beforeDir="false" afterPath="$PROJECT_DIR$/extra/hadra-example/hadra-example.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/extra/hadra-example/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/extra/hadra-example/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ide-support/hl4nb/hl4nb.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4nb/hl4nb.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ide-support/hl4nb/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4nb/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ide-support/hl4swing/hl4swing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4swing/hl4swing.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ide-support/hl4swing/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4swing/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ide-support/hl4swing/src/main/java/net/hl/ide/hl4swing/HLJSyntaxKit.java" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4swing/src/main/java/net/hl/ide/hl4swing/HLJSyntaxKit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/hadra-lang/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/lib/hadra-lang/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +68,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -89,7 +82,7 @@
     <option name="skipTests" value="true" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="ProjectId" id="1dTH9fIwjMsvxmMNBtApNP1g3fz" />
   <component name="ProjectViewState">
@@ -398,7 +391,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594399804815</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="[CHANGED] Version Bumped to nuts 0.8.2&#10;[ADDED] Initial documentation">
+      <created>1630393769811</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1630393769811</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -411,7 +411,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added support to jdk9+ (jmod files)&#10;tested on jdk14" />
@@ -423,7 +422,8 @@
     <MESSAGE value="spec change : using fun keyword instead of def" />
     <MESSAGE value="spec change : all modifiers are annotations" />
     <MESSAGE value="20200710" />
-    <option name="LAST_COMMIT_MESSAGE" value="20200710" />
+    <MESSAGE value="[CHANGED] Version Bumped to nuts 0.8.2&#10;[ADDED] Initial documentation" />
+    <option name="LAST_COMMIT_MESSAGE" value="[CHANGED] Version Bumped to nuts 0.8.2&#10;[ADDED] Initial documentation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
