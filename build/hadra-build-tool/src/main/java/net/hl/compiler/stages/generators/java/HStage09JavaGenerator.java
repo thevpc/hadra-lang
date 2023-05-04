@@ -18,11 +18,11 @@ import net.thevpc.jeep.core.eval.JEvaluableValue;
 import net.thevpc.jeep.impl.CastJConverter;
 import net.thevpc.jeep.impl.eval.JEvaluableConverter;
 import net.thevpc.jeep.impl.functions.*;
+import net.thevpc.jeep.source.JTextSource;
 import net.thevpc.jeep.util.JStringUtils;
 import net.thevpc.jeep.util.JTokenUtils;
 import net.thevpc.jeep.util.JTypeUtils;
 import net.thevpc.jeep.util.JeepUtils;
-import net.thevpc.common.textsource.JTextSource;
 
 import java.io.File;
 import java.io.IOException;

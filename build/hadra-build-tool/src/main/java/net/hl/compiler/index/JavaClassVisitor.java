@@ -1,20 +1,23 @@
 package net.hl.compiler.index;
 
-import net.thevpc.jeep.JShouldNeverHappenException;
 import net.thevpc.jeep.impl.functions.JNameSignature;
 import net.thevpc.jeep.util.JTypeUtils;
 import org.objectweb.asm.*;
+import org.objectweb.asm.signature.SignatureReader;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.*;
 
 class JavaClassVisitor extends ClassVisitor {
     private final HIndexerImpl defaultHLIndexer;
     private String source;
-    private String currentFullName;
-    private Set<String> visitedMethods=new LinkedHashSet<>();
+    private JavaClassNames currentFullName;
+    private List<String> superTypes;
+    private int classAccess;
+    private Set<String> visitedMethods = new LinkedHashSet<>();
+    private List<HIndexedMethod> indexedMethods = new ArrayList<>();
+    private List<HIndexedField> indexedFields = new ArrayList<>();
+    private List<HIndexedConstructor> indexedConstructors = new ArrayList<>();
+    private List<AnnInfo> annotations = new ArrayList<>();
 
     public JavaClassVisitor(HIndexerImpl defaultHLIndexer, String source) {
         super(Opcodes.ASM8);
@@ -23,224 +26,76 @@ class JavaClassVisitor extends ClassVisitor {
     }
 
 
-    private String parseSimpleName(String name){
-        int x=name.lastIndexOf('/');
-        if(x>=0){
-            name=name.substring(x+1);
-        }
-        return name;
-    }
-    private String readFullName2List(Reader name){
-        int a=0;
-        StringBuilder ename=new StringBuilder();
-        try {
-            int c=name.read();
-            if(c==-1){
-                return null;
-            }
-            while(c=='['){
-                a++;
-                c=name.read();
-            }
-            switch (c){
-                    case 'Z': {
-                        ename.append("boolean");
-                        break;
-                    }
-                    case 'C': {
-                        ename.append("char");
-                        break;
-                    }
-                    case 'B': {
-                        ename.append("byte");
-                        break;
-                    }
-                    case 'S': {
-                        ename.append("short");
-                        break;
-                    }
-                    case 'I': {
-                        ename.append("int");
-                        break;
-                    }
-                    case 'F': {
-                        ename.append("float");
-                        break;
-                    }
-                    case 'J': {
-                        ename.append("long");
-                        break;
-                    }
-                    case 'D': {
-                        ename.append("double");
-                        break;
-                    }
-                    case 'V': {
-                        ename.append("void");
-                        break;
-                    }
-                    case 'L': {
-                        boolean loop=true;
-                        while(loop){
-                            try {
-                                c=name.read();
-                            } catch (IOException e) {
-                                c=-1;
-                            }
-                            switch (c){
-                                case -1:
-                                case ';':{
-                                    loop=false;
-                                    break;
-                                }
-                                case '/':
-                                case '$':
-                                    {
-                                    ename.append('.');
-                                    break;
-                                }
-                                default:{
-                                    ename.append((char)c);
-                                }
-                            }
-                        }
-                        break;
-                    }
-                    default:{
-                        throw new JShouldNeverHappenException("unexpected "+((char)c));
-                    }
-            }
-            if(a>0){
-                for (int i = 0; i < a; i++) {
-                    ename.append("[]");
-                }
-            }
-            return ename.toString();
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Error");
-        }
-    }
-
-    private String[] parseFullName2List(String name){
-        List<String> all=new ArrayList<>();
-        String s;
-        StringReader r=new StringReader(name);
-        while((s=readFullName2List(r))!=null){
-            all.add(s);
-        }
-        return all.toArray(new String[0]);
-    }
-    private String parseFullName2(String name){
-        StringReader r=new StringReader(name);
-        return readFullName2List(r);
-    }
-
-    private JavaClassNames parseFullName(String name){
-        JavaClassNames cn=new JavaClassNames();
-        String s = name.replace('/', '.');
-        int x=s.lastIndexOf('$');
-        if(x>=0){
-            cn.simpleName=s.substring(x+1);
-            cn.fullName=s.replace('$', '.');
-            int y=s.lastIndexOf('.');
-            if(y>=0){
-                cn.simpleName2=cn.fullName.substring(y+1);
-            }else{
-                cn.simpleName2=cn.fullName;
-            }
-            cn.declaringName= cn.fullName.substring(0, x);
-            if(y>=0){
-                cn.packageName =cn.fullName.substring(0,y);
-            }else{
-                cn.packageName ="";
-            }
-        }else{
-            x=s.lastIndexOf('.');
-            if(x>=0){
-                cn.fullName=s;
-                cn.simpleName=s.substring(x+1);
-                cn.packageName =s.substring(0,x);
-//                    cn.declaringName=null;
-            }else{
-                cn.packageName ="";
-                cn.simpleName=s;
-                cn.fullName=s;
-            }
-            cn.simpleName2=cn.simpleName;
-        }
-        return cn;
-    }
-
-    static String[] parseModifiers(int access){
-        List<String> mods=new ArrayList<>();
+    static AnnInfo[] parseModifiers(int access) {
+        List<AnnInfo> mods = new ArrayList<>();
         if ((access & Opcodes.ACC_ABSTRACT) != 0) {
-            mods.add("abstract");
+            mods.add(new AnnInfo("abstract"));
         }
         if ((access & Opcodes.ACC_PRIVATE) != 0) {
-            mods.add("private");
+            mods.add(new AnnInfo("private"));
         }
         if ((access & Opcodes.ACC_PROTECTED) != 0) {
-            mods.add("protected");
+            mods.add(new AnnInfo("protected"));
         }
         if ((access & Opcodes.ACC_ANNOTATION) != 0) {
-            mods.add("annotation");
+            mods.add(new AnnInfo("annotation"));
         }
         if ((access & Opcodes.ACC_BRIDGE) != 0) {
-            mods.add("bridge");
+            mods.add(new AnnInfo("bridge"));
         }
         if ((access & Opcodes.ACC_DEPRECATED) != 0) {
-            mods.add("deprecated");
+            mods.add(new AnnInfo("deprecated"));
         }
         if ((access & Opcodes.ACC_ENUM) != 0) {
-            mods.add("enum");
+            mods.add(new AnnInfo("enum"));
         }
         if ((access & Opcodes.ACC_FINAL) != 0) {
-            mods.add("final");
+            mods.add(new AnnInfo("final"));
         }
         if ((access & Opcodes.ACC_INTERFACE) != 0) {
-            mods.add("interface");
+            mods.add(new AnnInfo("interface"));
         }
         if ((access & Opcodes.ACC_TRANSIENT) != 0) {
-            mods.add("transient");
+            mods.add(new AnnInfo("transient"));
         }
         if ((access & Opcodes.ACC_NATIVE) != 0) {
-            mods.add("native");
+            mods.add(new AnnInfo("native"));
         }
         if ((access & Opcodes.ACC_VOLATILE) != 0) {
-            mods.add("volatile");
+            mods.add(new AnnInfo("volatile"));
         }
         if ((access & Opcodes.ACC_SYNCHRONIZED) != 0) {
-            mods.add("synchronized");
+            mods.add(new AnnInfo("synchronized"));
         }
         if ((access & Opcodes.ACC_STATIC) != 0) {
-            mods.add("static");
+            mods.add(new AnnInfo("static"));
         }
         if ((access & Opcodes.ACC_STRICT) != 0) {
-            mods.add("strictfp");
+            mods.add(new AnnInfo("strictfp"));
         }
         if ((access & Opcodes.ACC_SYNTHETIC) != 0) {
-            mods.add("synthetic");
+            mods.add(new AnnInfo("synthetic"));
         }
         if ((access & Opcodes.ACC_MANDATED) != 0) {
-            mods.add("mandated");
+            mods.add(new AnnInfo("mandated"));
         }
         if ((access & Opcodes.ACC_MODULE) != 0) {
-            mods.add("module");
+            mods.add(new AnnInfo("module"));
         }
         if ((access & Opcodes.ACC_SUPER) != 0) {
-            mods.add("super");
+            mods.add(new AnnInfo("super"));
         }
         if ((access & Opcodes.ACC_TRANSITIVE) != 0) {
-            mods.add("transitive");
+            mods.add(new AnnInfo("transitive"));
         }
         if ((access & Opcodes.ACC_OPEN) != 0) {
-            mods.add("open");
+            mods.add(new AnnInfo("open"));
         }
         if ((access & Opcodes.ACC_RECORD) != 0) {
-            mods.add("record");
+            mods.add(new AnnInfo("record"));
         }
         if ((access & Opcodes.ACC_STATIC_PHASE) != 0) {
-            mods.add("staticphase");
+            mods.add(new AnnInfo("staticphase"));
         }
 //        if ((access & Opcodes.ACC_PUBLIC) != 0) {
 //            modifiers |= Modifier.PUBLIC;
@@ -254,43 +109,53 @@ class JavaClassVisitor extends ClassVisitor {
 //        if ((access & Opcodes.ACC_PRIVATE) != 0) {
 //            modifiers |= Modifier.PRIVATE;
 //        }
-        return mods.toArray(new String[0]);//modifiers;
-    }
-    @Override
-    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        List<String> superTypes=new ArrayList<>();
-        if(superName!=null){
-            superTypes.add(parseFullName(superName).fullName);
-        }
-        if(interfaces!=null) {
-            for (String anInterface : interfaces) {
-                superTypes.add(parseFullName(anInterface).fullName);
-            }
-        }
-        JavaClassNames currentFullName = parseFullName(name);
-        this.currentFullName = currentFullName.fullName;
-        defaultHLIndexer.indexType0(new HIndexedClass(
-                currentFullName.simpleName,
-                currentFullName.simpleName2,
-                this.currentFullName, currentFullName.declaringName==null?"":currentFullName.declaringName,
-                currentFullName.packageName,(String[]) superTypes.toArray(new String[0]),
-                new String[0],
-                parseModifiers(access),
-                source
-                ));
+        return mods.toArray(new AnnInfo[0]);//modifiers;
     }
 
-//        @Override
+    @Override
+    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        superTypes = new ArrayList<>();
+        if (signature != null) {
+            new SignatureReader(signature).accept(new SignatureVisitorProcessor(
+                    x->{
+                        // TODO FIX ME
+                    }
+            ));
+        }
+        if (superName != null) {
+            superTypes.add(JavaClassNames.parseFullNameFromPath(superName).fullName);
+        }
+        if (interfaces != null) {
+            for (String anInterface : interfaces) {
+                superTypes.add(JavaClassNames.parseFullNameFromPath(anInterface).fullName);
+            }
+        }
+        currentFullName = JavaClassNames.parseFullNameFromPath(name);
+
+    }
+
+    @Override
+    public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+        return new MyAnnotationVisitor(
+                JavaClassNames.parseFullNameFromEncoded(descriptor).fullName
+                , visible, x -> annotations.add(x));
+    }
+
+    @Override
+    public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String descriptor, boolean visible) {
+        return super.visitTypeAnnotation(typeRef, typePath, descriptor, visible);
+    }
+    //        @Override
 //        public void visitInnerClass(String name, String outerName, String innerName, int access) {
 //            super.visitInnerClass(name, outerName, innerName, access);
 //        }
 
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-        if(!JTypeUtils.isSynthetic(access)) {
-            String[] modifiers = parseModifiers(access);
-            defaultHLIndexer.indexField0(new HIndexedField(
-                    currentFullName, parseFullName2(desc), name, new String[0], modifiers,
+        if (!JTypeUtils.isSynthetic(access)) {
+            AnnInfo[] modifiers = parseModifiers(access);
+            indexedFields.add(new HIndexedField(
+                    this.currentFullName.fullName, JavaClassNames.parseInternalForm(desc), name, new String[0], modifiers,
                     source
             ));
         }
@@ -304,17 +169,44 @@ class JavaClassVisitor extends ClassVisitor {
 //                    source
 //            ));
         int endPar = desc.indexOf(')');
-        String returnType=parseFullName2(desc.substring(endPar+1));
-        String[] parameterTypes=parseFullName2List(desc.substring(1, endPar));
+        String returnType = JavaClassNames.parseInternalForm(desc.substring(endPar + 1));
+        String[] parameterTypes = JavaClassNames.parseInternalFormList(desc.substring(1, endPar));
         String id = JNameSignature.of(name, parameterTypes).toString();
-        if(!visitedMethods.contains(id)) {
+        if (!visitedMethods.contains(id)) {
 //            System.out.println("VISIT_00 "+returnType+" "+id+" :: "+access+" "+name+" "+desc+" "+signature+" "+exceptions);
             visitedMethods.add(id);
-            return new JavaMethodVisitor(defaultHLIndexer, source, currentFullName, name, parameterTypes, access, returnType);
-        }else{
+            return new JavaMethodVisitor(defaultHLIndexer, source, this.currentFullName.fullName,
+                    name, parameterTypes, access, returnType, indexedMethods, indexedConstructors);
+        } else {
 //            System.out.println("IGNORED_00 "+returnType+" "+id+" :: "+access+" "+name+" "+desc+" "+signature+" "+exceptions);
         }
         return null;
+    }
+
+    @Override
+    public void visitEnd() {
+        super.visitEnd();
+        List<AnnInfo> annotations1 = new ArrayList<>(Arrays.asList(parseModifiers(classAccess)));
+        annotations1.addAll(annotations);
+        defaultHLIndexer.indexType0(
+                new HIndexedClass(
+                currentFullName.simpleName,
+                currentFullName.simpleName2,
+                this.currentFullName.fullName, currentFullName.declaringName == null ? "" : currentFullName.declaringName,
+                currentFullName.packageName, (String[]) superTypes.toArray(new String[0]),
+                new String[0],
+                annotations1.toArray(new AnnInfo[0]),
+                source
+        ));
+        for (HIndexedField indexedField : indexedFields) {
+            defaultHLIndexer.indexField0(indexedField);
+        }
+        for (HIndexedConstructor indexConstructor : indexedConstructors) {
+            defaultHLIndexer.indexConstructor0(indexConstructor);
+        }
+        for (HIndexedMethod indexedMethod : indexedMethods) {
+            defaultHLIndexer.indexMethod0(indexedMethod);
+        }
     }
 
 }

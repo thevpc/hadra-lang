@@ -4,8 +4,12 @@ import net.hl.compiler.HL;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.HTask;
 import net.thevpc.nuts.*;
+import net.thevpc.nuts.cmdline.NArg;
+import net.thevpc.nuts.cmdline.NCmdLine;
+import net.thevpc.nuts.cmdline.NCmdLineContext;
+import net.thevpc.nuts.cmdline.NCmdLineProcessor;
 
-public class HLMain implements NutsApplication {
+public class HLMain implements NApplication {
 
     private static final String PREFERRED_ALIAS = "hl";
 
@@ -14,58 +18,77 @@ public class HLMain implements NutsApplication {
     }
 
     @Override
-    public void run(NutsApplicationContext applicationContext) {
-        applicationContext.processCommandLine(new NutsCommandLineProcessor() {
-            HL hl = HL.create(applicationContext.getSession());
+    public void run(NSession session) {
+        session.processAppCommandLine(new NCmdLineProcessor() {
+            HL hl = HL.create(session);
             boolean noMoreOptions = false;
 
             @Override
-            public boolean onNextOption(NutsArgument argument, NutsCommandLine cmdLine) {
+            public boolean onCmdNextOption(NArg option, NCmdLine cmdLine, NCmdLineContext context) {
                 if (noMoreOptions) {
                     return false;
                 }
-                switch (argument.getStringKey()) {
+                switch (option.key()) {
                     case "--clean": {
-                        if (cmdLine.nextBoolean().getBooleanValue()) {
-                            hl.addTask(HTask.CLEAN);
-                        } else {
-                            hl.removeTask(HTask.CLEAN);
+                        NArg arg = cmdLine.nextFlag().get();
+                        if (arg.isActive()) {
+                            if (arg.getBooleanValue().get()) {
+                                hl.addTask(HTask.CLEAN);
+                            } else {
+                                hl.removeTask(HTask.CLEAN);
+                            }
                         }
                         return true;
                     }
                     case "-i":
                     case "--incremental": {
-                        hl.setIncremental(cmdLine.nextBoolean().getBooleanValue());
+                        NArg arg = cmdLine.nextFlag().get();
+                        if (arg.isActive()) {
+                            hl.setIncremental(arg.getBooleanValue().get());
+                        }
                         return true;
                     }
                     case "-r":
                     case "--root": {
-                        hl.setProjectRoot(cmdLine.nextString().getStringValue());
+                        NArg arg = cmdLine.nextEntry().get();
+                        if (arg.isActive()) {
+                            hl.setProjectRoot(arg.getStringValue().get());
+                        }
                         return true;
                     }
                     case "--java": {
-                        cmdLine.skip();
-                        hl.addTask(HTask.JAVA);
+                        NArg arg = cmdLine.next().get();
+                        if (arg.isActive()) {
+                            hl.addTask(HTask.JAVA);
+                        }
                         return true;
                     }
                     case "--c": {
-                        cmdLine.skip();
-                        hl.addTask(HTask.C);
+                        NArg arg = cmdLine.nextEntry().get();
+                        if (arg.isActive()) {
+                            hl.addTask(HTask.C);
+                        }
                         return true;
                     }
                     case "--c++": {
-                        cmdLine.skip();
-                        hl.addTask(HTask.CPP);
+                        NArg arg = cmdLine.nextEntry().get();
+                        if (arg.isActive()) {
+                            hl.addTask(HTask.CPP);
+                        }
                         return true;
                     }
                     case "--cs": {
-                        cmdLine.skip();
-                        hl.addTask(HTask.CS);
+                        NArg arg = cmdLine.nextEntry().get();
+                        if (arg.isActive()) {
+                            hl.addTask(HTask.CS);
+                        }
                         return true;
                     }
                     case "--run": {
-                        cmdLine.skip();
-                        hl.addTask(HTask.RUN);
+                        NArg arg = cmdLine.nextEntry().get();
+                        if (arg.isActive()) {
+                            hl.addTask(HTask.RUN);
+                        }
                         return true;
                     }
                 }
@@ -73,8 +96,8 @@ public class HLMain implements NutsApplication {
             }
 
             @Override
-            public boolean onNextNonOption(NutsArgument argument, NutsCommandLine cmdLine) {
-                String s = cmdLine.next().getString();
+            public boolean onCmdNextNonOption(NArg nonOption, NCmdLine cmdLine, NCmdLineContext context) {
+                String s = cmdLine.next().get().toString();
                 if (isURL(s)) {
                     hl.addSourceFileURL(s);
                 } else {
@@ -91,7 +114,7 @@ public class HLMain implements NutsApplication {
             }
 
             @Override
-            public void onExec() {
+            public void onCmdExec(NCmdLine CmdLine, NCmdLineContext context) {
                 final HProject e = hl.compile();
                 if (!e.isSuccessful()) {
                     String m = "compilation failed with ";
@@ -99,48 +122,45 @@ public class HLMain implements NutsApplication {
                     if (e.getWarningCount() > 0) {
                         m += (" and " + (e.getWarningCount() > 1 ? (String.valueOf(e.getWarningCount()) + " errors") : "1 error"));
                     }
-                    throw new NutsExecutionException(applicationContext.getSession(), NutsMessage.plain(m), 201);
+                    throw new NExecutionException(session, NMsg.ofPlain(m), 201);
                 }
             }
         });
     }
 
     @Override
-    public void onUninstallApplication(NutsApplicationContext applicationContext) {
-        NutsWorkspace ws = applicationContext.getWorkspace();
-        ws.commands().removeCommandIfExists(PREFERRED_ALIAS);
-        ws.config().save();
+    public void onUninstallApplication(NSession session) {
+        NCommands.of(session).removeCommandIfExists(PREFERRED_ALIAS);
+        NConfigs.of(session).save();
     }
 
     @Override
-    public void onUpdateApplication(NutsApplicationContext applicationContext) {
-        onInstallApplication(applicationContext);
+    public void onUpdateApplication(NSession session) {
+        onInstallApplication(session);
     }
 
     @Override
-    public void onInstallApplication(NutsApplicationContext applicationContext) {
-        NutsWorkspace ws = applicationContext.getWorkspace();
-        NutsSession session = applicationContext.getSession();
-        NutsWorkspaceCustomCommand a = ws.commands().findCommand(PREFERRED_ALIAS, applicationContext.getAppId(), applicationContext.getAppId());
+    public void onInstallApplication(NSession session) {
+        NCommands commands = NCommands.of(session);
+        NCustomCommand a = commands.findCommand(PREFERRED_ALIAS, session.getAppId(), session.getAppId());
         boolean update = false;
         boolean add = false;
         if (a != null) {
             update = true;
-        } else if (ws.commands().findCommand(PREFERRED_ALIAS) == null) {
+        } else if (commands.findCommand(PREFERRED_ALIAS) == null) {
             add = true;
         }
         if (update || add) {
-            ws.commands()
-                    .setSession((update ? session.copy().setConfirm(NutsConfirmationMode.YES) : session))
-                    .addCommand(new NutsCommandConfig()
-                    .setName(PREFERRED_ALIAS)
-                    .setOwner(applicationContext.getAppId())
-                    .setCommand(applicationContext.getAppId().getShortName())
+            commands
+                    .setSession((update ? session.copy().setConfirm(NConfirmationMode.YES) : session))
+                    .addCommand(new NCommandConfig()
+                            .setName(PREFERRED_ALIAS)
+                            .setOwner(session.getAppId())
+                            .setCommand(session.getAppId().getShortName())
                     );
-            ws.config().save();
+            NConfigs.of(session).save();
         }
     }
-
 
 
 }

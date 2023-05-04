@@ -12,8 +12,8 @@ import net.hl.compiler.utils.HNodeUtils;
 
 import java.util.*;
 import net.hl.compiler.index.HIndexer;
-import net.thevpc.nuts.NutsSession;
-import net.thevpc.nuts.NutsWorkspace;
+import net.thevpc.nuts.NSession;
+import net.thevpc.nuts.NWorkspace;
 
 public class HProject implements HProjectContext {
 
@@ -24,21 +24,21 @@ public class HProject implements HProjectContext {
     private HNDeclareMetaPackage resolvedMetaPackage;
     private String rootId;
     private Map<String, Object> userProperties = new HashMap<>();
-    private NutsSession session;
+    private NSession session;
 
-    public HProject(HadraContext context, HIndexer indexer, NutsSession session) {
+    public HProject(HadraContext context, HIndexer indexer, NSession session) {
         this.context = context;
         this.indexer = indexer;
         this.session = session;
         metaPackageType.addAnnotationNoDuplicates(HNodeUtils.createAnnotationModifierCall("public"));
     }
 
-    public NutsWorkspace getWorkspace() {
+    public NWorkspace getWorkspace() {
         return getSession().getWorkspace();
     }
 
     @Override
-    public NutsSession getSession() {
+    public NSession getSession() {
         return session;
     }
 
@@ -90,7 +90,7 @@ public class HProject implements HProjectContext {
     }
 
     public String getErrorMessage() {
-        return log().getErrorMssage();
+        return log().getErrorMessage();
     }
 
     public boolean isSuccessful() {

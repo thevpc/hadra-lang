@@ -18,12 +18,17 @@ class JavaMethodVisitor extends MethodVisitor {
     private HIndexerImpl defaultHLIndexer;
     private String source;
     private String currentFullName;
+    private List<HIndexedMethod> indexedMethods;
+    private List<HIndexedConstructor> indexedConstructors;
 
 
     public JavaMethodVisitor(HIndexerImpl defaultHLIndexer,
                              String source,
                              String currentFullName,
-                             String methodName, String[] paramTypes, int access, String returnType) {
+                             String methodName, String[] paramTypes, int access, String returnType
+            ,List<HIndexedMethod> indexedMethods,
+                             List<HIndexedConstructor> indexedConstructors
+    ) {
         super(Opcodes.ASM6);
         this.defaultHLIndexer = defaultHLIndexer;
         this.source = source;
@@ -34,6 +39,8 @@ class JavaMethodVisitor extends MethodVisitor {
         this.returnType = returnType;
         this.parameterNames = new ArrayList<>();
         this.staticMethod =(access&Opcodes.ACC_STATIC)!=0;
+        this.indexedMethods =indexedMethods;
+        this.indexedConstructors =indexedConstructors;
     }
 
     @Override
@@ -56,20 +63,20 @@ class JavaMethodVisitor extends MethodVisitor {
 
     @Override
     public void visitEnd() {
-        String[] modifiers = JavaClassVisitor.parseModifiers(access);
+        AnnInfo[] modifiers = JavaClassVisitor.parseModifiers(access);
         if(methodName.equals("<init>")){
-            defaultHLIndexer.indexConstructor0(new HIndexedConstructor(
+            indexedConstructors.add(new HIndexedConstructor(
                     methodName, (String[]) parameterNames.toArray(new String[0]), paramTypes, new String[0],
                     currentFullName, modifiers, source
             ));
         }else {
 //            System.out.println("VISIT : "+currentFullName+"."+methodName);
             //if("println".equals(methodName)) {
-            if(Arrays.stream(modifiers).noneMatch(x->x.equals("synthetic"))) {
+            if(Arrays.stream(modifiers).noneMatch(x->x.getName().equals("synthetic"))) {
 //                if(methodName.contains("$")){
 //                    System.out.println(modifiers);
 //                }
-                defaultHLIndexer.indexMethod0(new HIndexedMethod(
+                indexedMethods.add(new HIndexedMethod(
                         methodName, (String[]) parameterNames.toArray(new String[0]), paramTypes, new String[0],
                         returnType, currentFullName, modifiers, source
                 ));

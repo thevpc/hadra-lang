@@ -1,6 +1,6 @@
 package net.hl.ide.hl4nb.project;
 
-import net.thevpc.jeep.JIndexStoreMemory;
+import net.thevpc.jeep.impl.index.mem.JIndexStoreMemory;
 
 //should replace this with Netbeans Index Mechanism based on Lucene
 public class HLnbJIndexStore extends JIndexStoreMemory {

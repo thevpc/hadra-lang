@@ -4,6 +4,7 @@ import net.thevpc.jeep.JField;
 import net.thevpc.jeep.JIndexDocument;
 import net.thevpc.jeep.core.index.DefaultJIndexDocument;
 
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class HIndexedField implements HIndexedElement {
@@ -12,25 +13,25 @@ public class HIndexedField implements HIndexedElement {
     private String name;
     private String id;
     private String[] imports;
-    private String annotations;
+    private AnnInfo[] annotations;
     private String source;
 
     public HIndexedField(JField item, String source) {
         this.declaringType = item.getDeclaringType().getName();
         this.type = item.type()==null?"":item.type().getName();
         this.name = item.name();
-        this.annotations = item.getAnnotations().stream().map(Object::toString).collect(Collectors.joining(" "));
+        this.annotations = item.getAnnotations().stream().map(AnnInfo::new).toArray(AnnInfo[]::new);
         this.imports= new String[0];
         this.source=source;
         this.id = (this.declaringType==null) ? name : (this.declaringType + "." + name);
     }
 
-    public HIndexedField(String declaringType, String type, String name, String[] imports, String[] annotations, String source) {
+    public HIndexedField(String declaringType, String type, String name, String[] imports, AnnInfo[] annotations, String source) {
         this.declaringType = declaringType;
         this.type = type;
         this.name = name;
         this.imports = imports;
-        this.annotations = String.join(" ", annotations);
+        this.annotations = Arrays.stream(annotations).toArray(AnnInfo[]::new);
         this.source = source;
         this.id = (this.declaringType==null) ? name : (this.declaringType + "." + name);
     }
@@ -51,7 +52,7 @@ public class HIndexedField implements HIndexedElement {
         return imports;
     }
 
-    public String getAnnotations() {
+    public AnnInfo[] getAnnotations() {
         return annotations;
     }
 
@@ -66,7 +67,7 @@ public class HIndexedField implements HIndexedElement {
         doc.add("name", name,true);
         doc.add("type", type,true);
         doc.add("declaringType", declaringType,true);
-        doc.add("annotations", String.valueOf(annotations),false);
+        doc.add("annotations", Arrays.asList(annotations).toString(),false);
         doc.add("imports", String.join(";",imports),false);
         doc.add("source", source,false);
         return doc;
@@ -75,5 +76,13 @@ public class HIndexedField implements HIndexedElement {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "HIndexedField{" +
+                "type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

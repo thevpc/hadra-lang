@@ -10,12 +10,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import net.hl.compiler.ast.HNBlock;
 
-import net.thevpc.common.textsource.JTextSource;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.ast.HNDeclareType;
 import net.hl.compiler.ast.HNode;
+import net.thevpc.jeep.source.JTextSource;
 
 /**
  *
@@ -25,7 +26,7 @@ public class HJavaContextHelper {
 
     private HNDeclareType metaPackage;
     private List<HNDeclareType> topLevelTypes = new ArrayList<>();
-    private Set<JTextSource> metaPackageSources = new HashSet<JTextSource>();
+    private Set<JTextSource> metaPackageSources = new HashSet<>();
     private List<String> javaFiles = new ArrayList<>();
     private File outputJarFile;
 

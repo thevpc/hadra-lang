@@ -1,6 +1,5 @@
 package net.hl.ide.hl4swing.test;
 
-import net.thevpc.common.textsource.JTextSourceFactory;
 import net.thevpc.jeep.editor.JEditorPaneBuilder;
 import net.thevpc.jeep.editor.JSyntaxUtils;
 import net.thevpc.jeep.editor.comp.JSyntaxPosLabel;
@@ -9,6 +8,7 @@ import net.hl.compiler.core.HCompletion;
 import net.hl.compiler.core.HadraLanguage;
 import net.hl.compiler.index.HIndexerImpl;
 import net.hl.ide.hl4swing.HLJSyntaxKit;
+import net.thevpc.jeep.source.JTextSourceFactory;
 
 import javax.swing.*;
 import java.awt.*;

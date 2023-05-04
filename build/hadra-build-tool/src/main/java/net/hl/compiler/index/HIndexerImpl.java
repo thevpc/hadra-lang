@@ -3,6 +3,7 @@ package net.hl.compiler.index;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.JIndexQuery;
 import net.thevpc.jeep.core.index.DefaultJIndexDocument;
+import net.thevpc.jeep.impl.index.mem.JIndexStoreMemory;
 import net.thevpc.jeep.util.Chronometer;
 import net.thevpc.jeep.util.JeepUtils;
 import net.hl.compiler.ast.HNBlock;
@@ -296,10 +297,10 @@ public class HIndexerImpl implements HIndexer {
         typesCounter.inc();
         //remove old indexes
         for (String elementType : new String[]{
-            "Method",
-            "Field",
-            "Type",
-            "Constructor"
+                HElementTypes.METHOD,
+                HElementTypes.FIELD,
+                HElementTypes.TYPE,
+                HElementTypes.CONSTRUCTOR
         }) {
             for (JIndexDocument d : store.searchDocuments(uuid, elementType, new JIndexQuery().whereEq("declaringType", item.getFullName()))) {
                 store.removeIndex(uuid, elementType, d.getId());
@@ -337,22 +338,22 @@ public class HIndexerImpl implements HIndexer {
     @Override
     public void indexProject(HIndexedProject project) {
         LOG.log(Level.FINE, "index project {0} @ {1}", new Object[]{project.getId(), project.getSource()});
-        store.index(project.getSource(), "Project", project, true);
+        store.index(project.getSource(), HElementTypes.PROJECT, project, true);
     }
 
     @Override
     public Set<HIndexedClass> searchTypes() {
-        return store.searchElements(null, "Type");
+        return store.searchElements(null, HElementTypes.TYPE);
     }
 
     @Override
     public HIndexedClass searchType(String fullName) {
-        return JeepUtils.first(store.searchElements(null, "Type", new JIndexQuery().whereEq("fullName", fullName)));
+        return JeepUtils.first(store.searchElements(null, HElementTypes.TYPE, new JIndexQuery().whereEq("fullName", fullName)));
     }
 
     @Override
     public Set<HIndexedClass> searchTypes(JIndexQuery query) {
-        return store.searchElements(null, "Type", query);
+        return store.searchElements(null, HElementTypes.TYPE, query);
     }
 
     private Set<String> searchTypeHierarchy(String className) {
@@ -382,7 +383,7 @@ public class HIndexerImpl implements HIndexer {
     @Override
     public Set<HIndexedField> searchFields(JIndexQuery query, boolean inherited) {
         LinkedHashSet<HIndexedField> all = new LinkedHashSet<>();
-        for (HIndexedField field : store.<HIndexedField>searchElements(null, "Field", query)) {
+        for (HIndexedField field : store.<HIndexedField>searchElements(null, HElementTypes.FIELD, query)) {
             all.add(field);
             if (inherited) {
                 Set<String> dt = searchTypeHierarchy(field.getDeclaringType());
@@ -391,9 +392,9 @@ public class HIndexerImpl implements HIndexer {
                 typesToCheck.addAll(dt);
                 while (!typesToCheck.isEmpty()) {
                     String t = typesToCheck.pop();
-                    for (HIndexedField f2 : store.<HIndexedField>searchElements(t, "Field", query)) {
+                    for (HIndexedField f2 : store.<HIndexedField>searchElements(t, HElementTypes.FIELD, query)) {
                         //TODO fix me
-                        if (!f2.getAnnotations().contains("private")) {
+                        if (Arrays.stream(f2.getAnnotations()).noneMatch(x->x.getName().equals("private"))) {
                             all.add(f2);
                         }
                     }
@@ -418,7 +419,7 @@ public class HIndexerImpl implements HIndexer {
     @Override
     public Set<HIndexedMethod> searchMethods(JIndexQuery query, boolean inherited) {
         LinkedHashSet<HIndexedMethod> all = new LinkedHashSet<>();
-        for (HIndexedMethod field : store.<HIndexedMethod>searchElements(null, "Method", query)) {
+        for (HIndexedMethod field : store.<HIndexedMethod>searchElements(null, HElementTypes.METHOD, query)) {
             all.add(field);
             if (inherited) {
                 Set<String> dt = searchTypeHierarchy(field.getDeclaringType());
@@ -427,9 +428,9 @@ public class HIndexerImpl implements HIndexer {
                 typesToCheck.addAll(dt);
                 while (!typesToCheck.isEmpty()) {
                     String t = typesToCheck.pop();
-                    for (HIndexedMethod f2 : store.<HIndexedMethod>searchElements(t, "Method", query)) {
+                    for (HIndexedMethod f2 : store.<HIndexedMethod>searchElements(t, HElementTypes.METHOD, query)) {
                         //TODO fix me
-                        if (!f2.getAnnotations().contains("private")) {
+                        if (Arrays.stream(f2.getAnnotations()).noneMatch(x->x.getName().equals("private"))) {
                             all.add(f2);
                         }
                     }
@@ -453,7 +454,7 @@ public class HIndexerImpl implements HIndexer {
 
     @Override
     public Set<HIndexedConstructor> searchConstructors(JIndexQuery query) {
-        return store.searchElements(null, "Constructor", query);
+        return store.searchElements(null, HElementTypes.CONSTRUCTOR, query);
     }
 
     @Override
@@ -462,7 +463,7 @@ public class HIndexerImpl implements HIndexer {
         if (declaringType != null) {
             q.whereEq("declaringType", declaringType);
         }
-        return store.searchElements(null, "Constructor", q);
+        return store.searchElements(null, HElementTypes.CONSTRUCTOR, q);
     }
 
     @Override
@@ -472,14 +473,14 @@ public class HIndexerImpl implements HIndexer {
 
     @Override
     public Set<HIndexedPackage> searchPackages(JIndexQuery query) {
-        return store.searchElements(null, "Package", query);
+        return store.searchElements(null, HElementTypes.PACKAGE, query);
     }
 
     @Override
     public HIndexedPackage searchPackage(String fullName) {
         JIndexQuery q = new JIndexQuery();
         q.whereEq("fullName", fullName);
-        return JeepUtils.first(store.searchElements(null, "Package", q));
+        return JeepUtils.first(store.searchElements(null, HElementTypes.PACKAGE, q));
     }
 
     @Override
@@ -489,7 +490,7 @@ public class HIndexerImpl implements HIndexer {
 
     public HIndexedProject searchProject(String projectRoot) {
         return JeepUtils.first(
-                store.searchElements(null, "Project",
+                store.searchElements(null, HElementTypes.PROJECT,
                         new JIndexQuery().whereEq("projectRoot", projectRoot)
                 )
         );
@@ -497,9 +498,9 @@ public class HIndexerImpl implements HIndexer {
 
     public void indexPackage(HIndexedPackage p) {
         String source = p.getSource();
-        store.index(source, "Package", p, false);
+        store.index(source, HElementTypes.PACKAGE, p, false);
         for (String o : p.getParents()) {
-            store.index(source, "Package", new HIndexedPackage(source, o), false);
+            store.index(source, HElementTypes.PACKAGE, new HIndexedPackage(source, o), false);
         }
     }
 
@@ -510,7 +511,7 @@ public class HIndexerImpl implements HIndexer {
     }
 
     public void indexType0(HIndexedClass p) {
-        store.index(p.getSource(), "Type", p, true);
+        store.index(p.getSource(), HElementTypes.TYPE, p, true);
         indexPackage(new HIndexedPackage(p.getSource(), p.getPackageName()));
     }
 
@@ -521,7 +522,7 @@ public class HIndexerImpl implements HIndexer {
     }
 
     public final void indexField0(HIndexedField p) {
-        store.index(p.getSource(), "Field", p, true);
+        store.index(p.getSource(), HElementTypes.FIELD, p, true);
     }
 
     @Override
@@ -533,7 +534,7 @@ public class HIndexerImpl implements HIndexer {
     }
 
     public final void indexMethod0(HIndexedMethod p) {
-        store.index(p.getSource(), "Method", p, true);
+        store.index(p.getSource(), HElementTypes.METHOD, p, true);
     }
 
     @Override
@@ -543,7 +544,7 @@ public class HIndexerImpl implements HIndexer {
     }
 
     public final void indexConstructor0(HIndexedConstructor p) {
-        store.index(p.getSource(), "Constructor", p, true);
+        store.index(p.getSource(), HElementTypes.CONSTRUCTOR, p, true);
     }
 
     public boolean isValidClassFile(String name) {

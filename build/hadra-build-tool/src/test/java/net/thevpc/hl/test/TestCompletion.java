@@ -9,7 +9,7 @@ import net.hl.compiler.index.HIndexedProject;
 import net.hl.compiler.utils.DepIdAndFile;
 import net.thevpc.jeep.JCompletionProposal;
 import net.thevpc.nuts.Nuts;
-import net.thevpc.nuts.NutsSession;
+import net.thevpc.nuts.NSession;
 import org.junit.jupiter.api.Test;
 
 public class TestCompletion {

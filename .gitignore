@@ -28,6 +28,5 @@
 /.idea/
 /extra/hadra-example/target/
 /extra/hadra-example/.idea/
-/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/TestExample.java
 /build/hl/target/
 /build/hl-maven-plugin/target/

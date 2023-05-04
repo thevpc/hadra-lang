@@ -24,7 +24,7 @@ import net.hl.lang.JExports;
 import net.hl.lang.JSignature;
 import net.hl.lang.ext.*;
 import net.thevpc.nuts.Nuts;
-import net.thevpc.nuts.NutsSession;
+import net.thevpc.nuts.NSession;
 
 /**
  *
@@ -50,13 +50,13 @@ public final class HadraLanguage extends DefaultJeep implements HadraContext {
         return RANDOM_INSTANCE;
     }
 
-    private NutsSession session;
+    private NSession session;
 
-    public HadraLanguage(NutsSession session) {
+    public HadraLanguage(NSession session) {
         this(session, null);
     }
 
-    public HadraLanguage(NutsSession session, ClassLoader classLoader) {
+    public HadraLanguage(NSession session, ClassLoader classLoader) {
         super(new HJeepFactory(session), classLoader);
         if (RANDOM_INSTANCE == null) {
             RANDOM_INSTANCE = this;
@@ -66,7 +66,7 @@ public final class HadraLanguage extends DefaultJeep implements HadraContext {
     }
 
     @Override
-    public NutsSession getSession() {
+    public NSession getSession() {
         return session;
     }
 

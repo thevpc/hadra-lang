@@ -20,11 +20,11 @@ import net.thevpc.jeep.core.types.DefaultTypeName;
 import net.thevpc.jeep.core.types.JTypeNameBounded;
 import net.thevpc.jeep.impl.functions.JNameSignature;
 import net.thevpc.jeep.impl.tokens.JTokenId;
+import net.thevpc.jeep.log.JMessageList;
+import net.thevpc.jeep.log.JSourceMessage;
+import net.thevpc.jeep.log.impl.DefaultJMessageList;
 import net.thevpc.jeep.util.JTokenUtils;
 import net.thevpc.jeep.util.JeepUtils;
-import net.thevpc.common.textsource.log.JMessageList;
-import net.thevpc.common.textsource.log.JSourceMessage;
-import net.thevpc.common.textsource.log.impl.DefaultJMessageList;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -660,7 +660,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
         return super.parseExpressionUnaryTerminal(options);
     }
 
-//
+    //
 //    public HNode parseExpression() {
 //        return super.parseExpression();
 //    }
@@ -713,7 +713,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                             JTokenBoundsBuilder bb = new JTokenBoundsBuilder();
                             bb.visit(p = next());
                             return new HNAnnotationCall[]{
-                                new HNAnnotationCall(new HNTypeTokenSpecialAnnotation(p), new HNode[0], bb)
+                                    new HNAnnotationCall(new HNTypeTokenSpecialAnnotation(p), new HNode[0], bb)
                             };
                         }
                     }
@@ -1908,6 +1908,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
 //        }
 //        return modifiers;
 //    }
+
     /**
      * var a=2 val a=2 a=Z int a=2; String a=""; The same applies with ':'
      * instead of '='
@@ -2719,7 +2720,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             if (row.size() != maxColumns) {
                 log().jerror("X135", "matrix",
                         startToken, "columns mismatch : "
-                        + "expected " + maxColumns + " but found " + row.size() + " at row " + (i + 1));
+                                + "expected " + maxColumns + " but found " + row.size() + " at row " + (i + 1));
             }
             mat[i] = row.toArray(new HNode[0]);
         }
@@ -3127,14 +3128,9 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
             n = peek();
             if (n.id() == HTokenId.LEFT_CURLY_BRACKET) {
                 endToken = n;
-                metaParsingMode = true;
-                try {
-                    pp.setBody((HNBlock) parseBraces(false, HNBlock.BlocType.PACKAGE_BODY));
-                    if (pp.getBody() != null) {
-                        endToken = (pp.getBody().getEndToken());
-                    }
-                } finally {
-                    metaParsingMode = false;
+                pp.setBody((HNBlock) parseBraces(false, HNBlock.BlocType.PACKAGE_BODY));
+                if (pp.getBody() != null) {
+                    endToken = (pp.getBody().getEndToken());
                 }
             } else if (n.id() == HTokenId.SEMICOLON) {
                 endToken = (next());
@@ -3208,6 +3204,59 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
         return null;
     }
 
+    HNIdentifier parsePackageId() {
+        JToken idToken = new JToken();
+        idToken.def = new JTokenDef(HTokenId.IDENTIFIER, "IDENTIFIER", HTokenId.IDENTIFIER, "IDENTIFIER", "");
+        List<JToken> idTokens = new ArrayList<>();
+        StringBuilder idTokensSB = new StringBuilder();
+        while (true) {
+            JToken t = peek();
+            if (t == null) {
+                if (idTokensSB.length() == 0) {
+                    return null;
+                }
+                break;
+            }
+            boolean validNext = false;
+            switch (t.id()) {
+                case HTokenId.IDENTIFIER:
+                case HTokenId.COLON:
+                case HTokenId.NUMBER_INT:
+                case HTokenId.NUMBER_FLOAT:
+                case HTokenId.DOT: {
+                    validNext = true;
+                    break;
+                }
+                default: {
+                    if ("#".equals(t.image)) {
+                        validNext = true;
+                    } else {
+                        validNext = false;
+                        break;
+                    }
+                }
+            }
+            if (validNext) {
+                next();
+                idTokens.add(t);
+                if (idTokensSB.length() == 0) {
+                    idToken.startColumnNumber = t.startColumnNumber;
+                    idToken.startLineNumber = t.startLineNumber;
+                    idToken.startCharacterNumber = t.startCharacterNumber;
+                }
+                idToken.endColumnNumber = t.endColumnNumber;
+                idToken.endLineNumber = t.endLineNumber;
+                idToken.endCharacterNumber = t.endCharacterNumber;
+                idTokensSB.append(t.image);
+                idToken.image = idTokensSB.toString();
+                idToken.sval = idTokensSB.toString();
+            } else {
+                break;
+            }
+        }
+        return new HNIdentifier(idToken);
+    }
+
     protected HNode parseImportNode() {
         JToken n = next();
         JToken startToken = n.copy();
@@ -3215,72 +3264,80 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
         if (n.id() == HTokenId.KEYWORD_IMPORT) {
             endToken = n = peek();
             if (n.id() == HTokenId.KEYWORD_PACKAGE) {
-                if (!metaParsingMode) {
-                    log().jerror("X159", "import package statement", n, "import package is not allowed outside package declaration");
-                }
-                endToken = next();
-                HNode id = parseExpression();
-                if (id != null) {
-                    endToken = id.getEndToken();
-                }
-                HNMetaImportPackage node = new HNMetaImportPackage(startToken);
-                node.setImportedPackageNode(id);
-                JToken p = next();
-                if (p.id() == HTokenId.SEMICOLON) {
-                    pushBack(p);
-                    node.setEndToken(endToken);
-                    return node;
-                }
-                if (p.id() == HTokenId.KEYWORD_FOR) {
-                    endToken = p;
-                    p = next();
-                    if (p.isImage("optional")) {
-                        endToken = p;
-                        node.setOptional(true);
-                        p = next();
-                    }
-                    switch (p.image) {
-                        case "compile":
-                        case "build":
-                        case "test":
-                        case "api":
-                        case "runtime": {
-                            endToken = p;
-                            node.setScope(p.image);
-                            break;
-                        }
-                        default: {
-                            log().jerror("X160", "import package statement", p, "expected compile,build,test,api,runtime");
-                            pushBack(p);
-                            node.setEndToken(endToken);
-                            return node;
-                        }
-                    }
-                }
-                p = peek();
-                if (p.id() == HTokenId.KEYWORD_BREAK) {
+//                if (!metaParsingMode) {
+//                    log().jerror("X159", "import package statement", n, "import package is not allowed outside package declaration");
+//                }
+                boolean oldMetaParsingMode = metaParsingMode;
+                HNMetaImportPackage node;
+                try {
+                    metaParsingMode = true;
+
                     endToken = next();
-                    while (true) {
-                        HNode i = parseExpression();
-                        if (i != null) {
-                            endToken = i.getEndToken();
-                            node.addExclusion(i);
-                        } else {
-                            node.setEndToken(endToken);
-                            return node;
+                    HNode id = parsePackageId();
+                    if (id != null) {
+                        endToken = id.getEndToken();
+                    }
+                    node = new HNMetaImportPackage(startToken);
+                    node.setImportedPackageNode(id);
+                    JToken p = next();
+                    if (p.id() == HTokenId.SEMICOLON) {
+                        pushBack(p);
+                        node.setEndToken(endToken);
+                        return node;
+                    }
+                    if (p.id() == HTokenId.KEYWORD_FOR) {
+                        endToken = p;
+                        p = next();
+                        if (p.isImage("optional")) {
+                            endToken = p;
+                            node.setOptional(true);
+                            p = next();
                         }
-                        p = peek();
-                        if (p.id() == HTokenId.COMMA) {
-                            endToken = next();
-                            //okkay, consume it
-                        }
-                        if (p.id() == HTokenId.SEMICOLON) {
-                            break;
-                            //okkay, consume it
+                        switch (p.image) {
+                            case "compile":
+                            case "build":
+                            case "test":
+                            case "api":
+                            case "runtime": {
+                                endToken = p;
+                                node.setScope(p.image);
+                                break;
+                            }
+                            default: {
+                                log().jerror("X160", "import package statement", p, "expected compile,build,test,api,runtime");
+                                pushBack(p);
+                                node.setEndToken(endToken);
+                                return node;
+                            }
                         }
                     }
+                    p = peek();
+                    if (p.id() == HTokenId.KEYWORD_BREAK) {
+                        endToken = next();
+                        while (true) {
+                            HNode i = parseExpression();
+                            if (i != null) {
+                                endToken = i.getEndToken();
+                                node.addExclusion(i);
+                            } else {
+                                node.setEndToken(endToken);
+                                return node;
+                            }
+                            p = peek();
+                            if (p.id() == HTokenId.COMMA) {
+                                endToken = next();
+                                //okkay, consume it
+                            }
+                            if (p.id() == HTokenId.SEMICOLON) {
+                                break;
+                                //okkay, consume it
+                            }
+                        }
+                    }
+                    node.setEndToken(endToken);
+                } finally {
+                    metaParsingMode = oldMetaParsingMode;
                 }
-                node.setEndToken(endToken);
                 return node;
             } else {
                 JToken importStartToken = peek().copy();
@@ -3708,7 +3765,7 @@ public class HParser extends DefaultJParser<HNode, HExpressionOptions> {
                         seps.add(tbb.visit(next()));
                         HNPars v = new HNPars(
                                 new HNode[]{
-                                    id
+                                        id
                                 }, tbb.getStartToken(), seps.toArray(new JToken[0]), tbb.getEndToken()
                         );
                         if (endValidator != null && endValidator.test(v)) {

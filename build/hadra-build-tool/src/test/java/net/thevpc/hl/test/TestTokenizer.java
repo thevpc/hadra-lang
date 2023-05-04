@@ -6,8 +6,8 @@
 package net.thevpc.hl.test;
 
 import net.thevpc.jeep.*;
-import net.thevpc.common.textsource.JTextSourceFactory;
 import net.hl.compiler.HL;
+import net.thevpc.jeep.source.JTextSourceFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

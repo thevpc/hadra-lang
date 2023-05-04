@@ -3,8 +3,8 @@ package net.hl.compiler.utils;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.eval.JEvaluableNode;
 import net.thevpc.jeep.impl.functions.*;
-import net.thevpc.common.textsource.JTextSource;
 import net.hl.compiler.ast.*;
+import net.thevpc.jeep.source.JTextSource;
 
 import java.lang.reflect.Modifier;
 import java.time.LocalDate;

@@ -22,14 +22,14 @@ public class HIndexedConstructor implements HIndexedElement{
     private String returnType;
     private String declaringType;
     private JNameSignature signature;
-    private String annotations;
+    private AnnInfo[] annotations;
     private String source;
     private String id;
     public HIndexedConstructor(HNDeclareInvokable m) {
         name=m.getNameToken().sval;
         declaringType=m.getDeclaringType().getFullName();
         returnType=declaringType;
-        annotations = Arrays.stream(m.getAnnotations()).map(Object::toString).collect(Collectors.joining(" "));
+        this.annotations = Arrays.stream(m.getAnnotations()).map(AnnInfo::new).toArray(AnnInfo[]::new);
         List<String> pn=new ArrayList<>();
         List<String> pt=new ArrayList<>();
         for (HNDeclareIdentifier argument : m.getArguments()) {
@@ -47,7 +47,7 @@ public class HIndexedConstructor implements HIndexedElement{
         name=m.getName();
         declaringType=m.getDeclaringType().getName();
         returnType=declaringType;
-        annotations = m.getAnnotations().stream().map(Object::toString).collect(Collectors.joining(" "));
+        this.annotations = m.getAnnotations().stream().map(AnnInfo::new).toArray(AnnInfo[]::new);
         parameterNames=m.getArgNames();
         parameterTypes= Arrays.stream(m.getArgTypes()).map(JType::getName).toArray(String[]::new);
         imports= new String[0];
@@ -55,14 +55,14 @@ public class HIndexedConstructor implements HIndexedElement{
         this.source=source;
         id=declaringType+"."+signature.toString();
     }
-    public HIndexedConstructor(String name, String[] parameterNames, String[] parameterTypes, String[] imports, String declaringType, String[] annotations, String source) {
+    public HIndexedConstructor(String name, String[] parameterNames, String[] parameterTypes, String[] imports, String declaringType, AnnInfo[] annotations, String source) {
         this.name = name;
         this.parameterNames = parameterNames;
         this.parameterTypes = parameterTypes;
         this.imports = imports;
         this.returnType = declaringType;
         this.declaringType = declaringType;
-        this.annotations = Arrays.stream(annotations).collect(Collectors.joining(" "));
+        this.annotations = Arrays.stream(annotations).toArray(AnnInfo[]::new);
         this.source = source;
         this.signature=JNameSignature.of(name,parameterTypes);
         id=declaringType+"."+signature.toString();
@@ -75,7 +75,7 @@ public class HIndexedConstructor implements HIndexedElement{
         doc.add("returnType",returnType,true);
         doc.add("declaringType",declaringType,true);
         doc.add("signature",signature.toString(),true);
-        doc.add("annotations",String.valueOf(annotations),false);
+        doc.add("annotations",Arrays.asList(annotations).toString(),false);
         doc.add("source",source,false);
         doc.add("parameterNames",String.join(";",parameterNames),false);
         doc.add("parameterTypes",String.join(";",parameterTypes),false);
@@ -111,7 +111,7 @@ public class HIndexedConstructor implements HIndexedElement{
         return signature;
     }
 
-    public String getAnnotations() {
+    public AnnInfo[] getAnnotations() {
         return annotations;
     }
 

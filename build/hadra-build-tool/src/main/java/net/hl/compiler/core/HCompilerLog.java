@@ -5,87 +5,91 @@
  */
 package net.hl.compiler.core;
 
-import java.io.PrintStream;
+import net.hl.compiler.utils.StringUtils;
+import net.thevpc.jeep.DefaultJCompilerLog;
+import net.thevpc.jeep.log.JSourceMessage;
+import net.thevpc.jeep.msg.Message;
+import net.thevpc.jeep.source.JTextSource;
+import net.thevpc.jeep.source.JTextSourceRange;
+import net.thevpc.jeep.source.JTextSourceToken;
+import net.thevpc.nuts.NMsg;
+import net.thevpc.nuts.NSession;
+import net.thevpc.nuts.io.NPrintStream;
+import net.thevpc.nuts.io.NPrintStream;
+import net.thevpc.nuts.text.NText;
+import net.thevpc.nuts.text.NTextStyle;
+import net.thevpc.nuts.text.NTexts;
+
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
-import net.hl.compiler.utils.StringUtils;
-import net.thevpc.common.msg.Message;
-import net.thevpc.common.textsource.JTextSource;
-import net.thevpc.common.textsource.JTextSourceRange;
-import net.thevpc.common.textsource.JTextSourceToken;
-import net.thevpc.common.textsource.log.JSourceMessage;
-import net.thevpc.jeep.DefaultJCompilerLog;
-import net.thevpc.nuts.NutsMessage;
-import net.thevpc.nuts.NutsPrintStream;
-import net.thevpc.nuts.NutsSession;
-import net.thevpc.nuts.NutsTextStyle;
-import net.thevpc.nuts.NutsTextManager;
-import net.thevpc.nuts.NutsText;
 
 /**
- *
  * @author vpc
  */
 public class HCompilerLog extends DefaultJCompilerLog {
 
-    private NutsSession session;
+    private NSession session;
 
-    public HCompilerLog(NutsSession session) {
+    public HCompilerLog(NSession session) {
         this.session = session;
     }
 
     @Override
     public void printFooter() {
-        NutsPrintStream out = session.out();
+        NPrintStream out = session.out();
         String op = getOperationName();
         if (op == null) {
             op = DEFAULT_OPERATION_NAME;
         }
         final int errors = getErrorCount();
         final int warnings = getWarningCount();
-        NutsMessage m;
+        NMsg m;
         if (errors == 0 && warnings == 0) {
-            m = NutsMessage.cstyle("%s ##:success:successful##", op, warnings);
+            m = NMsg.ofC("%s ##:success:successful##", op, warnings);
         } else if (errors == 0) {
-            m = NutsMessage.cstyle("%s ##:success:successful## with ##:warn:%d## warning%s", op, warnings, warnings > 1 ? "s" : "");
+            m = NMsg.ofC("%s ##:success:successful## with ##:warn:%d## warning%s", op, warnings, warnings > 1 ? "s" : "");
         } else if (warnings == 0) {
-            m = NutsMessage.cstyle("%s ##:fail:failed## with ##:fail:%d## error%s", op, errors, errors > 1 ? "s" : "");
+            m = NMsg.ofC("%s ##:fail:failed## with ##:fail:%d## error%s", op, errors, errors > 1 ? "s" : "");
         } else {
-            m = NutsMessage.cstyle("%s ##:fail:failed## with ##:fail:%d## error%s and ##:warn:%d## warning%s", op, errors, errors > 1 ? "s" : "", warnings, warnings > 1 ? "s" : "");
+            m = NMsg.ofC("%s ##:fail:failed## with ##:fail:%d## error%s and ##:warn:%d## warning%s", op, errors, errors > 1 ? "s" : "", warnings, warnings > 1 ? "s" : "");
         }
 
         out.println(
                 StringUtils.center2(
-                        "[ " + session.getWorkspace().text().toText(
+                        "[ " + ofTexts().ofText(
                                 m
                         ).toString()
-                        + " ]",
-                        80, '-', session.getWorkspace())
+                                + " ]",
+                        80, '-', session)
         );
+    }
+
+    private NTexts ofTexts() {
+        return NTexts.of(session);
     }
 
     @Override
     public void printlnMessage(JSourceMessage jSourceMessage) {
-        NutsPrintStream out = session.out();
+        NPrintStream out = session.out();
         boolean showCompilationSource = true;
         final JTextSourceToken token = jSourceMessage.getToken();
         final Level level = jSourceMessage.getLevel();
         final String id = jSourceMessage.getId();
         final Message message = jSourceMessage.getMessage();
-        final NutsTextManager factory = session.getWorkspace().text();
+        final NTexts factory = ofTexts();
 
         JTextSource compilationUnitSource0 = token == null ? null : token.getSource();
         String compilationUnitSource = compilationUnitSource0 == null ? "" : compilationUnitSource0.name();
         String compilationUnitSourceShort = compilationUnitSource;
         if (compilationUnitSourceShort.length() > 0 && (compilationUnitSourceShort.contains("/") || compilationUnitSourceShort.contains("\\"))) {
-            compilationUnitSourceShort=compilationUnitSourceShort.replace('\\', '/');
-            while(compilationUnitSourceShort.endsWith("/")){
-                compilationUnitSourceShort=compilationUnitSourceShort.substring(0,compilationUnitSourceShort.length());
+            compilationUnitSourceShort = compilationUnitSourceShort.replace('\\', '/');
+            while (compilationUnitSourceShort.endsWith("/")) {
+                compilationUnitSourceShort = compilationUnitSourceShort.substring(0, compilationUnitSourceShort.length() - 1);
             }
-            if(compilationUnitSourceShort.contains("/")){
-                compilationUnitSourceShort=compilationUnitSourceShort.substring(
-                        compilationUnitSourceShort.lastIndexOf('/')+1
+            if (compilationUnitSourceShort.contains("/")) {
+                compilationUnitSourceShort = compilationUnitSourceShort.substring(
+                        compilationUnitSourceShort.lastIndexOf('/') + 1
                 );
             }
         }
@@ -97,57 +101,57 @@ public class HCompilerLog extends DefaultJCompilerLog {
             out.print(s);
         } else {
             if (showCompilationSource) {
-                out.printf("%s", StringUtils.left(compilationUnitSourceShort, 13));
+                out.print(NMsg.ofC("%s", StringUtils.left(compilationUnitSourceShort, 13)));
             }
             if (token != null) {
-                out.printf(" [%s,%s]",
-                        factory.forStyled(StringUtils.right(String.valueOf(token.getStartLineNumber() + 1), 4), NutsTextStyle.number()),
-                        factory.forStyled(StringUtils.right(String.valueOf(token.getStartColumnNumber() + 1), 3), NutsTextStyle.number())
-                );
+                out.print(NMsg.ofC(" [%s,%s]",
+                        factory.ofStyled(StringUtils.right(String.valueOf(token.getStartLineNumber() + 1), 4), NTextStyle.number()),
+                        factory.ofStyled(StringUtils.right(String.valueOf(token.getStartColumnNumber() + 1), 3), NTextStyle.number())
+                ));
             } else {
                 out.print("           ");
             }
         }
         out.print(" ");
-        NutsText n;
+        NText n;
         if (level.intValue() >= Level.SEVERE.intValue()) {
-            n = factory.forStyled(StringUtils.left("ERROR  ", 6), NutsTextStyle.error());
+            n = factory.ofStyled(StringUtils.left("ERROR  ", 6), NTextStyle.error());
         } else if (level.intValue() >= Level.WARNING.intValue()) {
-            n = factory.forStyled(StringUtils.left("WARNING", 6), NutsTextStyle.warn());
+            n = factory.ofStyled(StringUtils.left("WARNING", 6), NTextStyle.warn());
         } else if (level.intValue() >= Level.INFO.intValue()) {
-            n = factory.forStyled(StringUtils.left("INFO   ", 6), NutsTextStyle.info());
+            n = factory.ofStyled(StringUtils.left("INFO   ", 6), NTextStyle.info());
         } else if (level.intValue() >= Level.CONFIG.intValue()) {
-            n = factory.forStyled(StringUtils.left("CONFIG ", 6), NutsTextStyle.config());
+            n = factory.ofStyled(StringUtils.left("CONFIG ", 6), NTextStyle.config());
         } else {
-            n = factory.forStyled(StringUtils.left(level.toString(), 6), NutsTextStyle.pale());
+            n = factory.ofStyled(StringUtils.left(level.toString(), 6), NTextStyle.pale());
         }
-        out.printf("%s [%-5s] : %s",
+        out.print(NMsg.ofC("%s [%-5s] : %s",
                 n,
-                factory.forStyled(StringUtils.left(id == null ? "" : id, 6), NutsTextStyle.version()),
+                factory.ofStyled(StringUtils.left(id == null ? "" : id, 6), NTextStyle.version()),
                 message.getText()
-        );
+        ));
         boolean includeSourceNameInRange = false;
         if (token != null && compilationUnitSource0 != null) {
             if (includeSourceNameInRange) {
-                out.printf("%s", factory.forStyled(compilationUnitSource0.name(), NutsTextStyle.path()));
-                out.printf("%s", ":");
+                out.print(NMsg.ofC("%s", factory.ofStyled(compilationUnitSource0.name(), NTextStyle.path())));
+                out.print(NMsg.ofC("%s", ":"));
             }
             long cn = token.getStartCharacterNumber();
             int window = 80;
             JTextSourceRange range = compilationUnitSource0.range((int) cn - window, (int) cn + window);
             JTextSourceRange.JRangePointer windowString = range.trim(cn, window);
             out.print("\n   ");
-            out.printf("%s", factory.forCode("hadra", windowString.getText()));
-            out.append("\n   ");
+            out.print(NMsg.ofC("%s", factory.ofCode("hadra", windowString.getText())));
+            out.print(NMsg.ofC("\n   "));
             for (int i = 0; i < windowString.getOffset(); i++) {
                 out.print(" ");
             }
-            out.printf("%s", factory.forStyled("^^^", NutsTextStyle.path()));
+            out.print(NMsg.ofC("%s", factory.ofStyled("^^^", NTextStyle.path())));
 
 //            out.printf("%s", " [Line:");
-//            out.printf("%s", text.forStyled(String.valueOf(token.getStartLineNumber() + 1), NutsTextStyle.number()));
+//            out.printf("%s", text.ofStyled(String.valueOf(token.getStartLineNumber() + 1), NTextStyle.number()));
 //            out.printf("%s", ",Column:");
-//            out.printf("%s", text.forStyled(String.valueOf(token.getStartColumnNumber() + 1), NutsTextStyle.number()));
+//            out.printf("%s", text.ofStyled(String.valueOf(token.getStartColumnNumber() + 1), NTextStyle.number()));
 //            out.printf("%s", "]");
             if (compilationUnitSource.length() > 0 && (compilationUnitSource.contains("/") || compilationUnitSource.contains("\\"))) {
                 String s = compilationUnitSource;
@@ -156,11 +160,11 @@ public class HCompilerLog extends DefaultJCompilerLog {
                 } catch (Exception ex) {
                     //
                 }
-                out.printf(" %s", factory.forStyled(s, NutsTextStyle.path()));
+                out.print(NMsg.ofC(" %s", factory.ofStyled(s, NTextStyle.path())));
             } else if (compilationUnitSource.length() > 0) {
-                out.printf(" %s", factory.forStyled(compilationUnitSource, NutsTextStyle.path()));
+                out.print(NMsg.ofC(" %s", factory.ofStyled(compilationUnitSource, NTextStyle.path())));
             }
-            out.printf("%n");
+            out.print("\n");
         } else {
             out.print("\n");
         }

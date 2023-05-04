@@ -1,7 +1,7 @@
 package net.hl.compiler.parser;
 
-import net.thevpc.common.textsource.log.JSourceMessage;
 import net.hl.compiler.core.HTokenId;
+import net.thevpc.jeep.log.JSourceMessage;
 
 import java.util.ArrayList;
 import java.util.List;

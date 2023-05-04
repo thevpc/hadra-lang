@@ -4,7 +4,7 @@
 
     <groupId>net.thevpc.hl</groupId>
     <artifactId>hl</artifactId>
-    <version>0.1.1</version> <!--updated-->
+    <version>0.1.2</version> <!--updated-->
     <name>Hadra Language Compiler and Runtime</name>
     <packaging>jar</packaging>
     <description>Hadra Language Compiler and Runtime</description>
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>net.thevpc.hl</groupId>
             <artifactId>hadra-build-tool</artifactId>
-            <version>0.1.1</version>
+            <version>0.1.2</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

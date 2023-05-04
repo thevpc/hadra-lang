@@ -22,24 +22,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f1cf708f-f133-4792-a05e-0ddd77f1da07" name="Default Changelist" comment="[CHANGED] Version Bumped to nuts 0.8.2&#10;[ADDED] Initial documentation">
+    <list default="true" id="f1cf708f-f133-4792-a05e-0ddd77f1da07" name="Default Changelist" comment="[CHANGED] Version Bumped to nuts 0.8.3">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/hadra-build-tool.iml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/hadra-build-tool.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStageUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStageUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HStage10JavaCompiler.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HStage10JavaCompiler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-maven-plugin/hadra-maven-plugin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-maven-plugin/hadra-maven-plugin.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hadra-maven-plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-maven-plugin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/hl/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hl/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extra/hadra-example/hadra-example.iml" beforeDir="false" afterPath="$PROJECT_DIR$/extra/hadra-example/hadra-example.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/extra/hadra-example/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/extra/hadra-example/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ide-support/hl4nb/hl4nb.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4nb/hl4nb.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ide-support/hl4nb/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4nb/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ide-support/hl4swing/hl4swing.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4swing/hl4swing.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ide-support/hl4swing/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4swing/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/hadra-lang/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/lib/hadra-lang/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -398,7 +382,14 @@
       <option name="project" value="LOCAL" />
       <updated>1630393769811</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="[CHANGED] Version Bumped to nuts 0.8.3">
+      <created>1634593753879</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1634593753879</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -423,7 +414,8 @@
     <MESSAGE value="spec change : all modifiers are annotations" />
     <MESSAGE value="20200710" />
     <MESSAGE value="[CHANGED] Version Bumped to nuts 0.8.2&#10;[ADDED] Initial documentation" />
-    <option name="LAST_COMMIT_MESSAGE" value="[CHANGED] Version Bumped to nuts 0.8.2&#10;[ADDED] Initial documentation" />
+    <MESSAGE value="[CHANGED] Version Bumped to nuts 0.8.3" />
+    <option name="LAST_COMMIT_MESSAGE" value="[CHANGED] Version Bumped to nuts 0.8.3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

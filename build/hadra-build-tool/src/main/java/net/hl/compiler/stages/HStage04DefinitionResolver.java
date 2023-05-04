@@ -4,6 +4,7 @@ import net.hl.compiler.ast.*;
 import net.hl.compiler.core.elements.*;
 import net.hl.compiler.core.invokables.BodyJInvoke;
 import net.hl.compiler.core.invokables.HLJCompilerContext;
+import net.hl.compiler.core.invokables.JTypeFromHIndex;
 import net.hl.compiler.core.types.JPrimitiveModifierAnnotationInstance;
 import net.hl.compiler.index.HIndexedClass;
 import net.hl.compiler.index.HIndexedConstructor;
@@ -437,7 +438,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
 //        HNDeclareType declaringType = typeDec.getDeclaringType();
 
         List<HNDeclareIdentifier> mainConstructorArgs = typeDec.getMainConstructorArgs();
-        DefaultJType jType = (DefaultJType) compilerContext.getOrCreateType(typeDec);
+        JType jType = compilerContext.getOrCreateType(typeDec);
         boolean indexable = !inPreprocessor && !typeDec.isInternalType();
         String source = HSharedUtils.getSourceName(node);
         if (indexable) {
@@ -446,7 +447,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
         }
         if (mainConstructorArgs != null) {
             try {
-                JConstructor jConstructor = jType.addConstructor(
+                JConstructor jConstructor = ((DefaultJType)jType).addConstructor(
                         compilerContext.signature(JNameSignature.of(
                                 node.getNameToken().sval,
                                 mainConstructorArgs.stream()
@@ -522,7 +523,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                 JType typeVal = identifierTypeName == null ? null : identifierTypeName.getTypeVal();
                 JField jField = null;
                 try {
-                    jField = ((DefaultJType) compilerContext.getOrCreateType((HNDeclareType) idec))
+                    jField = ((JTypeFromHIndex) compilerContext.getOrCreateType((HNDeclareType) idec))
                             .addField(identifierToken.getName(),
                                     typeVal,
                                     new JModifier[0],
@@ -581,9 +582,9 @@ public class HStage04DefinitionResolver extends HStageType2 {
         if (tn != null) {
             boolean indexable = isIndexableType(tn, compilerContext);
             try {
-                DefaultJType jType = ((DefaultJType) compilerContext.getOrCreateType(tn));
+                JType jType = compilerContext.getOrCreateType(tn);
                 if (method.isConstructor()) {
-                    JConstructor jConstructor = jType.addConstructor(
+                    JConstructor jConstructor = ((DefaultJType)jType).addConstructor(
                             compilerContext.signature(JNameSignature.of(
                                     method.getNameToken().sval,
                                     method.getArguments().stream()
@@ -604,7 +605,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                 } else {
                     HNTypeToken returnTypeName = method.getReturnTypeName();
                     JType returnType = returnTypeName == null ? null : returnTypeName.getTypeVal();
-                    DefaultJRawMethod jMethod = (DefaultJRawMethod) jType.addMethod(
+                    DefaultJRawMethod jMethod = (DefaultJRawMethod) ((DefaultJType)jType).addMethod(
                             compilerContext.signature(JSignature.of(
                                     method.getNameToken().sval,
                                     method.getArguments().stream()

@@ -6,11 +6,11 @@
 package net.hl.compiler.utils;
 
 import net.hl.lang.IntToIntFunction;
-import net.thevpc.nuts.NutsConstants;
-import net.thevpc.nuts.NutsFormatManager;
-import net.thevpc.nuts.NutsTextStyle;
-import net.thevpc.nuts.NutsWorkspace;
-import net.thevpc.nuts.NutsTextManager;
+import net.thevpc.nuts.NConstants;
+import net.thevpc.nuts.NSession;
+import net.thevpc.nuts.text.NTexts;
+import net.thevpc.nuts.text.NTextStyle;
+import net.thevpc.nuts.text.NTexts;
 
 /**
  *
@@ -59,10 +59,10 @@ public class StringUtils {
         return sb.toString();
     }
 
-    public static String center2(String msg, int length, char c, NutsWorkspace ws) {
+    public static String center2(String msg, int length, char c, NSession session) {
         StringBuilder sb = new StringBuilder();
         sb.append(msg);
-        NutsTextManager f = ws.text();
+        NTexts f = NTexts.of(session);
         int len0 = f.parse(sb.toString()).textLength();
         int variant = 2;
         IntToIntFunction color
@@ -72,11 +72,11 @@ public class StringUtils {
         int cc = 0;
         while (len0 < length) {
             int z = color.applyAsInt(cc);
-            String cc2 = f.forStyled(String.valueOf(c), NutsTextStyle.foregroundColor(z)).toString() + NutsConstants.Ntf.SILENT;
+            String cc2 = f.ofStyled(String.valueOf(c), NTextStyle.foregroundColor(z)).toString() + NConstants.Ntf.SILENT;
             if (cc % 2 == 0) {
                 sb.insert(0, cc2);
             } else {
-                sb.append(cc2).append(NutsConstants.Ntf.SILENT);
+                sb.append(cc2).append(NConstants.Ntf.SILENT);
             }
             len0++;
             cc++;

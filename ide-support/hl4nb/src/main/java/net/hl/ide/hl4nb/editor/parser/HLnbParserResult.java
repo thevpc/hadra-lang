@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.logging.Level;
 
 import net.thevpc.jeep.*;
-import net.thevpc.common.textsource.JTextSourceToken;
-import net.thevpc.common.textsource.log.JSourceMessage;
+import net.thevpc.jeep.log.JSourceMessage;
+import net.thevpc.jeep.source.JTextSourceToken;
 import org.netbeans.modules.csl.api.Error;
 import org.netbeans.modules.csl.spi.DefaultError;
 import org.netbeans.modules.parsing.api.Snapshot;

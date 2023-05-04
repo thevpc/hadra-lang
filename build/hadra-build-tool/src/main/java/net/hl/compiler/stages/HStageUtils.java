@@ -4,9 +4,9 @@ import net.hl.compiler.core.invokables.HLJCompilerContext;
 import net.hl.compiler.utils.DepIdAndFile;
 import net.thevpc.jeep.JField;
 import net.thevpc.jeep.JMethod;
-import net.thevpc.nuts.NutsBlankable;
-import net.thevpc.nuts.NutsSession;
-import net.thevpc.nuts.NutsUtilStrings;
+import net.thevpc.nuts.NBlankable;
+import net.thevpc.nuts.NSession;
+import net.thevpc.nuts.io.NPath;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -42,7 +42,7 @@ public class HStageUtils {
     }
 
     public static File toFile(String url) {
-        if (NutsBlankable.isBlank(url)) {
+        if (NBlankable.isBlank(url)) {
             return null;
         }
         URL u = null;
@@ -82,7 +82,7 @@ public class HStageUtils {
 //        }
 //    }
 
-    public static DepIdAndFile[] resolveLangPaths(DepIdAndFile[] deps, String[] dependencyFiles, boolean checkClassLoader, boolean checkCompilerVM, boolean checkContent, NutsSession session) {
+    public static DepIdAndFile[] resolveLangPaths(DepIdAndFile[] deps, String[] dependencyFiles, boolean checkClassLoader, boolean checkCompilerVM, boolean checkContent, NSession session) {
         LinkedHashSet<DepIdAndFile> found = new LinkedHashSet<>();
         //check depdencies
         if (deps != null) {
@@ -128,7 +128,7 @@ public class HStageUtils {
         return found.toArray(new DepIdAndFile[0]);
     }
 
-    public static DepIdAndFile hadraLangDepIdAndFileForPath(String path, NutsSession session) {
+    public static DepIdAndFile hadraLangDepIdAndFileForPath(String path, NSession session) {
         String s0 = path;
         path = path.replace("\\", "/");
         if (path.endsWith("/hadra-lang/target/classes/") || path.endsWith("/hadra-lang/target/classes")) {
@@ -162,7 +162,7 @@ public class HStageUtils {
             }
             return null;
         } else if (path.matches(".*/hadra-lang-[a-z0-9.-]+[.]jar")) {
-            try (InputStream is = session.getWorkspace().io().path(s0).input().open()) {
+            try (InputStream is = NPath.of(s0,session).getInputStream()) {
                 try (ZipInputStream zis = new ZipInputStream(is)) {
                     //get the zipped file list entry
                     ZipEntry ze = zis.getNextEntry();

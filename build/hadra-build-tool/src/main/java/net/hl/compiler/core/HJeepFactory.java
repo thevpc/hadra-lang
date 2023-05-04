@@ -13,13 +13,13 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
-import net.thevpc.nuts.NutsSession;
+import net.thevpc.nuts.NSession;
 
 public class HJeepFactory extends DefaultJeepFactory {
 
-    private NutsSession session;
+    private NSession session;
 
-    public HJeepFactory(NutsSession session) {
+    public HJeepFactory(NSession session) {
         this.session = session;
     }
 
@@ -88,8 +88,8 @@ public class HJeepFactory extends DefaultJeepFactory {
 
             @Override
             public int compare(JInvokable o1, JInvokable o2) {
-                String s1 = o1.getSourceName();
-                String s2 = o2.getSourceName();
+                String s1 = o1.getSourceName()==null?"":o1.getSourceName();
+                String s2 = o2.getSourceName()==null?"":o2.getSourceName();
                 if (!s1.equals(s2)) {
                     if (s1.endsWith(".hl") && !s2.endsWith(".hl")) {
                         return -1;

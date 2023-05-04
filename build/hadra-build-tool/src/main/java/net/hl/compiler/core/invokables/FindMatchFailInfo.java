@@ -1,7 +1,7 @@
 package net.hl.compiler.core.invokables;
 
 import net.thevpc.jeep.*;
-import net.thevpc.common.textsource.log.JSourceMessage;
+import net.thevpc.jeep.log.JSourceMessage;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

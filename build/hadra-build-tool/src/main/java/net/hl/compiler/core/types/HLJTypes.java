@@ -1,5 +1,8 @@
 package net.hl.compiler.core.types;
 
+import net.hl.compiler.core.invokables.JTypeFromHIndex;
+import net.hl.compiler.index.HIndexedClass;
+import net.hl.compiler.index.HIndexer;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.types.DefaultJField;
 import net.thevpc.jeep.impl.types.*;
@@ -12,10 +15,37 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class HLJTypes extends DefaultJTypes {
+    private HIndexer indexer;
+
     public HLJTypes(JContext context, ClassLoader classLoader) {
         super(context, classLoader);
         DefaultJAnnotationInstanceList t = (DefaultJAnnotationInstanceList) forName("null").getAnnotations();
         t.add(JPrimitiveModifierAnnotationInstance.PUBLIC);
+    }
+
+    public HIndexer getIndexer() {
+        return indexer;
+    }
+
+    public JType getRegisteredOrAliasCurrent(String jt, boolean checkAliases, boolean checkTypes) {
+        JType jType = super.getRegisteredOrAliasCurrent(jt, checkAliases, checkTypes);
+        if (jType != null) {
+            return jType;
+        }
+        if (indexer != null) {
+            HIndexedClass hIndexedClass = indexer.searchType(jt);
+            if (hIndexedClass != null) {
+                JTypeFromHIndex t = new JTypeFromHIndex(hIndexedClass, null, indexer, this);
+                super.registerType(t);
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public HLJTypes setIndexer(HIndexer indexer) {
+        this.indexer = indexer;
+        return this;
     }
 
     @Override
@@ -30,15 +60,15 @@ public class HLJTypes extends DefaultJTypes {
 
     @Override
     public JType createMutableType0(String name, JTypeKind kind) {
-        switch (kind.getValue()){
-            case JTypeKind.Ids.ANNOTATION:{
-                return new HAnnotationType(name,kind,this);
+        switch (kind.getValue()) {
+            case JTypeKind.Ids.ANNOTATION: {
+                return new HAnnotationType(name, kind, this);
             }
-            case JTypeKind.Ids.ENUM:{
-                return new HEnumType(name,kind,this);
+            case JTypeKind.Ids.ENUM: {
+                return new HEnumType(name, kind, this);
             }
-            default:{
-                return new HType(name,kind,this);
+            default: {
+                return new HType(name, kind, this);
             }
         }
     }
@@ -54,11 +84,11 @@ public class HLJTypes extends DefaultJTypes {
     }
 
 
-    protected JType createHostType0(Class name){
-        if(name.isEnum()){
+    protected JType createHostType0(Class name) {
+        if (name.isEnum()) {
             return new HostJEnumType(name, this);
         }
-        if(name.isAnnotation()){
+        if (name.isAnnotation()) {
             return new HostJAnnotationType(name, this);
         }
         return new HostJClassType(name, this);
@@ -66,7 +96,7 @@ public class HLJTypes extends DefaultJTypes {
 
 
     @Override
-    public JType createHostType0(String name){
+    public JType createHostType0(String name) {
         switch (name) {
             case "Object":
             case "object":
@@ -124,7 +154,7 @@ public class HLJTypes extends DefaultJTypes {
             case "time":
                 return createHostType0(LocalTime.class);
         }
-        ClassLoader hostClassLoader=this.hostClassLoader();
+        ClassLoader hostClassLoader = this.hostClassLoader();
         Class<?> t = null;
         try {
             //i should replace this witch
@@ -140,13 +170,13 @@ public class HLJTypes extends DefaultJTypes {
     }
 
     public boolean isPublic(JAnnotationInstanceList c) {
-        if(c.contains(JPrimitiveModifierAnnotationInstance.PUBLIC)){
+        if (c.contains(JPrimitiveModifierAnnotationInstance.PUBLIC)) {
             return true;
         }
-        if(c.contains(JPrimitiveModifierAnnotationInstance.PRIVATE)){
+        if (c.contains(JPrimitiveModifierAnnotationInstance.PRIVATE)) {
             return false;
         }
-        if(c.contains(JPrimitiveModifierAnnotationInstance.PROTECTED)){
+        if (c.contains(JPrimitiveModifierAnnotationInstance.PROTECTED)) {
             return false;
         }
         return true;
@@ -205,5 +235,10 @@ public class HLJTypes extends DefaultJTypes {
     @Override
     public boolean isFinalField(DefaultJField c) {
         return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.FINAL);
+    }
+
+    @Override
+    public JType forNameOrNull(String name, JDeclaration enclosingDeclaration) {
+        return super.forNameOrNull(name, enclosingDeclaration);
     }
 }

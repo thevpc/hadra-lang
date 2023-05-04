@@ -17,6 +17,12 @@ public class HIndexedProject implements HIndexedElement {
         this.moduleId = moduleId;
         this.source = source;
         this.dependencies = dependencies;
+        if(source==null){
+            throw new IllegalArgumentException("Missing source");
+        }
+        if(moduleId==null){
+            throw new IllegalArgumentException("Missing moduleId");
+        }
     }
 
     public DepIdAndFile[] getDependencies() {

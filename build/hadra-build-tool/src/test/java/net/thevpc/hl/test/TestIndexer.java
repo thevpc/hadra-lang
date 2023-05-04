@@ -1,10 +1,8 @@
 package net.thevpc.hl.test;
 
-import net.thevpc.jeep.JIndexStoreMemory;
+import net.hl.compiler.index.*;
+import net.thevpc.jeep.impl.index.mem.JIndexStoreMemory;
 import net.thevpc.jeep.core.JIndexQuery;
-import net.hl.compiler.index.HIndexerImpl;
-import net.hl.compiler.index.HIndexedClass;
-import net.hl.compiler.index.HIndexedMethod;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -27,17 +25,17 @@ public class TestIndexer {
                 new String[]{"a"},
                 new String[0],
                 "r",
-                "cls", new String[0], "test"
+                "cls", new AnnInfo [0], "test"
         );
         HIndexedMethod m2 = new HIndexedMethod("m2", new String[0],
                 new String[]{"a"},
                 new String[0],
                 "r",
-                "cls", new String[0], "test"
+                "cls", new AnnInfo[0], "test"
         );
-        store.index("test", "Method", m1, true);
-        store.index("test", "Method", m2, true);
-        store.index("test", "Method", m2, true);
+        store.index("test", HElementTypes.METHOD, m1, true);
+        store.index("test", HElementTypes.METHOD, m2, true);
+        store.index("test", HElementTypes.METHOD, m2, true);
         for (HIndexedMethod cls : ii.searchMethods("cls", null, true)) {
             System.out.println(cls);
         }

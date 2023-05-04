@@ -8,8 +8,10 @@ import java.util.logging.Logger;
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HTask;
 import net.hl.compiler.stages.AbstractHStage;
-import net.thevpc.nuts.NutsExecutionType;
-import net.thevpc.nuts.NutsWorkspace;
+import net.thevpc.nuts.NExecCommand;
+import net.thevpc.nuts.NExecOutput;
+import net.thevpc.nuts.NExecutionType;
+import net.thevpc.nuts.NWorkspace;
 
 public class HStage11JavaRun extends AbstractHStage {
 
@@ -36,14 +38,12 @@ public class HStage11JavaRun extends AbstractHStage {
         HJavaContextHelper jn = HJavaContextHelper.of(project);
         if (jn.getOutputJarFile() != null) {
             try {
-                NutsWorkspace ws = project.getSession().getWorkspace();
-                ws.exec()
+                NExecCommand.of(project.getSession())
                         .addCommand(jn.getOutputJarFile().getCanonicalPath())
                         .setSleepMillis(1000)
-                        .setInheritSystemIO(true)
-                        .setRedirectErrorStream(true)
+                        .setErr(NExecOutput.ofRedirect())
                         .setFailFast(true)
-                        .setExecutionType(NutsExecutionType.EMBEDDED)
+                        .setExecutionType(NExecutionType.EMBEDDED)
                         .getResult();
                 return;
             } catch (IOException ex) {

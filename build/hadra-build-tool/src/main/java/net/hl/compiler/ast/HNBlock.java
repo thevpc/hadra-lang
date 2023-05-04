@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class HNBlock extends HNode {
     private List<HNode> statements = new ArrayList<HNode>();
     private BlocType blocType = BlocType.UNKNOWN;
-    private Map<Class,List> cacheByType = new HashMap<>();
+    private Map<Class, List> cacheByType = new HashMap<>();
 //    private List<HNDeclareIdentifier> varDeclarations = new ArrayList<HNDeclareIdentifier>();
 //    private List<HNDeclareInvokable> functionDeclarations = new ArrayList<HNDeclareInvokable>();
 //    private List<HNDeclareType> classDeclarations = new ArrayList<HNDeclareType>();
@@ -30,18 +30,18 @@ public class HNBlock extends HNode {
 
     protected HNBlock(BlocType blocType) {
         super(HNNodeId.H_BLOCK);
-        this.blocType=blocType;
+        this.blocType = blocType;
     }
 
-    public HNBlock(BlocType blocType,HNode[] statements,JToken startToken,JToken endToken) {
+    public HNBlock(BlocType blocType, HNode[] statements, JToken startToken, JToken endToken) {
         this();
-        this.blocType=blocType;
+        this.blocType = blocType;
         setStatements(new ArrayList<>(Arrays.asList(statements)));
         setStartToken(startToken);
         setEndToken(endToken);
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return statements.isEmpty();
     }
 //
@@ -92,8 +92,8 @@ public class HNBlock extends HNode {
     }
 
     public static String toString(HNode[] statements, boolean includeBraces) {
-        if(statements.length==0){
-            if(includeBraces){
+        if (statements.length == 0) {
+            if (includeBraces) {
                 return "{}";
             }
             return "";
@@ -155,13 +155,13 @@ public class HNBlock extends HNode {
         return r;
     }
 
-    public void add(int index,HNode node) {
-        statements.add(index,JNodeUtils.bind(this,node,"statements",statements.size()));
+    public void add(int index, HNode node) {
+        statements.add(index, JNodeUtils.bind(this, node, "statements", statements.size()));
         cacheByType.clear();
     }
 
     public void add(HNode node) {
-        statements.add(JNodeUtils.bind(this,node,"statements",statements.size()));
+        statements.add(JNodeUtils.bind(this, node, "statements", statements.size()));
         cacheByType.clear();
     }
 
@@ -170,7 +170,7 @@ public class HNBlock extends HNode {
     }
 
     public HNBlock setStatements(List<HNode> statements) {
-        this.statements = JNodeUtils.bind(this,statements,"statements");
+        this.statements = JNodeUtils.bind(this, statements, "statements");
         return this;
     }
 
@@ -181,11 +181,11 @@ public class HNBlock extends HNode {
 
     @Override
     protected void findAndReplaceChildren(JNodeFindAndReplace findAndReplace) {
-        JNodeUtils.findAndReplaceNext(this,findAndReplace,this.getStatements());
+        JNodeUtils.findAndReplaceNext(this, findAndReplace, this.getStatements());
     }
 
-    public void copyFrom(JNode node,JNodeCopyFactory copyFactory) {
-        super.copyFrom(node,copyFactory);
+    public void copyFrom(JNode node, JNodeCopyFactory copyFactory) {
+        super.copyFrom(node, copyFactory);
         if (node instanceof HNBlock) {
             HNBlock o = (HNBlock) node;
             this.statements = JNodeUtils.copy(o.statements);
@@ -198,112 +198,124 @@ public class HNBlock extends HNode {
         return (List) this.statements;
     }
 
-    public List<HNDeclareType> findDeclaredTypes(boolean fast){
-        if(fast){
+    public List<HNDeclareType> findDeclaredTypes(boolean fast) {
+        if (fast) {
             List li = cacheByType.get(HNDeclareType.class);
-            if(li!=null){
+            if (li != null) {
                 return li;
             }
-            li=findDeclaredTypes();
-            cacheByType.put(HNDeclareType.class,li);
+            li = findDeclaredTypes();
+            cacheByType.put(HNDeclareType.class, li);
             return li;
         }
         return findDeclaredTypes();
     }
 
-    public List<HNDeclareInvokable> findDeclaredInvokables(boolean fast){
-        if(fast){
+    public List<HNDeclareInvokable> findDeclaredInvokables(boolean fast) {
+        if (fast) {
             List li = cacheByType.get(HNDeclareInvokable.class);
-            if(li!=null){
+            if (li != null) {
                 return li;
             }
-            li=findDeclaredTypes();
-            cacheByType.put(HNDeclareInvokable.class,li);
+            li = findDeclaredTypes();
+            cacheByType.put(HNDeclareInvokable.class, li);
             return li;
         }
         return findDeclaredInvokables();
     }
 
-    public List<HNDeclareIdentifier> findDeclaredIdentifiers(boolean fast){
-        if(fast){
+    public List<HNDeclareIdentifier> findDeclaredIdentifiers(boolean fast) {
+        if (fast) {
             List li = cacheByType.get(HNDeclareIdentifier.class);
-            if(li!=null){
+            if (li != null) {
                 return li;
             }
-            li=findDeclaredTypes();
-            cacheByType.put(HNDeclareIdentifier.class,li);
+            li = findDeclaredTypes();
+            cacheByType.put(HNDeclareIdentifier.class, li);
             return li;
         }
         return findDeclaredIdentifiers();
     }
 
-    public List<HNDeclareMetaPackage> findDeclaredMetaPackages(boolean fast){
-        if(fast){
+    public List<HNDeclareMetaPackage> findDeclaredMetaPackages(boolean fast) {
+        if (fast) {
             List li = cacheByType.get(HNDeclareMetaPackage.class);
-            if(li!=null){
+            if (li != null) {
                 return li;
             }
-            li=findDeclaredTypes();
-            cacheByType.put(HNDeclareMetaPackage.class,li);
+            li = findDeclaredTypes();
+            cacheByType.put(HNDeclareMetaPackage.class, li);
             return li;
         }
         return findDeclaredMetaPackages();
     }
 
-    public List<HNDeclareType> findDeclaredTypes(){
-        List<HNDeclareType> all=new ArrayList<>();
+    public List<HNDeclareType> findDeclaredTypes() {
+        List<HNDeclareType> all = new ArrayList<>();
         for (HNode statement : getStatements()) {
-            if(statement instanceof HNDeclareType){
+            if (statement instanceof HNDeclareType) {
                 all.add((HNDeclareType) statement);
-            }else if(statement instanceof HNBlock && ((HNBlock) statement).getBlocType()==BlocType.IMPORT_BLOC){
+            } else if (statement instanceof HNBlock && ((HNBlock) statement).getBlocType() == BlocType.IMPORT_BLOC) {
                 all.addAll(((HNBlock) statement).findDeclaredTypes());
             }
         }
         return all;
     }
 
-    public List<HNDeclareIdentifier> findDeclaredIdentifiers(){
-        List<HNDeclareIdentifier> all=new ArrayList<>();
+    public List<HNDeclareIdentifier> findDeclaredIdentifiers() {
+        List<HNDeclareIdentifier> all = new ArrayList<>();
         for (HNode statement : getStatements()) {
-            if(statement instanceof HNDeclareIdentifier){
+            if (statement instanceof HNDeclareIdentifier) {
                 all.add((HNDeclareIdentifier) statement);
-            }else if(statement instanceof HNBlock && ((HNBlock) statement).getBlocType()==BlocType.IMPORT_BLOC){
+            } else if (statement instanceof HNBlock && ((HNBlock) statement).getBlocType() == BlocType.IMPORT_BLOC) {
                 all.addAll(((HNBlock) statement).findDeclaredIdentifiers());
             }
         }
         return all;
     }
 
-    public List<HNDeclareInvokable> findDeclaredInvokables(){
-        List<HNDeclareInvokable> all=new ArrayList<>();
+    public List<HNDeclareInvokable> findDeclaredInvokables() {
+        List<HNDeclareInvokable> all = new ArrayList<>();
         for (HNode statement : getStatements()) {
-            if(statement instanceof HNDeclareInvokable){
+            if (statement instanceof HNDeclareInvokable) {
                 all.add((HNDeclareInvokable) statement);
-            }else if(statement instanceof HNBlock && ((HNBlock) statement).getBlocType()==BlocType.IMPORT_BLOC){
+            } else if (statement instanceof HNBlock && ((HNBlock) statement).getBlocType() == BlocType.IMPORT_BLOC) {
                 all.addAll(((HNBlock) statement).findDeclaredInvokables());
             }
         }
         return all;
     }
 
-    public List<HNDeclareMetaPackage> findDeclaredModules(){
-        List<HNDeclareMetaPackage> all=new ArrayList<>();
+    public List<HNDeclareMetaPackage> findDeclaredModules() {
+        List<HNDeclareMetaPackage> all = new ArrayList<>();
         for (HNode statement : getStatements()) {
-            if(statement instanceof HNDeclareMetaPackage){
+            if (statement instanceof HNDeclareMetaPackage) {
                 all.add((HNDeclareMetaPackage) statement);
-            }else if(statement instanceof HNBlock && ((HNBlock) statement).getBlocType()==BlocType.IMPORT_BLOC){
+            } else if (statement instanceof HNBlock && ((HNBlock) statement).getBlocType() == BlocType.IMPORT_BLOC) {
                 all.addAll(((HNBlock) statement).findDeclaredModules());
             }
         }
         return all;
     }
 
-    public List<HNDeclareMetaPackage> findDeclaredMetaPackages(){
-        List<HNDeclareMetaPackage> all=new ArrayList<>();
+    public List<HNMetaImportPackage> findLeadingImportPackages() {
+        List<HNMetaImportPackage> all = new ArrayList<>();
         for (HNode statement : getStatements()) {
-            if(statement instanceof HNDeclareMetaPackage){
+            if (statement instanceof HNMetaImportPackage) {
+                all.add((HNMetaImportPackage) statement);
+            } else {
+                break;
+            }
+        }
+        return all;
+    }
+
+    public List<HNDeclareMetaPackage> findDeclaredMetaPackages() {
+        List<HNDeclareMetaPackage> all = new ArrayList<>();
+        for (HNode statement : getStatements()) {
+            if (statement instanceof HNDeclareMetaPackage) {
                 all.add((HNDeclareMetaPackage) statement);
-            }else if(statement instanceof HNBlock && ((HNBlock) statement).getBlocType()==BlocType.IMPORT_BLOC){
+            } else if (statement instanceof HNBlock && ((HNBlock) statement).getBlocType() == BlocType.IMPORT_BLOC) {
                 all.addAll(((HNBlock) statement).findDeclaredMetaPackages());
             }
         }
@@ -315,7 +327,7 @@ public class HNBlock extends HNode {
         return getExitPoints(statements.toArray(new HNode[0]));
     }
 
-    public enum BlocType{
+    public enum BlocType {
         UNKNOWN,
         PACKAGE_BODY,
         GLOBAL_BODY,
@@ -328,10 +340,11 @@ public class HNBlock extends HNode {
         INSTANCE_INITIALIZER,
     }
 
-    public static class CompilationUnitBlock extends HNBlock{
+    public static class CompilationUnitBlock extends HNBlock {
         private JCompilationUnit compilationUnit;
-        public CompilationUnitBlock(HNode[] statements,JToken startToken,JToken endToken) {
-            super(BlocType.GLOBAL_BODY,statements,startToken,endToken);
+
+        public CompilationUnitBlock(HNode[] statements, JToken startToken, JToken endToken) {
+            super(BlocType.GLOBAL_BODY, statements, startToken, endToken);
         }
 
         public JCompilationUnit getCompilationUnit() {
@@ -344,7 +357,7 @@ public class HNBlock extends HNode {
         }
     }
 
-    public static HNBlock get(JNode n){
+    public static HNBlock get(JNode n) {
         return (HNBlock) n;
     }
 }

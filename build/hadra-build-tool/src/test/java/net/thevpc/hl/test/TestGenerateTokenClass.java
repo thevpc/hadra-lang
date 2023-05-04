@@ -6,8 +6,8 @@
 package net.thevpc.hl.test;
 
 import net.thevpc.nuts.Nuts;
-import net.thevpc.nuts.NutsSession;
-import net.thevpc.nuts.NutsWorkspace;
+import net.thevpc.nuts.NSession;
+import net.thevpc.nuts.NWorkspace;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -18,7 +18,7 @@ public class TestGenerateTokenClass {
 
     @Test
     public void testGen() {
-        final NutsSession ws = Nuts.openWorkspace();
+        final NSession ws = Nuts.openWorkspace();
         new net.hl.compiler.core.HadraLanguage(ws).generateTokensClass(System.out, "net.hl.compiler.core.HTokenId");
     }
 }

@@ -28,6 +28,11 @@ public class JPrimitiveModifierAnnotationInstance implements JAnnotationInstance
         this.name = name;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
     public String name() {
         return name;
     }

@@ -1,5 +1,6 @@
 package net.hl.compiler.index;
 
+import net.hl.compiler.ast.HNAnnotationCall;
 import net.hl.compiler.ast.HNDeclareType;
 import net.hl.compiler.ast.HNExtends;
 import net.hl.compiler.utils.HSharedUtils;
@@ -21,7 +22,7 @@ public class HIndexedClass implements HIndexedElement {
     private String[] superTypes;
     private String[] imports;
     private String[] exports;
-    private String annotations;
+    private AnnInfo[] annotations;
     private String source;
 
     public HIndexedClass(JType type, String source) {
@@ -41,7 +42,7 @@ public class HIndexedClass implements HIndexedElement {
         }
         packageName = type.getPackageName();
         this.source = source;
-        annotations = type.getAnnotations().stream().map(Object::toString).collect(Collectors.joining(" "));
+        this.annotations = type.getAnnotations().stream().map(AnnInfo::new).toArray(AnnInfo[]::new);
         imports = new String[0];
         List<String> superTypesList = new ArrayList<>();
         for (JType extend : type.getParents()) {
@@ -68,7 +69,7 @@ public class HIndexedClass implements HIndexedElement {
         }
         packageName = type.getFullPackage();
         this.source = source;
-        annotations = Arrays.stream(type.getAnnotations()).map(Object::toString).collect(Collectors.joining(" "));
+        this.annotations = Arrays.stream(type.getAnnotations()).map(AnnInfo::new).toArray(AnnInfo[]::new);
         imports = HSharedUtils.getImports(type);
         List<String> superTypesList = new ArrayList<>();
         for (HNExtends extend : type.getExtends()) {
@@ -78,7 +79,7 @@ public class HIndexedClass implements HIndexedElement {
         this.exports = new String[0]; //fix me;
     }
 
-    public HIndexedClass(String simpleName, String simpleName2, String fullName, String declaringType, String packageName, String[] superTypes, String[] imports, String[] annotations, String source) {
+    public HIndexedClass(String simpleName, String simpleName2, String fullName, String declaringType, String packageName, String[] superTypes, String[] imports, AnnInfo[] annotations, String source) {
         this.simpleName = simpleName;
         this.simpleName2 = simpleName2;
         this.fullName = fullName;
@@ -86,7 +87,7 @@ public class HIndexedClass implements HIndexedElement {
         this.packageName = packageName;
         this.superTypes = superTypes;
         this.imports = imports;
-        this.annotations = Arrays.stream(annotations).map(Object::toString).collect(Collectors.joining(" "));
+        this.annotations = Arrays.stream(annotations).toArray(AnnInfo[]::new);
         this.source = source;
         this.exports = new String[0]; //fix me;
     }
@@ -123,7 +124,7 @@ public class HIndexedClass implements HIndexedElement {
         return exports;
     }
 
-    public String getAnnotations() {
+    public AnnInfo[] getAnnotations() {
         return annotations;
     }
 
@@ -140,7 +141,7 @@ public class HIndexedClass implements HIndexedElement {
         doc.add("package", ns, true);
         while (!ns.isEmpty()) {
             doc.add("packages", ns, true);
-            int dot = ns.indexOf('.');
+            int dot = ns.lastIndexOf('.');
             if (dot >= 0) {
                 ns = ns.substring(0, dot);
             } else {
@@ -149,7 +150,7 @@ public class HIndexedClass implements HIndexedElement {
         }
         doc.add("simpleName", simpleName, true);
         doc.add("simpleName2", simpleName2, true);
-        doc.add("annotations", String.valueOf(annotations), false);
+        doc.add("annotations", Arrays.asList(annotations).toString(), false);
         doc.add("source", String.valueOf(source), false);
         doc.add("imports", String.join(";", Arrays.asList(imports)), false);
 
@@ -176,7 +177,7 @@ public class HIndexedClass implements HIndexedElement {
                 ", superTypes=" + Arrays.toString(superTypes) +
                 ", imports=" + Arrays.toString(imports) +
                 ", exports=" + Arrays.toString(exports) +
-                ", annotations=" + annotations +
+                ", annotations=" + Arrays.asList(annotations).toString() +
                 ", source='" + source + '\'' +
                 '}';
     }

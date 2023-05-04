@@ -1618,6 +1618,9 @@ public class HStage05CallResolver extends HStageType2 {
     }
 
     protected boolean onIdentifierWithoutPars(HNIdentifier node, HNode dotBase, HLJCompilerContext compilerContext) {
+        if(node.getParentNode() instanceof HNMetaImportPackage){
+            return true;
+        }
         boolean lhs = false;
         if (dotBase != null) {
             HNElementKind kind = dotBase.getElement().getKind();

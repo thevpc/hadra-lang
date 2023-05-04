@@ -55,8 +55,8 @@ Here is a snippet of the one file project in Hadra-lang
        var b=1î+2;
        println(a+b);
        (a,b)=(b,a); // using Tuples to swap a and b
-       String[] a=(for i:[1..10] String(i*2));
-       int x=try int(a[0]); //convert first element and catch exception
+       String[] t=(for i:[1..10] String(i*2));
+       int x=try int(t[0]); //convert first element and catch exception
     }
 
     Complex î=Complex(0,1);

@@ -1,11 +1,12 @@
 package net.hl.compiler.core;
 
+import net.thevpc.jeep.source.JTextSourceFactory;
+import net.thevpc.jeep.source.JTextSourceRoot;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import net.thevpc.common.textsource.JTextSourceFactory;
-import net.thevpc.common.textsource.JTextSourceRoot;
 
 public abstract class HOptions<T extends HOptions> {
 
@@ -113,7 +114,10 @@ public abstract class HOptions<T extends HOptions> {
     }
 
     public T addSourceMavenProject(String path) {
-        addSourceFile(new File(path, "src/main/hl"));
+        File f = new File(path, "src/main/hl");
+        if(f.isDirectory()) {
+            addSourceFile(f);
+        }
         return (T) this;
     }
 

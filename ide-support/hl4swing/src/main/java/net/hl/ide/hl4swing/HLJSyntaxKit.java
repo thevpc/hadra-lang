@@ -10,11 +10,11 @@ import net.hl.compiler.core.HTokenId;
 import net.hl.compiler.core.HadraContext;
 import net.hl.compiler.core.HadraLanguage;
 import net.thevpc.jeep.editor.ColorResource;
-import net.thevpc.nuts.NutsSession;
+import net.thevpc.nuts.NSession;
 
 public class HLJSyntaxKit extends JSyntaxKit {
 
-    private static NutsSession session;
+    private static NSession session;
 
     public HLJSyntaxKit() {
         this(null);

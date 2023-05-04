@@ -1,9 +1,6 @@
 package net.hl.compiler.stages;
 
-import net.thevpc.nuts.Nuts;
-import net.thevpc.nuts.NutsDefinition;
-import net.thevpc.nuts.NutsSearchCommand;
-import net.thevpc.nuts.NutsWorkspace;
+import net.thevpc.nuts.*;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.DefaultJTypedValue;
 import net.thevpc.jeep.core.eval.JEvaluableValue;
@@ -24,12 +21,10 @@ import net.hl.compiler.utils.HTokenUtils;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.hl.compiler.HL;
 import net.hl.compiler.utils.DepIdAndFile;
 import net.hl.compiler.utils.HSharedUtils;
-import net.thevpc.nuts.NutsDependencies;
-import net.thevpc.nuts.NutsDependency;
-import net.thevpc.nuts.NutsNotFoundException;
 
 public class HStage02Preprocessor extends AbstractHStage {
 
@@ -50,6 +45,8 @@ public class HStage02Preprocessor extends AbstractHStage {
         HNDeclareMetaPackage currentMetaPackage = null;
         String currentMetaPackageSource = null;
         JToken anyToken = null;
+        List<HNMetaImportPackage> leadingImportPackages = new ArrayList<>();
+        Set<String> metaSources=new HashSet<>();
         for (JCompilationUnit compilationUnit : project.getCompilationUnits()) {
             HNBlock.CompilationUnitBlock ast = (HNBlock.CompilationUnitBlock) compilationUnit.getAst();
             if (anyToken == null) {
@@ -61,20 +58,26 @@ public class HStage02Preprocessor extends AbstractHStage {
                 } else {
                     currentMetaPackage = metaPackage;
                     currentMetaPackageSource = compilationUnit.getSource().name();
+                    metaSources.add(currentMetaPackageSource);
                     project.setResolvedMetaPackage(currentMetaPackage);
                 }
             }
+            for (HNMetaImportPackage leadingImportPackage : ast.findLeadingImportPackages()) {
+                metaSources.add(compilationUnit.getSource().name());
+                leadingImportPackages.add(leadingImportPackage);
+            }
         }
+
         HNDeclareMetaPackage metaPackage = project.getResolvedMetaPackage();
         HIndexedProject ip = null;
         String projectRoot = options.getProjectRoot();
         JModuleId defaultModuleId = JModuleId.DEFAULT_MODULE_ID();
-        DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true,project.getSession());
+        DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true, project.getSession());
         if (defaultLangPaths.length == 0) {
             project.log().jerror("X000", null, null, "unresolvable hadra-lang library");
         }
-        if (!options.isIncremental() || metaPackage != null) {
-            ip = parsePreProcessorResult(metaPackage, projectRoot, currentMetaPackageSource, project, options);
+        if (!options.isIncremental() || metaPackage != null || leadingImportPackages.size() > 0) {
+            ip = parsePreProcessorResult(metaPackage, projectRoot, currentMetaPackageSource, project, options, leadingImportPackages,metaSources);
             if (ip == null) {
                 if (currentMetaPackageSource == null) {
                     currentMetaPackageSource = projectRoot;
@@ -95,6 +98,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                     ip = new HIndexedProject(ip.getId(), ip.getModuleId(), ip.getSource(), depIds.toArray(new DepIdAndFile[0]));
                 }
             }
+            project.log().jinfo("X000", null, null, "start indexing project...");
             project.indexer().indexProject(ip);
         } else {
             ip = project.indexer().searchProject(projectRoot);
@@ -141,9 +145,22 @@ public class HStage02Preprocessor extends AbstractHStage {
     }
 
     public HIndexedProject parsePreProcessorResult(HNDeclareMetaPackage metaPackage,
-            String projectId,
-            String currentMetaPackageSource, HProject project, HOptions options) {
+                                                   String projectId,
+                                                   String currentMetaPackageSource, HProject project, HOptions options,
+                                                   List<HNMetaImportPackage> leadingImportPackages,
+                                                   Set<String> metaSources
+    ) {
+        String goodSource=currentMetaPackageSource;
+        if(goodSource==null){
+            for (String metaSource : metaSources) {
+                goodSource=metaSource;
+            }
+        }
+        if(goodSource==null) {
+            goodSource = "unknown-source";
+        }
         HadraContext context = project.languageContext();
+        HCompilerEnv env = new HCompilerEnv(project, options, context);
         if (metaPackage != null) {
             HNBlock body = metaPackage.getBody();
             boolean requirePreprocessor = false;
@@ -211,7 +228,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                 mainMethod.setBody(block.setBlocType(HNBlock.BlocType.LOCAL_BLOC));
                 mainMethod.setReturnTypeName(HNodeUtils.createTypeToken("void"));
                 HNBlock preprocessorRootNode = new HNBlock.CompilationUnitBlock(new HNode[]{
-                    mainMethod
+                        mainMethod
                 }, block.getStartToken(), block.getEndToken());
 
 //                System.out.println("### START PREPROCESSOR");
@@ -228,70 +245,42 @@ public class HStage02Preprocessor extends AbstractHStage {
                 HNBlock.CompilationUnitBlock cub = (HNBlock.CompilationUnitBlock) nn;
                 HProject preProcessorProgram = new HProject(preProcessorContext, project.indexer(), project.getSession());
                 preProcessorProgram.setIndexedProject(new HIndexedProject(projectId,
-                        "HLPreprocessor#0.1.0",
-                        currentMetaPackageSource,
-                        defaultLangPaths.length == 0 ? new DepIdAndFile[0] : new DepIdAndFile[]{defaultLangPaths[0]}
-                )
+                                "HLPreprocessor#0.1.0",
+                                currentMetaPackageSource,
+                                defaultLangPaths.length == 0 ? new DepIdAndFile[0] : new DepIdAndFile[]{defaultLangPaths[0]}
+                        )
                 );
                 preProcessorProgram.getMetaPackageType().setNameToken(HTokenUtils.createToken("HLPreprocessor"));
                 LOG.log(Level.FINE, "running Preprocessor with code \n{0}", preprocessorRootNode);
                 preProcessorProgram.addCompilationUnit(new DefaultJCompilationUnit(cub.getCompilationUnit().getSource(), preprocessorRootNode));
                 preProcessorProgram.setRootId("<preprocessor>:" + projectId);
                 for (HStage hlcStage : new HStage[]{
-                    new HStage03Indexer(true),
-                    new HStage04DefinitionResolver(true),
-                    new HStage05CallResolver(true),
-                    new HStage08JavaTransform(true) //transform to java nodes to help evaluation!
+                        new HStage03Indexer(true),
+                        new HStage04DefinitionResolver(true),
+                        new HStage05CallResolver(true),
+                        new HStage08JavaTransform(true) //transform to java nodes to help evaluation!
                 }) {
                     hlcStage.processProject(preProcessorProgram, options);
                 }
 //                System.out.println("PREPROCESSOR CODE");
 //                System.out.println(JeepUtils.indent(preProcessorProgram.getMetaPackageType().toString()));
 
-                HCompilerEnv env = new HCompilerEnv(project, options, context);
+
                 new JNodeHBlocJInvoke((HNBlock) mainMethod.getBody())
                         .invoke(new DefaultJInvokeContext(
                                 context,
                                 preProcessorContext.evaluators().newEvaluator(),
                                 new DefaultJTypedValue(env, context.types().forName(HCompilerEnv.class.getName())),
                                 new JEvaluable[]{new JEvaluableValue(
-                                            new String[0],
-                                            preProcessorContext.types().forName("String[]")
-                                    )},
+                                        new String[0],
+                                        preProcessorContext.types().forName("String[]")
+                                )},
                                 "compile", null, null
                         ));
 //                Set<String> foundIds = new HashSet<>();
-                Set<String> dfiles = new HashSet<>();
-                NutsWorkspace ws = project.getSession().getWorkspace();
-                NutsSearchCommand search = ws.search()
-                        .setDependencies(true).setInlineDependencies(true)
-                        .setLatest(true).setContent(true)
-                        .setSession(project.getSession());
-                boolean someSearch = false;
-                for (HDependency d : env.dependencies()) {
-                    someSearch = true;
-                    search.addId(d.toString());
-                }
-                Set<DepIdAndFile> classPath = new LinkedHashSet<>();
-                if (someSearch) {
-                    for (NutsDependencies depd : search.getResultDependencies()) {
-                        for (NutsDependency dep : depd.all()) {
-                            NutsDefinition def = null;
-                            try {
-                                def = ws.fetch().setId(dep.toId()).setEffective(true).setContent(true).getResultDefinition();
-                            } catch (NutsNotFoundException ex) {
-                                //
-                            }
-                            if (def == null || def.getContent().getLocation() == null) {
-                                project.log().jerror("X000", "pre-processor", block.getStartToken(), "unresolvable dependency " + dep);
-                            } else {
-                                classPath.add(new DepIdAndFile(dep.toString(), def.getContent().getLocation().toString()));
-                            }
-                        }
-                    }
-                }
+                Set<DepIdAndFile> classPath = buildClassPath(project, env, leadingImportPackages, block.getStartToken());
                 HIndexedProject ip = new HIndexedProject(
-                        projectId, moduleId.toString(), currentMetaPackageSource,
+                        projectId, moduleId.toString(), goodSource,
                         classPath.toArray(new DepIdAndFile[0])
                 );
                 metaPackage.setIndex(ip);
@@ -299,8 +288,75 @@ public class HStage02Preprocessor extends AbstractHStage {
 //                System.out.println("### END PREPROCESSOR");
                 return ip;
             }
+        } else if (leadingImportPackages.size() > 0) {
+            Set<DepIdAndFile> classPath = buildClassPath(project, env,
+                    leadingImportPackages,
+                    leadingImportPackages.get(0).getStartToken());
+            HIndexedProject ip = new HIndexedProject(
+                    projectId, "snapshot", goodSource,
+                    classPath.toArray(new DepIdAndFile[0])
+            );
+            return ip;
         }
         return null;
+    }
+
+    private Set<DepIdAndFile> buildClassPath(HProject project, HCompilerEnv env, List<HNMetaImportPackage> leadingImportPackages, JToken startToken) {
+        for (HNMetaImportPackage lip : leadingImportPackages) {
+            HNIdentifier pn = (HNIdentifier) lip.getImportedPackageNode();
+            String name = pn.getName();
+            env.addDependency(
+                    new HDependency(
+                            name,
+                            lip.getScope(),
+                            lip.isOptional(),
+                            lip.getExclusions().stream().map(x -> ((HNIdentifier) x).getName()).toArray(String[]::new)
+                    )
+            );
+        }
+        NSession session = project.getSession();
+        NSearchCommand search = NSearchCommand.of(session)
+                .setDependencies(true).setInlineDependencies(true)
+                .setLatest(true).setContent(true)
+                .setDependencyFilter(NDependencyFilters.of(session).byRunnable())
+                .setSession(session);
+        boolean someSearch = false;
+        for (HDependency d : env.dependencies()) {
+            someSearch = true;
+            search.addId(d.toString());
+        }
+        Set<DepIdAndFile> classPath = new LinkedHashSet<>();
+        for (HDependency dep : env.dependencies()) {
+            NDefinition def = null;
+            try {
+                def = NFetchCommand.of(session).setId(dep.getName()).setEffective(true).setContent(true).getResultDefinition();
+            } catch (NNotFoundException ex) {
+                //
+            }
+            if (def == null || def.getContent().isEmpty()) {
+                project.log().jerror("X000", "pre-processor", startToken, "unresolvable dependency " + dep);
+            } else {
+                classPath.add(new DepIdAndFile(dep.toString(), def.getContent().get().toString()));
+            }
+        }
+        if (someSearch) {
+            for (NDependencies depd : search.getResultDependencies()) {
+                for (NDependency dep : depd.transitive().toList()) {
+                    NDefinition def = null;
+                    try {
+                        def = NFetchCommand.of(session).setId(dep.toId()).setEffective(true).setContent(true).getResultDefinition();
+                    } catch (NNotFoundException ex) {
+                        //
+                    }
+                    if (def == null || def.getContent().isEmpty()) {
+                        project.log().jerror("X000", "pre-processor", startToken, "unresolvable dependency " + dep);
+                    } else {
+                        classPath.add(new DepIdAndFile(dep.toString(), def.getContent().get().toString()));
+                    }
+                }
+            }
+        }
+        return classPath;
     }
 
 }

@@ -1,8 +1,8 @@
 package net.hl.compiler.core.elements;
 
 import net.thevpc.jeep.*;
-import net.thevpc.common.textsource.JTextSource;
-import net.thevpc.common.textsource.log.JSourceMessage;
+import net.thevpc.jeep.log.JSourceMessage;
+import net.thevpc.jeep.source.JTextSource;
 
 public abstract class HNElement {
     private HNElementKind kind;

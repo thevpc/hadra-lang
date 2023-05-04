@@ -6,9 +6,10 @@ import net.thevpc.jeep.impl.functions.ConvertedJMethod2;
 import net.thevpc.jeep.impl.functions.JArgumentConverterByIndex;
 import net.thevpc.jeep.impl.functions.JInstanceArgumentResolverFromArgumentByIndex;
 import net.thevpc.jeep.impl.functions.JNameSignature;
+import net.thevpc.jeep.impl.types.host.AbstractJType;
+import net.thevpc.jeep.source.JTextSource;
 import net.thevpc.jeep.util.JTokenUtils;
 import net.thevpc.jeep.util.JTypeUtils;
-import net.thevpc.common.textsource.JTextSource;
 import net.hl.compiler.core.HOptions;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.elements.*;
@@ -1462,7 +1463,7 @@ public class HStage08JavaTransform extends AbstractHStage {
                     null,
                     null
             );
-            DefaultJType metaType = (DefaultJType) compilerContext.base.getOrCreateType(jn.getMetaPackage());
+            JType metaType = compilerContext.base.getOrCreateType(jn.getMetaPackage());
             ii.setSignature(JNameSignature.of("runModule()"));
             ii.setReturnTypeName(compilerContext.base.createSpecialTypeToken("void"));
             ii.setDeclaringType(meta);
@@ -1471,7 +1472,7 @@ public class HStage08JavaTransform extends AbstractHStage {
             ii.addModifierKeys("public", "static");
             HNBlock b = jn.getMetaPackageBody();
 
-            JMethod jm = metaType.addMethod(JSignature.of(compilerContext.types(), "runModule()"), new String[0], JTypeUtils.forVoid(compilerContext.types()),
+            JMethod jm = ((AbstractJType)metaType).addMethod(JSignature.of(compilerContext.types(), "runModule()"), new String[0], JTypeUtils.forVoid(compilerContext.types()),
                     new BodyJInvoke(ii), new JModifier[0], new JAnnotationInstance[]{
                         JPrimitiveModifierAnnotationInstance.STATIC
                     }, false);
@@ -1502,7 +1503,7 @@ public class HStage08JavaTransform extends AbstractHStage {
                         null,
                         null
                 );
-                DefaultJType metaType = (DefaultJType) compilerContext.base.getOrCreateType(jn.getMetaPackage());
+                JType metaType = compilerContext.base.getOrCreateType(jn.getMetaPackage());
                 ii.setSignature(JNameSignature.of("main(java.lang.String[])"));
                 ii.setReturnTypeName(compilerContext.base.createSpecialTypeToken("void"));
                 ii.setDeclaringType(meta);
@@ -1523,7 +1524,7 @@ public class HStage08JavaTransform extends AbstractHStage {
                 ii.addModifierKeys("public", "static");
                 HNBlock b = jn.getMetaPackageBody();
 
-                JMethod jm = metaType.addMethod(JSignature.of(compilerContext.types(), "main(java.lang.String[])"),
+                JMethod jm = ((AbstractJType)metaType).addMethod(JSignature.of(compilerContext.types(), "main(java.lang.String[])"),
                         new String[]{"args"}, JTypeUtils.forVoid(compilerContext.types()),
                         new BodyJInvoke(ii), new JModifier[0], new JAnnotationInstance[]{
                             JPrimitiveModifierAnnotationInstance.PUBLIC,
@@ -1543,7 +1544,7 @@ public class HStage08JavaTransform extends AbstractHStage {
                     null,
                     null
             );
-            DefaultJType metaType = (DefaultJType) compilerContext.base.getOrCreateType(jn.getMetaPackage());
+            JType metaType = compilerContext.base.getOrCreateType(jn.getMetaPackage());
             ii.setSignature(JNameSignature.of("main(java.lang.String[])"));
             ii.setReturnTypeName(compilerContext.base.createSpecialTypeToken("void"));
             ii.setDeclaringType(meta);
@@ -1560,7 +1561,7 @@ public class HStage08JavaTransform extends AbstractHStage {
             ));
             HNBlock b = jn.getMetaPackageBody();
 
-            JMethod jm = metaType.addMethod(JSignature.of(compilerContext.types(), "main(java.lang.String[])"),
+            JMethod jm = ((DefaultJType) metaType).addMethod(JSignature.of(compilerContext.types(), "main(java.lang.String[])"),
                     new String[0], JTypeUtils.forVoid(compilerContext.types()),
                     new BodyJInvoke(ii), new JModifier[0], new JAnnotationInstance[]{
                         JPrimitiveModifierAnnotationInstance.STATIC

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.hl.ide</groupId>
     <artifactId>hl4swing</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <name>net.thevpc.hl.ide.hl4swing</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,12 +17,12 @@
         <dependency>
             <groupId>net.thevpc.hl</groupId>
             <artifactId>hadra-build-tool</artifactId>
-            <version>0.1.1</version>
+            <version>0.1.2</version>
         </dependency>
         <dependency>
             <groupId>net.thevpc.jeep</groupId>
             <artifactId>jeep-swing-editor</artifactId>
-            <version>1.2.8</version>
+            <version>1.2.9</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

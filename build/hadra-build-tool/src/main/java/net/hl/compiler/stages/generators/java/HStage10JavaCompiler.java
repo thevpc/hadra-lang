@@ -39,16 +39,13 @@ import net.hl.compiler.core.JModuleId;
 import net.hl.compiler.stages.AbstractHStage;
 import net.hl.compiler.utils.DepIdAndFile;
 import net.hl.compiler.utils.HFileUtils;
-import net.thevpc.common.msg.Messages;
+import net.thevpc.jeep.log.JSourceMessage;
+import net.thevpc.jeep.msg.Messages;
+import net.thevpc.jeep.source.JTextSource;
+import net.thevpc.jeep.source.JTextSourceFactory;
+import net.thevpc.jeep.source.JTextSourceToken;
 import net.thevpc.jeep.util.JStringUtils;
-import net.thevpc.common.textsource.JTextSource;
-import net.thevpc.common.textsource.JTextSourceFactory;
-import net.thevpc.common.textsource.JTextSourceToken;
-import net.thevpc.common.textsource.log.JSourceMessage;
-import net.thevpc.nuts.NutsConstants;
-import net.thevpc.nuts.NutsDependency;
-import net.thevpc.nuts.NutsDescriptor;
-import net.thevpc.nuts.NutsEnvConditionBuilder;
+import net.thevpc.nuts.*;
 
 public class HStage10JavaCompiler extends AbstractHStage {
 
@@ -137,25 +134,25 @@ public class HStage10JavaCompiler extends AbstractHStage {
         if (success) {
             //need to generate descriptor that contains dependencies...
             //project.getIndexedProject().getDependencies()
-            NutsDescriptor desc = project.getWorkspace().descriptor().descriptorBuilder()
+            NDescriptor desc = new DefaultNDescriptorBuilder()
                     .setId(project.getIndexedProject().getModuleId())
                     .setPackaging("jar")
                     .setCondition(
-                            NutsEnvConditionBuilder.of(project.getSession())
-                                    .addPlatform("java")
+                            new DefaultNEnvConditionBuilder()
+                                    .setPlatform(Arrays.asList("java"))
                     )
                     .addDependencies(
                             Arrays.stream(project.getIndexedProject().getDependencies())
                                     .map(
                                             i
-                                            -> project.getWorkspace().dependency().builder()
+                                            -> new DefaultNDependencyBuilder()
                                                     .setId(
-                                                            project.getWorkspace().id().parser().parse(i.getId())
+                                                            NId.of(i.getId()).get()
                                                     ).build()
-                                    ).toArray(NutsDependency[]::new)
+                                    ).collect(Collectors.toList())
                     ).build();
-            project.getWorkspace().descriptor().formatter(desc).setSession(project.getSession())
-                    .print(new File(classesFolder, "META-INF/" + NutsConstants.Files.DESCRIPTOR_FILE_NAME));
+            desc.formatter(project.getSession())
+                    .print(new File(classesFolder, "META-INF/" + NConstants.Files.DESCRIPTOR_FILE_NAME));
             jarFolder.mkdirs();
             File jarPath = new File(jarFolder, jarName);
             generateJar(project, jarPath, classesFolder);

@@ -1,5 +1,6 @@
 package net.hl.compiler.core.invokables;
 
+import net.hl.compiler.index.*;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.AbstractJConverter;
 import net.thevpc.jeep.core.DefaultJTypedValue;
@@ -10,15 +11,13 @@ import net.thevpc.jeep.impl.JTypesSPI;
 import net.thevpc.jeep.impl.compiler.DefaultJImportInfo;
 import net.thevpc.jeep.impl.compiler.JCompilerContextImpl;
 import net.thevpc.jeep.impl.functions.*;
-import net.thevpc.jeep.impl.types.DefaultJAnnotationInstanceList;
-import net.thevpc.jeep.impl.types.DefaultJType;
+import net.thevpc.jeep.impl.types.*;
+import net.thevpc.jeep.source.JTextSourceFactory;
 import net.thevpc.jeep.util.*;
-import net.thevpc.common.textsource.JTextSourceFactory;
 import net.hl.compiler.core.HFunctionType;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.HMissingLinkageException;
 import net.hl.compiler.core.elements.*;
-import net.hl.compiler.index.HIndexedClass;
 import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.*;
 import net.hl.lang.Tuple;
@@ -30,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import net.hl.compiler.index.HIndexer;
 
 public class HLJCompilerContext extends JCompilerContextImpl {
 
@@ -113,7 +111,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
 
     private Set<String> resolveImportStatics() {
         if (_resolveImportStatics == null) {
-            _resolveImportStatics = resolveImportStatics(getImports());
+            _resolveImportStatics = resolveImportStatics(buildValidImports().toArray(new JImportInfo[0]));
         }
         return _resolveImportStatics;
     }
@@ -122,9 +120,16 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         LinkedHashSet<String> ii = new LinkedHashSet<>();
         if (imports != null) {
             for (JImportInfo a : expandImports(imports)) {
-                String _anImport=a.importValue();
+                String _anImport = a.importValue();
                 if (_anImport.endsWith(".*")) {
                     String cls = _anImport.substring(0, _anImport.length() - 2);
+                    for (String fullName : project.indexer().searchTypes(new JIndexQuery().whereEq("fullName", cls))
+                            .stream().map(x -> x.getFullName()).collect(Collectors.toList())) {
+                        ii.add(fullName);
+                        break;
+                    }
+                }else if (_anImport.endsWith(".**")) {
+                    String cls = _anImport.substring(0, _anImport.length() - 3);
                     for (String fullName : project.indexer().searchTypes(new JIndexQuery().whereEq("fullName", cls))
                             .stream().map(x -> x.getFullName()).collect(Collectors.toList())) {
                         ii.add(fullName);
@@ -191,7 +196,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     private Map<String, String> resolveTypeImports(JImportInfo[] anImports, Predicate<String> predicate) {
         Map<String, String> m = new HashMap<>();
         for (JImportInfo a : expandImports(anImports)) {
-            String _anImport=a.importValue();
+            String _anImport = a.importValue();
             if (_anImport.endsWith(".*")) {
                 String ns = _anImport.substring(0, _anImport.length() - 2);
                 Stream<HIndexedClass> s1 = project.indexer().searchTypes(new JIndexQuery().whereEq("fullName", ns))
@@ -254,7 +259,8 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 String ns = _anImport.substring(0, _anImport.length() - 3);
                 //this must be a package because type @export expansion is already processed
                 //check packages (not package)
-                Stream<HIndexedClass> s1 = project.indexer().searchTypes(new JIndexQuery().whereEq("packages", ns))
+                Set<HIndexedClass> ls1 = project.indexer().searchTypes(new JIndexQuery().whereEq("packages", ns));
+                Stream<HIndexedClass> s1 = project.indexer().searchTypes(new JIndexQuery().whereDotStart("packages", ns))
                         .stream();
                 if (predicate != null) {
                     s1 = s1.filter(x -> predicate.test(x.getFullName()));
@@ -501,7 +507,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             try {
                 jType = getContext().types().forName(cls);
             } catch (Exception ex) {
-                //some how this not accessible... ignore it
+                //somehow this not accessible... ignore it
             }
             if (jType != null) {
                 all.addAll(
@@ -538,7 +544,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             if (jType != null) {
                 all.addAll(
                         Arrays.stream(jType.getDeclaredMethods(
-                                namesWithAliases(name, null), argsCount, true))
+                                        namesWithAliases(name, null), argsCount, true))
                                 .filter(x -> x.isStatic() && isVisible(x))
                                 .collect(Collectors.toList())
                 );
@@ -568,13 +574,13 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     private String[] namesWithAliases(String name, HFunctionType opType) {
         if (opType == HFunctionType.GET) {
             return new String[]{
-                JeepUtils.propertyToGetter(name, false),
-                JeepUtils.propertyToGetter(name, true)
+                    JeepUtils.propertyToGetter(name, false),
+                    JeepUtils.propertyToGetter(name, true)
             };
         }
         if (opType == HFunctionType.SET) {
             return new String[]{
-                JeepUtils.propertyToSetter(name)
+                    JeepUtils.propertyToSetter(name)
             };
         }
         Set<String> all = new HashSet<>();
@@ -874,8 +880,8 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 }
                 if (withOps) {
                     return new String[]{
-                        name,
-                        sb.toString()
+                            name,
+                            sb.toString()
                     };
                 } else {
                     return new String[]{name};
@@ -1258,10 +1264,10 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     failInfo.fail(jOnError, getLog(),
                             "S044", null,
                             "To use "
-                            + baseTypeNameSafe + "[" + JTypePattern.signatureStringNoPars(oldTypes) + "] set operator, you should implement either \n"
-                            + "\tinstance method: " + baseType.toString() + "." + HExtensionNames.BRACKET_SET_LONG + "" + JTypePattern.signatureString(oldTypes) + " \n"
-                            + "\tor\n"
-                            + "\tstatic method  : " + HExtensionNames.BRACKET_SET_LONG + "" + JTypePattern.signatureString(args) + " \n", location
+                                    + baseTypeNameSafe + "[" + JTypePattern.signatureStringNoPars(oldTypes) + "] set operator, you should implement either \n"
+                                    + "\tinstance method: " + baseType.toString() + "." + HExtensionNames.BRACKET_SET_LONG + "" + JTypePattern.signatureString(oldTypes) + " \n"
+                                    + "\tor\n"
+                                    + "\tstatic method  : " + HExtensionNames.BRACKET_SET_LONG + "" + JTypePattern.signatureString(args) + " \n", location
                     );
                     return null;
                 }
@@ -1335,9 +1341,9 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 if (jInvokable != null) {
                     if (bestOnly) {
                         return new JInvokableCost[]{new JInvokableCostImpl(
-                            jInvokable,
-                            0.0
-                            )};
+                                jInvokable,
+                                0.0
+                        )};
                     } else {
                         finalResultNonBestOnly.add(new JInvokableCostImpl(
                                 jInvokable,
@@ -1400,9 +1406,9 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                         );
                         if (bestOnly) {
                             return new JInvokableCost[]{new JInvokableCostImpl(
-                                cc,
-                                0.1
-                                )};
+                                    cc,
+                                    0.1
+                            )};
                         } else {
                             finalResultNonBestOnly.add(new JInvokableCostImpl(
                                     cc,
@@ -1435,16 +1441,16 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                     if (m2 != null) {
                         ConvertedJMethod2 cc = new ConvertedJMethod2(
                                 m2, new JArgumentConverter[]{
-                                    new JArgumentConverterByIndex(0, args[0].getType())
-                                }, new JType[]{args[0].getType(), args[1].getType()},
+                                new JArgumentConverterByIndex(0, args[0].getType())
+                        }, new JType[]{args[0].getType(), args[1].getType()},
                                 new JInstanceArgumentResolverFromArgumentByIndex(1, args[1].getType()),
                                 null
                         );
                         if (bestOnly) {
                             return new JInvokableCost[]{new JInvokableCostImpl(
-                                cc,
-                                0.2
-                                )};
+                                    cc,
+                                    0.2
+                            )};
                         } else {
                             finalResultNonBestOnly.add(new JInvokableCostImpl(
                                     cc,
@@ -1482,7 +1488,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public JInvokableCost[] findAllMatchesBase(String[] nameAlternatives, JTypePattern[] args,
-            JToken location, boolean bestOnly, FindMatchFailInfo failInfo) {
+                                               JToken location, boolean bestOnly, FindMatchFailInfo failInfo) {
         if (failInfo.getConversions() == null) {
             failInfo.setConversions(new ConversionTrace(this));
         }
@@ -1550,7 +1556,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     protected JInvokableCost[] filterAcceptable(Set<JInvokable> acceptable, JTypePattern[] args,
-            JToken location, boolean bestOnly, List<JInvokableCost> finalResultNonBestOnly, FindMatchFailInfo failInfo) {
+                                                JToken location, boolean bestOnly, List<JInvokableCost> finalResultNonBestOnly, FindMatchFailInfo failInfo) {
         boolean noLambda = this.isTypes(args);
         for (JInvokable jInvokable : acceptable) {
             failInfo.addAvailable(jInvokable);
@@ -1869,7 +1875,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         return result;
     }
 
-//    public HNDeclareTokenBase lookupVarDeclarationOrNull(String name, JToken location) {
+    //    public HNDeclareTokenBase lookupVarDeclarationOrNull(String name, JToken location) {
 //        HNElement hnElement = lookupElementNoBaseOne(JOnError.NULL, name, new JTypePattern[0], isStaticContext(), false, location, node(), lookupTypes, null);
 //        if (hnElement != null) {
 //            switch (hnElement.getKind()) {
@@ -1988,14 +1994,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
 //                throw new JFixMeLaterException();
 //            }
 //        }
-        Set<JImportInfo> validImports = new LinkedHashSet<>();
-
-        validImports.addAll(Arrays.asList(getImports()));
-
-        validImports.add(createJImportInfo("java.lang.*", "<default>"));
-        validImports.add(createJImportInfo("java.util.*", "<default>"));
-        validImports.add(createJImportInfo("java.io.*", "<default>"));
-        validImports.add(createJImportInfo("net.hl.lang.*", "<default>"));
+        Set<JImportInfo> validImports = buildValidImports();
         String fullPackage = project().getMetaPackageType().getFullPackage();
         if (!JStringUtils.isBlank(fullPackage)) {
             validImports.add(createJImportInfo(fullPackage + ".*", "<default>"));
@@ -2010,15 +2009,77 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         return null;
     }
 
+    private Set<JImportInfo> buildValidImports() {
+        Set<JImportInfo> validImports = new LinkedHashSet<>();
+
+        validImports.addAll(Arrays.asList(getImports()));
+
+        validImports.add(createJImportInfo("java.lang.*", "<default>"));
+        validImports.add(createJImportInfo("java.util.*", "<default>"));
+        validImports.add(createJImportInfo("java.io.*", "<default>"));
+        validImports.add(createJImportInfo("net.hl.lang.*", "<default>"));
+        return buildValidImports(validImports);
+    }
+
+    private Set<JImportInfo> buildValidImports(Set<JImportInfo> validImports) {
+        Set<JImportInfo> result = new HashSet<>();
+        Queue<JImportInfo> toProcess = new ArrayDeque<>(validImports);
+        while (!toProcess.isEmpty()) {
+            JImportInfo next = toProcess.remove();
+            if (!result.contains(next)) {
+                result.add(next);
+                if (next.importValue().endsWith(".**")) {
+                    String ns = next.importValue().substring(0, next.importValue().length() - 3);
+                    Set<HIndexedClass> s1 = project.indexer().searchTypes(new JIndexQuery().whereDotStart("fullName", ns));
+                    for (HIndexedClass hIndexedClass : s1) {
+
+                        for (AnnInfo annotation : hIndexedClass.getAnnotations()) {
+                            if (annotation.getName().equals("net.hl.lang.JExports")) {
+                                for (Map.Entry<String, AnnValue> e : annotation.getValues().entrySet()) {
+                                    if (e.getKey().equals("value")) {
+                                        switch (e.getValue().getType()) {
+                                            case ARRAY: {
+                                                for (AnnValue o : (List<AnnValue>) e.getValue().getValue()) {
+                                                    toProcess.add(
+                                                            new DefaultJImportInfo(
+                                                                    (String) o.getValue(), next.token()
+                                                            )
+                                                    );
+                                                }
+                                                break;
+                                            }
+                                            case STRING: {
+                                                toProcess.add(
+                                                        new DefaultJImportInfo(
+                                                                (String) e.getValue().getValue(), next.token()
+                                                        )
+                                                );
+                                                break;
+                                            }
+                                            default: {
+                                                throw new IllegalArgumentException("unexpected");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public List<JType> lookupTypes(boolean importedOnly, Predicate<String> predicate) {
         Chronometer chrono = Chronometer.start("lookupTypes:" + (importedOnly ? 0 : 1));
         Map<String, JType> result = new LinkedHashMap<>();
         JTypes types = getContext().types();
         for (String stype : new String[]{"boolean", "char", "byte", "short",
-            "int",
-            "long",
-            "float",
-            "double"
+                "int",
+                "long",
+                "float",
+                "double"
         }) {
             if (predicate.test(stype)) {
                 result.put(stype, types.forName(stype));
@@ -2565,7 +2626,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                                 //should i check other thing ?
                                 JInvokable m = lookupFunctionMatch(JOnError.TRACE, "getLength", HFunctionType.SPECIAL,
                                         new JTypePattern[]{
-                                            JTypePattern.of(leftType)
+                                                JTypePattern.of(leftType)
                                         }, whereToLookInto.getStartToken()
                                 );
                                 if (m != null) {
@@ -3129,11 +3190,11 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     private HNElement lookupElementWithBase(JOnError onError, String name,
-            JTypePattern dotBaseType,
-            JTypePattern[] argTypes,
-            boolean requireStatic, boolean lhs,
-            JToken location,
-            JNode fromNode, FindMatchFailInfo failInfo) {
+                                            JTypePattern dotBaseType,
+                                            JTypePattern[] argTypes,
+                                            boolean requireStatic, boolean lhs,
+                                            JToken location,
+                                            JNode fromNode, FindMatchFailInfo failInfo) {
         if (failInfo == null) {
             failInfo = new FindMatchFailInfo("symbol");
         }
@@ -3213,9 +3274,9 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     private HNElement lookupElement(JOnError onError, String methodName,
-            JTypePattern dotBaseType,
-            JTypePattern[] argTypes,
-            boolean requireStatic, boolean lhs, JNode fromNode, JToken location, FindMatchFailInfo failInfo) {
+                                    JTypePattern dotBaseType,
+                                    JTypePattern[] argTypes,
+                                    boolean requireStatic, boolean lhs, JNode fromNode, JToken location, FindMatchFailInfo failInfo) {
         if (dotBaseType != null) {
             return lookupElementWithBase(onError, methodName, dotBaseType, argTypes, requireStatic, lhs, location, fromNode, failInfo);
         } else {
@@ -3280,7 +3341,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         }
         JType old = types.forNameOrNull(n);
         if (old != null) {
-            this.getLog().jerror("S012", null, type.getNameToken(), "type declaration : type multiple declarations : " + n);
+            //this.getLog().jerror("S012", null, type.getNameToken(), "type declaration : type multiple declarations : " + n);
             return old;
         }
         LOG.log(Level.FINE, "declare type {0}", type.getFullName());
@@ -3292,19 +3353,18 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 : JTypeKind.CLASS;
 
         jt = types.declareType(n, jTypeKind, false);
-        DefaultJType djt = (DefaultJType) jt;
         type.setjType(jt);
-        ((DefaultJAnnotationInstanceList) djt.getAnnotations())
+        ((DefaultJAnnotationInstanceList) jt.getAnnotations())
                 .addAll(HNodeUtils.toAnnotations(type.getAnnotations()));
         for (HNExtends extend : type.getExtends()) {
             JType tt = lookupType(extend.getFullName());
             if (tt.isInterface()) {
                 LinkedHashSet<JType> ifs = new LinkedHashSet<>();
-                ifs.addAll(Arrays.asList(djt.getInterfaces()));
+                ifs.addAll(Arrays.asList(jt.getInterfaces()));
                 ifs.add(tt);
-                djt.setInterfaces(ifs.toArray(new JType[0]));
+                ((DefaultJType)jt).setInterfaces(ifs.toArray(new JType[0]));
             } else {
-                djt.setSuperType(tt);
+                ((DefaultJType)jt).setSuperType(tt);
             }
         }
         return jt;
@@ -3443,4 +3503,5 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             return t;
         }
     }
+
 }

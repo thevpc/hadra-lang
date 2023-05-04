@@ -1,10 +1,12 @@
 package net.hl.compiler.stages;
 
 import net.hl.compiler.HL;
+import net.hl.compiler.core.types.HLJTypes;
 import net.thevpc.jeep.DefaultJCompilationUnit;
-import net.thevpc.common.textsource.JTextSource;
-import net.thevpc.common.textsource.JTextSourceRoot;
+import net.thevpc.jeep.JTypes;
 import net.thevpc.jeep.log.LogJTextSourceReport;
+import net.thevpc.jeep.source.JTextSource;
+import net.thevpc.jeep.source.JTextSourceRoot;
 import net.thevpc.jeep.util.JStringUtils;
 import net.hl.compiler.core.HOptions;
 import net.hl.compiler.core.HProject;
@@ -50,5 +52,7 @@ public class HStage01Parser extends AbstractHStage {
         if (foundCompilationUnits == 0 && project.log().isSuccessful()) {
             project.log().jerror("X403", null, null, "missing units to compile");
         }
+        HLJTypes t = (HLJTypes) project.languageContext().types();
+        t.setIndexer(project.indexer());
     }
 }

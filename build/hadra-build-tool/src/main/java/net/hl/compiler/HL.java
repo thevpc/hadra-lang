@@ -1,6 +1,8 @@
 package net.hl.compiler;
 
 import java.io.File;
+
+import net.thevpc.jeep.source.JTextSourceRoot;
 import net.thevpc.jeep.util.Chronometer;
 import net.hl.compiler.core.*;
 import net.hl.compiler.index.HIndexerImpl;
@@ -13,12 +15,14 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.hl.compiler.stages.generators.java.HStage10JavaCompiler;
 import net.hl.compiler.index.HIndexer;
 import net.hl.compiler.stages.generators.java.HStage11JavaRun;
 import net.hl.compiler.utils.StringUtils;
-import net.thevpc.nuts.NutsSession;
-import net.thevpc.nuts.NutsTextStyle;
+import net.thevpc.nuts.NSession;
+import net.thevpc.nuts.text.NTextStyle;
+import net.thevpc.nuts.text.NTexts;
 
 /**
  * Hadra Language Build Tool
@@ -30,23 +34,23 @@ public class HL extends HOptions<HL> {
     private HProjectContext projectContext;
 
     public HL() {
-        this((NutsSession) null);
+        this((NSession) null);
     }
 
-    public HL(NutsSession session) {
+    public HL(NSession session) {
         this((ClassLoader) null, null, session);
     }
 
-    public HL(ClassLoader classLoader, HIndexer indexer, NutsSession session) {
+    public HL(ClassLoader classLoader, HIndexer indexer, NSession session) {
         this(new HadraLanguage(session, classLoader), indexer, session);
     }
 
-    public HL(HadraContext language, HIndexer indexer, NutsSession session) {
+    public HL(HadraContext language, HIndexer indexer, NSession session) {
         this(new DefaultHLProjectContext(
-                language == null ? session == null ? HadraLanguage.getSingleton() : new HadraLanguage(session) : language,
-                indexer == null ? new HIndexerImpl() : indexer,
-                null
-        )
+                        language == null ? session == null ? HadraLanguage.getSingleton() : new HadraLanguage(session) : language,
+                        indexer == null ? new HIndexerImpl() : indexer,
+                        null
+                )
         );
     }
 
@@ -57,7 +61,7 @@ public class HL extends HOptions<HL> {
         this.projectContext = projectContext;
     }
 
-    public static HL create(NutsSession session) {
+    public static HL create(NSession session) {
         return new HL(session);
     }
 
@@ -72,22 +76,26 @@ public class HL extends HOptions<HL> {
     public HProject compile() {
         HL options = this;
         HadraContext context = languageContext().newContext();
-        HProject project = new HProject(context, projectContext.indexer(), projectContext.getSession());
+        NSession session = projectContext.getSession();
+        HProject project = new HProject(context, projectContext.indexer(), session);
         Chronometer globalChronometer = Chronometer.start();
+        NTexts texts = NTexts.of(session);
         project.getSession().out().println(
                 StringUtils.center2(
-                        "[ " + project.getWorkspace().text().forStyled("Hadra Lang Build Tool", NutsTextStyle.primary(1)).toString()
-                        + " ]",
-                         80, '-', context.getSession().getWorkspace())
+                        "[ " + texts.ofStyled("Hadra Lang Build Tool", NTextStyle.primary(1)).toString()
+                                + " ]",
+                        80, '-', session)
         );
         project.log().jinfo("X000", null, null, "compiler started");
 
+        if (sources().length == 0 && new File(".", "pom.xml").isFile()) {
+            addSourceMavenProject(".");
+        }
         if (sources().length == 0) {
-            if (new File(".", "pom.xml").exists()) {
-                addSourceMavenProject(".");
-            } else {
-                addSourceFile(".");
-            }
+            addSourceFile(".");
+        }
+        for (JTextSourceRoot source : sources()) {
+            project.log().jinfo("X000", null, null, "input: {0}", source);
         }
 
         if (containsAnyTask(HTask.COMPILE, HTask.RUN)) {
@@ -155,9 +163,9 @@ public class HL extends HOptions<HL> {
             project.log().jerror("X000", null, null, "unexpected error : " + ex.toString());
         }
         LOG.log(Level.FINE, "compilation finished with {0} errors and {1} warnings in {2}", new Object[]{
-            project.getErrorCount(),
-            project.getWarningCount(),
-            globalChronometer.stop().getDuration()
+                project.getErrorCount(),
+                project.getWarningCount(),
+                globalChronometer.stop().getDuration()
         });
         project.log().printFooter();
         return project;

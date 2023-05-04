@@ -1,11 +1,11 @@
 package net.hl.compiler.core;
 
 import net.hl.compiler.index.HIndexer;
-import net.thevpc.nuts.NutsSession;
+import net.thevpc.nuts.NSession;
 
 public interface HProjectContext {
 
-    NutsSession getSession();
+    NSession getSession();
 
     HadraContext languageContext();
 
