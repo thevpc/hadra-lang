@@ -4,9 +4,9 @@ import net.hl.compiler.core.invokables.HLJCompilerContext;
 import net.hl.compiler.utils.DepIdAndFile;
 import net.thevpc.jeep.JField;
 import net.thevpc.jeep.JMethod;
-import net.thevpc.nuts.NBlankable;
 import net.thevpc.nuts.NSession;
 import net.thevpc.nuts.io.NPath;
+import net.thevpc.nuts.util.NBlankable;
 
 import java.io.*;
 import java.net.MalformedURLException;

@@ -7,7 +7,8 @@ import net.thevpc.nuts.*;
 import net.thevpc.nuts.cmdline.NArg;
 import net.thevpc.nuts.cmdline.NCmdLine;
 import net.thevpc.nuts.cmdline.NCmdLineContext;
-import net.thevpc.nuts.cmdline.NCmdLineProcessor;
+import net.thevpc.nuts.cmdline.NCmdLineRunner;
+import net.thevpc.nuts.util.NMsg;
 
 public class HLMain implements NApplication {
 
@@ -19,12 +20,12 @@ public class HLMain implements NApplication {
 
     @Override
     public void run(NSession session) {
-        session.processAppCommandLine(new NCmdLineProcessor() {
+        session.runAppCmdLine(new NCmdLineRunner() {
             HL hl = HL.create(session);
             boolean noMoreOptions = false;
 
             @Override
-            public boolean onCmdNextOption(NArg option, NCmdLine cmdLine, NCmdLineContext context) {
+            public boolean nextOption(NArg option, NCmdLine cmdLine, NCmdLineContext context) {
                 if (noMoreOptions) {
                     return false;
                 }
@@ -96,7 +97,7 @@ public class HLMain implements NApplication {
             }
 
             @Override
-            public boolean onCmdNextNonOption(NArg nonOption, NCmdLine cmdLine, NCmdLineContext context) {
+            public boolean nextNonOption(NArg nonOption, NCmdLine cmdLine, NCmdLineContext context) {
                 String s = cmdLine.next().get().toString();
                 if (isURL(s)) {
                     hl.addSourceFileURL(s);
@@ -114,7 +115,7 @@ public class HLMain implements NApplication {
             }
 
             @Override
-            public void onCmdExec(NCmdLine CmdLine, NCmdLineContext context) {
+            public void run(NCmdLine nCmdLine, NCmdLineContext nCmdLineContext) {
                 final HProject e = hl.compile();
                 if (!e.isSuccessful()) {
                     String m = "compilation failed with ";
@@ -142,7 +143,7 @@ public class HLMain implements NApplication {
     @Override
     public void onInstallApplication(NSession session) {
         NCommands commands = NCommands.of(session);
-        NCustomCommand a = commands.findCommand(PREFERRED_ALIAS, session.getAppId(), session.getAppId());
+        NCustomCmd a = commands.findCommand(PREFERRED_ALIAS, session.getAppId(), session.getAppId());
         boolean update = false;
         boolean add = false;
         if (a != null) {

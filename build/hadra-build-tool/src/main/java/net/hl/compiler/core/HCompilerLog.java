@@ -12,13 +12,13 @@ import net.thevpc.jeep.msg.Message;
 import net.thevpc.jeep.source.JTextSource;
 import net.thevpc.jeep.source.JTextSourceRange;
 import net.thevpc.jeep.source.JTextSourceToken;
-import net.thevpc.nuts.NMsg;
 import net.thevpc.nuts.NSession;
 import net.thevpc.nuts.io.NPrintStream;
 import net.thevpc.nuts.io.NPrintStream;
 import net.thevpc.nuts.text.NText;
 import net.thevpc.nuts.text.NTextStyle;
 import net.thevpc.nuts.text.NTexts;
+import net.thevpc.nuts.util.NMsg;
 
 import java.nio.file.Paths;
 import java.time.LocalDateTime;

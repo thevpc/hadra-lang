@@ -8,10 +8,9 @@ import java.util.logging.Logger;
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HTask;
 import net.hl.compiler.stages.AbstractHStage;
-import net.thevpc.nuts.NExecCommand;
-import net.thevpc.nuts.NExecOutput;
+import net.thevpc.nuts.NExecCmd;
 import net.thevpc.nuts.NExecutionType;
-import net.thevpc.nuts.NWorkspace;
+import net.thevpc.nuts.io.NExecOutput;
 
 public class HStage11JavaRun extends AbstractHStage {
 
@@ -38,13 +37,13 @@ public class HStage11JavaRun extends AbstractHStage {
         HJavaContextHelper jn = HJavaContextHelper.of(project);
         if (jn.getOutputJarFile() != null) {
             try {
-                NExecCommand.of(project.getSession())
+                NExecCmd.of(project.getSession())
                         .addCommand(jn.getOutputJarFile().getCanonicalPath())
                         .setSleepMillis(1000)
                         .setErr(NExecOutput.ofRedirect())
                         .setFailFast(true)
                         .setExecutionType(NExecutionType.EMBEDDED)
-                        .getResult();
+                        .run();
                 return;
             } catch (IOException ex) {
                 project.log().jerror("RJ01", "run", null, "error executing jar", ex);
