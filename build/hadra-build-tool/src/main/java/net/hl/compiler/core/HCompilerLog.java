@@ -14,7 +14,6 @@ import net.thevpc.jeep.source.JTextSourceRange;
 import net.thevpc.jeep.source.JTextSourceToken;
 import net.thevpc.nuts.NSession;
 import net.thevpc.nuts.io.NPrintStream;
-import net.thevpc.nuts.io.NPrintStream;
 import net.thevpc.nuts.text.NText;
 import net.thevpc.nuts.text.NTextStyle;
 import net.thevpc.nuts.text.NTexts;
@@ -29,15 +28,13 @@ import java.util.logging.Level;
  */
 public class HCompilerLog extends DefaultJCompilerLog {
 
-    private NSession session;
 
-    public HCompilerLog(NSession session) {
-        this.session = session;
+    public HCompilerLog() {
     }
 
     @Override
     public void printFooter() {
-        NPrintStream out = session.out();
+        NPrintStream out = NSession.of().out();
         String op = getOperationName();
         if (op == null) {
             op = DEFAULT_OPERATION_NAME;
@@ -57,21 +54,21 @@ public class HCompilerLog extends DefaultJCompilerLog {
 
         out.println(
                 StringUtils.center2(
-                        "[ " + ofTexts().ofText(
+                        "[ " + ofTexts().of(
                                 m
                         ).toString()
                                 + " ]",
-                        80, '-', session)
+                        80, '-')
         );
     }
 
     private NTexts ofTexts() {
-        return NTexts.of(session);
+        return NTexts.of();
     }
 
     @Override
     public void printlnMessage(JSourceMessage jSourceMessage) {
-        NPrintStream out = session.out();
+        NPrintStream out = NSession.of().out();
         boolean showCompilationSource = true;
         final JTextSourceToken token = jSourceMessage.getToken();
         final Level level = jSourceMessage.getLevel();

@@ -1,6 +1,5 @@
 package net.hl.compiler.core;
 
-import java.nio.file.Path;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.eval.JEvaluableValue;
 import net.thevpc.jeep.impl.functions.DefaultJInvokeContext;
@@ -24,23 +23,13 @@ public class HProject implements HProjectContext {
     private HNDeclareMetaPackage resolvedMetaPackage;
     private String rootId;
     private Map<String, Object> userProperties = new HashMap<>();
-    private NSession session;
 
-    public HProject(HadraContext context, HIndexer indexer, NSession session) {
+    public HProject(HadraContext context, HIndexer indexer) {
         this.context = context;
         this.indexer = indexer;
-        this.session = session;
         metaPackageType.addAnnotationNoDuplicates(HNodeUtils.createAnnotationModifierCall("public"));
     }
 
-    public NWorkspace getWorkspace() {
-        return getSession().getWorkspace();
-    }
-
-    @Override
-    public NSession getSession() {
-        return session;
-    }
 
     public HNDeclareMetaPackage getResolvedMetaPackage() {
         return resolvedMetaPackage;

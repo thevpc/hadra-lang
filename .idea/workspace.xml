@@ -3,64 +3,43 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
-  <component name="BranchesTreeState">
-    <expand>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </expand>
-    <select />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="f1cf708f-f133-4792-a05e-0ddd77f1da07" name="Default Changelist" comment="[CHANGED] Version Bumped to nuts 0.8.3">
+    <list default="true" id="3cf2d979-179c-468c-8e0e-fdcb2bf3d484" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/HL.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/HL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/DefaultHLProjectContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/DefaultHLProjectContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HCompilerLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HCompilerLog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HCompletion.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HCompletion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HJeepFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HJeepFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HProject.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HProject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HProjectContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HProjectContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HadraContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HadraContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HadraContextImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HadraContextImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HadraLanguage.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HadraLanguage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/SignatureVisitorProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/index/SignatureVisitorProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage02Preprocessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage02Preprocessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage03Indexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage03Indexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage04DefinitionResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage04DefinitionResolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStageUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStageUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HStage10JavaCompiler.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HStage10JavaCompiler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HStage11JavaRun.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/generators/java/HStage11JavaRun.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/StringUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/thevpc/hl/test/TestCompilerFail.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/thevpc/hl/test/TestCompilerFail.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/thevpc/hl/test/TestGenerateTokenClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/thevpc/hl/test/TestGenerateTokenClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/thevpc/hl/test/util/TestHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/thevpc/hl/test/util/TestHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hadra-maven-plugin/src/main/java/net/hl/build/mvnplugin/HLMvnPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hadra-maven-plugin/src/main/java/net/hl/build/mvnplugin/HLMvnPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/hl/src/main/java/net/thevpc/hl/build/HLMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/hl/src/main/java/net/thevpc/hl/build/HLMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ide-support/hl4nb/src/main/java/net/hl/ide/hl4nb/editor/semantic/LHnbProjectContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/ide-support/hl4nb/src/main/java/net/hl/ide/hl4nb/editor/semantic/LHnbProjectContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/hadra-lang/src/main/java/net/hl/lang/Int4ToIntFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/lib/hadra-lang/src/main/java/net/hl/lang/Int4ToIntFunction.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="CodeStyleSettingsInfer">
-    <option name="done" value="true" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Interface" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GitSEFilterConfiguration">
-    <file-type-list>
-      <filtered-out-file-type name="LOCAL_BRANCH" />
-      <filtered-out-file-type name="REMOTE_BRANCH" />
-      <filtered-out-file-type name="TAG" />
-      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
-    </file-type-list>
-  </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="$USER_HOME$/.m2/wrapper/dists/apache-maven-3.5.4-bin/4lcg54ki11c6mp435njk296gm5/apache-maven-3.5.4" />
-      </MavenGeneralSettings>
-    </option>
   </component>
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
@@ -68,477 +47,198 @@
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
   </component>
-  <component name="ProjectId" id="1dTH9fIwjMsvxmMNBtApNP1g3fz" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2rJGPfF9KWyvRIXBLAwKvLB9IIh" />
   <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="eu.ydp.idea.ts.spec.generator.settings.spec.template" value="import {$ClassName$} from '$TestsRelativePath$../src/$classRelativePath$/$ClassName$';&#10;&#10;describe('$ClassName$', () =&gt; {&#10;  let $ObjName$:$ClassName$;&#10;&#10;  beforeEach(() =&gt; {&#10;    $ObjName$ = new $ClassName$();&#10;  });&#10;&#10;  describe('', () =&gt; {&#10;    it('', () =&gt; {&#10;      // given&#10;&#10;      // when&#10;&#10;      // then&#10;    });&#10;  });&#10;});&#10;" />
-    <property name="extract.method.default.visibility" value="private" />
-    <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/types" />
-    <property name="last_opened_file_path" value="$USER_HOME$" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.17" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
-  </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples" />
-      <recent name="$PROJECT_DIR$/ide-support/hl4nb/src/main/resources/net/hl/ide" />
-      <recent name="$PROJECT_DIR$/extra" />
-      <recent name="$PROJECT_DIR$/build-support" />
-      <recent name="$PROJECT_DIR$/hadra-build-tool/src/test/resources/net" />
-    </key>
-    <key name="MoveInnerDialog.RECENTS_KEY">
-      <recent name="net.vpc.common.jeep.impl.types" />
-      <recent name="net.vpc.common.jeep.impl.types.host" />
-      <recent name="net.hl.compiler.core.types" />
-      <recent name="net.hl.compiler.parser" />
-      <recent name="net.vpc.common.textsource.log.impl" />
-    </key>
-    <key name="MoveMembersDialog.RECENTS_KEY">
-      <recent name="net.hl.compiler.core.types.JPrimitiveModifierAnnotation" />
-      <recent name="net.vpc.common.jeep.util.JeepUtils" />
-      <recent name="net.vpc.hadralang.compiler.parser.HLParserOptions" />
-      <recent name="net.vpc.common.jeep.util.JTypeUtils" />
-      <recent name="net.vpc.hadralang.compiler.utils.HTokenUtils" />
-    </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="net.vpc.common.jeep" />
-      <recent name="net" />
-      <recent name="net.hl.ide" />
-      <recent name="net.hl.editor.hl4nb" />
-      <recent name="net.hl.editor" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/tokenizer" />
-      <recent name="$PROJECT_DIR$/build/hadra-build-tool/src/test/resources/net/hl/test/compiler/examples" />
-      <recent name="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/success" />
-      <recent name="$PROJECT_DIR$/hadra-lang/src/test/resources/net/vpc/hadralang/test/compiler/fail" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="net.hl.compiler.core.invokables" />
-      <recent name="net.hl.compiler.core.types" />
-      <recent name="net.vpc.common.jeep.impl.types" />
-      <recent name="net.vpc.common.jeep" />
-      <recent name="net.vpc.common.jeep.impl.types.host" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Application.HLMain">
-    <configuration name="HLMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.HLMain hadruwaves-tutorial-hl.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.IntRangeTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestCompilerFail.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.TestCompilerFail.testCompiler0009.executor&quot;: &quot;Debug&quot;,
+    &quot;Maven.hadra-build-tool [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hadra-lang [clean,install,-DforkCount=0...].executor&quot;: &quot;Debug&quot;,
+    &quot;Maven.root-hadra-build [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/vpc/xprojects/lang/hadra-lang&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager" selected="Application.HLMain hadruwaves-tutorial-hl">
+    <configuration name="HLMain hadruwaves-tutorial-hl" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.thevpc.hl.build.HLMain" />
       <module name="hl" />
-      <option name="PROGRAM_PARAMETERS" value="a.hl" />
-      <option name="VM_PARAMETERS" value="-Dnuts.args=&quot;--verbose&quot;" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$" />
+      <option name="PROGRAM_PARAMETERS" value="--clean --run --root src/main/hl/Example1.hl" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../scholar/scholar-mw/tutorials/hadruwaves-tutorial-hl/" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IntRangeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="hadra-lang" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="net.thevpc.hl.build.*" />
+          <option name="PATTERN" value="net.hl.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestCompileNutsInstaller" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="TestCompile" />
-      <module name="hadra-example" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="All in kafka-spring-cloud01" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="kafka-spring-cloud01" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestCompilerSuccess" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="hadra-build-tool" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="net.vpc.hl.test.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="net.vpc.hl.test" />
-      <option name="MAIN_CLASS_NAME" value="net.vpc.hl.test.TestCompilerSuccess" />
+      <option name="PACKAGE_NAME" value="net.hl.test" />
+      <option name="MAIN_CLASS_NAME" value="net.hl.test.IntRangeTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestCompilerSuccess.testCompiler0023" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCompilerFail" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="hadra-build-tool" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="net.vpc.hl.test.*" />
+          <option name="PATTERN" value="net.thevpc.hl.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="net.vpc.hl.test" />
-      <option name="MAIN_CLASS_NAME" value="net.vpc.hl.test.TestCompilerSuccess" />
-      <option name="METHOD_NAME" value="testCompiler0023" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="net.thevpc.hl.test" />
+      <option name="MAIN_CLASS_NAME" value="net.thevpc.hl.test.TestCompilerFail" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestCompilerSuccess.testCompiler0038" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCompilerFail.testCompiler0009" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="hadra-build-tool" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="net.vpc.hl.test.*" />
+          <option name="PATTERN" value="net.thevpc.hl.test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="net.vpc.hl.test" />
-      <option name="MAIN_CLASS_NAME" value="net.vpc.hl.test.TestCompilerSuccess" />
-      <option name="METHOD_NAME" value="testCompiler0038" />
+      <option name="PACKAGE_NAME" value="net.thevpc.hl.test" />
+      <option name="MAIN_CLASS_NAME" value="net.thevpc.hl.test.TestCompilerFail" />
+      <option name="METHOD_NAME" value="testCompiler0009" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration name="Remote JVM" type="Remote">
-      <module name="hl" />
-      <option name="USE_SOCKET_TRANSPORT" value="true" />
-      <option name="SERVER_MODE" value="false" />
-      <option name="SHMEM_ADDRESS" />
-      <option name="HOST" value="localhost" />
-      <option name="PORT" value="5005" />
-      <option name="AUTO_RESTART" value="false" />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="5005" />
-        <option name="LOCAL" value="false" />
-      </RunnerSettings>
-      <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.TestCompileNutsInstaller" />
-      <item itemvalue="Application.HLMain" />
-      <item itemvalue="JUnit.All in kafka-spring-cloud01" />
-      <item itemvalue="JUnit.TestCompilerSuccess" />
-      <item itemvalue="JUnit.TestCompilerSuccess.testCompiler0023" />
-      <item itemvalue="JUnit.TestCompilerSuccess.testCompiler0038" />
-      <item itemvalue="Remote JVM Debug.Remote JVM" />
+      <item itemvalue="Application.HLMain hadruwaves-tutorial-hl" />
+      <item itemvalue="JUnit.IntRangeTest" />
+      <item itemvalue="JUnit.TestCompilerFail" />
+      <item itemvalue="JUnit.TestCompilerFail.testCompiler0009" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.HLMain" />
-        <item itemvalue="JUnit.TestCompilerSuccess.testCompiler0038" />
-        <item itemvalue="JUnit.TestCompilerSuccess.testCompiler0023" />
-        <item itemvalue="JUnit.TestCompilerSuccess" />
-        <item itemvalue="JUnit.All in kafka-spring-cloud01" />
+        <item itemvalue="JUnit.TestCompilerFail.testCompiler0009" />
+        <item itemvalue="JUnit.TestCompilerFail" />
+        <item itemvalue="JUnit.IntRangeTest" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="f1cf708f-f133-4792-a05e-0ddd77f1da07" name="Default Changelist" comment="" />
-      <created>1592442014074</created>
+      <changelist id="3cf2d979-179c-468c-8e0e-fdcb2bf3d484" name="Changes" comment="" />
+      <created>1736269742369</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1592442014074</updated>
+      <updated>1736269742369</updated>
+      <workItem from="1736269743452" duration="2917000" />
+      <workItem from="1736348886462" duration="1587000" />
+      <workItem from="1736460113844" duration="1694000" />
+      <workItem from="1736505966294" duration="2918000" />
+      <workItem from="1736632741737" duration="2369000" />
     </task>
-    <task id="LOCAL-00001" summary="added support to jdk9+ (jmod files)&#10;tested on jdk14">
-      <created>1592597936514</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1592597936514</updated>
-    </task>
-    <task id="LOCAL-00002" summary="validating test batteries. introducing 'static.methodName' and other preprocessor variables">
-      <created>1592701800320</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1592701800320</updated>
-    </task>
-    <task id="LOCAL-00003" summary="validating test batteries.">
-      <created>1592756313960</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1592756313960</updated>
-    </task>
-    <task id="LOCAL-00004" summary="validating test batteries.">
-      <created>1592756419413</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1592756419413</updated>
-    </task>
-    <task id="LOCAL-00005" summary="JTypeOrLambda-&gt;JTypePattern">
-      <created>1592783381622</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1592783381622</updated>
-    </task>
-    <task id="LOCAL-00006" summary="JTypeOrLambda-&gt;JTypePattern">
-      <created>1592784176099</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1592784176099</updated>
-    </task>
-    <task id="LOCAL-00007" summary="testing try/catch constructs, introducing Map construct (a la json)">
-      <created>1592908283275</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1592908283275</updated>
-    </task>
-    <task id="LOCAL-00008" summary="moving to more standard package &quot;net.hl&quot; instead of &quot;net.vpc.hadralang&quot;, stdlib moved to &quot;net.hl.lang&quot;">
-      <created>1593121332127</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1593121332127</updated>
-    </task>
-    <task id="LOCAL-00009" summary="spec change : using fun keyword instead of def">
-      <created>1593123817073</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1593123817073</updated>
-    </task>
-    <task id="LOCAL-00010" summary="spec change : using fun keyword instead of def">
-      <created>1593126251691</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1593126251691</updated>
-    </task>
-    <task id="LOCAL-00011" summary="spec change : using fun keyword instead of def">
-      <created>1593126696068</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1593126696068</updated>
-    </task>
-    <task id="LOCAL-00012" summary="spec change : all modifiers are annotations">
-      <created>1593513579209</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1593513579209</updated>
-    </task>
-    <task id="LOCAL-00013" summary="spec change : all modifiers are annotations">
-      <created>1593513710335</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1593513710335</updated>
-    </task>
-    <task id="LOCAL-00014" summary="spec change : all modifiers are annotations">
-      <created>1593514170727</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1593514170727</updated>
-    </task>
-    <task id="LOCAL-00015" summary="spec change : all modifiers are annotations">
-      <created>1593514277463</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1593514277463</updated>
-    </task>
-    <task id="LOCAL-00016" summary="spec change : all modifiers are annotations">
-      <created>1593514358133</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1593514358133</updated>
-    </task>
-    <task id="LOCAL-00017" summary="spec change : all modifiers are annotations">
-      <created>1593908278657</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1593908278657</updated>
-    </task>
-    <task id="LOCAL-00018" summary="20200710">
-      <created>1594399804815</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1594399804815</updated>
-    </task>
-    <task id="LOCAL-00019" summary="[CHANGED] Version Bumped to nuts 0.8.2&#10;[ADDED] Initial documentation">
-      <created>1630393769811</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1630393769811</updated>
-    </task>
-    <task id="LOCAL-00020" summary="[CHANGED] Version Bumped to nuts 0.8.3">
-      <created>1634593753879</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1634593753879</updated>
-    </task>
-    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="added support to jdk9+ (jmod files)&#10;tested on jdk14" />
-    <MESSAGE value="validating test batteries. introducing 'static.methodName' and other preprocessor variables" />
-    <MESSAGE value="validating test batteries." />
-    <MESSAGE value="JTypeOrLambda-&gt;JTypePattern" />
-    <MESSAGE value="testing try/catch constructs, introducing Map construct (a la json)" />
-    <MESSAGE value="moving to more standard package &quot;net.hl&quot; instead of &quot;net.vpc.hadralang&quot;, stdlib moved to &quot;net.hl.lang&quot;" />
-    <MESSAGE value="spec change : using fun keyword instead of def" />
-    <MESSAGE value="spec change : all modifiers are annotations" />
-    <MESSAGE value="20200710" />
-    <MESSAGE value="[CHANGED] Version Bumped to nuts 0.8.2&#10;[ADDED] Initial documentation" />
-    <MESSAGE value="[CHANGED] Version Bumped to nuts 0.8.3" />
-    <option name="LAST_COMMIT_MESSAGE" value="[CHANGED] Version Bumped to nuts 0.8.3" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/HLJCompilerContext.java</url>
-          <line>1789</line>
-          <option name="timeStamp" value="108" />
+          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/HL.java</url>
+          <line>157</line>
+          <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/impl/functions/JFunctionFromInvoke.java</url>
-          <line>20</line>
-          <option name="timeStamp" value="110" />
+          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage02Preprocessor.java</url>
+          <line>241</line>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/JTypePattern.java</url>
-          <line>126</line>
-          <option name="timeStamp" value="117" />
+          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage05CallResolver.java</url>
+          <line>1753</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/util/JTypeUtils.java</url>
-          <line>640</line>
-          <option name="timeStamp" value="122" />
+          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HCompletion.java</url>
+          <line>65</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/ast/HNMap.java</url>
-          <line>28</line>
-          <option name="timeStamp" value="134" />
+          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/HCompletion.java</url>
+          <line>83</line>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <condition expression="h.getElement()==null" language="JAVA" />
-          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/HLJCompilerContext.java</url>
-          <line>2826</line>
-          <option name="timeStamp" value="140" />
+          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage04DefinitionResolver.java</url>
+          <line>623</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <condition expression="n==null" language="JAVA" />
-          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/elements/HNElementExpr.java</url>
-          <line>23</line>
-          <option name="timeStamp" value="145" />
+          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage04DefinitionResolver.java</url>
+          <line>639</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <condition expression="def==null" language="JAVA" />
-          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/JToken.java</url>
-          <line>307</line>
-          <option name="timeStamp" value="146" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <condition expression="t.startLineNumber&lt;-1" language="JAVA" />
-          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/impl/tokens/JTokenizerImpl.java</url>
-          <line>248</line>
-          <option name="timeStamp" value="147" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/impl/tokens/JTokenizerImpl.java</url>
-          <line>216</line>
-          <option name="timeStamp" value="152" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/core/DefaultJeep.java</url>
-          <line>304</line>
-          <option name="timeStamp" value="220" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/impl/types/DefaultJModifierList.java</url>
-          <line>138</line>
-          <option name="timeStamp" value="225" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-jeep/vpc-common-jeep/src/main/java/net/vpc/common/jeep/core/DefaultJParser.java</url>
-          <line>105</line>
-          <option name="timeStamp" value="233" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/test/java/net/vpc/hl/test/TestTokenizer.java</url>
-          <line>267</line>
-          <option name="timeStamp" value="234" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/core/invokables/HLJCompilerContext.java</url>
-          <line>3323</line>
-          <option name="timeStamp" value="248" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../vpc-common/vpc-common-text-source-log/src/main/java/net/vpc/common/textsource/log/impl/DefaultJTextSourceLog.java</url>
-          <line>54</line>
-          <option name="timeStamp" value="249" />
+          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/stages/HStage04DefinitionResolver.java</url>
+          <line>605</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/build/hl/src/main/java/net/thevpc/hl/build/HLMain.java</url>
-          <line>94</line>
-          <option name="timeStamp" value="250" />
+          <line>23</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>jar:///usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/src.zip!/java/io/UncheckedIOException.java</url>
-          <line>48</line>
-          <option name="timeStamp" value="251" />
+          <url>file://$PROJECT_DIR$/build/hl/src/main/java/net/thevpc/hl/build/HLMain.java</url>
+          <line>22</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>jar:///usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/src.zip!/java/io/UncheckedIOException.java</url>
-          <line>61</line>
-          <option name="timeStamp" value="252" />
+          <url>file://$PROJECT_DIR$/build/hl/src/main/java/net/thevpc/hl/build/HLMain.java</url>
+          <line>17</line>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>jar:///usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/src.zip!/java/io/FileNotFoundException.java</url>
-          <line>63</line>
-          <option name="timeStamp" value="253" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar:///usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/src.zip!/java/io/FileNotFoundException.java</url>
-          <line>76</line>
-          <option name="timeStamp" value="254" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <condition expression="file.contains(&quot;file:&quot;)" language="JAVA" />
-          <url>file://$PROJECT_DIR$/build/hadra-build-tool/src/main/java/net/hl/compiler/utils/DepIdAndFile.java</url>
-          <line>19</line>
-          <option name="timeStamp" value="255" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$MAVEN_REPOSITORY$/net/thevpc/common/thevpc-common-text-source-log/1.3.0/thevpc-common-text-source-log-1.3.0-sources.jar!/net/thevpc/common/textsource/log/impl/DefaultJTextSourceLog.java</url>
-          <line>93</line>
-          <option name="timeStamp" value="256" />
+          <url>jar://$MAVEN_REPOSITORY$/net/thevpc/nuts/nuts/0.8.5/nuts-0.8.5.jar!/net/thevpc/nuts/NApplications.class</url>
+          <line>103</line>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -605,7 +605,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                 } else {
                     HNTypeToken returnTypeName = method.getReturnTypeName();
                     JType returnType = returnTypeName == null ? null : returnTypeName.getTypeVal();
-                    DefaultJRawMethod jMethod = (DefaultJRawMethod) ((DefaultJType)jType).addMethod(
+                    JMethod jMethod =  ((DefaultJType)jType).addMethod(
                             compilerContext.signature(JSignature.of(
                                     method.getNameToken().sval,
                                     method.getArguments().stream()
@@ -621,7 +621,9 @@ public class HStage04DefinitionResolver extends HStageType2 {
                             HNodeUtils.toAnnotations(method.getAnnotations()),
                             false
                     );
-                    jMethod.setSourceName(HSharedUtils.getSourceName(method));
+                    if(jMethod instanceof DefaultJRawMethod) {
+                        ((DefaultJRawMethod)jMethod).setSourceName(HSharedUtils.getSourceName(method));
+                    }
                     method.setInvokable(jMethod);
                     if (returnType == null) {
                         List<JMethod> noTypeMethods = HStageUtils.getNoTypeMethods(compilerContext);
@@ -637,6 +639,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
             } catch (Exception ex) {
                 LOG.log(Level.FINE, "unexpected error : " + ex.toString(), ex);
                 compilerContext.getLog().jerror("X000", null, method.getStartToken(), "unexpected error : " + ex.toString());
+                ex.printStackTrace();
             }
         } else {
             compilerContext.getLog().jerror("X000", null, method.getStartToken(), "you cannot create function inside a local bloc (for the moment)");

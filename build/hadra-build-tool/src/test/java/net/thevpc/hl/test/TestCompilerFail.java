@@ -1,7 +1,9 @@
 package net.thevpc.hl.test;
 
 import net.hl.compiler.core.HProject;
+import net.thevpc.nuts.Nuts;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
@@ -10,6 +12,11 @@ import net.thevpc.hl.test.util.TestHelper;
 public class TestCompilerFail {
 
     private static final Logger log = Logger.getLogger(TestCompilerFail.class.getName());
+
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
 
     @Test
     public void testCompiler0001() {

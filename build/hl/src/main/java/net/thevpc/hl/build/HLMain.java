@@ -15,13 +15,13 @@ public class HLMain implements NApplication {
     private static final String PREFERRED_ALIAS = "hl";
 
     public static void main(String[] args) {
-        new HLMain().runAndExit(args);
+        new HLMain().run(args);
     }
 
     @Override
-    public void run(NSession session) {
-        session.runAppCmdLine(new NCmdLineRunner() {
-            HL hl = HL.create(session);
+    public void run() {
+        NApp.of().processCmdLine(new NCmdLineRunner() {
+            HL hl = HL.create();
             boolean noMoreOptions = false;
 
             @Override
@@ -123,43 +123,44 @@ public class HLMain implements NApplication {
                     if (e.getWarningCount() > 0) {
                         m += (" and " + (e.getWarningCount() > 1 ? (String.valueOf(e.getWarningCount()) + " errors") : "1 error"));
                     }
-                    throw new NExecutionException(session, NMsg.ofPlain(m), 201);
+                    throw new NExecutionException(NMsg.ofPlain(m), 201);
                 }
             }
         });
     }
 
     @Override
-    public void onUninstallApplication(NSession session) {
-        NCommands.of(session).removeCommandIfExists(PREFERRED_ALIAS);
-        NConfigs.of(session).save();
+    public void onUninstallApplication() {
+        NWorkspace.of().removeCommandIfExists(PREFERRED_ALIAS);
+        NWorkspace.of().saveConfig();
     }
 
     @Override
-    public void onUpdateApplication(NSession session) {
-        onInstallApplication(session);
+    public void onUpdateApplication() {
+        onInstallApplication();
     }
 
     @Override
-    public void onInstallApplication(NSession session) {
-        NCommands commands = NCommands.of(session);
-        NCustomCmd a = commands.findCommand(PREFERRED_ALIAS, session.getAppId(), session.getAppId());
+    public void onInstallApplication() {
+        NWorkspace ws = NWorkspace.of();
+        NApp app = NApp.of();
+        NId appId = app.getId().get();
+        NCustomCmd a = ws.findCommand(PREFERRED_ALIAS, appId, appId);
         boolean update = false;
         boolean add = false;
         if (a != null) {
             update = true;
-        } else if (commands.findCommand(PREFERRED_ALIAS) == null) {
+        } else if (ws.findCommand(PREFERRED_ALIAS) == null) {
             add = true;
         }
         if (update || add) {
-            commands
-                    .setSession((update ? session.copy().setConfirm(NConfirmationMode.YES) : session))
+            ws
                     .addCommand(new NCommandConfig()
                             .setName(PREFERRED_ALIAS)
-                            .setOwner(session.getAppId())
-                            .setCommand(session.getAppId().getShortName())
+                            .setOwner(appId)
+                            .setCommand(appId.getShortName())
                     );
-            NConfigs.of(session).save();
+            ws.saveConfig();
         }
     }
 

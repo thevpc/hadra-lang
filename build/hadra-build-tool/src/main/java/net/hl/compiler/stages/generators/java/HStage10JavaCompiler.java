@@ -46,6 +46,11 @@ import net.thevpc.jeep.source.JTextSourceFactory;
 import net.thevpc.jeep.source.JTextSourceToken;
 import net.thevpc.jeep.util.JStringUtils;
 import net.thevpc.nuts.*;
+import net.thevpc.nuts.format.NDependencyFormat;
+import net.thevpc.nuts.format.NDescriptorFormat;
+import net.thevpc.nuts.runtime.standalone.DefaultNDependencyBuilder;
+import net.thevpc.nuts.runtime.standalone.DefaultNDescriptorBuilder;
+import net.thevpc.nuts.runtime.standalone.DefaultNEnvConditionBuilder;
 
 public class HStage10JavaCompiler extends AbstractHStage {
 
@@ -147,11 +152,11 @@ public class HStage10JavaCompiler extends AbstractHStage {
                                             i
                                             -> new DefaultNDependencyBuilder()
                                                     .setId(
-                                                            NId.of(i.getId()).get()
+                                                            NId.of(i.getId())
                                                     ).build()
                                     ).collect(Collectors.toList())
                     ).build();
-            desc.formatter(project.getSession())
+            NDescriptorFormat.of(desc)
                     .print(new File(classesFolder, "META-INF/" + NConstants.Files.DESCRIPTOR_FILE_NAME));
             jarFolder.mkdirs();
             File jarPath = new File(jarFolder, jarName);

@@ -14,7 +14,6 @@ import net.thevpc.nuts.NSession;
  */
 public interface HadraContext extends JContext {
 
-    NSession getSession();
 
     @Override
     public HadraContext newContext();

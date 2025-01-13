@@ -23,11 +23,8 @@ import net.hl.lang.HDefaults;
 import net.hl.lang.JExports;
 import net.hl.lang.JSignature;
 import net.hl.lang.ext.*;
-import net.thevpc.nuts.Nuts;
-import net.thevpc.nuts.NSession;
 
 /**
- *
  * @author vpc
  */
 public final class HadraLanguage extends DefaultJeep implements HadraContext {
@@ -45,34 +42,27 @@ public final class HadraLanguage extends DefaultJeep implements HadraContext {
 
     public static HadraLanguage getSingleton() {
         if (RANDOM_INSTANCE == null) {
-            RANDOM_INSTANCE = new HadraLanguage(Nuts.openWorkspace());
+            RANDOM_INSTANCE = new HadraLanguage();
         }
         return RANDOM_INSTANCE;
     }
 
-    private NSession session;
-
-    public HadraLanguage(NSession session) {
-        this(session, null);
+    public HadraLanguage() {
+        this(null);
     }
 
-    public HadraLanguage(NSession session, ClassLoader classLoader) {
-        super(new HJeepFactory(session), classLoader);
+    public HadraLanguage(ClassLoader classLoader) {
+        super(new HJeepFactory(), classLoader);
         if (RANDOM_INSTANCE == null) {
             RANDOM_INSTANCE = this;
         }
-        this.session = session;
         prepare();
     }
 
-    @Override
-    public NSession getSession() {
-        return session;
-    }
 
     @Override
     public HadraContext newContext() {
-        return new HadraContextImpl(session, this);
+        return new HadraContextImpl(this);
     }
 
     protected void prepare() {

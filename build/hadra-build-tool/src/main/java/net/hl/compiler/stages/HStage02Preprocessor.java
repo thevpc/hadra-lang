@@ -72,7 +72,7 @@ public class HStage02Preprocessor extends AbstractHStage {
         HIndexedProject ip = null;
         String projectRoot = options.getProjectRoot();
         JModuleId defaultModuleId = JModuleId.DEFAULT_MODULE_ID();
-        DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true, project.getSession());
+        DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true);
         if (defaultLangPaths.length == 0) {
             project.log().jerror("X000", null, null, "unresolvable hadra-lang library");
         }
@@ -91,7 +91,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                 if (JStringUtils.isBlank(JModuleId.valueOf(ip.getModuleId()).getArtifactId())) {
                     project.log().jerror("X000", null, metaPackage == null ? anyToken : metaPackage.getStartToken(), "missing artifact name");
                 }
-                DepIdAndFile[] u = HStageUtils.resolveLangPaths(ip.getDependencies(), null, false, false, true, project.getSession());
+                DepIdAndFile[] u = HStageUtils.resolveLangPaths(ip.getDependencies(), null, false, false, true);
                 if (u.length > 0) {
                     List<DepIdAndFile> depIds = new ArrayList<>(Arrays.asList(ip.getDependencies()));
                     depIds.add(u[0]);
@@ -191,7 +191,7 @@ public class HStage02Preprocessor extends AbstractHStage {
             }
             metaPackage.setElement(new HNElementNonExpr());
             moduleId = JModuleId.replaceBlanks(moduleId, JModuleId.DEFAULT_MODULE_ID());
-            DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true, project.getSession());
+            DepIdAndFile[] defaultLangPaths = HStageUtils.resolveLangPaths(null, null, true, true, true);
             if (defaultLangPaths.length == 0) {
                 project.log().jerror("X000", null, null, "unresolvable hadra-lang library");
             }
@@ -243,7 +243,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                     return null;
                 }
                 HNBlock.CompilationUnitBlock cub = (HNBlock.CompilationUnitBlock) nn;
-                HProject preProcessorProgram = new HProject(preProcessorContext, project.indexer(), project.getSession());
+                HProject preProcessorProgram = new HProject(preProcessorContext, project.indexer());
                 preProcessorProgram.setIndexedProject(new HIndexedProject(projectId,
                                 "HLPreprocessor#0.1.0",
                                 currentMetaPackageSource,
@@ -314,12 +314,11 @@ public class HStage02Preprocessor extends AbstractHStage {
                     )
             );
         }
-        NSession session = project.getSession();
-        NSearchCmd search = NSearchCmd.of(session)
+        NSearchCmd search = NSearchCmd.of()
                 .setDependencies(true).setInlineDependencies(true)
                 .setLatest(true).setContent(true)
-                .setDependencyFilter(NDependencyFilters.of(session).byRunnable())
-                .setSession(session);
+                .setDependencyFilter(NDependencyFilters.of().byRunnable())
+                ;
         boolean someSearch = false;
         for (HDependency d : env.dependencies()) {
             someSearch = true;
@@ -329,7 +328,7 @@ public class HStage02Preprocessor extends AbstractHStage {
         for (HDependency dep : env.dependencies()) {
             NDefinition def = null;
             try {
-                def = NFetchCmd.of(session).setId(dep.getName()).setEffective(true).setContent(true).getResultDefinition();
+                def = NFetchCmd.of().setId(dep.getName()).setEffective(true).setContent(true).getResultDefinition();
             } catch (NNotFoundException ex) {
                 //
             }
@@ -344,7 +343,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                 for (NDependency dep : depd.transitive().toList()) {
                     NDefinition def = null;
                     try {
-                        def = NFetchCmd.of(session).setId(dep.toId()).setEffective(true).setContent(true).getResultDefinition();
+                        def = NFetchCmd.of(dep.toId()).setEffective(true).setContent(true).getResultDefinition();
                     } catch (NNotFoundException ex) {
                         //
                     }

@@ -15,7 +15,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
-import net.thevpc.nuts.Nuts;
 
 /**
  *
@@ -97,7 +96,7 @@ public class HLMvnPlugin extends AbstractMojo {
         URLClassLoader classLoader = new URLClassLoader(classLoaderURLs.toArray(new URL[0]),
                 Thread.currentThread().getContextClassLoader()
         );
-        HL hl = new HL(classLoader, null, Nuts.openWorkspace());
+        HL hl = new HL(classLoader, null);
         for (String item : compileClasspathElements) {
             if (item.equals(buildDirectory) || item.startsWith(buildDirectory + File.separator)) {
                 //ignore

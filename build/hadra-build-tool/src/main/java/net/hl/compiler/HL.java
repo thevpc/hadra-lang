@@ -34,20 +34,16 @@ public class HL extends HOptions<HL> {
     private HProjectContext projectContext;
 
     public HL() {
-        this((NSession) null);
+        this((ClassLoader) null, null);
     }
 
-    public HL(NSession session) {
-        this((ClassLoader) null, null, session);
+    public HL(ClassLoader classLoader, HIndexer indexer) {
+        this(new HadraLanguage(classLoader), indexer);
     }
 
-    public HL(ClassLoader classLoader, HIndexer indexer, NSession session) {
-        this(new HadraLanguage(session, classLoader), indexer, session);
-    }
-
-    public HL(HadraContext language, HIndexer indexer, NSession session) {
+    public HL(HadraContext language, HIndexer indexer) {
         this(new DefaultHLProjectContext(
-                        language == null ? session == null ? HadraLanguage.getSingleton() : new HadraLanguage(session) : language,
+                        language == null ? HadraLanguage.getSingleton() : language,
                         indexer == null ? new HIndexerImpl() : indexer,
                         null
                 )
@@ -62,7 +58,7 @@ public class HL extends HOptions<HL> {
     }
 
     public static HL create(NSession session) {
-        return new HL(session);
+        return new HL();
     }
 
     public static HL create() {
@@ -76,15 +72,15 @@ public class HL extends HOptions<HL> {
     public HProject compile() {
         HL options = this;
         HadraContext context = languageContext().newContext();
-        NSession session = projectContext.getSession();
-        HProject project = new HProject(context, projectContext.indexer(), session);
+        NSession session = NSession.of();
+        HProject project = new HProject(context, projectContext.indexer());
         Chronometer globalChronometer = Chronometer.start();
-        NTexts texts = NTexts.of(session);
-        project.getSession().out().println(
+        NTexts texts = NTexts.of();
+        session.out().println(
                 StringUtils.center2(
                         "[ " + texts.ofStyled("Hadra Lang Build Tool", NTextStyle.primary(1)).toString()
                                 + " ]",
-                        80, '-', session)
+                        80, '-')
         );
         project.log().jinfo("X000", null, null, "compiler started");
 

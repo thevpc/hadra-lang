@@ -4,7 +4,6 @@ import net.hl.compiler.core.invokables.HLJCompilerContext;
 import net.hl.compiler.utils.DepIdAndFile;
 import net.thevpc.jeep.JField;
 import net.thevpc.jeep.JMethod;
-import net.thevpc.nuts.NSession;
 import net.thevpc.nuts.io.NPath;
 import net.thevpc.nuts.util.NBlankable;
 
@@ -82,7 +81,7 @@ public class HStageUtils {
 //        }
 //    }
 
-    public static DepIdAndFile[] resolveLangPaths(DepIdAndFile[] deps, String[] dependencyFiles, boolean checkClassLoader, boolean checkCompilerVM, boolean checkContent, NSession session) {
+    public static DepIdAndFile[] resolveLangPaths(DepIdAndFile[] deps, String[] dependencyFiles, boolean checkClassLoader, boolean checkCompilerVM, boolean checkContent) {
         LinkedHashSet<DepIdAndFile> found = new LinkedHashSet<>();
         //check depdencies
         if (deps != null) {
@@ -94,7 +93,7 @@ public class HStageUtils {
         }
         if (dependencyFiles != null) {
             for (String dependencyFile : dependencyFiles) {
-                DepIdAndFile e = hadraLangDepIdAndFileForPath(dependencyFile, session);
+                DepIdAndFile e = hadraLangDepIdAndFileForPath(dependencyFile);
                 if (e != null) {
                     found.add(e);
                 }
@@ -106,7 +105,7 @@ public class HStageUtils {
                 URLClassLoader ucl = (URLClassLoader) cl;
                 for (URL url : ucl.getURLs()) {
                     String s = url.toString();
-                    DepIdAndFile e = hadraLangDepIdAndFileForPath(s, session);
+                    DepIdAndFile e = hadraLangDepIdAndFileForPath(s);
                     if (e != null) {
                         found.add(e);
                     }
@@ -118,7 +117,7 @@ public class HStageUtils {
             String cp = System.getProperty("java.class.path");
             if (cp != null) {
                 for (String s : cp.split(File.pathSeparator)) {
-                    DepIdAndFile e = hadraLangDepIdAndFileForPath(s, session);
+                    DepIdAndFile e = hadraLangDepIdAndFileForPath(s);
                     if (e != null) {
                         found.add(e);
                     }
@@ -128,7 +127,7 @@ public class HStageUtils {
         return found.toArray(new DepIdAndFile[0]);
     }
 
-    public static DepIdAndFile hadraLangDepIdAndFileForPath(String path, NSession session) {
+    public static DepIdAndFile hadraLangDepIdAndFileForPath(String path) {
         String s0 = path;
         path = path.replace("\\", "/");
         if (path.endsWith("/hadra-lang/target/classes/") || path.endsWith("/hadra-lang/target/classes")) {
@@ -162,7 +161,7 @@ public class HStageUtils {
             }
             return null;
         } else if (path.matches(".*/hadra-lang-[a-z0-9.-]+[.]jar")) {
-            try (InputStream is = NPath.of(s0,session).getInputStream()) {
+            try (InputStream is = NPath.of(s0).getInputStream()) {
                 try (ZipInputStream zis = new ZipInputStream(is)) {
                     //get the zipped file list entry
                     ZipEntry ze = zis.getNextEntry();

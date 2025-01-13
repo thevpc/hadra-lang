@@ -13,14 +13,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
-import net.thevpc.nuts.NSession;
 
 public class HJeepFactory extends DefaultJeepFactory {
 
-    private NSession session;
-
-    public HJeepFactory(NSession session) {
-        this.session = session;
+    public HJeepFactory() {
     }
 
     @Override
@@ -31,7 +27,7 @@ public class HJeepFactory extends DefaultJeepFactory {
 
     @Override
     public JCompilerLog createLog(JContext context) {
-        return new HCompilerLog(session);
+        return new HCompilerLog();
     }
 
     @Override

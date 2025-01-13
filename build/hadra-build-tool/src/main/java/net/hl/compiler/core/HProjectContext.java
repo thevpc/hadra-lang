@@ -5,8 +5,6 @@ import net.thevpc.nuts.NSession;
 
 public interface HProjectContext {
 
-    NSession getSession();
-
     HadraContext languageContext();
 
     HIndexer indexer();

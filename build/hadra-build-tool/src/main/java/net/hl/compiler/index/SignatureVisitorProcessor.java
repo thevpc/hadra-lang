@@ -1,9 +1,6 @@
 package net.hl.compiler.index;
 
-import jdk.nashorn.internal.ir.debug.PrintVisitor;
-import net.thevpc.jeep.JTypeName;
 import net.thevpc.jeep.JTypeNameOrVariable;
-import net.thevpc.jeep.JTypes;
 import net.thevpc.jeep.core.types.DefaultTypeName;
 import net.thevpc.jeep.core.types.JTypeNameParser;
 import org.objectweb.asm.Opcodes;
@@ -27,7 +24,6 @@ class SignatureVisitorProcessor extends SignatureVisitor {
     public SignatureVisitorProcessor(Consumer<JTypeNameOrVariable> c) {
         super(Opcodes.ASM8);
         this.c=c;
-        p = new PrintVisitor();
         init();
     }
 
@@ -50,7 +46,6 @@ class SignatureVisitorProcessor extends SignatureVisitor {
     // Completed Parameter Types are stored here
     private List<JTypeNameOrVariable> parameterTypes = new ArrayList<>(0);
 
-    private final PrintVisitor p;
 
     protected void println(String s) {
         //p.println(s);

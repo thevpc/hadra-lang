@@ -9,12 +9,17 @@ import net.hl.compiler.HL;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.HTask;
 import net.hl.compiler.utils.SetLog;
+import net.thevpc.nuts.Nuts;
 
 /**
  *
  * @author vpc
  */
 public class TestHelper {
+
+    public static void openWorkspace() {
+        Nuts.openWorkspace("-ZyS","-w=test").setSharedInstance();
+    }
 
     public static void printHeader(String header) {
 //        log.log(Level.FINE, "Test :: " + header);

@@ -7,10 +7,8 @@ package net.hl.compiler.utils;
 
 import net.hl.lang.IntToIntFunction;
 import net.thevpc.nuts.NConstants;
-import net.thevpc.nuts.NSession;
 import net.thevpc.nuts.text.NTexts;
 import net.thevpc.nuts.text.NTextStyle;
-import net.thevpc.nuts.text.NTexts;
 
 /**
  *
@@ -59,11 +57,11 @@ public class StringUtils {
         return sb.toString();
     }
 
-    public static String center2(String msg, int length, char c, NSession session) {
+    public static String center2(String msg, int length, char c) {
         StringBuilder sb = new StringBuilder();
         sb.append(msg);
-        NTexts f = NTexts.of(session);
-        int len0 = f.parse(sb.toString()).textLength();
+        NTexts f = NTexts.of();
+        int len0 = f.of(sb.toString()).textLength();
         int variant = 2;
         IntToIntFunction color
                 = variant == 1 ? (i -> 30 + (i % 40) / 2)

@@ -37,7 +37,7 @@ public class HStage11JavaRun extends AbstractHStage {
         HJavaContextHelper jn = HJavaContextHelper.of(project);
         if (jn.getOutputJarFile() != null) {
             try {
-                NExecCmd.of(project.getSession())
+                NExecCmd.of()
                         .addCommand(jn.getOutputJarFile().getCanonicalPath())
                         .setSleepMillis(1000)
                         .setErr(NExecOutput.ofRedirect())

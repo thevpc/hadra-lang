@@ -63,7 +63,7 @@ public class HStage03Indexer extends AbstractHStage {
         HIndexedClass tupleType = indexer.searchType("net.hl.lang.Tuple");
         if (tupleType == null) {
             if (inPreprocessor) {
-                DepIdAndFile[] u = HStageUtils.resolveLangPaths(null,null, true, true, true, project.getSession());
+                DepIdAndFile[] u = HStageUtils.resolveLangPaths(null,null, true, true, true);
                 if (u.length > 0) {
                     indexer.indexLibrary(new File(u[0].getFile()), !incremental, clog);
                 } else {

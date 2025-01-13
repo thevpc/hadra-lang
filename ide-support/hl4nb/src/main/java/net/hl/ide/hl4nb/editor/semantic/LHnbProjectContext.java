@@ -20,11 +20,6 @@ public class LHnbProjectContext implements HProjectContext {
         this.rootId = rootId;
     }
 
-    @Override
-    public NSession getSession() {
-        return context.getSession();
-    }
-
     public String rootId() {
         return rootId;
     }

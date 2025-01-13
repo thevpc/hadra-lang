@@ -15,10 +15,6 @@ public class DefaultHLProjectContext implements HProjectContext {
         this.rootId = rootId;
     }
 
-    public NSession getSession() {
-        return languageContext.getSession();
-    }
-
     public String rootId() {
         return rootId;
     }

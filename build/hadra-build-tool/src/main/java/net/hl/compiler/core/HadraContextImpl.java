@@ -7,7 +7,6 @@ package net.hl.compiler.core;
 
 import net.thevpc.jeep.JContext;
 import net.thevpc.jeep.impl.JContextImpl;
-import net.thevpc.nuts.NSession;
 
 /**
  *
@@ -15,21 +14,14 @@ import net.thevpc.nuts.NSession;
  */
 public class HadraContextImpl extends JContextImpl implements HadraContext {
 
-    private NSession session;
-
-    public HadraContextImpl(NSession session, JContext context) {
+    public HadraContextImpl(JContext context) {
         super(context);
-        this.session = session;
     }
 
     @Override
     public HadraContext newContext() {
-        return new HadraContextImpl(session, this);
+        return new HadraContextImpl(this);
     }
 
-    @Override
-    public NSession getSession() {
-        return session;
-    }
 
 }
