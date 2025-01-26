@@ -31,3 +31,7 @@
 /build/hl/target/
 /build/hl-maven-plugin/target/
 /build/hl/hl.iml
+.idea
+**/*.iml
+**/*.ipr
+**/*.iws
