@@ -55,9 +55,9 @@ public abstract class AbstractComparableRange<T extends Comparable> extends Abst
         sb.append("..");
         if (isEndExclusive()) {
             if (reversedOrder()) {
-                sb.append("<");
-            } else {
                 sb.append(">");
+            } else {
+                sb.append("<");
             }
         }
         sb.append(end());

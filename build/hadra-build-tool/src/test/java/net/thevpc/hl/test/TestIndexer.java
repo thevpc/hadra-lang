@@ -1,14 +1,20 @@
 package net.thevpc.hl.test;
 
 import net.hl.compiler.index.*;
+import net.thevpc.hl.test.util.TestHelper;
 import net.thevpc.jeep.impl.index.mem.JIndexStoreMemory;
 import net.thevpc.jeep.core.JIndexQuery;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
 public class TestIndexer {
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
 
     @Test
     public void testJarIndexer() {

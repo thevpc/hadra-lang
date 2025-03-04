@@ -5,10 +5,12 @@
  */
 package net.thevpc.hl.test;
 
+import net.thevpc.hl.test.util.TestHelper;
 import net.thevpc.jeep.*;
 import net.hl.compiler.HL;
 import net.thevpc.jeep.source.JTextSourceFactory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -21,6 +23,10 @@ import net.thevpc.jeep.core.tokens.JTokenDef;
  * @author vpc
  */
 public class TestTokenizer {
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
 
     @Test
     public void testTok1() {

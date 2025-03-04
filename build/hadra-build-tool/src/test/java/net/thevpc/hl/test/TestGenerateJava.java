@@ -2,6 +2,7 @@ package net.thevpc.hl.test;
 
 import net.hl.compiler.core.HProject;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
@@ -10,6 +11,10 @@ import net.thevpc.hl.test.util.TestHelper;
 public class TestGenerateJava {
 
     private static final Logger log = Logger.getLogger(TestGenerateJava.class.getName());
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
 
 //    @Test
 //    public void testGenerateJava0001() {

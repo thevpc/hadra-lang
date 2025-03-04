@@ -98,7 +98,7 @@ public class HGenCompilationUnitContext {
                             }
                             full += "." + simpleName;
                         }
-                        String s = currentType.getPackageName();
+                        String s = currentType==null?null:currentType.getPackageName();
                         if(s==null){
                             s="";
                         }

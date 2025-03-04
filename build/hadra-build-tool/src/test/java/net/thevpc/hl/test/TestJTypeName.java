@@ -1,11 +1,17 @@
 package net.thevpc.hl.test;
 
+import net.thevpc.hl.test.util.TestHelper;
 import net.thevpc.jeep.JTypeName;
 import net.thevpc.jeep.core.types.DefaultTypeName;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class TestJTypeName {
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
     @Test
     public void test1(){
 //        System.out.println(JTypeName.of("int"));

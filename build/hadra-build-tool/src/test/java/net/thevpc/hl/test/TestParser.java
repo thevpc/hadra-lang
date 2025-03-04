@@ -4,9 +4,14 @@ import net.thevpc.jeep.JNode;
 import net.hl.compiler.core.HProject;
 import net.thevpc.hl.test.util.TestHelper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class TestParser {
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
 //    static class T{
 //        int x;
 //    }

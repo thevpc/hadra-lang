@@ -3284,10 +3284,14 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         }
     }
 
-    public JType getOrCreateType(HNDeclareType type) {
+    public JMutableRawType getOrCreateType(HNDeclareType type) {
         JType jt = type.getjType();
         if (jt != null) {
-            return jt;
+            if(jt instanceof JMutableRawType) {
+                return (JMutableRawType) jt;
+            }else{
+
+            }
         }
         String n = type.getName();
         JNode pn = type.getParentNode();
@@ -3362,9 +3366,9 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 LinkedHashSet<JType> ifs = new LinkedHashSet<>();
                 ifs.addAll(Arrays.asList(jt.getInterfaces()));
                 ifs.add(tt);
-                ((DefaultJType)jt).setInterfaces(ifs.toArray(new JType[0]));
+                ((JMutableRawType)jt).setInterfaces(ifs.toArray(new JType[0]));
             } else {
-                ((DefaultJType)jt).setSuperType(tt);
+                ((JMutableRawType)jt).setSuperType(tt);
             }
         }
         return jt;

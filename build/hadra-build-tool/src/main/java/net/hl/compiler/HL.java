@@ -21,6 +21,7 @@ import net.hl.compiler.index.HIndexer;
 import net.hl.compiler.stages.generators.java.HStage11JavaRun;
 import net.hl.compiler.utils.StringUtils;
 import net.thevpc.nuts.NSession;
+import net.thevpc.nuts.NWorkspace;
 import net.thevpc.nuts.text.NTextStyle;
 import net.thevpc.nuts.text.NTexts;
 

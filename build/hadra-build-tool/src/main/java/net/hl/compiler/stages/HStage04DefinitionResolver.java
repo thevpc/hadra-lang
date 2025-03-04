@@ -582,7 +582,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
         if (tn != null) {
             boolean indexable = isIndexableType(tn, compilerContext);
             try {
-                JType jType = compilerContext.getOrCreateType(tn);
+                JMutableRawType jType = compilerContext.getOrCreateType(tn);
                 if (method.isConstructor()) {
                     JConstructor jConstructor = ((DefaultJType)jType).addConstructor(
                             compilerContext.signature(JNameSignature.of(

@@ -5,8 +5,10 @@
  */
 package net.thevpc.hl.test;
 
+import net.thevpc.hl.test.util.TestHelper;
 import net.thevpc.nuts.Nuts;
 import net.thevpc.nuts.NSession;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,10 +16,13 @@ import org.junit.jupiter.api.Test;
  * @author vpc
  */
 public class TestGenerateTokenClass {
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
 
     @Test
     public void testGen() {
-        final NSession ws = Nuts.openWorkspace().setSharedInstance().currentSession();
         new net.hl.compiler.core.HadraLanguage().generateTokensClass(System.out, "net.hl.compiler.core.HTokenId");
     }
 }

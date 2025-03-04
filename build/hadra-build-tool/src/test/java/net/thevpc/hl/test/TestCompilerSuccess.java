@@ -1,11 +1,16 @@
 package net.thevpc.hl.test;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import net.thevpc.hl.test.util.TestHelper;
 
 public class TestCompilerSuccess {
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
 
     @Test
     public void testCompiler0001() {

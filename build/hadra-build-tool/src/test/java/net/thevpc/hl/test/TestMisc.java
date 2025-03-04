@@ -6,12 +6,18 @@
 package net.thevpc.hl.test;
 
 import net.hl.compiler.utils.HSharedUtils;
+import net.thevpc.hl.test.util.TestHelper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
  * @author vpc
  */
 public class TestMisc {
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
     @Test
     public void testTemporal() {
         System.out.println(HSharedUtils.parseTemporal("12:13"));

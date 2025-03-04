@@ -7,12 +7,19 @@ import net.hl.compiler.core.HadraLanguage;
 import net.hl.compiler.index.HIndexerImpl;
 import net.hl.compiler.index.HIndexedProject;
 import net.hl.compiler.utils.DepIdAndFile;
+import net.thevpc.hl.test.util.TestHelper;
 import net.thevpc.jeep.JCompletionProposal;
 import net.thevpc.nuts.Nuts;
 import net.thevpc.nuts.NSession;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class TestCompletion {
+
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
 
     @Test
     public void test1() {

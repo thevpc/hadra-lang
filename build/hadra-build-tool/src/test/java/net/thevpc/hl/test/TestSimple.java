@@ -7,6 +7,7 @@ package net.thevpc.hl.test;
 
 import net.thevpc.hl.test.util.TestHelper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,6 +15,10 @@ import org.junit.jupiter.api.Test;
  * @author vpc
  */
 public class TestSimple {
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
 
     @Test
     public void testCompiler0019() {

@@ -4,12 +4,18 @@ import net.hl.compiler.HL;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.HTask;
 import net.hl.compiler.utils.SetLog;
+import net.thevpc.hl.test.util.TestHelper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static net.thevpc.hl.test.util.TestHelper.printHeader;
 
 public class TestCompilerJarSuccess {
+    @BeforeAll
+    static void beforeAll(){
+        TestHelper.openWorkspace();
+    }
 
 //    @Test
 //    public void testCompiler0001() {
