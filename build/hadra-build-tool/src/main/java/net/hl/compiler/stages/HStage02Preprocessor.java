@@ -316,7 +316,7 @@ public class HStage02Preprocessor extends AbstractHStage {
         }
         NSearchCmd search = NSearchCmd.of()
                 .setDependencies(true).setInlineDependencies(true)
-                .setLatest(true).setContent(true)
+                .setLatest(true)
                 .setDependencyFilter(NDependencyFilters.of().byRunnable())
                 ;
         boolean someSearch = false;
@@ -328,7 +328,7 @@ public class HStage02Preprocessor extends AbstractHStage {
         for (HDependency dep : env.dependencies()) {
             NDefinition def = null;
             try {
-                def = NFetchCmd.of().setId(dep.getName()).setEffective(true).setContent(true).getResultDefinition();
+                def = NFetchCmd.of().setId(dep.getName()).getResultDefinition();
             } catch (NNotFoundException ex) {
                 //
             }
@@ -343,7 +343,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                 for (NDependency dep : depd.transitive().toList()) {
                     NDefinition def = null;
                     try {
-                        def = NFetchCmd.of(dep.toId()).setEffective(true).setContent(true).getResultDefinition();
+                        def = NFetchCmd.of(dep.toId()).getResultDefinition();
                     } catch (NNotFoundException ex) {
                         //
                     }
