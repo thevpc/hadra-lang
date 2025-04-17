@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.thevpc.hl</groupId>
@@ -16,16 +13,8 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>net.thevpc.hl</groupId>
-            <artifactId>hadra-lang</artifactId>
-            <version>0.1.1</version> <!--updated-->
-        </dependency>
-        <dependency>
-            <groupId>net.thevpc.hl</groupId>
-            <artifactId>hadra-build-tool</artifactId>
-            <version>0.1.2</version>
-        </dependency>
+        <dependency><groupId>net.thevpc.hl</groupId><artifactId>hadra-lang</artifactId><version>0.1.1</version><!--updated--></dependency>
+        <dependency><groupId>net.thevpc.hl</groupId><artifactId>hadra-build-tool</artifactId><version>0.1.2</version></dependency>
     </dependencies>
     <build>
         <plugins>
