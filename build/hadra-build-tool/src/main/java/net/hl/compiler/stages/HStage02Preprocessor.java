@@ -328,7 +328,7 @@ public class HStage02Preprocessor extends AbstractHStage {
         for (HDependency dep : env.dependencies()) {
             NDefinition def = null;
             try {
-                def = NFetchCmd.of().setId(dep.getName()).getResultDefinition();
+                def = NFetchCmd.of().setId(dep.getName()).setDependencyFilter(NDependencyFilters.of().byRunnable()).getResultDefinition();
             } catch (NNotFoundException ex) {
                 //
             }
@@ -343,7 +343,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                 for (NDependency dep : depd.transitive().toList()) {
                     NDefinition def = null;
                     try {
-                        def = NFetchCmd.of(dep.toId()).getResultDefinition();
+                        def = NFetchCmd.of(dep.toId()).setDependencyFilter(NDependencyFilters.of().byRunnable()).getResultDefinition();
                     } catch (NNotFoundException ex) {
                         //
                     }
