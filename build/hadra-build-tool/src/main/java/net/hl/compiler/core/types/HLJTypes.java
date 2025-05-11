@@ -59,7 +59,7 @@ public class HLJTypes extends DefaultJTypes {
     }
 
     @Override
-    public JType createMutableType0(String name, JTypeKind kind) {
+    public JMutableRawType createMutableType0(String name, JTypeKind kind) {
         switch (kind.getValue()) {
             case JTypeKind.Ids.ANNOTATION: {
                 return new HAnnotationType(name, kind, this);

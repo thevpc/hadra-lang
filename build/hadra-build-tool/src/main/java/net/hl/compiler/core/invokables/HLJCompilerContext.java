@@ -3285,7 +3285,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public JMutableRawType getOrCreateType(HNDeclareType type) {
-        JType jt = type.getjType();
+        JMutableRawType jt = type.getjType();
         if (jt != null) {
             if(jt instanceof JMutableRawType) {
                 return (JMutableRawType) jt;
