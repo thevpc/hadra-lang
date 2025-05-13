@@ -3285,7 +3285,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     }
 
     public JMutableRawType getOrCreateType(HNDeclareType type) {
-        JMutableRawType jt = type.getjType();
+        JMutableRawType jt = (JMutableRawType) type.getjType();
         if (jt != null) {
             if(jt instanceof JMutableRawType) {
                 return (JMutableRawType) jt;
@@ -3346,7 +3346,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         JType old = types.forNameOrNull(n);
         if (old != null) {
             //this.getLog().jerror("S012", null, type.getNameToken(), "type declaration : type multiple declarations : " + n);
-            return old;
+            return (JMutableRawType) old;
         }
         LOG.log(Level.FINE, "declare type {0}", type.getFullName());
         JTypeKind jTypeKind
@@ -3356,7 +3356,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 : HNodeUtils.isModifierAnnotation(type.getAnnotations(), "annotation") ? JTypeKind.ANNOTATION
                 : JTypeKind.CLASS;
 
-        jt = types.declareType(n, jTypeKind, false);
+        jt = (JMutableRawType) types.declareType(n, jTypeKind, false);
         type.setjType(jt);
         ((DefaultJAnnotationInstanceList) jt.getAnnotations())
                 .addAll(HNodeUtils.toAnnotations(type.getAnnotations()));
@@ -3366,9 +3366,9 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 LinkedHashSet<JType> ifs = new LinkedHashSet<>();
                 ifs.addAll(Arrays.asList(jt.getInterfaces()));
                 ifs.add(tt);
-                ((JMutableRawType)jt).setInterfaces(ifs.toArray(new JType[0]));
+                jt.setInterfaces(ifs.toArray(new JType[0]));
             } else {
-                ((JMutableRawType)jt).setSuperType(tt);
+                jt.setSuperType(tt);
             }
         }
         return jt;
