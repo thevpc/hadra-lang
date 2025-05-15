@@ -315,7 +315,8 @@ public class HStage02Preprocessor extends AbstractHStage {
             );
         }
         NSearchCmd search = NSearchCmd.of()
-                .setDependencies(true).setInlineDependencies(true)
+//                .setDependencies(true)
+                .setInlineDependencies(true)
                 .setLatest(true)
                 .setDependencyFilter(NDependencyFilters.of().byRunnable())
                 ;
