@@ -3363,10 +3363,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         for (HNExtends extend : type.getExtends()) {
             JType tt = lookupType(extend.getFullName());
             if (tt.isInterface()) {
-                LinkedHashSet<JType> ifs = new LinkedHashSet<>();
-                ifs.addAll(Arrays.asList(jt.getInterfaces()));
-                ifs.add(tt);
-                jt.setInterfaces(ifs.toArray(new JType[0]));
+                jt.addInterface(tt);
             } else {
                 jt.setSuperType(tt);
             }
