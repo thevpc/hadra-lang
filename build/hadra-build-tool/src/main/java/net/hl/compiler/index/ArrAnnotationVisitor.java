@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 class ArrAnnotationVisitor extends AnnotationVisitor {
     Consumer<AnnValue> annotations;
     public ArrAnnotationVisitor(Consumer<AnnValue> annotations) {
-        super(Opcodes.ASM8);
+        super(Opcodes.ASM9);
         this.annotations=annotations;
     }
 

@@ -10,6 +10,7 @@ import net.thevpc.jeep.JTypes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class JAnnotationInstanceFromIndex implements JAnnotationInstance {
     private AnnInfo annotation;
@@ -37,8 +38,13 @@ public class JAnnotationInstanceFromIndex implements JAnnotationInstance {
     }
 
     @Override
-    public Object getObject() {
-        return annotation;
+    public JAnnotationInstanceField getField(String name) {
+        for (Map.Entry<String, AnnValue> z : annotation.getValues().entrySet()) {
+            if(Objects.equals(z.getKey(), name)) {
+                return new JAnnotationInstanceFieldFromIndex(z.getKey(), z.getValue());
+            }
+        }
+        return null;
     }
 
 }

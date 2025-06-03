@@ -5,6 +5,7 @@ import net.hl.compiler.core.elements.*;
 import net.hl.compiler.core.invokables.BodyJInvoke;
 import net.hl.compiler.core.invokables.HLJCompilerContext;
 import net.hl.compiler.core.invokables.JTypeFromHIndex;
+import net.hl.compiler.core.types.HType;
 import net.hl.compiler.core.types.JPrimitiveModifierAnnotationInstance;
 import net.hl.compiler.index.HIndexedClass;
 import net.hl.compiler.index.HIndexedConstructor;
@@ -459,7 +460,7 @@ public class HStage04DefinitionResolver extends HStageType2 {
                                 .toArray(String[]::new),
                         new HNDeclareTypeMainConstructor(node),
                         new JModifier[0], new JAnnotationInstance[]{
-                            JPrimitiveModifierAnnotationInstance.SPECIAL_DEFAULT_CONSTRUCTOR
+                            HType.SPECIAL_DEFAULT_CONSTRUCTOR
                         }, false
                 );
                 if (indexable) {

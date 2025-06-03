@@ -1,5 +1,6 @@
 package net.hl.compiler.stages.generators.java;
 
+import net.hl.compiler.core.types.HType;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.impl.CastJConverter;
 import net.thevpc.jeep.impl.functions.ConvertedJMethod2;
@@ -1474,7 +1475,7 @@ public class HStage08JavaTransform extends AbstractHStage {
 
             JMethod jm = ((AbstractJType)metaType).addMethod(JSignature.of(compilerContext.types(), "runModule()"), new String[0], JTypeUtils.forVoid(compilerContext.types()),
                     new BodyJInvoke(ii), new JModifier[0], new JAnnotationInstance[]{
-                        JPrimitiveModifierAnnotationInstance.STATIC
+                        HType.STATIC
                     }, false);
             ii.setElement(new HNElementMethod(jm));
 
@@ -1527,8 +1528,8 @@ public class HStage08JavaTransform extends AbstractHStage {
                 JMethod jm = ((AbstractJType)metaType).addMethod(JSignature.of(compilerContext.types(), "main(java.lang.String[])"),
                         new String[]{"args"}, JTypeUtils.forVoid(compilerContext.types()),
                         new BodyJInvoke(ii), new JModifier[0], new JAnnotationInstance[]{
-                            JPrimitiveModifierAnnotationInstance.PUBLIC,
-                            JPrimitiveModifierAnnotationInstance.STATIC
+                            HType.PUBLIC,
+                            HType.STATIC
                         }, false);
                 ii.setElement(new HNElementMethod(jm));
                 b.add(ii);
@@ -1564,7 +1565,7 @@ public class HStage08JavaTransform extends AbstractHStage {
             JMethod jm = ((DefaultJType) metaType).addMethod(JSignature.of(compilerContext.types(), "main(java.lang.String[])"),
                     new String[0], JTypeUtils.forVoid(compilerContext.types()),
                     new BodyJInvoke(ii), new JModifier[0], new JAnnotationInstance[]{
-                        JPrimitiveModifierAnnotationInstance.STATIC
+                        HType.STATIC
                     }, false);
             HNDeclareInvokable runModule = getRunModuleMethod(compilerContext);
             if (runModule != null) {

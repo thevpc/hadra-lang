@@ -8,6 +8,6 @@ public class HConstructor extends DefaultJConstructor {
 
     @Override
     public boolean isPublic() {
-        return getAnnotations().contains(JPrimitiveModifierAnnotationInstance.PUBLIC);
+        return getAnnotations().contains(HType.PUBLIC);
     }
 }

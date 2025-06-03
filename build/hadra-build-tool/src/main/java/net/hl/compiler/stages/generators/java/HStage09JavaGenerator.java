@@ -1819,7 +1819,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
         StringBuilder sb = new StringBuilder();
         sb.append("@");
         sb.append(nodeToString(hnAnnotationCall.getName(), cuctx, path));
-        JAnnotationType tv = (JAnnotationType) ((HNTypeToken) hnAnnotationCall.getName()).getTypeVal();
+        JType tv = (JType) ((HNTypeToken) hnAnnotationCall.getName()).getTypeVal();
         JAnnotationField[] annotationFields = tv.getAnnotationFields();
         HNode[] arr = hnAnnotationCall.getArgs();
         if (arr.length > 0) {

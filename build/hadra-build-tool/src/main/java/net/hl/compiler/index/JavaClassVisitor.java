@@ -20,7 +20,7 @@ class JavaClassVisitor extends ClassVisitor {
     private List<AnnInfo> annotations = new ArrayList<>();
 
     public JavaClassVisitor(HIndexerImpl defaultHLIndexer, String source) {
-        super(Opcodes.ASM8);
+        super(Opcodes.ASM9);
         this.defaultHLIndexer = defaultHLIndexer;
         this.source = source;
     }

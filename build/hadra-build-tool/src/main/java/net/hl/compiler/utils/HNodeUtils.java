@@ -1,8 +1,12 @@
 package net.hl.compiler.utils;
 
+import net.hl.compiler.core.types.HType;
 import net.hl.compiler.core.types.JPrimitiveModifierAnnotationInstance;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.types.JTypeNameParser;
+import net.thevpc.jeep.impl.types.DefaultJAnnotationField;
+import net.thevpc.jeep.impl.types.DefaultJAnnotationInstance;
+import net.thevpc.jeep.impl.types.DefaultJAnnotationInstanceField;
 import net.thevpc.jeep.util.JNodeUtils;
 import net.thevpc.jeep.util.JTokenUtils;
 import net.hl.compiler.core.elements.HNElement;
@@ -97,8 +101,8 @@ public class HNodeUtils {
                         JMethod jm = (JMethod) ((HNElementMethod) element).getInvokable();
                         //jm.declaringType()==null for convert functions...
                         if (
-                                jm.getDeclaringType()!=null &&
-                                jm.getDeclaringType().getName().equals("net.hl.lang.ext.HJavaDefaultOperators")) {
+                                jm.getDeclaringType() != null &&
+                                        jm.getDeclaringType().getName().equals("net.hl.lang.ext.HJavaDefaultOperators")) {
                             //this is a standard operator
                             return false;
                         }
@@ -126,16 +130,16 @@ public class HNodeUtils {
 
     public static HNDeclareInvokable getMainMethod(HNBlock block) {
         return block.findDeclaredInvokables().stream().filter(x -> {
-            HNElement e = x.getElement();
-            if (e != null && e.getKind() == HNElementKind.METHOD) {
-                HNElementMethod me = (HNElementMethod) e;
-                JInvokable invokable = me.getInvokable();
-                if (invokable != null && invokable.getSignature().toString().equals("main(java.lang.String[])")) {
-                    return true;
-                }
-            }
-            return x.getSignature().toString().equals("main(java.lang.String[])");
-        })
+                    HNElement e = x.getElement();
+                    if (e != null && e.getKind() == HNElementKind.METHOD) {
+                        HNElementMethod me = (HNElementMethod) e;
+                        JInvokable invokable = me.getInvokable();
+                        if (invokable != null && invokable.getSignature().toString().equals("main(java.lang.String[])")) {
+                            return true;
+                        }
+                    }
+                    return x.getSignature().toString().equals("main(java.lang.String[])");
+                })
                 .findFirst().orElse(null);
     }
 
@@ -360,13 +364,14 @@ public class HNodeUtils {
         }
         return null;
     }
-    public static HNode assignToDeclare(HNode expr,boolean skipPar){
-        if(skipPar && expr instanceof HNPars){
+
+    public static HNode assignToDeclare(HNode expr, boolean skipPar) {
+        if (skipPar && expr instanceof HNPars) {
             HNPars p = (HNPars) expr;
             HNode[] i = p.getItems();
-            if(i.length==1){
-                HNode n2=assignToDeclare(i[0],false);
-                if(n2!=i[0]){
+            if (i.length == 1) {
+                HNode n2 = assignToDeclare(i[0], false);
+                if (n2 != i[0]) {
                     p.setItems(new HNode[]{n2});
                     return p;
                 }
@@ -383,7 +388,7 @@ public class HNodeUtils {
         return expr;
     }
 
-    public static HNAnnotationCall createAnnotationModifierCall(String name){
+    public static HNAnnotationCall createAnnotationModifierCall(String name) {
         JToken token = HTokenUtils.createToken(name);
         JTokenBoundsBuilder jTokenBoundsBuilder = new JTokenBoundsBuilder();
         jTokenBoundsBuilder.visit(token);
@@ -395,121 +400,137 @@ public class HNodeUtils {
                 jTokenBoundsBuilder
         );
     }
-    public static List<String> filterModifierAnnotations(HNAnnotationCall[] calls,String ...modifiers){
-        Set<String> s=new HashSet<>(Arrays.asList(modifiers));
+
+    public static List<String> filterModifierAnnotations(HNAnnotationCall[] calls, String... modifiers) {
+        Set<String> s = new HashSet<>(Arrays.asList(modifiers));
         return Arrays.stream(calls)
-                .map(x->HNodeUtils.getModifierAnnotation(x))
-                .filter(x->s.contains(x))
+                .map(x -> HNodeUtils.getModifierAnnotation(x))
+                .filter(x -> s.contains(x))
                 .collect(Collectors.toList());
     }
 
-    public static String getModifierAnnotation(HNAnnotationCall call){
-        return (call.getName() instanceof HNTypeTokenSpecialAnnotation)?
-                (((HNTypeTokenSpecialAnnotation)call.getName()).getTypename().name()) : null;
+    public static String getModifierAnnotation(HNAnnotationCall call) {
+        return (call.getName() instanceof HNTypeTokenSpecialAnnotation) ?
+                (((HNTypeTokenSpecialAnnotation) call.getName()).getTypename().name()) : null;
     }
 
-    public static boolean isModifierAnnotation(HNAnnotationCall[] call,String ... any){
+    public static boolean isModifierAnnotation(HNAnnotationCall[] call, String... any) {
         for (HNAnnotationCall hnAnnotationCall : call) {
-            if(isModifierAnnotation(hnAnnotationCall,any)){
+            if (isModifierAnnotation(hnAnnotationCall, any)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean isModifierAnnotation(HNAnnotationCall call){
+    public static boolean isModifierAnnotation(HNAnnotationCall call) {
         return call.getName() instanceof HNTypeTokenSpecialAnnotation;
     }
-    
-    public static boolean isModifierAnnotation(HNAnnotationCall call,String ... any){
+
+    public static boolean isModifierAnnotation(HNAnnotationCall call, String... any) {
         return call.getName() instanceof HNTypeTokenSpecialAnnotation
-                && Arrays.asList(any).contains(((HNTypeTokenSpecialAnnotation)call.getName()).getTypename().name());
+                && Arrays.asList(any).contains(((HNTypeTokenSpecialAnnotation) call.getName()).getTypename().name());
     }
 
     public static Object toAnnotationValue(HNode node) {
         if (node instanceof HNLiteral) {
             return ((HNLiteral) node).getValue();
-        }else if (node instanceof HNBrackets) {
-            HNBrackets b=(HNBrackets) node;
+        } else if (node instanceof HNBrackets) {
+            HNBrackets b = (HNBrackets) node;
             HNode[] items = b.getItems();
             Object[] values = new Object[items.length];
             for (int i = 0; i < values.length; i++) {
-                values[i]=toAnnotationValue(items[i]);
+                values[i] = toAnnotationValue(items[i]);
             }
             return values;
-        }else if (node instanceof HNAnnotationCall) {
+        } else if (node instanceof HNAnnotationCall) {
             HNAnnotationCall call = (HNAnnotationCall) node;
             if (call.getName() instanceof HNTypeTokenSpecialAnnotation) {
                 HNTypeTokenSpecialAnnotation a = (HNTypeTokenSpecialAnnotation) call.getName();
                 switch (a.getTypename().name()) {
                     case "public":
-                        return JPrimitiveModifierAnnotationInstance.PUBLIC;
+                        return HType.PUBLIC;
                     case "private":
-                        return JPrimitiveModifierAnnotationInstance.PRIVATE;
+                        return HType.PRIVATE;
                     case "protected":
-                        return JPrimitiveModifierAnnotationInstance.PROTECTED;
+                        return HType.PROTECTED;
                     case "abstract":
-                        return JPrimitiveModifierAnnotationInstance.ABSTRACT;
+                        return HType.ABSTRACT;
                     case "const":
-                        return JPrimitiveModifierAnnotationInstance.CONST;
+                        return HType.CONST;
                     case "final":
-                        return JPrimitiveModifierAnnotationInstance.FINAL;
+                        return HType.FINAL;
                     case "enum":
-                        return JPrimitiveModifierAnnotationInstance.ENUM;
+                        return HType.ENUM;
                     case "exception":
-                        return JPrimitiveModifierAnnotationInstance.EXCEPTION;
+                        return HType.EXCEPTION;
                     case "interface":
-                        return JPrimitiveModifierAnnotationInstance.INTERFACE;
+                        return HType.INTERFACE;
                     case "native":
-                        return JPrimitiveModifierAnnotationInstance.NATIVE;
+                        return HType.NATIVE;
                     case "static":
-                        return JPrimitiveModifierAnnotationInstance.STATIC;
+                        return HType.STATIC;
                     case "strictfp":
-                        return JPrimitiveModifierAnnotationInstance.STRICTFP;
+                        return HType.STRICTFP;
                     case "synchronized":
-                        return JPrimitiveModifierAnnotationInstance.SYNCHRONIZED;
+                        return HType.SYNCHRONIZED;
                     case "transient":
-                        return JPrimitiveModifierAnnotationInstance.TRANSIENT;
+                        return HType.TRANSIENT;
                     case "volatile":
-                        return JPrimitiveModifierAnnotationInstance.VOLATILE;
+                        return HType.VOLATILE;
                     default: {
                         throw new IllegalArgumentException("Expected type annotation " + call);
                     }
                 }
-            }else{
-                HNTypeToken a=(HNTypeToken) call.getName();
-                JAnnotationType tv = (JAnnotationType) a.getTypeVal();
-                Map<String,Object> values=new HashMap<>();
+            } else {
+                HNTypeToken a = (HNTypeToken) call.getName();
+                JRawType tv = (JRawType) a.getTypeVal();
+
+                DefaultJAnnotationInstance dd=new DefaultJAnnotationInstance();
+                dd.setAnnotationType(tv);
+                dd.setName(tv.getName());
+
+                Map<String, Object> values = new HashMap<>();
                 HNode[] args = call.getArgs();
                 for (int i = 0, argsLength = args.length; i < argsLength; i++) {
                     HNode arg = args[i];
                     String aname;
-                    if (arg instanceof HNamedNode){
-                        aname=((HNamedNode) arg).getName().sval;
-                    }else{
-                        aname=tv.getAnnotationFields()[i].getName();
+                    if (arg instanceof HNamedNode) {
+                        aname = ((HNamedNode) arg).getName().sval;
+                    } else {
+                        aname = tv.getAnnotationFields()[i].getName();
                     }
-                    values.put(aname,toAnnotationValue(arg));
+                    if (aname == null) {
+                        aname="value";
+                    }
+                    String finalAname = aname;
+                    JAnnotationField jAnnotationField = Arrays.stream(tv.getAnnotationFields()).filter(x -> x.getName().equals(finalAname)).findFirst().get();
+                    dd.add(new DefaultJAnnotationInstanceField(
+                            jAnnotationField,
+                            aname,
+                            toAnnotationValue(arg),
+                            jAnnotationField.getDefaultValue()
+                    ));
                 }
-                return tv.newInstance(values);
+                return dd;
             }
-        }else{
+        } else {
             throw new IllegalArgumentException("Expected type annotation " + node);
         }
     }
 
-    public static JAnnotationInstance toAnnotation(HNAnnotationCall call){
-        if(call.getName() instanceof HNTypeToken){
+    public static JAnnotationInstance toAnnotation(HNAnnotationCall call) {
+        if (call.getName() instanceof HNTypeToken) {
             return (JAnnotationInstance) toAnnotationValue(call);
-        }else{
-            throw new IllegalArgumentException("Expected type annotation "+call);
+        } else {
+            throw new IllegalArgumentException("Expected type annotation " + call);
         }
     }
 
-    public static JAnnotationInstance[] toAnnotations(HNAnnotationCall[] calls){
-        JAnnotationInstance[] r=new JAnnotationInstance[calls.length];
+    public static JAnnotationInstance[] toAnnotations(HNAnnotationCall[] calls) {
+        JAnnotationInstance[] r = new JAnnotationInstance[calls.length];
         for (int i = 0; i < calls.length; i++) {
-            r[i]=toAnnotation(calls[i]);
+            r[i] = toAnnotation(calls[i]);
         }
         return r;
     }

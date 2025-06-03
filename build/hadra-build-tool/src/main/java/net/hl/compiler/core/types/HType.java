@@ -3,10 +3,7 @@ package net.hl.compiler.core.types;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.types.DefaultJObject;
 import net.thevpc.jeep.impl.functions.JSignature;
-import net.thevpc.jeep.impl.types.DefaultJAnnotationInstanceList;
-import net.thevpc.jeep.impl.types.DefaultJConstructor;
-import net.thevpc.jeep.impl.types.DefaultJModifierList;
-import net.thevpc.jeep.impl.types.DefaultJType;
+import net.thevpc.jeep.impl.types.*;
 import net.thevpc.jeep.util.JTypeUtils;
 
 import java.lang.annotation.Annotation;
@@ -14,14 +11,24 @@ import java.util.Arrays;
 
 public class HType extends DefaultJType {
 
-    public static final JAnnotationInstance PUBLIC = new JPrimitiveModifierAnnotationInstance("public");
-    public static final JAnnotationInstance PRIVATE = new JPrimitiveModifierAnnotationInstance("private");
-    public static final JAnnotationInstance PROTECTED = new JPrimitiveModifierAnnotationInstance("protected");
-    public static final JAnnotationInstance STATIC = new JPrimitiveModifierAnnotationInstance("static");
-    public static final JAnnotationInstance INTERFACE = new JPrimitiveModifierAnnotationInstance("interface");
-    public static final JAnnotationInstance ANNOTATION = new JPrimitiveModifierAnnotationInstance("annotation");
-    public static final JAnnotationInstance ENUM = new JPrimitiveModifierAnnotationInstance("enum");
-    public static final JAnnotationInstance EXCEPTION = new JPrimitiveModifierAnnotationInstance("exception");
+    public static final DefaultJAnnotationInstance STRICTFP = new DefaultJAnnotationInstance("strictfp");
+    public static final DefaultJAnnotationInstance TRANSIENT = new DefaultJAnnotationInstance("transient");
+    public static final DefaultJAnnotationInstance VOLATILE = new DefaultJAnnotationInstance("volatile");
+    public static final DefaultJAnnotationInstance SYNCHRONIZED = new DefaultJAnnotationInstance("synchronized");
+    public static final DefaultJAnnotationInstance STATIC = new DefaultJAnnotationInstance("static");
+    public static final DefaultJAnnotationInstance PUBLIC = new DefaultJAnnotationInstance("public");
+    public static final DefaultJAnnotationInstance PROTECTED = new DefaultJAnnotationInstance("protected");
+    public static final DefaultJAnnotationInstance PRIVATE = new DefaultJAnnotationInstance("private");
+    public static final DefaultJAnnotationInstance NATIVE = new DefaultJAnnotationInstance("native");
+    public static final DefaultJAnnotationInstance INTERFACE = new DefaultJAnnotationInstance("interface");
+    public static final DefaultJAnnotationInstance FINAL = new DefaultJAnnotationInstance("final");
+    public static final DefaultJAnnotationInstance ABSTRACT = new DefaultJAnnotationInstance("abstract");
+    public static final DefaultJAnnotationInstance ENUM = new DefaultJAnnotationInstance("enum");
+    public static final DefaultJAnnotationInstance ANNOTATION = new DefaultJAnnotationInstance("annotation");
+    public static final DefaultJAnnotationInstance EXCEPTION = new DefaultJAnnotationInstance("exception");
+    public static final DefaultJAnnotationInstance CONST = new DefaultJAnnotationInstance("const");
+    public static final DefaultJAnnotationInstance SPECIAL_DEFAULT_CONSTRUCTOR = new DefaultJAnnotationInstance("default-constructor");
+
 
     public HType(String name, JTypeKind kind,JTypes types) {
         super(name, kind, types);
@@ -89,7 +96,7 @@ public class HType extends DefaultJType {
                 new String[0], (JInvokeContext context) -> new DefaultJObject(HType.this), new JModifier[]{
                         DefaultJModifierList.PUBLIC
                 }, new JAnnotationInstance[]{
-                        JPrimitiveModifierAnnotationInstance.PUBLIC
+                        HType.PUBLIC
                 }
         );
         constructor.setSourceName("<generated>");

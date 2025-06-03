@@ -17,7 +17,7 @@ class MyAnnotationVisitor extends AnnotationVisitor {
     boolean visible;
 
     public MyAnnotationVisitor(String name, boolean visible, Consumer<AnnInfo> annotations) {
-        super(Opcodes.ASM8);
+        super(Opcodes.ASM9);
         this.name = name;
         this.visible = visible;
         this.annotations = annotations;

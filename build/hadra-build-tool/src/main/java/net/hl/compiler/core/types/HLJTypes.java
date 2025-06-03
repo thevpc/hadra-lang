@@ -4,11 +4,7 @@ import net.hl.compiler.core.invokables.JTypeFromHIndex;
 import net.hl.compiler.index.HIndexedClass;
 import net.hl.compiler.index.HIndexer;
 import net.thevpc.jeep.*;
-import net.thevpc.jeep.core.types.DefaultJField;
 import net.thevpc.jeep.impl.types.*;
-import net.thevpc.jeep.impl.types.host.HostJAnnotationType;
-import net.thevpc.jeep.impl.types.host.HostJClassType;
-import net.thevpc.jeep.impl.types.host.HostJEnumType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +16,7 @@ public class HLJTypes extends DefaultJTypes {
     public HLJTypes(JContext context, ClassLoader classLoader) {
         super(context, classLoader);
         DefaultJAnnotationInstanceList t = (DefaultJAnnotationInstanceList) forName("null").getAnnotations();
-        t.add(JPrimitiveModifierAnnotationInstance.PUBLIC);
+        t.add(HType.PUBLIC);
     }
 
     public HIndexer getIndexer() {
@@ -60,17 +56,7 @@ public class HLJTypes extends DefaultJTypes {
 
     @Override
     public JMutableRawType createMutableType0(String name, JTypeKind kind) {
-        switch (kind.getValue()) {
-            case JTypeKind.Ids.ANNOTATION: {
-                return new HAnnotationType(name, kind, this);
-            }
-            case JTypeKind.Ids.ENUM: {
-                return new HEnumType(name, kind, this);
-            }
-            default: {
-                return new HType(name, kind, this);
-            }
-        }
+        return new HType(name, kind, this);
     }
 
     @Override
@@ -81,17 +67,6 @@ public class HLJTypes extends DefaultJTypes {
     @Override
     public JParameterizedType createParameterizedType0(JType rootRaw, JType[] parameters, JType declaringType) {
         return super.createParameterizedType0(rootRaw, parameters, declaringType);
-    }
-
-
-    protected JType createHostType0(Class name) {
-        if (name.isEnum()) {
-            return new HostJEnumType(name, this);
-        }
-        if (name.isAnnotation()) {
-            return new HostJAnnotationType(name, this);
-        }
-        return new HostJClassType(name, this);
     }
 
 
@@ -170,13 +145,13 @@ public class HLJTypes extends DefaultJTypes {
     }
 
     public boolean isPublic(JAnnotationInstanceList c) {
-        if (c.contains(JPrimitiveModifierAnnotationInstance.PUBLIC)) {
+        if (c.contains(HType.PUBLIC)) {
             return true;
         }
-        if (c.contains(JPrimitiveModifierAnnotationInstance.PRIVATE)) {
+        if (c.contains(HType.PRIVATE)) {
             return false;
         }
-        if (c.contains(JPrimitiveModifierAnnotationInstance.PROTECTED)) {
+        if (c.contains(HType.PROTECTED)) {
             return false;
         }
         return true;
@@ -204,12 +179,12 @@ public class HLJTypes extends DefaultJTypes {
 
     @Override
     public boolean isAbstractMethod(JMethod c) {
-        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.ABSTRACT);
+        return c.getAnnotations().contains(HType.ABSTRACT);
     }
 
     @Override
     public boolean isAbstractType(JType c) {
-        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.ABSTRACT);
+        return c.getAnnotations().contains(HType.ABSTRACT);
     }
 
     @Override
@@ -219,26 +194,22 @@ public class HLJTypes extends DefaultJTypes {
 
     @Override
     public boolean isStaticType(JType c) {
-        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.STATIC);
+        return c.getAnnotations().contains(HType.STATIC);
     }
 
     @Override
     public boolean isStaticMethod(JMethod c) {
-        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.STATIC);
+        return c.getAnnotations().contains(HType.STATIC);
     }
 
     @Override
     public boolean isStaticField(JField c) {
-        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.STATIC);
+        return c.getAnnotations().contains(HType.STATIC);
     }
 
     @Override
-    public boolean isFinalField(DefaultJField c) {
-        return c.getAnnotations().contains(JPrimitiveModifierAnnotationInstance.FINAL);
+    public boolean isFinalField(JField c) {
+        return c.getAnnotations().contains(HType.FINAL);
     }
 
-    @Override
-    public JType forNameOrNull(String name, JDeclaration enclosingDeclaration) {
-        return super.forNameOrNull(name, enclosingDeclaration);
-    }
 }

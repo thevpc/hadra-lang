@@ -5,8 +5,9 @@ import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.DefaultJTypedValue;
 import net.thevpc.jeep.core.eval.JEvaluableValue;
 import net.thevpc.jeep.JArrayType;
+import net.thevpc.jeep.impl.types.DefaultJType;
+import net.thevpc.jeep.impl.types.DefaultJTypes;
 import net.thevpc.jeep.impl.types.host.HostJArray;
-import net.thevpc.jeep.impl.types.host.HostJRawType;
 import net.thevpc.jeep.util.JTypeUtils;
 import net.hl.compiler.core.HCompilerEnv;
 import net.hl.compiler.core.HDependency;
@@ -656,8 +657,8 @@ public class HEvaluator implements JEvaluator {
                 HNLambdaExpression lnode = (HNLambdaExpression) node;
                 if (lnode.getProxy() == null) {
                     JType t = lnode.getElement().getType();
-                    if (t instanceof HostJRawType) {
-                        Class<?> aClass = null;
+                    if (t instanceof DefaultJType && ((DefaultJType) t).getHostType()!=null) {
+                        Class<?> aClass = (Class<?>) ((DefaultJType) t).getHostType();
                         try {
                             aClass = Class.forName(t.getName());
                         } catch (ClassNotFoundException e) {

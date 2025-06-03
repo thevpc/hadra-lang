@@ -22,7 +22,7 @@ class SignatureVisitorProcessor extends SignatureVisitor {
 
     private static final int PARAMETER_TYPE = 3;
     public SignatureVisitorProcessor(Consumer<JTypeNameOrVariable> c) {
-        super(Opcodes.ASM8);
+        super(Opcodes.ASM9);
         this.c=c;
         init();
     }
