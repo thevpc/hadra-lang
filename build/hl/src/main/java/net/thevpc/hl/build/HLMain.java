@@ -20,7 +20,7 @@ public class HLMain implements NApplication {
 
     @Override
     public void run() {
-        NApp.of().processCmdLine(new NCmdLineRunner() {
+        NApp.of().runCmdLine(new NCmdLineRunner() {
             HL hl = HL.create();
             boolean noMoreOptions = false;
 
