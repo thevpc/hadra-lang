@@ -6,7 +6,6 @@ import net.hl.compiler.core.HTask;
 import net.thevpc.nuts.*;
 import net.thevpc.nuts.cmdline.NArg;
 import net.thevpc.nuts.cmdline.NCmdLine;
-import net.thevpc.nuts.cmdline.NCmdLineContext;
 import net.thevpc.nuts.cmdline.NCmdLineRunner;
 import net.thevpc.nuts.util.NMsg;
 
@@ -25,14 +24,14 @@ public class HLMain implements NApplication {
             boolean noMoreOptions = false;
 
             @Override
-            public boolean nextOption(NArg option, NCmdLine cmdLine, NCmdLineContext context) {
+            public boolean nextOption(NArg option, NCmdLine cmdLine) {
                 if (noMoreOptions) {
                     return false;
                 }
                 switch (option.key()) {
                     case "--clean": {
                         NArg arg = cmdLine.nextFlag().get();
-                        if (arg.isActive()) {
+                        if (arg.isNonCommented()) {
                             if (arg.getBooleanValue().get()) {
                                 hl.addTask(HTask.CLEAN);
                             } else {
@@ -44,7 +43,7 @@ public class HLMain implements NApplication {
                     case "-i":
                     case "--incremental": {
                         NArg arg = cmdLine.nextFlag().get();
-                        if (arg.isActive()) {
+                        if (arg.isNonCommented()) {
                             hl.setIncremental(arg.getBooleanValue().get());
                         }
                         return true;
@@ -52,42 +51,42 @@ public class HLMain implements NApplication {
                     case "-r":
                     case "--root": {
                         NArg arg = cmdLine.nextEntry().get();
-                        if (arg.isActive()) {
+                        if (arg.isNonCommented()) {
                             hl.setProjectRoot(arg.getStringValue().get());
                         }
                         return true;
                     }
                     case "--java": {
                         NArg arg = cmdLine.next().get();
-                        if (arg.isActive()) {
+                        if (arg.isNonCommented()) {
                             hl.addTask(HTask.JAVA);
                         }
                         return true;
                     }
                     case "--c": {
                         NArg arg = cmdLine.nextEntry().get();
-                        if (arg.isActive()) {
+                        if (arg.isNonCommented()) {
                             hl.addTask(HTask.C);
                         }
                         return true;
                     }
                     case "--c++": {
                         NArg arg = cmdLine.nextEntry().get();
-                        if (arg.isActive()) {
+                        if (arg.isNonCommented()) {
                             hl.addTask(HTask.CPP);
                         }
                         return true;
                     }
                     case "--cs": {
                         NArg arg = cmdLine.nextEntry().get();
-                        if (arg.isActive()) {
+                        if (arg.isNonCommented()) {
                             hl.addTask(HTask.CS);
                         }
                         return true;
                     }
                     case "--run": {
                         NArg arg = cmdLine.nextEntry().get();
-                        if (arg.isActive()) {
+                        if (arg.isNonCommented()) {
                             hl.addTask(HTask.RUN);
                         }
                         return true;
@@ -97,7 +96,7 @@ public class HLMain implements NApplication {
             }
 
             @Override
-            public boolean nextNonOption(NArg nonOption, NCmdLine cmdLine, NCmdLineContext context) {
+            public boolean nextNonOption(NArg nonOption, NCmdLine cmdLine) {
                 String s = cmdLine.next().get().toString();
                 if (isURL(s)) {
                     hl.addSourceFileURL(s);
@@ -115,7 +114,7 @@ public class HLMain implements NApplication {
             }
 
             @Override
-            public void run(NCmdLine nCmdLine, NCmdLineContext nCmdLineContext) {
+            public void run(NCmdLine nCmdLine) {
                 final HProject e = hl.compile();
                 if (!e.isSuccessful()) {
                     String m = "compilation failed with ";
