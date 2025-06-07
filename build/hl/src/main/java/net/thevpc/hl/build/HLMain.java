@@ -7,6 +7,7 @@ import net.thevpc.nuts.*;
 import net.thevpc.nuts.cmdline.NArg;
 import net.thevpc.nuts.cmdline.NCmdLine;
 import net.thevpc.nuts.cmdline.NCmdLineRunner;
+import net.thevpc.nuts.io.NPath;
 import net.thevpc.nuts.util.NMsg;
 
 public class HLMain implements NApplication {
@@ -23,89 +24,90 @@ public class HLMain implements NApplication {
             HL hl = HL.create();
             boolean noMoreOptions = false;
 
-            @Override
-            public boolean nextOption(NArg option, NCmdLine cmdLine) {
-                if (noMoreOptions) {
-                    return false;
-                }
-                switch (option.key()) {
-                    case "--clean": {
-                        NArg arg = cmdLine.nextFlag().get();
-                        if (arg.isNonCommented()) {
-                            if (arg.getBooleanValue().get()) {
-                                hl.addTask(HTask.CLEAN);
-                            } else {
-                                hl.removeTask(HTask.CLEAN);
-                            }
-                        }
-                        return true;
-                    }
-                    case "-i":
-                    case "--incremental": {
-                        NArg arg = cmdLine.nextFlag().get();
-                        if (arg.isNonCommented()) {
-                            hl.setIncremental(arg.getBooleanValue().get());
-                        }
-                        return true;
-                    }
-                    case "-r":
-                    case "--root": {
-                        NArg arg = cmdLine.nextEntry().get();
-                        if (arg.isNonCommented()) {
-                            hl.setProjectRoot(arg.getStringValue().get());
-                        }
-                        return true;
-                    }
-                    case "--java": {
-                        NArg arg = cmdLine.next().get();
-                        if (arg.isNonCommented()) {
-                            hl.addTask(HTask.JAVA);
-                        }
-                        return true;
-                    }
-                    case "--c": {
-                        NArg arg = cmdLine.nextEntry().get();
-                        if (arg.isNonCommented()) {
-                            hl.addTask(HTask.C);
-                        }
-                        return true;
-                    }
-                    case "--c++": {
-                        NArg arg = cmdLine.nextEntry().get();
-                        if (arg.isNonCommented()) {
-                            hl.addTask(HTask.CPP);
-                        }
-                        return true;
-                    }
-                    case "--cs": {
-                        NArg arg = cmdLine.nextEntry().get();
-                        if (arg.isNonCommented()) {
-                            hl.addTask(HTask.CS);
-                        }
-                        return true;
-                    }
-                    case "--run": {
-                        NArg arg = cmdLine.nextEntry().get();
-                        if (arg.isNonCommented()) {
-                            hl.addTask(HTask.RUN);
-                        }
-                        return true;
-                    }
-                }
-                return false;
-            }
 
             @Override
-            public boolean nextNonOption(NArg nonOption, NCmdLine cmdLine) {
-                String s = cmdLine.next().get().toString();
-                if (isURL(s)) {
-                    hl.addSourceFileURL(s);
+            public boolean next(NArg arg, NCmdLine cmdLine) {
+                if (arg.isOption()) {
+                    if (noMoreOptions) {
+                        return false;
+                    }
+                    switch (arg.key()) {
+                        case "--clean": {
+                            arg = cmdLine.nextFlag().get();
+                            if (arg.isNonCommented()) {
+                                if (arg.getBooleanValue().get()) {
+                                    hl.addTask(HTask.CLEAN);
+                                } else {
+                                    hl.removeTask(HTask.CLEAN);
+                                }
+                            }
+                            return true;
+                        }
+                        case "-i":
+                        case "--incremental": {
+                            arg = cmdLine.nextFlag().get();
+                            if (arg.isNonCommented()) {
+                                hl.setIncremental(arg.getBooleanValue().get());
+                            }
+                            return true;
+                        }
+                        case "-r":
+                        case "--root": {
+                            arg = cmdLine.nextEntry().get();
+                            if (arg.isNonCommented()) {
+                                hl.setProjectRoot(arg.getStringValue().get());
+                            }
+                            return true;
+                        }
+                        case "--java": {
+                            arg = cmdLine.next().get();
+                            if (arg.isNonCommented()) {
+                                hl.addTask(HTask.JAVA);
+                            }
+                            return true;
+                        }
+                        case "--c": {
+                            arg = cmdLine.nextEntry().get();
+                            if (arg.isNonCommented()) {
+                                hl.addTask(HTask.C);
+                            }
+                            return true;
+                        }
+                        case "--c++": {
+                            arg = cmdLine.nextEntry().get();
+                            if (arg.isNonCommented()) {
+                                hl.addTask(HTask.CPP);
+                            }
+                            return true;
+                        }
+                        case "--cs": {
+                            arg = cmdLine.nextEntry().get();
+                            if (arg.isNonCommented()) {
+                                hl.addTask(HTask.CS);
+                            }
+                            return true;
+                        }
+                        case "--run": {
+                            arg = cmdLine.nextEntry().get();
+                            if (arg.isNonCommented()) {
+                                hl.addTask(HTask.RUN);
+                            }
+                            return true;
+                        }
+                    }
+                    return false;
                 } else {
-                    hl.addSourceFile(s);
+                    String s = cmdLine.next().get().toString();
+                    if (isURL(s)) {
+                        hl.addSourceFileURL(s);
+                    } else {
+                        hl.addSourceFile(s);
+                    }
+                    noMoreOptions = true;
+                    return true;
                 }
-                noMoreOptions = true;
-                return true;
             }
+
 
             private boolean isURL(String s) {
                 return s.startsWith("file:")
