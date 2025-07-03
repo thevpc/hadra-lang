@@ -15,7 +15,7 @@ public class HLMain implements NApplication {
     private static final String PREFERRED_ALIAS = "hl";
 
     public static void main(String[] args) {
-        new HLMain().main(NMainArgs.of(args));
+        NApp.builder(args).run();
     }
 
     @Override
