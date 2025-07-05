@@ -18,7 +18,7 @@ public class HLMain {
         NApp.builder(args).run();
     }
 
-    @NApp.Main
+    @NApp.Runner
     public void run() {
         NApp.of().runCmdLine(new NCmdLineRunner() {
             HL hl = HL.create();
