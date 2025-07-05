@@ -9,7 +9,7 @@ import net.thevpc.nuts.cmdline.NCmdLine;
 import net.thevpc.nuts.cmdline.NCmdLineRunner;
 import net.thevpc.nuts.util.NMsg;
 
-@NApp.Definition
+@NAppDefinition
 public class HLMain {
 
     private static final String PREFERRED_ALIAS = "hl";
@@ -18,7 +18,7 @@ public class HLMain {
         NApp.builder(args).run();
     }
 
-    @NApp.Runner
+    @NAppRunner
     public void run() {
         NApp.of().runCmdLine(new NCmdLineRunner() {
             HL hl = HL.create();
@@ -130,18 +130,18 @@ public class HLMain {
         });
     }
 
-    @NApp.Uninstaller
+    @NAppUninstaller
     public void onUninstallApplication() {
         NWorkspace.of().removeCommandIfExists(PREFERRED_ALIAS);
         NWorkspace.of().saveConfig();
     }
 
-    @NApp.Updater
+    @NAppUpdater
     public void onUpdateApplication() {
         onInstallApplication();
     }
 
-    @NApp.Installer
+    @NAppInstaller
     public void onInstallApplication() {
         NWorkspace ws = NWorkspace.of();
         NApp app = NApp.of();
