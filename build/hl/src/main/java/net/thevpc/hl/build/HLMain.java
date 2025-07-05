@@ -9,7 +9,7 @@ import net.thevpc.nuts.cmdline.NCmdLine;
 import net.thevpc.nuts.cmdline.NCmdLineRunner;
 import net.thevpc.nuts.util.NMsg;
 
-@NApp.Info
+@NApp.Definition
 public class HLMain {
 
     private static final String PREFERRED_ALIAS = "hl";
