@@ -7,7 +7,6 @@ import net.thevpc.nuts.*;
 import net.thevpc.nuts.cmdline.NArg;
 import net.thevpc.nuts.cmdline.NCmdLine;
 import net.thevpc.nuts.cmdline.NCmdLineRunner;
-import net.thevpc.nuts.io.NPath;
 import net.thevpc.nuts.util.NMsg;
 
 @NApp.Info
@@ -35,7 +34,7 @@ public class HLMain {
                     switch (arg.key()) {
                         case "--clean": {
                             arg = cmdLine.nextFlag().get();
-                            if (arg.isNonCommented()) {
+                            if (arg.isUncommented()) {
                                 if (arg.getBooleanValue().get()) {
                                     hl.addTask(HTask.CLEAN);
                                 } else {
@@ -47,7 +46,7 @@ public class HLMain {
                         case "-i":
                         case "--incremental": {
                             arg = cmdLine.nextFlag().get();
-                            if (arg.isNonCommented()) {
+                            if (arg.isUncommented()) {
                                 hl.setIncremental(arg.getBooleanValue().get());
                             }
                             return true;
@@ -55,42 +54,42 @@ public class HLMain {
                         case "-r":
                         case "--root": {
                             arg = cmdLine.nextEntry().get();
-                            if (arg.isNonCommented()) {
+                            if (arg.isUncommented()) {
                                 hl.setProjectRoot(arg.getStringValue().get());
                             }
                             return true;
                         }
                         case "--java": {
                             arg = cmdLine.next().get();
-                            if (arg.isNonCommented()) {
+                            if (arg.isUncommented()) {
                                 hl.addTask(HTask.JAVA);
                             }
                             return true;
                         }
                         case "--c": {
                             arg = cmdLine.nextEntry().get();
-                            if (arg.isNonCommented()) {
+                            if (arg.isUncommented()) {
                                 hl.addTask(HTask.C);
                             }
                             return true;
                         }
                         case "--c++": {
                             arg = cmdLine.nextEntry().get();
-                            if (arg.isNonCommented()) {
+                            if (arg.isUncommented()) {
                                 hl.addTask(HTask.CPP);
                             }
                             return true;
                         }
                         case "--cs": {
                             arg = cmdLine.nextEntry().get();
-                            if (arg.isNonCommented()) {
+                            if (arg.isUncommented()) {
                                 hl.addTask(HTask.CS);
                             }
                             return true;
                         }
                         case "--run": {
                             arg = cmdLine.nextEntry().get();
-                            if (arg.isNonCommented()) {
+                            if (arg.isUncommented()) {
                                 hl.addTask(HTask.RUN);
                             }
                             return true;
