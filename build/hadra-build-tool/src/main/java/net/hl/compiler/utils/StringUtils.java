@@ -61,7 +61,7 @@ public class StringUtils {
         StringBuilder sb = new StringBuilder();
         sb.append(msg);
         NTexts f = NTexts.of();
-        int len0 = f.of(sb.toString()).textLength();
+        int len0 = f.of(sb.toString()).length();
         int variant = 2;
         IntToIntFunction color
                 = variant == 1 ? (i -> 30 + (i % 40) / 2)
