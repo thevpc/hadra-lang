@@ -11,8 +11,6 @@ import net.hl.compiler.utils.HNodeUtils;
 
 import java.util.*;
 import net.hl.compiler.index.HIndexer;
-import net.thevpc.nuts.NSession;
-import net.thevpc.nuts.NWorkspace;
 
 public class HProject implements HProjectContext {
 
