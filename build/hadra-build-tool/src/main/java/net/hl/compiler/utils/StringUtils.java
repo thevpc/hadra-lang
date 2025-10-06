@@ -6,7 +6,7 @@
 package net.hl.compiler.utils;
 
 import net.hl.lang.IntToIntFunction;
-import net.thevpc.nuts.NConstants;
+import net.thevpc.nuts.core.NConstants;
 import net.thevpc.nuts.text.NTexts;
 import net.thevpc.nuts.text.NTextStyle;
 
