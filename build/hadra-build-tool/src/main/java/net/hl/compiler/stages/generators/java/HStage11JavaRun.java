@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HTask;
 import net.hl.compiler.stages.AbstractHStage;
-import net.thevpc.nuts.NExecCmd;
-import net.thevpc.nuts.NExecutionType;
+import net.thevpc.nuts.command.NExecCmd;
+import net.thevpc.nuts.command.NExecutionType;
 import net.thevpc.nuts.io.NExecOutput;
 
 public class HStage11JavaRun extends AbstractHStage {
