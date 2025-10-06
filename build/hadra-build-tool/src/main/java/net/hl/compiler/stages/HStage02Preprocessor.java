@@ -1,6 +1,5 @@
 package net.hl.compiler.stages;
 
-import net.thevpc.nuts.*;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.DefaultJTypedValue;
 import net.thevpc.jeep.core.eval.JEvaluableValue;
@@ -25,6 +24,9 @@ import java.util.logging.Logger;
 import net.hl.compiler.HL;
 import net.hl.compiler.utils.DepIdAndFile;
 import net.hl.compiler.utils.HSharedUtils;
+import net.thevpc.nuts.artifact.*;
+import net.thevpc.nuts.command.NFetchCmd;
+import net.thevpc.nuts.command.NSearchCmd;
 
 public class HStage02Preprocessor extends AbstractHStage {
 
