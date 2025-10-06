@@ -6,8 +6,6 @@
 package net.thevpc.hl.test;
 
 import net.thevpc.hl.test.util.TestHelper;
-import net.thevpc.nuts.Nuts;
-import net.thevpc.nuts.NSession;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
