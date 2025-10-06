@@ -6,7 +6,6 @@
 package net.hl.compiler.core;
 
 import net.thevpc.jeep.JContext;
-import net.thevpc.nuts.NSession;
 
 /**
  *
