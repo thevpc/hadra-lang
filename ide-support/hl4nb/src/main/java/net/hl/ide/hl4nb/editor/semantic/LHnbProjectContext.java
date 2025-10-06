@@ -6,7 +6,6 @@ import net.hl.ide.hl4nb.HadraLanguageSingleton;
 import net.hl.compiler.core.HProjectContext;
 import net.hl.compiler.core.HadraContext;
 import net.hl.compiler.index.HIndexer;
-import net.thevpc.nuts.NSession;
 
 public class LHnbProjectContext implements HProjectContext {
 
