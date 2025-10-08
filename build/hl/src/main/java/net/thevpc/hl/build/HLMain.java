@@ -12,7 +12,7 @@ import net.thevpc.nuts.command.NCommandConfig;
 import net.thevpc.nuts.command.NCustomCmd;
 import net.thevpc.nuts.command.NExecutionException;
 import net.thevpc.nuts.core.NWorkspace;
-import net.thevpc.nuts.util.NMsg;
+import net.thevpc.nuts.text.NMsg;
 
 @NAppDefinition
 public class HLMain {
