@@ -332,7 +332,7 @@ public class HStage02Preprocessor extends AbstractHStage {
             NDefinition def = null;
             try {
                 def = NFetchCmd.of().setId(dep.getName()).setDependencyFilter(NDependencyFilters.of().byRunnable()).getResultDefinition();
-            } catch (NNotFoundException ex) {
+            } catch (NArtifactNotFoundException ex) {
                 //
             }
             if (def == null || def.getContent().isEmpty()) {
@@ -347,7 +347,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                     NDefinition def = null;
                     try {
                         def = NFetchCmd.of(dep.toId()).setDependencyFilter(NDependencyFilters.of().byRunnable()).getResultDefinition();
-                    } catch (NNotFoundException ex) {
+                    } catch (NArtifactNotFoundException ex) {
                         //
                     }
                     if (def == null || def.getContent().isEmpty()) {
