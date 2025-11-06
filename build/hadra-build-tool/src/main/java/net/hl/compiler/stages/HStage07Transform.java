@@ -473,7 +473,7 @@
 //                        }
 //                    }
 //                    if (identifierType != null) {
-//                        JRawType declaringType = (JRawType) compilerContext.getOrCreateType(node.getDeclaringType());
+//                        JType declaringType = (JType) compilerContext.getOrCreateType(node.getDeclaringType());
 //                        for (String identifierName : node.getIdentifierNames()) {
 //                            JField jField = declaringType.addField(identifierName,
 //                                    identifierType,
