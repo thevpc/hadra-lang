@@ -1,9 +1,7 @@
 package net.hl.compiler.stages.generators.java;
 
-import net.thevpc.jeep.JArrayType;
 import net.thevpc.jeep.JType;
 import net.thevpc.jeep.JTypes;
-import net.thevpc.jeep.JParameterizedType;
 
 import java.util.*;
 
@@ -62,7 +60,7 @@ public class HGenCompilationUnitContext {
 
     public String nameWithImports(JType type, boolean staticImport, boolean noPrimitive) {
             if(type.isArray()){
-                JArrayType ta=(JArrayType) type;
+                JType ta= type;
                 String s = nameWithImports(ta.rootComponentType());
                 for (int i = 0; i < ta.arrayDimension(); i++) {
                     s+="[]";
@@ -81,7 +79,7 @@ public class HGenCompilationUnitContext {
                     if (sb.length() > 0) {
                         sb.insert(0, ".");
                     }
-                    sb.insert(0, type.simpleName());
+                    sb.insert(0, type.getSimpleName());
                     JType dt = type.getDeclaringType();
                     if (dt == null) {
                         String ns = type.getPackageName();
@@ -146,7 +144,7 @@ public class HGenCompilationUnitContext {
 //                    n = type.simpleName() + "." + n;
 //                }
 //            }
-            JType[] jTypeOrVariables = (type instanceof JParameterizedType)? ((JParameterizedType)type).getActualTypeArguments():new JType[0];
+            JType[] jTypeOrVariables = type.getActualTypeArguments();
             if (jTypeOrVariables.length > 0) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(rawFullString);
