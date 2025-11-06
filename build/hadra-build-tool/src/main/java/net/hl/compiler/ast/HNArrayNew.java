@@ -98,11 +98,11 @@ public class HNArrayNew extends HNode {
         return sb.toString();
     }
 
-    public JArrayType getArrayType() {
-        if (arrayType != null && !(arrayType instanceof JArrayType)) {
-            return (JArrayType) arrayType;
+    public JType getArrayType() {
+        if (arrayType != null && !(arrayType.isArray())) {
+            return arrayType;
         }
-        return (JArrayType) arrayType;
+        return arrayType;
     }
 
     public HNArrayNew setArrayType(JType arrayType) {
