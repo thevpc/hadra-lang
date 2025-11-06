@@ -1,6 +1,5 @@
 package net.hl.compiler.index;
 
-import net.hl.compiler.ast.HNAnnotationCall;
 import net.hl.compiler.ast.HNDeclareType;
 import net.hl.compiler.ast.HNExtends;
 import net.hl.compiler.utils.HSharedUtils;
@@ -11,7 +10,6 @@ import net.thevpc.jeep.core.index.DefaultJIndexDocument;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class HIndexedClass implements HIndexedElement {
     private String simpleName;
@@ -27,7 +25,7 @@ public class HIndexedClass implements HIndexedElement {
 
     public HIndexedClass(JType type, String source) {
         fullName = type.getName();
-        simpleName = type.simpleName();
+        simpleName = type.getSimpleName();
         simpleName2 = simpleName;
         JType nn = type.getDeclaringType();
         while (nn != null) {
