@@ -349,23 +349,23 @@ public class HSharedUtils {
     public static String getStaticConstructorName(JType baseType) {
         JType jType = baseType.getRawType();
         if (jType.isArray()) {
-            JArrayType ta = (JArrayType) jType;
+            JType ta = jType;
             jType = ta.rootComponentType();
         }
         StringBuilder staticConstructorName = new StringBuilder("new");
         if (jType.isPrimitive()) {
             //here to distinguish from primitive and boxed types
             //to get : newPrimitiveLongArray and newLongArray for instance
-            char[] s = jType.simpleName().toCharArray();
+            char[] s = jType.getSimpleName().toCharArray();
             s[0] = Character.toUpperCase(s[0]);
             staticConstructorName.append("Primitive");
             staticConstructorName.append(s);
         } else {
-            staticConstructorName.append(jType.simpleName());
+            staticConstructorName.append(jType.getSimpleName());
         }
         if (baseType.isArray()) {
             staticConstructorName.append("Array");
-            JArrayType ta = (JArrayType) baseType;
+            JType ta = (JType) baseType;
             if (ta.arrayDimension() > 1) {
                 staticConstructorName.append(ta.arrayDimension());
             }
