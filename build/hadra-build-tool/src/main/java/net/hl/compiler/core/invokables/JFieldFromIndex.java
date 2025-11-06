@@ -3,31 +3,48 @@ package net.hl.compiler.core.invokables;
 import net.hl.compiler.index.*;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.types.AbstractJField;
+import net.thevpc.jeep.core.types.DefaultJField;
 import net.thevpc.jeep.impl.types.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Supplier;
 
-public class JFieldFromIndex extends AbstractJField {
+public class JFieldFromIndex extends DefaultJField {
     private final HIndexedField field;
     private final HIndexer indexer;
-    private final JTypes types;
-    private final JType declaringType;
 
     public JFieldFromIndex(HIndexedField field, JType declaringType,HIndexer indexer, JTypes types) {
         this.field = field;
         this.indexer = indexer;
-        this.types = types;
-        this.declaringType = declaringType;
-    }
+        setDeclaringType(declaringType);
+//        setSource(field.getSource());
 
-    @Override
-    public String name() {
-        return field.getName();
-    }
-
-    @Override
-    public JType type() {
-        return types.forNameOrNull(field.getType());
+        modifiers.addSupplier(new Supplier<List<JModifier>>() {
+            @Override
+            public List<JModifier> get() {
+                List<JModifier> all=new ArrayList<JModifier>();
+                for (AnnInfo annotation : field.getAnnotations()) {
+                    if (annotation.getName().equals(annotation.getName().toLowerCase())) {
+                        all.add(new JPrimitiveModifier(annotation.getName()));
+                    }
+                }
+                return all;
+            }
+        });
+        annotations.addSupplier(new  Supplier<List<JAnnotationInstance>>() {
+            @Override
+            public List<JAnnotationInstance> get() {
+                List<JAnnotationInstance> all=new ArrayList<>();
+                for (AnnInfo annotation : field.getAnnotations()) {
+                    all.add(new JAnnotationInstanceFromIndex(annotation, indexer, types));
+                }
+                return all;
+            }
+        });
+        setName(field.getName());
+        setGenericType(types.forNameOrNull(field.getType()));
     }
 
     @Override
@@ -53,43 +70,6 @@ public class JFieldFromIndex extends AbstractJField {
     @Override
     public boolean isFinal() {
         return Arrays.stream(field.getAnnotations()).anyMatch(x -> x.getName().equals("final"));
-    }
-
-    @Override
-    public JType getDeclaringType() {
-        return declaringType;
-    }
-
-    @Override
-    public JAnnotationInstanceList getAnnotations() {
-        DefaultJAnnotationInstanceList a=new DefaultJAnnotationInstanceList();
-        for (AnnInfo annotation : field.getAnnotations()) {
-            a.add(new JAnnotationInstanceFromIndex(annotation,indexer,types));
-        }
-        return a;
-    }
-
-    @Override
-    public JModifierList getModifiers() {
-        DefaultJModifierList e = new DefaultJModifierList();
-        for (AnnInfo annotation : field.getAnnotations()) {
-            if (annotation.getName().equals(annotation.getName().toLowerCase())) {
-                e.add(new JPrimitiveModifier(annotation.getName()));
-            }
-        }
-        return e;
-    }
-
-    @Override
-    public JTypes getTypes() {
-        return types;
-    }
-
-    @Override
-    public String toString() {
-        return "JFieldFromHIndexedField{" +
-                "fullName=" + field +
-                '}';
     }
 
 }
