@@ -4,9 +4,7 @@ import net.hl.lang.*;
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.DefaultJTypedValue;
 import net.thevpc.jeep.core.eval.JEvaluableValue;
-import net.thevpc.jeep.JArrayType;
 import net.thevpc.jeep.impl.types.DefaultJType;
-import net.thevpc.jeep.impl.types.DefaultJTypes;
 import net.thevpc.jeep.impl.types.host.HostJArray;
 import net.thevpc.jeep.util.JTypeUtils;
 import net.hl.compiler.core.HCompilerEnv;
@@ -430,7 +428,7 @@ public class HEvaluator implements JEvaluator {
                             throw new NullPointerException();
                         }
                         int index = ((Number) evaluate(a.getIndexNodes()[0], context)).intValue();
-                        JArrayType t = (JArrayType) context.getContext().types().typeOf(v);
+                        JType t = context.getContext().types().typeOf(v);
                         JArray aa = t.asArray(v);
                         aa.set(index, o);
                         return o;
@@ -440,7 +438,7 @@ public class HEvaluator implements JEvaluator {
             }
             case H_ARRAY_NEW: {
                 HNArrayNew a = (HNArrayNew) node;
-                JArrayType arrayType = (JArrayType) a.getArrayType();
+                JType arrayType =  a.getArrayType();
                 HNode[] inits = a.getInits();
                 int[] allLen = new int[arrayType.arrayDimension()];
                 for (int i = 0; i < allLen.length; i++) {
@@ -472,7 +470,7 @@ public class HEvaluator implements JEvaluator {
                                 break;
                             }
                             case 2: {
-                                JArrayType tt = arrayType;
+                                JType tt = arrayType;
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -491,8 +489,8 @@ public class HEvaluator implements JEvaluator {
                                 break;
                             }
                             case 3: {
-                                JArrayType tt = arrayType;
-                                JArrayType tt1 = (JArrayType) arrayType.componentType();
+                                JType tt = arrayType;
+                                JType tt1 =  arrayType.componentType();
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -515,9 +513,9 @@ public class HEvaluator implements JEvaluator {
                                 break;
                             }
                             case 4: {
-                                JArrayType tt = arrayType;
-                                JArrayType tt1 = (JArrayType) arrayType.componentType();
-                                JArrayType tt2 = (JArrayType) tt1.componentType();
+                                JType tt = arrayType;
+                                JType tt1 =  arrayType.componentType();
+                                JType tt2 =  tt1.componentType();
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -558,7 +556,7 @@ public class HEvaluator implements JEvaluator {
                                 break;
                             }
                             case 2: {
-                                JArrayType tt = arrayType;
+                                JType tt = arrayType;
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -568,8 +566,8 @@ public class HEvaluator implements JEvaluator {
                                 break;
                             }
                             case 3: {
-                                JArrayType tt = arrayType;
-                                JArrayType tt1 = (JArrayType) arrayType.componentType();
+                                JType tt = arrayType;
+                                JType tt1 =  arrayType.componentType();
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -582,9 +580,9 @@ public class HEvaluator implements JEvaluator {
                                 break;
                             }
                             case 4: {
-                                JArrayType tt = arrayType;
-                                JArrayType tt1 = (JArrayType) arrayType.componentType();
-                                JArrayType tt2 = (JArrayType) tt1.componentType();
+                                JType tt = arrayType;
+                                JType tt1 =  arrayType.componentType();
+                                JType tt2 =  tt1.componentType();
                                 for (int i = 0; i < allLen[0]; i++) {
                                     JArray jarr1 = tt.asArray(jarr0.get(i));
                                     for (int j = 0; j < allLen[1]; j++) {
@@ -614,7 +612,7 @@ public class HEvaluator implements JEvaluator {
                     throw new NullPointerException();
                 }
                 int index = ((Number) evaluate(n.getIndexNodes()[0], context)).intValue();
-                JArrayType t = (JArrayType) context.getContext().types().typeOf(v);
+                JType t =  context.getContext().types().typeOf(v);
                 JArray a = t.asArray(v);
                 return a.get(index);
             }
@@ -762,7 +760,7 @@ public class HEvaluator implements JEvaluator {
     private Tuple2<Object,Object> evalArrayInc(HNBracketsPostfix arg, int inc, JInvokeContext context) {
         HNBracketsPostfix a = arg;
         int index = (int) evaluate(a.getRight().get(0), context);
-        JArrayType arrayType = (JArrayType) a.getLeft().getElement().getType();
+        JType arrayType =  a.getLeft().getElement().getType();
         String argTypeName = arrayType.componentType().getName();
         JArray array = arrayType.asArray(evaluate(a.getLeft(), context));
         Object oldValue0 = array.get(index);
