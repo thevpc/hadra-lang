@@ -46,8 +46,7 @@ public class HTypeUtils {
                         Arrays.fill(e, JTypeUtils.forObject(t.getTypes()));
                         return e;
                     }
-                    JParameterizedType p = (JParameterizedType) t;
-                    return p.getActualTypeArguments();
+                    return t.getActualTypeArguments();
                 }
             }
             n = n.getSuperType();
@@ -63,7 +62,7 @@ public class HTypeUtils {
         if (others.length > Tuple.MAX_ELEMENTS) {
             return t.forName(TupleN.class.getName());
         } else {
-            JRawType raw = (JRawType) t.forName("net.hl.lang.Tuple" + others.length);
+            JType raw = (JType) t.forName("net.hl.lang.Tuple" + others.length);
             if (others.length > 0) {
                 return raw.parametrize(others);
             }
@@ -71,11 +70,11 @@ public class HTypeUtils {
         }
     }
 
-    public static JRawType tupleTypeForCount(int count, JTypes types) {
+    public static JType tupleTypeForCount(int count, JTypes types) {
         if (count > Tuple.MAX_ELEMENTS) {
-            return (JRawType) types.forName(TupleN.class.getName());
+            return types.forName(TupleN.class.getName());
         } else {
-            return (JRawType) types.forName("net.hl.lang.Tuple" + count);
+            return types.forName("net.hl.lang.Tuple" + count);
         }
     }
 
@@ -96,7 +95,7 @@ public class HTypeUtils {
 
     public static ElementTypeAndConstraint resolveIterableComponentType(JType valType, JTypes types) {
         if (valType.isArray()) {
-            JArrayType ta = (JArrayType) valType;
+            JType ta = valType;
             return new ElementTypeAndConstraint(
                     (ta.componentType()),
                     InitValueConstraint.ITERABLE
@@ -113,7 +112,7 @@ public class HTypeUtils {
             );
         } else if (types.forName("java.util.Iterable").isAssignableFrom(valType)) {
             if (types.forName("java.util.Iterable").equals(valType.getRawType())) {
-                JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).getActualTypeArguments() : new JType[0];
+                JType[] a = valType.getActualTypeArguments();
                 if (a.length == 0) {
                     valType = (JTypeUtils.forObject(types));
                 } else {
@@ -128,7 +127,7 @@ public class HTypeUtils {
             );
         } else if (types.forName("java.util.Iterator").isAssignableFrom(valType)) {
             if (types.forName("java.util.Iterator").equals(valType.getRawType())) {
-                JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).getActualTypeArguments() : new JType[0];
+                JType[] a = valType.getActualTypeArguments();
                 if (a.length == 0) {
                     valType = (JTypeUtils.forObject(types));
                 } else {
@@ -144,7 +143,7 @@ public class HTypeUtils {
         } else if (types.forName("java.util.stream.BaseStream").isAssignableFrom(valType)) {
             if (types.forName("java.util.stream.Stream").isAssignableFrom(valType)) {
                 if (types.forName("java.util.stream.Stream").equals(valType.getRawType())) {
-                    JType[] a = (valType instanceof JParameterizedType) ? ((JParameterizedType) valType).getActualTypeArguments() : new JType[0];
+                    JType[] a = valType.getActualTypeArguments();
                     if (a.length == 0) {
                         valType = (JTypeUtils.forObject(types));
                     } else {
