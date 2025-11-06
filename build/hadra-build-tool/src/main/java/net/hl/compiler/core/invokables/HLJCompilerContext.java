@@ -11,7 +11,6 @@ import net.thevpc.jeep.impl.JTypesSPI;
 import net.thevpc.jeep.impl.compiler.DefaultJImportInfo;
 import net.thevpc.jeep.impl.compiler.JCompilerContextImpl;
 import net.thevpc.jeep.impl.functions.*;
-import net.thevpc.jeep.impl.types.*;
 import net.thevpc.jeep.source.JTextSourceFactory;
 import net.thevpc.jeep.util.*;
 import net.hl.compiler.core.HFunctionType;
@@ -426,7 +425,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 if (sb.length() > 0) {
                     sb.insert(0, ".");
                 }
-                sb.insert(0, jType.simpleName());
+                sb.insert(0, jType.getSimpleName());
                 jType = jType.getDeclaringType();
             }
             return sb.toString();
@@ -1949,7 +1948,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 //special case
                 jType = HTypeUtils.tupleType(types(), aa);
             } else {
-                jType = ((JRawType) jType).parametrize(aa);
+                jType =  jType.parametrize(aa);
             }
         }
         if (typeName.isArray()) {
@@ -3284,14 +3283,10 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         }
     }
 
-    public JMutableRawType getOrCreateType(HNDeclareType type) {
-        JMutableRawType jt = (JMutableRawType) type.getjType();
+    public JType getOrCreateType(HNDeclareType type) {
+        JType jt = type.getjType();
         if (jt != null) {
-            if(jt instanceof JMutableRawType) {
-                return (JMutableRawType) jt;
-            }else{
-
-            }
+            return jt;
         }
         String n = type.getName();
         JNode pn = type.getParentNode();
@@ -3345,8 +3340,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         }
         JType old = types.forNameOrNull(n);
         if (old != null) {
-            //this.getLog().jerror("S012", null, type.getNameToken(), "type declaration : type multiple declarations : " + n);
-            return (JMutableRawType) old;
+            return old;
         }
         LOG.log(Level.FINE, "declare type {0}", type.getFullName());
         JTypeKind jTypeKind
@@ -3356,10 +3350,11 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 : HNodeUtils.isModifierAnnotation(type.getAnnotations(), "annotation") ? JTypeKind.ANNOTATION
                 : JTypeKind.CLASS;
 
-        jt = (JMutableRawType) types.declareType(n, jTypeKind, false);
+        jt = types.declareType(n, jTypeKind, false);
         type.setjType(jt);
-        ((DefaultJAnnotationInstanceList) jt.getAnnotations())
-                .addAll(HNodeUtils.toAnnotations(type.getAnnotations()));
+        for (JAnnotationInstance a : HNodeUtils.toAnnotations(type.getAnnotations())) {
+            jt.addAnnotation(a);
+        }
         for (HNExtends extend : type.getExtends()) {
             JType tt = lookupType(extend.getFullName());
             if (tt.isInterface()) {
