@@ -9,14 +9,14 @@ import net.thevpc.jeep.impl.types.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 public class HLJTypes extends DefaultJTypes {
     private HIndexer indexer;
 
     public HLJTypes(JContext context, ClassLoader classLoader) {
         super(context, classLoader);
-        DefaultJAnnotationInstanceList t = (DefaultJAnnotationInstanceList) forName("null").getAnnotations();
-        t.add(HType.PUBLIC);
+        forName("null").addAnnotation(HType.PUBLIC);
     }
 
     public HIndexer getIndexer() {
@@ -55,7 +55,7 @@ public class HLJTypes extends DefaultJTypes {
     }
 
     @Override
-    public JMutableRawType createMutableType0(String name, JTypeKind kind) {
+    public JType createMutableType0(String name, JTypeKind kind) {
         return new HType(name, kind, this);
     }
 
@@ -65,7 +65,7 @@ public class HLJTypes extends DefaultJTypes {
     }
 
     @Override
-    public JParameterizedType createParameterizedType0(JType rootRaw, JType[] parameters, JType declaringType) {
+    public JType createParameterizedType0(JType rootRaw, JType[] parameters, JType declaringType) {
         return super.createParameterizedType0(rootRaw, parameters, declaringType);
     }
 
@@ -144,7 +144,7 @@ public class HLJTypes extends DefaultJTypes {
         return null;
     }
 
-    public boolean isPublic(JAnnotationInstanceList c) {
+    public boolean isPublic(List<JAnnotationInstance> c) {
         if (c.contains(HType.PUBLIC)) {
             return true;
         }
