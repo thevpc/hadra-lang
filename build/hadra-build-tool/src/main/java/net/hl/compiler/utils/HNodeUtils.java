@@ -484,7 +484,7 @@ public class HNodeUtils {
                 }
             } else {
                 HNTypeToken a = (HNTypeToken) call.getName();
-                JRawType tv = (JRawType) a.getTypeVal();
+                JType tv =a.getTypeVal();
 
                 DefaultJAnnotationInstance dd=new DefaultJAnnotationInstance();
                 dd.setAnnotationType(tv);
