@@ -31,22 +31,22 @@ public class HType extends DefaultJType {
 
 
     public HType(String name, JTypeKind kind,JTypes types) {
-        super(name, kind, types);
+        super(name, kind,null, types);
         switch (kind.getValue()){
             case JTypeKind.Ids.ANNOTATION:{
-                ((DefaultJAnnotationInstanceList)getAnnotations()).add(ANNOTATION);
+                addAnnotation(ANNOTATION);
                 break;
             }
             case JTypeKind.Ids.ENUM:{
-                ((DefaultJAnnotationInstanceList)getAnnotations()).add(ENUM);
+                addAnnotation(ENUM);
                 break;
             }
             case JTypeKind.Ids.EXCEPTION:{
-                ((DefaultJAnnotationInstanceList)getAnnotations()).add(EXCEPTION);
+                addAnnotation(EXCEPTION);
                 break;
             }
             case JTypeKind.Ids.INTERFACE:{
-                ((DefaultJAnnotationInstanceList)getAnnotations()).add(INTERFACE);
+                addAnnotation(INTERFACE);
                 break;
             }
         }
@@ -110,7 +110,11 @@ public class HType extends DefaultJType {
         m.setDeclaringType(this);
         ((DefaultJModifierList) m.getModifiers()).addAll(modifiers);
         m.setArgNames(Arrays.copyOf(argNames, argNames.length));
-        ((DefaultJAnnotationInstanceList) m.getAnnotations()).addAll(annotations);
+        if(annotations!=null){
+            for (JAnnotationInstance a : annotations) {
+                m.addAnnotation(a);
+            }
+        }
         m.setHandler(handler);
         m.setGenericSignature(signature);
         return m;
