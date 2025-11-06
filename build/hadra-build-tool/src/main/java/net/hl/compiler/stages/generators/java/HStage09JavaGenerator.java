@@ -543,7 +543,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
                         HNDeclareTokenIdentifier identifier = (HNDeclareTokenIdentifier) identifiers[i];
                         String identifierName = identifier.getName();
 
-                        JType iterableType = ((JParameterizedType) tupleType).getActualTypeArguments()[i];
+                        JType iterableType = tupleType.getActualTypeArguments()[i];
                         JType elementType = identifier.getIdentifierType();
                         list.add(new ForEachDec(
                                 identifierName,
@@ -781,7 +781,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
         HNode setter = node.getConstructor();
         if (setter == null) {
             StringBuilder sb = new StringBuilder("new ");
-            JArrayType arrayType = (JArrayType) node.getElement().getType();
+            JType arrayType = (JType) node.getElement().getType();
             sb.append(cuctx.nameWithImports(arrayType.rootComponentType()));
             for (int i = 0; i < node.getInits().length; i++) {
                 sb.append("[");
@@ -1451,7 +1451,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
                     sb.append(", ");
                 }
                 if (argument.getIdentifierTypeNode().getTypename().isVarArg()) {
-                    JArrayType identifierType = (JArrayType) argument.getIdentifierType();
+                    JType identifierType = argument.getIdentifierType();
                     sb.append(cuctx.nameWithImports(identifierType.componentType()));
                     sb.append("...");
                 } else {
