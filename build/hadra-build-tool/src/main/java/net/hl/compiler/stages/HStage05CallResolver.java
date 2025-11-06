@@ -764,14 +764,14 @@ public class HStage05CallResolver extends HStageType2 {
                         .map(x -> compilerContext.getTypePattern(showFinalErrors, x))
                         .allMatch(x -> x.isType() && x.getType().boxed().getName().equals("java.lang.Integer"))) {
                     // this is a regular array
-                    JArrayType arrType = (JArrayType) baseToL.getType();
+                    JType arrType = baseToL.getType();
                     if (arrType.arrayDimension() >= inodes.length) {
                         acceptMethodImpl = false;
                         HNElementExpr element = (HNElementExpr) node.getElement();
                         JType tt = arrType;
                         for (int i = 0; i < inodes.length; i++) {
-                            if (tt instanceof JArrayType) {
-                                tt = ((JArrayType) tt).componentType();
+                            if (tt.isArray()) {
+                                tt = tt.componentType();
                             } else {
                                 compilerContext.getLog().jerror("X000", null, node.getStartToken(), "not an array " + tt);
                             }
@@ -915,7 +915,7 @@ public class HStage05CallResolver extends HStageType2 {
                                 .map(x -> compilerContext.getTypePattern(showFinalErrors, x))
                                 .allMatch(x -> x.isType() && x.getType().boxed().getName().equals("java.lang.Integer"))) {
                             // this is a regular array
-                            JArrayType arrType = (JArrayType) baseToL.getType();
+                            JType arrType = baseToL.getType();
                             if (arrType.arrayDimension() >= indicesNodes.size()) {
                                 acceptMethodImpl = false;
                                 HNElementExpr element = (HNElementExpr) left.getElement();
