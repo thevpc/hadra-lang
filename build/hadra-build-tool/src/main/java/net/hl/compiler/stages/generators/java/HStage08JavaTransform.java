@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
 import net.hl.compiler.HL;
 import net.hl.compiler.ast.extra.HXInvokableCall;
 import net.hl.compiler.core.HTask;
-import net.hl.compiler.core.types.JPrimitiveModifierAnnotationInstance;
 import net.hl.compiler.stages.AbstractHStage;
 import net.hl.compiler.utils.HNodeFactory;
 import net.hl.lang.ext.HHelpers;
@@ -1271,7 +1270,7 @@ public class HStage08JavaTransform extends AbstractHStage {
         }
         if (copy.isConstr()) {
             copy.setNameToken(
-                    HTokenUtils.createToken(compilerContext.base.getOrCreateType(node.getDeclaringType()).simpleName())
+                    HTokenUtils.createToken(compilerContext.base.getOrCreateType(node.getDeclaringType()).getSimpleName())
             );
         }
         body = copy.getBody();
