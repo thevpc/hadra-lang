@@ -1948,7 +1948,9 @@ public class HLJCompilerContext extends JCompilerContextImpl {
                 //special case
                 jType = HTypeUtils.tupleType(types(), aa);
             } else {
-                jType =  jType.parametrize(aa);
+                for (int i = 0; i < aa.length; i++) {
+                    jType =  jType.replaceParameter(vars[i].name(),aa[i]);
+                }
             }
         }
         if (typeName.isArray()) {
@@ -3353,7 +3355,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
         jt = types.declareType(n, jTypeKind, false);
         type.setjType(jt);
         for (JAnnotationInstance a : HNodeUtils.toAnnotations(type.getAnnotations())) {
-            jt.addAnnotation(a);
+            jt.getAnnotations().add(a);
         }
         for (HNExtends extend : type.getExtends()) {
             JType tt = lookupType(extend.getFullName());
