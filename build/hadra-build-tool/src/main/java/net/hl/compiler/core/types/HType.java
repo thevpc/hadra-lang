@@ -30,40 +30,40 @@ public class HType extends DefaultJType {
     public static final DefaultJAnnotationInstance SPECIAL_DEFAULT_CONSTRUCTOR = new DefaultJAnnotationInstance("default-constructor");
 
 
-    public HType(String name, JTypeKind kind,JTypes types) {
-        super(name, kind,null, types);
-        switch (kind.getValue()){
-            case JTypeKind.Ids.ANNOTATION:{
+    public HType(String name, JTypeKind kind, JTypes types) {
+        super(name, kind, null, types);
+        switch (kind.getValue()) {
+            case JTypeKind.Ids.ANNOTATION: {
                 addAnnotation(ANNOTATION);
                 break;
             }
-            case JTypeKind.Ids.ENUM:{
+            case JTypeKind.Ids.ENUM: {
                 addAnnotation(ENUM);
                 break;
             }
-            case JTypeKind.Ids.EXCEPTION:{
+            case JTypeKind.Ids.EXCEPTION: {
                 addAnnotation(EXCEPTION);
                 break;
             }
-            case JTypeKind.Ids.INTERFACE:{
+            case JTypeKind.Ids.INTERFACE: {
                 addAnnotation(INTERFACE);
                 break;
             }
         }
-        switch (getKind().getValue()){
-            case JTypeKind.Ids.ENUM:{
+        switch (getKind().getValue()) {
+            case JTypeKind.Ids.ENUM: {
                 setSuperType(getTypes().forName(Enum.class.getName()));
                 break;
             }
-            case JTypeKind.Ids.CLASS:{
+            case JTypeKind.Ids.CLASS: {
                 setSuperType(getTypes().forName(Object.class.getName()));
                 break;
             }
-            case JTypeKind.Ids.EXCEPTION:{
+            case JTypeKind.Ids.EXCEPTION: {
                 setSuperType(getTypes().forName(RuntimeException.class.getName()));
                 break;
             }
-            case JTypeKind.Ids.ANNOTATION:{
+            case JTypeKind.Ids.ANNOTATION: {
                 addInterface(getTypes().forName(Annotation.class.getName()));
                 break;
             }
@@ -77,14 +77,14 @@ public class HType extends DefaultJType {
     @Override
     public JType getSuperType() {
         JType t = super.getSuperType();
-        if(t!=null){
+        if (t != null) {
             return t;
         }
-        switch (getKind().getValue()){
-            case JTypeKind.Ids.CLASS:{
+        switch (getKind().getValue()) {
+            case JTypeKind.Ids.CLASS: {
                 return JTypeUtils.forObject(getTypes());
             }
-            case JTypeKind.Ids.ENUM:{
+            case JTypeKind.Ids.ENUM: {
                 return getTypes().forName(Enum.class.getName());
             }
         }
@@ -110,7 +110,7 @@ public class HType extends DefaultJType {
         m.setDeclaringType(this);
         ((DefaultJModifierList) m.getModifiers()).addAll(modifiers);
         m.setArgNames(Arrays.copyOf(argNames, argNames.length));
-        if(annotations!=null){
+        if (annotations != null) {
             for (JAnnotationInstance a : annotations) {
                 m.addAnnotation(a);
             }
