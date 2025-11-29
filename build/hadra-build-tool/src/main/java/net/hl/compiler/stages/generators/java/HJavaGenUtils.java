@@ -141,7 +141,9 @@ public class HJavaGenUtils {
 
     public static HNode Callable(JType resultType, HNode body) {
         JTypes types = resultType.getTypes();
-        JType UncheckedCallableType = types.forName(UncheckedCallable.class.getName()).parametrize(
+        JType jType = types.forName(UncheckedCallable.class.getName());
+        JType UncheckedCallableType = jType.replaceParameter(
+                jType.getTypeParameters()[0].getVName(),
                 resultType
         );
         return new HXInvokableCall(
