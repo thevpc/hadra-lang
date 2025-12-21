@@ -25,8 +25,8 @@ import net.hl.compiler.HL;
 import net.hl.compiler.utils.DepIdAndFile;
 import net.hl.compiler.utils.HSharedUtils;
 import net.thevpc.nuts.artifact.*;
-import net.thevpc.nuts.command.NFetchCmd;
-import net.thevpc.nuts.command.NSearchCmd;
+import net.thevpc.nuts.command.NFetch;
+import net.thevpc.nuts.command.NSearch;
 
 public class HStage02Preprocessor extends AbstractHStage {
 
@@ -316,7 +316,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                     )
             );
         }
-        NSearchCmd search = NSearchCmd.of()
+        NSearch search = NSearch.of()
 //                .setDependencies(true)
                 .setInlineDependencies(true)
                 .setLatest(true)
@@ -331,7 +331,7 @@ public class HStage02Preprocessor extends AbstractHStage {
         for (HDependency dep : env.dependencies()) {
             NDefinition def = null;
             try {
-                def = NFetchCmd.of().setId(dep.getName()).setDependencyFilter(NDependencyFilters.of().byRunnable()).getResultDefinition();
+                def = NFetch.of().setId(dep.getName()).setDependencyFilter(NDependencyFilters.of().byRunnable()).getResultDefinition();
             } catch (NArtifactNotFoundException ex) {
                 //
             }
@@ -346,7 +346,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                 for (NDependency dep : depd.transitive().toList()) {
                     NDefinition def = null;
                     try {
-                        def = NFetchCmd.of(dep.toId()).setDependencyFilter(NDependencyFilters.of().byRunnable()).getResultDefinition();
+                        def = NFetch.of(dep.toId()).setDependencyFilter(NDependencyFilters.of().byRunnable()).getResultDefinition();
                     } catch (NArtifactNotFoundException ex) {
                         //
                     }
