@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import net.hl.compiler.HL;
 import net.hl.compiler.core.HTask;
 import net.hl.compiler.stages.AbstractHStage;
-import net.thevpc.nuts.command.NExecCmd;
+import net.thevpc.nuts.command.NExec;
 import net.thevpc.nuts.command.NExecutionType;
 import net.thevpc.nuts.io.NExecOutput;
 
@@ -37,7 +37,7 @@ public class HStage11JavaRun extends AbstractHStage {
         HJavaContextHelper jn = HJavaContextHelper.of(project);
         if (jn.getOutputJarFile() != null) {
             try {
-                NExecCmd.of()
+                NExec.of()
                         .addCommand(jn.getOutputJarFile().getCanonicalPath())
                         .setSleepMillis(1000)
                         .setErr(NExecOutput.ofRedirect())
