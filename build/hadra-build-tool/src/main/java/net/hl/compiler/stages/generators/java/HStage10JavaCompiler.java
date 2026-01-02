@@ -44,7 +44,7 @@ import net.thevpc.jeep.util.JStringUtils;
 import net.thevpc.nuts.artifact.NDescriptor;
 import net.thevpc.nuts.artifact.NId;
 import net.thevpc.nuts.core.NConstants;
-import net.thevpc.nuts.text.NDescriptorFormat;
+import net.thevpc.nuts.text.NDescriptorWriter;
 import net.thevpc.nuts.runtime.standalone.DefaultNDependencyBuilder;
 import net.thevpc.nuts.runtime.standalone.DefaultNDescriptorBuilder;
 import net.thevpc.nuts.runtime.standalone.DefaultNEnvConditionBuilder;
@@ -153,7 +153,7 @@ public class HStage10JavaCompiler extends AbstractHStage {
                                                     ).build()
                                     ).collect(Collectors.toList())
                     ).build();
-            NDescriptorFormat.of()
+            NDescriptorWriter.of()
                     .print(desc, new File(classesFolder, "META-INF/" + NConstants.Files.DESCRIPTOR_FILE_NAME));
             jarFolder.mkdirs();
             File jarPath = new File(jarFolder, jarName);
