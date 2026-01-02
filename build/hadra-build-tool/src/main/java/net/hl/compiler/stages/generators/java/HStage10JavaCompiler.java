@@ -153,8 +153,8 @@ public class HStage10JavaCompiler extends AbstractHStage {
                                                     ).build()
                                     ).collect(Collectors.toList())
                     ).build();
-            NDescriptorFormat.of(desc)
-                    .print(new File(classesFolder, "META-INF/" + NConstants.Files.DESCRIPTOR_FILE_NAME));
+            NDescriptorFormat.of()
+                    .print(desc, new File(classesFolder, "META-INF/" + NConstants.Files.DESCRIPTOR_FILE_NAME));
             jarFolder.mkdirs();
             File jarPath = new File(jarFolder, jarName);
             generateJar(project, jarPath, classesFolder);
