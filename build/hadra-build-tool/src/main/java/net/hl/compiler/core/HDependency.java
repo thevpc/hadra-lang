@@ -1,6 +1,7 @@
 package net.hl.compiler.core;
 
 import net.thevpc.jeep.util.JStringUtils;
+import net.thevpc.nuts.util.NBlankable;
 
 public class HDependency {
     private String name;
@@ -37,7 +38,7 @@ public class HDependency {
         sb.append(name);
         boolean first=true;
 
-        if(!JStringUtils.isBlank(scope) && !"compile".equals(scope)){
+        if(!NBlankable.isBlank(scope) && !"compile".equals(scope)){
             if(first){
                 sb.append("?");
                 first=false;

@@ -27,6 +27,7 @@ import net.hl.compiler.utils.HSharedUtils;
 import net.thevpc.nuts.artifact.*;
 import net.thevpc.nuts.command.NFetch;
 import net.thevpc.nuts.command.NSearch;
+import net.thevpc.nuts.util.NBlankable;
 
 public class HStage02Preprocessor extends AbstractHStage {
 
@@ -90,7 +91,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                                 ? new DepIdAndFile[]{defaultLangPaths[0]} : new DepIdAndFile[0]
                 );
             } else {
-                if (JStringUtils.isBlank(JModuleId.valueOf(ip.getModuleId()).getArtifactId())) {
+                if (NBlankable.isBlank(JModuleId.valueOf(ip.getModuleId()).getArtifactId())) {
                     project.log().jerror("X000", null, metaPackage == null ? anyToken : metaPackage.getStartToken(), "missing artifact name");
                 }
                 DepIdAndFile[] u = HStageUtils.resolveLangPaths(ip.getDependencies(), null, false, false, true);

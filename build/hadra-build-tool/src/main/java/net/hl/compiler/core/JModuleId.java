@@ -3,6 +3,7 @@ package net.hl.compiler.core;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
 import net.thevpc.jeep.util.JStringUtils;
+import net.thevpc.nuts.util.NBlankable;
 
 public class JModuleId {
 
@@ -101,13 +102,13 @@ public class JModuleId {
         if (moduleId == null) {
             moduleId = defaultId;
         }
-        if (JStringUtils.isBlank(moduleId.getGroupId()) && !JStringUtils.isBlank(defaultId.getGroupId())) {
+        if (NBlankable.isBlank(moduleId.getGroupId()) && !NBlankable.isBlank(defaultId.getGroupId())) {
             moduleId = new JModuleId(defaultId.getGroupId(), moduleId.getArtifactId(), moduleId.getVersion());
         }
-        if (JStringUtils.isBlank(moduleId.getArtifactId()) && !JStringUtils.isBlank(defaultId.getArtifactId())) {
+        if (NBlankable.isBlank(moduleId.getArtifactId()) && !NBlankable.isBlank(defaultId.getArtifactId())) {
             moduleId = new JModuleId(moduleId.getGroupId(), defaultId.getArtifactId(), moduleId.getVersion());
         }
-        if (JStringUtils.isBlank(moduleId.getVersion())) {
+        if (NBlankable.isBlank(moduleId.getVersion())) {
             moduleId = new JModuleId(moduleId.getGroupId(), moduleId.getArtifactId(), defaultId.getVersion());
         }
         return moduleId;

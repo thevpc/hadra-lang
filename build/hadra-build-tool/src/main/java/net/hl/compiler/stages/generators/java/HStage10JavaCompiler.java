@@ -48,6 +48,7 @@ import net.thevpc.nuts.text.NDescriptorWriter;
 import net.thevpc.nuts.runtime.standalone.DefaultNDependencyBuilder;
 import net.thevpc.nuts.runtime.standalone.DefaultNDescriptorBuilder;
 import net.thevpc.nuts.runtime.standalone.DefaultNEnvConditionBuilder;
+import net.thevpc.nuts.util.NBlankable;
 
 public class HStage10JavaCompiler extends AbstractHStage {
 
@@ -95,7 +96,7 @@ public class HStage10JavaCompiler extends AbstractHStage {
         joptions.add(classesFolder.getPath());
 
         JModuleId m = JModuleId.valueOf(project.getIndexedProject().getModuleId());
-        String jarName = (JStringUtils.isBlank(m.getGroupId()) ? "" : (m.getGroupId() + "-"))
+        String jarName = (NBlankable.isBlank(m.getGroupId()) ? "" : (m.getGroupId() + "-"))
                 + m.getArtifactId() + "-" + m.getVersion() + ".jar";
         CompilationTask task = compiler.getTask(null, null, diagnostics, joptions, null, compilationUnits);
         boolean success = task.call();

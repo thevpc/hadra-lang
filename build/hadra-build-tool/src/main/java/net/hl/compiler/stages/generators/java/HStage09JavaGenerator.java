@@ -37,6 +37,7 @@ import net.hl.compiler.HL;
 import net.hl.compiler.core.HTask;
 import net.hl.compiler.stages.AbstractHStage;
 import net.hl.compiler.utils.HFileUtils;
+import net.thevpc.nuts.util.NBlankable;
 
 public class HStage09JavaGenerator extends AbstractHStage {
 
@@ -112,7 +113,7 @@ public class HStage09JavaGenerator extends AbstractHStage {
         String ns = classDeclaration.getFullPackage();
         String name = classDeclaration.getName();
         StringBuilder relativePath = new StringBuilder();
-        if (!JStringUtils.isBlank(ns)) {
+        if (!NBlankable.isBlank(ns)) {
             if (relativePath.length() > 0 && relativePath.charAt(relativePath.length() - 1) != File.separatorChar) {
                 relativePath.append(File.separatorChar);
             }

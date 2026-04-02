@@ -20,6 +20,7 @@ import net.hl.compiler.core.elements.*;
 import net.hl.compiler.ast.*;
 import net.hl.compiler.utils.*;
 import net.hl.lang.Tuple;
+import net.thevpc.nuts.util.NBlankable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -162,7 +163,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
     private Set<JImportInfo> expandImports(JImportInfo _anImport, Map<String, Set<JImportInfo>> cache) {
         String _anImportValue = _anImport.importValue();
         final JToken location = _anImport.token();
-        if (JStringUtils.isBlank(_anImportValue)) {
+        if (NBlankable.isBlank(_anImportValue)) {
             return Collections.emptySet();
         }
         Set<JImportInfo> s = cache.get(_anImportValue);
@@ -1997,7 +1998,7 @@ public class HLJCompilerContext extends JCompilerContextImpl {
 //        }
         Set<JImportInfo> validImports = buildValidImports();
         String fullPackage = project().getMetaPackageType().getFullPackage();
-        if (!JStringUtils.isBlank(fullPackage)) {
+        if (!NBlankable.isBlank(fullPackage)) {
             validImports.add(createJImportInfo(fullPackage + ".*", "<default>"));
         }
         //                ,"net.hl.lang.HDefaults"
@@ -3313,15 +3314,15 @@ public class HLJCompilerContext extends JCompilerContextImpl {
             declaringType = getMetaPackageType();
         }
         if (declaringType == null) {
-            if (!JStringUtils.isBlank(type.getPackageName())) {
+            if (!NBlankable.isBlank(type.getPackageName())) {
                 n = type.getPackageName() + "." + n;
             }
-            if (!JStringUtils.isBlank(type.getMetaPackage())) {
+            if (!NBlankable.isBlank(type.getMetaPackage())) {
                 n = type.getMetaPackage() + "." + n;
             }
             type.setInternalType(false);
         } else {
-            if (!JStringUtils.isBlank(type.getPackageName())) {
+            if (!NBlankable.isBlank(type.getPackageName())) {
                 getLog().jerror("X000", null, type.getStartToken(), "internal classes cannot define package");
             }
 

@@ -12,6 +12,7 @@ import net.hl.compiler.core.HOptions;
 import net.hl.compiler.core.HProject;
 import net.hl.compiler.ast.HNBlock;
 import net.hl.compiler.core.HTask;
+import net.thevpc.nuts.util.NBlankable;
 
 public class HStage01Parser extends AbstractHStage {
 
@@ -30,7 +31,7 @@ public class HStage01Parser extends AbstractHStage {
         JTextSourceRoot[] inputs = options.sources();
         int foundCompilationUnits = 0;
         if (inputs.length > 0) {
-            if (JStringUtils.isBlank(options.getProjectRoot())) {
+            if (NBlankable.isBlank(options.getProjectRoot())) {
                 if (inputs.length != 1) {
                     project.log().jerror("X405", null, null, "missing source");
                     return;

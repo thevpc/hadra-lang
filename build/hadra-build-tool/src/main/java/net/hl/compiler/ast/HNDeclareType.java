@@ -2,8 +2,8 @@ package net.hl.compiler.ast;
 
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.util.JNodeUtils;
-import net.thevpc.jeep.util.JStringUtils;
 import net.thevpc.jeep.util.JeepUtils;
+import net.thevpc.nuts.util.NBlankable;
 
 import java.util.*;
 
@@ -118,11 +118,11 @@ public class HNDeclareType extends HNode implements HNDeclare {
             return getDeclaringType().getFullPackage();
         }
         StringBuilder sb = new StringBuilder();
-        if (!JStringUtils.isBlank(getMetaPackage())) {
+        if (!NBlankable.isBlank(getMetaPackage())) {
             sb.append(getMetaPackage());
         }
         String packageName = getPackageName();
-        if (!JStringUtils.isBlank(packageName)) {
+        if (!NBlankable.isBlank(packageName)) {
             if (sb.length() > 0) {
                 sb.append(".");
             }
@@ -136,11 +136,11 @@ public class HNDeclareType extends HNode implements HNDeclare {
             return getDeclaringType().getFullName() + "." + getName();
         }
         StringBuilder sb = new StringBuilder();
-        if (!JStringUtils.isBlank(getMetaPackage())) {
+        if (!NBlankable.isBlank(getMetaPackage())) {
             sb.append(getMetaPackage());
         }
         String packageName = getPackageName();
-        if (!JStringUtils.isBlank(packageName)) {
+        if (!NBlankable.isBlank(packageName)) {
             if (sb.length() > 0) {
                 sb.append(".");
             }
