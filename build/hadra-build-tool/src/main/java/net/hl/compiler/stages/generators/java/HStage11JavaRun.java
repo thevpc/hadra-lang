@@ -39,10 +39,10 @@ public class HStage11JavaRun extends AbstractHStage {
             try {
                 NExec.of()
                         .addCommand(jn.getOutputJarFile().getCanonicalPath())
-                        .setSleepMillis(1000)
-                        .setErr(NExecOutput.ofRedirect())
-                        .setFailFast(true)
-                        .setExecutionType(NExecutionType.EMBEDDED)
+                        .sleepMillis(1000)
+                        .err(NExecOutput.ofRedirect())
+                        .failFast(true)
+                        .executionType(NExecutionType.EMBEDDED)
                         .run();
                 return;
             } catch (IOException ex) {
