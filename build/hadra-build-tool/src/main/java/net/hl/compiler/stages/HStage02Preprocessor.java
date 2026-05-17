@@ -4,7 +4,6 @@ import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.DefaultJTypedValue;
 import net.thevpc.jeep.core.eval.JEvaluableValue;
 import net.thevpc.jeep.impl.functions.DefaultJInvokeContext;
-import net.thevpc.jeep.util.JStringUtils;
 import net.hl.compiler.core.*;
 import net.hl.compiler.core.elements.HNElementMetaPackageArtifact;
 import net.hl.compiler.core.elements.HNElementMetaPackageGroup;
@@ -320,7 +319,7 @@ public class HStage02Preprocessor extends AbstractHStage {
         NSearch search = NSearch.of()
 //                .setDependencies(true)
                 .setInlineDependencies(true)
-                .setLatest(true)
+                .latest(true)
                 .setDependencyFilter(NDependencyFilters.of().byRunnable())
                 ;
         boolean someSearch = false;
