@@ -161,7 +161,7 @@ public class HStageUtils {
             }
             return null;
         } else if (path.matches(".*/hadra-lang-[a-z0-9.-]+[.]jar")) {
-            try (InputStream is = NPath.of(s0).getInputStream()) {
+            try (InputStream is = NPath.of(s0).inputStream()) {
                 try (ZipInputStream zis = new ZipInputStream(is)) {
                     //get the zipped file list entry
                     ZipEntry ze = zis.getNextEntry();

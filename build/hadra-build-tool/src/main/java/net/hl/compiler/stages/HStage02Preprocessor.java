@@ -335,10 +335,10 @@ public class HStage02Preprocessor extends AbstractHStage {
             } catch (NArtifactNotFoundException ex) {
                 //
             }
-            if (def == null || def.getContent().isEmpty()) {
+            if (def == null || def.content().isEmpty()) {
                 project.log().jerror("X000", "pre-processor", startToken, "unresolvable dependency " + dep);
             } else {
-                classPath.add(new DepIdAndFile(dep.toString(), def.getContent().get().toString()));
+                classPath.add(new DepIdAndFile(dep.toString(), def.content().get().toString()));
             }
         }
         if (someSearch) {
@@ -350,10 +350,10 @@ public class HStage02Preprocessor extends AbstractHStage {
                     } catch (NArtifactNotFoundException ex) {
                         //
                     }
-                    if (def == null || def.getContent().isEmpty()) {
+                    if (def == null || def.content().isEmpty()) {
                         project.log().jerror("X000", "pre-processor", startToken, "unresolvable dependency " + dep);
                     } else {
-                        classPath.add(new DepIdAndFile(dep.toString(), def.getContent().get().toString()));
+                        classPath.add(new DepIdAndFile(dep.toString(), def.content().get().toString()));
                     }
                 }
             }

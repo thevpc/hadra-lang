@@ -150,7 +150,7 @@ public class HLMain {
     public void onInstallApplication() {
         NWorkspace ws = NWorkspace.of();
         NApp app = NApp.of();
-        NId appId = app.getId().get();
+        NId appId = app.id().get();
         NCustomCmd a = ws.findCommand(PREFERRED_ALIAS, appId, appId);
         boolean update = false;
         boolean add = false;
@@ -164,7 +164,7 @@ public class HLMain {
                     .addCommand(new NCommandConfig()
                             .setName(PREFERRED_ALIAS)
                             .setOwner(appId)
-                            .setCommand(appId.getShortName())
+                            .setCommand(appId.shortName())
                     );
             ws.saveConfig();
         }
