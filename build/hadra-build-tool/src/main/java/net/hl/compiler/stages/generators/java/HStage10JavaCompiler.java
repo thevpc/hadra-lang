@@ -40,7 +40,6 @@ import net.thevpc.jeep.msg.Messages;
 import net.thevpc.jeep.source.JTextSource;
 import net.thevpc.jeep.source.JTextSourceFactory;
 import net.thevpc.jeep.source.JTextSourceToken;
-import net.thevpc.jeep.util.JStringUtils;
 import net.thevpc.nuts.artifact.NDescriptor;
 import net.thevpc.nuts.artifact.NId;
 import net.thevpc.nuts.core.NConstants;
@@ -138,18 +137,18 @@ public class HStage10JavaCompiler extends AbstractHStage {
             //need to generate descriptor that contains dependencies...
             //project.getIndexedProject().getDependencies()
             NDescriptor desc = new DefaultNDescriptorBuilder()
-                    .setId(project.getIndexedProject().getModuleId())
-                    .setPackaging("jar")
-                    .setCondition(
+                    .id(project.getIndexedProject().getModuleId())
+                    .packaging("jar")
+                    .condition(
                             new DefaultNEnvConditionBuilder()
-                                    .setPlatform(Arrays.asList("java"))
+                                    .platform(Arrays.asList("java"))
                     )
                     .addDependencies(
                             Arrays.stream(project.getIndexedProject().getDependencies())
                                     .map(
                                             i
                                             -> new DefaultNDependencyBuilder()
-                                                    .setId(
+                                                    .id(
                                                             NId.of(i.getId())
                                                     ).build()
                                     ).collect(Collectors.toList())

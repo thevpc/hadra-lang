@@ -162,9 +162,9 @@ public class HLMain {
         if (update || add) {
             ws
                     .addCommand(new NCommandConfig()
-                            .setName(PREFERRED_ALIAS)
-                            .setOwner(appId)
-                            .setCommand(appId.shortName())
+                            .name(PREFERRED_ALIAS)
+                            .owner(appId)
+                            .command(appId.shortName())
                     );
             ws.saveConfig();
         }

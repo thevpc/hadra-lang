@@ -11,6 +11,7 @@ import net.hl.compiler.stages.AbstractHStage;
 import net.thevpc.nuts.command.NExec;
 import net.thevpc.nuts.command.NExecutionType;
 import net.thevpc.nuts.io.NExecOutput;
+import net.thevpc.nuts.time.NDuration;
 
 public class HStage11JavaRun extends AbstractHStage {
 
@@ -39,7 +40,7 @@ public class HStage11JavaRun extends AbstractHStage {
             try {
                 NExec.of()
                         .addCommand(jn.getOutputJarFile().getCanonicalPath())
-                        .sleepMillis(1000)
+                        .sleepDuration(NDuration.ofSeconds(1))
                         .err(NExecOutput.ofRedirect())
                         .failFast(true)
                         .executionType(NExecutionType.EMBEDDED)
