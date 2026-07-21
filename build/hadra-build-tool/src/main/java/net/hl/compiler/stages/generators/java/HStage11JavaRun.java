@@ -39,7 +39,7 @@ public class HStage11JavaRun extends AbstractHStage {
         if (jn.getOutputJarFile() != null) {
             try {
                 NExec.of()
-                        .addCommand(jn.getOutputJarFile().getCanonicalPath())
+                        .command(jn.getOutputJarFile().getCanonicalPath())
                         .sleepDuration(NDuration.ofSeconds(1))
                         .err(NExecOutput.ofRedirect())
                         .failFast(true)
