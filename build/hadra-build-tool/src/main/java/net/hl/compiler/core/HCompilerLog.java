@@ -16,7 +16,6 @@ import net.thevpc.nuts.core.NSession;
 import net.thevpc.nuts.io.NPrintStream;
 import net.thevpc.nuts.text.NText;
 import net.thevpc.nuts.text.NTextStyle;
-import net.thevpc.nuts.text.NTexts;
 import net.thevpc.nuts.text.NMsg;
 
 import java.nio.file.Paths;
@@ -54,7 +53,7 @@ public class HCompilerLog extends DefaultJCompilerLog {
 
         out.println(
                 StringUtils.center2(
-                        "[ " + ofTexts().of(
+                        "[ " + NText.of(
                                 m
                         ).toString()
                                 + " ]",
@@ -62,9 +61,6 @@ public class HCompilerLog extends DefaultJCompilerLog {
         );
     }
 
-    private NTexts ofTexts() {
-        return NTexts.of();
-    }
 
     @Override
     public void printlnMessage(JSourceMessage jSourceMessage) {
@@ -74,7 +70,6 @@ public class HCompilerLog extends DefaultJCompilerLog {
         final Level level = jSourceMessage.getLevel();
         final String id = jSourceMessage.getId();
         final Message message = jSourceMessage.getMessage();
-        final NTexts factory = ofTexts();
 
         JTextSource compilationUnitSource0 = token == null ? null : token.getSource();
         String compilationUnitSource = compilationUnitSource0 == null ? "" : compilationUnitSource0.name();
@@ -102,8 +97,8 @@ public class HCompilerLog extends DefaultJCompilerLog {
             }
             if (token != null) {
                 out.print(NMsg.ofC(" [%s,%s]",
-                        factory.ofStyled(StringUtils.right(String.valueOf(token.getStartLineNumber() + 1), 4), NTextStyle.number()),
-                        factory.ofStyled(StringUtils.right(String.valueOf(token.getStartColumnNumber() + 1), 3), NTextStyle.number())
+                        NText.ofStyled(StringUtils.right(String.valueOf(token.getStartLineNumber() + 1), 4), NTextStyle.number()),
+                        NText.ofStyled(StringUtils.right(String.valueOf(token.getStartColumnNumber() + 1), 3), NTextStyle.number())
                 ));
             } else {
                 out.print("           ");
@@ -112,25 +107,25 @@ public class HCompilerLog extends DefaultJCompilerLog {
         out.print(" ");
         NText n;
         if (level.intValue() >= Level.SEVERE.intValue()) {
-            n = factory.ofStyled(StringUtils.left("ERROR  ", 6), NTextStyle.error());
+            n = NText.ofStyled(StringUtils.left("ERROR  ", 6), NTextStyle.error());
         } else if (level.intValue() >= Level.WARNING.intValue()) {
-            n = factory.ofStyled(StringUtils.left("WARNING", 6), NTextStyle.warn());
+            n = NText.ofStyled(StringUtils.left("WARNING", 6), NTextStyle.warn());
         } else if (level.intValue() >= Level.INFO.intValue()) {
-            n = factory.ofStyled(StringUtils.left("INFO   ", 6), NTextStyle.info());
+            n = NText.ofStyled(StringUtils.left("INFO   ", 6), NTextStyle.info());
         } else if (level.intValue() >= Level.CONFIG.intValue()) {
-            n = factory.ofStyled(StringUtils.left("CONFIG ", 6), NTextStyle.config());
+            n = NText.ofStyled(StringUtils.left("CONFIG ", 6), NTextStyle.config());
         } else {
-            n = factory.ofStyled(StringUtils.left(level.toString(), 6), NTextStyle.pale());
+            n = NText.ofStyled(StringUtils.left(level.toString(), 6), NTextStyle.pale());
         }
         out.print(NMsg.ofC("%s [%-5s] : %s",
                 n,
-                factory.ofStyled(StringUtils.left(id == null ? "" : id, 6), NTextStyle.version()),
+                NText.ofStyled(StringUtils.left(id == null ? "" : id, 6), NTextStyle.version()),
                 message.getText()
         ));
         boolean includeSourceNameInRange = false;
         if (token != null && compilationUnitSource0 != null) {
             if (includeSourceNameInRange) {
-                out.print(NMsg.ofC("%s", factory.ofStyled(compilationUnitSource0.name(), NTextStyle.path())));
+                out.print(NMsg.ofC("%s", NText.ofStyled(compilationUnitSource0.name(), NTextStyle.path())));
                 out.print(NMsg.ofC("%s", ":"));
             }
             long cn = token.getStartCharacterNumber();
@@ -138,12 +133,12 @@ public class HCompilerLog extends DefaultJCompilerLog {
             JTextSourceRange range = compilationUnitSource0.range((int) cn - window, (int) cn + window);
             JTextSourceRange.JRangePointer windowString = range.trim(cn, window);
             out.print("\n   ");
-            out.print(NMsg.ofC("%s", factory.ofCode("hadra", windowString.getText())));
+            out.print(NMsg.ofC("%s", NText.ofCode("hadra", windowString.getText())));
             out.print(NMsg.ofC("\n   "));
             for (int i = 0; i < windowString.getOffset(); i++) {
                 out.print(" ");
             }
-            out.print(NMsg.ofC("%s", factory.ofStyled("^^^", NTextStyle.path())));
+            out.print(NMsg.ofC("%s", NText.ofStyled("^^^", NTextStyle.path())));
 
 //            out.printf("%s", " [Line:");
 //            out.printf("%s", text.ofStyled(String.valueOf(token.getStartLineNumber() + 1), NTextStyle.number()));
@@ -157,9 +152,9 @@ public class HCompilerLog extends DefaultJCompilerLog {
                 } catch (Exception ex) {
                     //
                 }
-                out.print(NMsg.ofC(" %s", factory.ofStyled(s, NTextStyle.path())));
+                out.print(NMsg.ofC(" %s", NText.ofStyled(s, NTextStyle.path())));
             } else if (compilationUnitSource.length() > 0) {
-                out.print(NMsg.ofC(" %s", factory.ofStyled(compilationUnitSource, NTextStyle.path())));
+                out.print(NMsg.ofC(" %s", NText.ofStyled(compilationUnitSource, NTextStyle.path())));
             }
             out.print("\n");
         } else {

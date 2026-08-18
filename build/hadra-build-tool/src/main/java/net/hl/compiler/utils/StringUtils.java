@@ -7,7 +7,7 @@ package net.hl.compiler.utils;
 
 import net.hl.lang.IntToIntFunction;
 import net.thevpc.nuts.core.NConstants;
-import net.thevpc.nuts.text.NTexts;
+import net.thevpc.nuts.text.NText;
 import net.thevpc.nuts.text.NTextStyle;
 
 /**
@@ -60,8 +60,7 @@ public class StringUtils {
     public static String center2(String msg, int length, char c) {
         StringBuilder sb = new StringBuilder();
         sb.append(msg);
-        NTexts f = NTexts.of();
-        int len0 = f.of(sb.toString()).length();
+        int len0 = NText.of(sb.toString()).length();
         int variant = 2;
         IntToIntFunction color
                 = variant == 1 ? (i -> 30 + (i % 40) / 2)
@@ -70,7 +69,7 @@ public class StringUtils {
         int cc = 0;
         while (len0 < length) {
             int z = color.applyAsInt(cc);
-            String cc2 = f.ofStyled(String.valueOf(c), NTextStyle.foregroundColor(z)).toString() + NConstants.Ntf.SILENT;
+            String cc2 = NText.ofStyled(String.valueOf(c), NTextStyle.foregroundColor(z)).toString() + NConstants.Ntf.SILENT;
             if (cc % 2 == 0) {
                 sb.insert(0, cc2);
             } else {

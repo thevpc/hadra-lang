@@ -320,7 +320,7 @@ public class HStage02Preprocessor extends AbstractHStage {
 //                .setDependencies(true)
                 .inlineDependencies(true)
                 .latest(true)
-                .dependencyFilter(NDependencyFilters.of().byRunnable())
+                .dependencyFilter(NDependencyFilter.ofRunnable())
                 ;
         boolean someSearch = false;
         for (HDependency d : env.dependencies()) {
@@ -331,7 +331,7 @@ public class HStage02Preprocessor extends AbstractHStage {
         for (HDependency dep : env.dependencies()) {
             NDefinition def = null;
             try {
-                def = NFetch.of().id(dep.getName()).dependencyFilter(NDependencyFilters.of().byRunnable()).getResultDefinition();
+                def = NFetch.of().id(dep.getName()).dependencyFilter(NDependencyFilter.ofRunnable()).getResultDefinition();
             } catch (NArtifactNotFoundException ex) {
                 //
             }
@@ -346,7 +346,7 @@ public class HStage02Preprocessor extends AbstractHStage {
                 for (NDependency dep : depd.transitive().toList()) {
                     NDefinition def = null;
                     try {
-                        def = NFetch.of(dep.toId()).dependencyFilter(NDependencyFilters.of().byRunnable()).getResultDefinition();
+                        def = NFetch.of(dep.toId()).dependencyFilter(NDependencyFilter.ofRunnable()).getResultDefinition();
                     } catch (NArtifactNotFoundException ex) {
                         //
                     }
