@@ -5,9 +5,7 @@ import net.hl.compiler.core.HProject;
 import net.hl.compiler.core.HTask;
 import net.thevpc.nuts.app.*;
 import net.thevpc.nuts.artifact.NId;
-import net.thevpc.nuts.cmdline.NArg;
 import net.thevpc.nuts.cmdline.NCmdLine;
-import net.thevpc.nuts.cmdline.NCmdLineRunner;
 import net.thevpc.nuts.command.NCommandConfig;
 import net.thevpc.nuts.command.NCustomCmd;
 import net.thevpc.nuts.command.NExecutionException;
@@ -18,121 +16,63 @@ import net.thevpc.nuts.text.NMsg;
 public class HLMain {
 
     private static final String PREFERRED_ALIAS = "hl";
+    boolean noMoreOptions = false;
+    HL hl;
 
     public static void main(String[] args) {
         NApplication.builder(args).run();
     }
 
-    @NAppRun
-    public void run() {
-        NApplication.of().runCmdLine(new NCmdLineRunner() {
-            HL hl = HL.create();
-            boolean noMoreOptions = false;
 
-
-            @Override
-            public boolean next(NArg arg, NCmdLine cmdLine) {
-                if (arg.isOption()) {
-                    if (noMoreOptions) {
-                        return false;
-                    }
-                    switch (arg.key()) {
-                        case "--clean": {
-                            arg = cmdLine.nextFlag().get();
-                            if (arg.isUncommented()) {
-                                if (arg.getBooleanValue().get()) {
-                                    hl.addTask(HTask.CLEAN);
-                                } else {
-                                    hl.removeTask(HTask.CLEAN);
-                                }
-                            }
-                            return true;
-                        }
-                        case "-i":
-                        case "--incremental": {
-                            arg = cmdLine.nextFlag().get();
-                            if (arg.isUncommented()) {
-                                hl.setIncremental(arg.getBooleanValue().get());
-                            }
-                            return true;
-                        }
-                        case "-r":
-                        case "--root": {
-                            arg = cmdLine.nextEntry().get();
-                            if (arg.isUncommented()) {
-                                hl.setProjectRoot(arg.getStringValue().get());
-                            }
-                            return true;
-                        }
-                        case "--java": {
-                            arg = cmdLine.next().get();
-                            if (arg.isUncommented()) {
-                                hl.addTask(HTask.JAVA);
-                            }
-                            return true;
-                        }
-                        case "--c": {
-                            arg = cmdLine.nextEntry().get();
-                            if (arg.isUncommented()) {
-                                hl.addTask(HTask.C);
-                            }
-                            return true;
-                        }
-                        case "--c++": {
-                            arg = cmdLine.nextEntry().get();
-                            if (arg.isUncommented()) {
-                                hl.addTask(HTask.CPP);
-                            }
-                            return true;
-                        }
-                        case "--cs": {
-                            arg = cmdLine.nextEntry().get();
-                            if (arg.isUncommented()) {
-                                hl.addTask(HTask.CS);
-                            }
-                            return true;
-                        }
-                        case "--run": {
-                            arg = cmdLine.nextEntry().get();
-                            if (arg.isUncommented()) {
-                                hl.addTask(HTask.RUN);
-                            }
-                            return true;
-                        }
-                    }
-                    return false;
-                } else {
-                    String s = cmdLine.next().get().toString();
+    private NCmdLine parseCmdLine() {
+        NCmdLine cmdLine = NApplication.of().cmdLine();
+        cmdLine.matcher()
+                .when("--clean").and(c -> !noMoreOptions).asFlag(a -> hl.setTask(HTask.CLEAN, a.booleanValue()))
+                .when("--java").and(c -> !noMoreOptions).asFlag(a -> hl.setTask(HTask.JAVA, a.booleanValue()))
+                .when("--c").and(c -> !noMoreOptions).asFlag(a -> hl.setTask(HTask.C, a.booleanValue()))
+                .when("--c++", "--cpp").and(c -> !noMoreOptions).asFlag(a -> hl.setTask(HTask.CPP, a.booleanValue()))
+                .when("--cs", "--c#").and(c -> !noMoreOptions).asFlag(a -> hl.setTask(HTask.CS, a.booleanValue()))
+                .when("--run").and(c -> !noMoreOptions).asFlag(a -> hl.setTask(HTask.RUN, a.booleanValue()))
+                .when("--incremental", "-i").and(c -> !noMoreOptions).asFlag(a -> hl.setIncremental(a.booleanValue()))
+                .when("--root", "-r").and(c -> !noMoreOptions).asEntry(a -> hl.setProjectRoot(a.stringValue()))
+                .whenNonOption().asArg(a -> {
+                    String s = a.stringValue();
                     if (isURL(s)) {
                         hl.addSourceFileURL(s);
                     } else {
                         hl.addSourceFile(s);
                     }
                     noMoreOptions = true;
-                    return true;
-                }
-            }
+                })
+                .withDefaults()
+                .requireAll();
+        return cmdLine;
+    }
 
+    @NAppComplete
+    public void complete() {
+        parseCmdLine().printCompleteResult();
+    }
 
-            private boolean isURL(String s) {
-                return s.startsWith("file:")
-                        || s.startsWith("http:")
-                        || s.startsWith("https:");
+    @NAppRun
+    public void run() {
+        hl = HL.create();
+        NCmdLine cmdLine = parseCmdLine();
+        final HProject e = hl.compile();
+        if (!e.isSuccessful()) {
+            String m = "compilation failed with ";
+            m += e.getErrorCount() > 1 ? (e.getErrorCount() + " errors") : "1 error";
+            if (e.getWarningCount() > 0) {
+                m += (" and " + (e.getWarningCount() > 1 ? (e.getWarningCount() + " errors") : "1 error"));
             }
+            throw new NExecutionException(NMsg.ofPlain(m), 201);
+        }
+    }
 
-            @Override
-            public void run(NCmdLine nCmdLine) {
-                final HProject e = hl.compile();
-                if (!e.isSuccessful()) {
-                    String m = "compilation failed with ";
-                    m += e.getErrorCount() > 1 ? (String.valueOf(e.getErrorCount()) + " errors") : "1 error";
-                    if (e.getWarningCount() > 0) {
-                        m += (" and " + (e.getWarningCount() > 1 ? (String.valueOf(e.getWarningCount()) + " errors") : "1 error"));
-                    }
-                    throw new NExecutionException(NMsg.ofPlain(m), 201);
-                }
-            }
-        });
+    private boolean isURL(String s) {
+        return s.startsWith("file:")
+                || s.startsWith("http:")
+                || s.startsWith("https:");
     }
 
     @NAppUninstall

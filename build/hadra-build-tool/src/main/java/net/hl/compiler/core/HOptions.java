@@ -154,6 +154,15 @@ public abstract class HOptions<T extends HOptions> {
         return (T) this;
     }
 
+    public T setTask(HTask t,boolean a) {
+        if (a) {
+            addTask(t);
+        }else{
+            removeTask(t);
+        }
+        return (T) this;
+    }
+
     public T addTask(HTask t) {
         if (t != null) {
             tasks.add(t);
