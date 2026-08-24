@@ -14,18 +14,18 @@ import net.thevpc.nuts.command.NExecutionException;
 import net.thevpc.nuts.core.NWorkspace;
 import net.thevpc.nuts.text.NMsg;
 
-@NAppDefinition
+@NApp
 public class HLMain {
 
     private static final String PREFERRED_ALIAS = "hl";
 
     public static void main(String[] args) {
-        NApp.builder(args).run();
+        NApplication.builder(args).run();
     }
 
-    @NAppRunner
+    @NAppRun
     public void run() {
-        NApp.of().runCmdLine(new NCmdLineRunner() {
+        NApplication.of().runCmdLine(new NCmdLineRunner() {
             HL hl = HL.create();
             boolean noMoreOptions = false;
 
@@ -135,21 +135,21 @@ public class HLMain {
         });
     }
 
-    @NAppUninstaller
+    @NAppUninstall
     public void onUninstallApplication() {
         NWorkspace.of().removeCommandIfExists(PREFERRED_ALIAS);
         NWorkspace.of().saveConfig();
     }
 
-    @NAppUpdater
+    @NAppUpdate
     public void onUpdateApplication() {
         onInstallApplication();
     }
 
-    @NAppInstaller
+    @NAppInstall
     public void onInstallApplication() {
         NWorkspace ws = NWorkspace.of();
-        NApp app = NApp.of();
+        NApplication app = NApplication.of();
         NId appId = app.id().get();
         NCustomCmd a = ws.findCommand(PREFERRED_ALIAS, appId, appId);
         boolean update = false;
