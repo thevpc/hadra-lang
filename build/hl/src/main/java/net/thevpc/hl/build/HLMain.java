@@ -65,7 +65,7 @@ public class HLMain {
             if (e.getWarningCount() > 0) {
                 m += (" and " + (e.getWarningCount() > 1 ? (e.getWarningCount() + " errors") : "1 error"));
             }
-            throw new NExecutionException(NMsg.ofPlain(m), 201);
+            throw new NExecutionException(NMsg.ofP(m), 201);
         }
     }
 
