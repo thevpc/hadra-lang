@@ -3,7 +3,7 @@
 
     <groupId>net.thevpc.hl</groupId>
     <artifactId>hadra-build-tool</artifactId>
-    <version>0.1.2</version> <!--updated-->
+    <version>1.0.0.0</version>
     <name>Hadra Build Tool</name>
     <description>Hadra Build Tool Library</description>
     <packaging>jar</packaging>

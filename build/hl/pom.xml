@@ -3,7 +3,7 @@
 
     <groupId>net.thevpc.hl</groupId>
     <artifactId>hl</artifactId>
-    <version>0.1.2</version> <!--updated-->
+    <version>1.0.0.0</version>
     <name>Hadra Language Compiler and Runtime</name>
     <packaging>jar</packaging>
     <description>Hadra Language Compiler and Runtime</description>
@@ -54,7 +54,7 @@
         <nuts.application>true</nuts.application>
     </properties>
     <dependencies>
-        <dependency><groupId>net.thevpc.hl</groupId><artifactId>hadra-build-tool</artifactId><version>0.1.2</version></dependency>
+        <dependency><groupId>net.thevpc.hl</groupId><artifactId>hadra-build-tool</artifactId><version>1.0.0.0</version></dependency>
         <dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-api</artifactId><version>5.5.0</version><scope>test</scope></dependency>
     </dependencies>
 
