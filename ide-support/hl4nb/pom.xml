@@ -3,7 +3,7 @@
     <parent>
         <groupId>net.thevpc.hl</groupId>
         <artifactId>root-hadra-build</artifactId>
-        <version>1.0.0.0</version>
+        <version>1.1.0.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <groupId>net.thevpc.hl.ide</groupId>
@@ -66,7 +66,7 @@
     </build>
     <dependencies>
         <!-- editor -->
-        <dependency><groupId>net.thevpc.hl</groupId><artifactId>hadra-build-tool</artifactId><version>1.0.0.0</version></dependency>
+        <dependency><groupId>net.thevpc.hl</groupId><artifactId>hadra-build-tool</artifactId><version>1.1.0.0</version></dependency>
         
         <dependency><groupId>org.netbeans.api</groupId><artifactId>org-netbeans-modules-lexer</artifactId><version>${nb-version}</version></dependency>
         <dependency><groupId>org.netbeans.api</groupId><artifactId>org-netbeans-modules-parsing-api</artifactId><version>${nb-version}</version></dependency>

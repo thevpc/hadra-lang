@@ -3,7 +3,7 @@
     <groupId>net.thevpc.hl</groupId>
     <artifactId>root-hadra-build</artifactId>
     <name>net.thevpc.hl</name>
-    <version>1.0.0.0</version>
+    <version>1.1.0.0</version>
     <packaging>pom</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

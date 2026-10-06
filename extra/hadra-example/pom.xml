@@ -3,7 +3,7 @@
 
     <groupId>net.thevpc.hl</groupId>
     <artifactId>hadra-example</artifactId>
-    <version>1.0.0.0</version>
+    <version>1.1.0.0</version>
     <name>net.thevpc.hl.hadra-example</name>
 
     <properties>
@@ -13,8 +13,8 @@
     </properties>
 
     <dependencies>
-        <dependency><groupId>net.thevpc.hl</groupId><artifactId>hadra-lang</artifactId><version>1.0.0.0</version><!--updated--></dependency>
-        <dependency><groupId>net.thevpc.hl</groupId><artifactId>hadra-build-tool</artifactId><version>1.0.0.0</version></dependency>
+        <dependency><groupId>net.thevpc.hl</groupId><artifactId>hadra-lang</artifactId><version>1.1.0.0</version><!--updated--></dependency>
+        <dependency><groupId>net.thevpc.hl</groupId><artifactId>hadra-build-tool</artifactId><version>1.1.0.0</version></dependency>
     </dependencies>
     <build>
         <plugins>
