@@ -18,7 +18,7 @@ import net.thevpc.nuts.Nuts;
 public class TestHelper {
 
     public static void openWorkspace() {
-        Nuts.openWorkspace("-ZyS","-w=test").setSharedInstance();
+        Nuts.require("-y");
     }
 
     public static void printHeader(String header) {
